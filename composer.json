@@ -1,5 +1,5 @@
 {
-    "name": "treerful/newebpay",
+    "name": "treerful/laravel-newebpay",
     "description": "A library of connecting newebpay's API service.",
     "type": "library",
     "license": "MIT",
