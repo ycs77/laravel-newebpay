@@ -1,0 +1,21 @@
+{
+    "name": "w4ll4se/newebpay",
+    "description": "A library of connecting newebpay's API service.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "w4ll4se",
+            "email": "wallase.huang@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.10"
+    },
+    "minimum-stability": "beta",
+    "autoload": {
+        "psr-4": {
+            "W4ll4se\\NewebPay\\": "src/"
+        }
+    }
+}
