@@ -1,9 +1,9 @@
 <?php
 
-namespace W4ll4se\NewebPay;
+namespace Treerful\NewebPay;
 
-use W4ll4se\NewebPay\Traits\EncryptionTrait;
-use W4ll4se\NewebPay\Traits\RequestTrait;
+use Treerful\NewebPay\Traits\EncryptionTrait;
+use Treerful\NewebPay\Traits\RequestTrait;
 
 class NewebPayClose
 {

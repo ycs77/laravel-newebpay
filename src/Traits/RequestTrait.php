@@ -1,6 +1,6 @@
 <?php
 
-namespace W4ll4se\NewebPay\Traits;
+namespace Treerful\NewebPay\Traits;
 
 trait RequestTrait
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace W4ll4se\NewebPay\Providers;
+namespace Treerful\NewebPay\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use W4ll4se\Pay2go\NewebPay;
+use Treerful\Pay2go\NewebPay;
 
 class NewebPayServiceProvider extends ServiceProvider
 {
