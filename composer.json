@@ -15,7 +15,7 @@
     "minimum-stability": "beta",
     "autoload": {
         "psr-4": {
-            "W4ll4se\\NewebPay\\": "src/"
+            "Treerful\\NewebPay\\": "src/"
         }
     }
 }
