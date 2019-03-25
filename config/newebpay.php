@@ -20,7 +20,7 @@ return [
     /*
      * 串接版本
      */
-    'Version' => '1.2',
+    'Version' => '1.5',
 
     /*
      * 語系 zh-tw/en
