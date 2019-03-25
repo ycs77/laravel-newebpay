@@ -1,12 +1,4 @@
 # Laravel-NewebPay
-newebpay api for laravel packages
-藍新金流
-
-
-## Getting Started
-
-
-# Laravel-NewebPay
 
 Laravel-NewebPay 為針對 laravel 所寫的金流套件，主要實作藍新金流（原智付通）功能。
 
@@ -24,6 +16,7 @@ composer require treerful/laravel-newebpay
 ```
 
 2. Copy the config file (2 methods):
+
 (a)In `config/app.php`
 ```
  'providers' => [
@@ -36,7 +29,6 @@ composer require treerful/laravel-newebpay
         ...
         Treerful\NewebPay\NewebPayServiceProvider::class,
 ```
-
 After adding the ServiceProvider, Publish the config file.
 ```
 php artisan vendor:publish
@@ -59,7 +51,6 @@ cp vendor/treerful/laravel-newebpay/config/newebpay.php config/newebpay.php
 
     'NewebPay' => Treerful\NewebPay\NewebPay::class,
  ]
-
 ```
 
 ## Usage
@@ -180,8 +171,8 @@ function requestRefund()
 }
 ```
 
-## Authors
 
+## Authors
 * **Wallase Huang** - *work* - [Github](https://github.com/wallasehuang)
 * **Treerful** - [Github](https://github.com/treerful)
 
