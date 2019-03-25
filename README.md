@@ -1,6 +1,6 @@
 # Laravel-NewebPay
 newebpay api for laravel packages
-蘭馨金流
+藍新金流
 
 
 ## Getting Started
