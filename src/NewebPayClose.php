@@ -115,6 +115,6 @@ class NewebPayClose
             'PostData_' => $postData
         ];
 
-        return $this->setRequestForm($request, $this->NewebPayCloseURL);
+        return $this->setPostRequest($request, $this->NewebPayCloseURL);
     }
 }

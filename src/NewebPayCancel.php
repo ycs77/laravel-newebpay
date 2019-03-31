@@ -91,6 +91,6 @@ class NewebPayCancel
             'PostData_' => $postData
         ];
 
-        return $this->setRequestForm($request, $this->NewebPayCancelURL);
+        return $this->setPostRequest($request, $this->NewebPayCancelURL);
     }
 }
