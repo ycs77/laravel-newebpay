@@ -89,6 +89,21 @@ class NewebPay
         return $newebPay;
     }
 
+    /*
+      * 查詢
+      *
+      * no: 訂單編號
+      * amt: 訂單金額
+      */ 
+    public function query($no, $amt)
+    {
+        $newebPay = new NewebPayQuery($this->MerchantID, $this->HashKey, $this->HashIV);
+        $newebPay->setQuery($no, $amt);
+
+        return $newebPay;
+    }
+
+
 
     public function decodeCallback($encryptString)
     {
