@@ -117,7 +117,7 @@ class NewebPay
      */
     public function creditcardFirstTrade($data)
     {
-        $newebPay = new NewebPayCreditCard($this->MerchantID . $this->HashKey, $this->HashIV);
+        $newebPay = new NewebPayCreditCard($this->MerchantID, $this->HashKey, $this->HashIV);
         $newebPay->firstTrade($data);
 
         return $newebPay;
@@ -135,7 +135,7 @@ class NewebPay
      */
     public function creditcardTradeWithToken($data)
     {
-        $newebPay = new NewebPayCreditCard($this->MerchantID . $this->HashKey, $this->HashIV);
+        $newebPay = new NewebPayCreditCard($this->MerchantID, $this->HashKey, $this->HashIV);
         $newebPay->tradeWithToken($data);
 
         return $newebPay;

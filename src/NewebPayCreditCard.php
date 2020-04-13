@@ -25,13 +25,13 @@ class NewebPayCreditCard
         $this->HashKey = $HashKey;
         $this->HashIV = $HashIV;
 
-        $this->setNewebPayQueryURL(config('newebpay.Debug'));
+        $this->setNewebPayCreditCardURL(config('newebpay.Debug'));
 
         $this->TradeData['TimeStamp'] = time();
 
         $this->setP3D(false);
         $this->setVersion();
-        $this->setRespondType();
+        $this->setResponseType();
     }
 
     public function setNewebPayCreditCardURL($debug = true)
@@ -84,7 +84,7 @@ class NewebPayCreditCard
 
     public function tradeWithToken($data)
     {
-        $this->TradeData['TokenSwitch'] = 'no';
+        $this->TradeData['TokenSwitch'] = 'on';
 
         $this->TradeData['MerchantOrderNo'] = $data['no'];
         $this->TradeData['Amt'] = $data['amt'];
