@@ -4,6 +4,7 @@ namespace Treerful\NewebPay;
 
 use Treerful\NewebPay\Traits\EncryptionTrait;
 use Treerful\NewebPay\Traits\RequestTrait;
+use GuzzleHttp\Client;
 
 class NewebPayCreditCard
 {
@@ -106,6 +107,14 @@ class NewebPayCreditCard
             'Pos_' => $this->responseType
         ];
 
-        return $this->setRequestForm($request, $this->NewebPayCreditCardURL);
+        $url = $this->NewebPayCreditCardURL;
+        $parameter = [
+            'form_params' => $request,
+            'verify' => false,
+        ];
+
+        $client = new Client();
+        $result = json_decode($client->post($url, $parameter)->getBody(), true);
+        return $result;
     }
 }
