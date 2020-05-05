@@ -18,5 +18,15 @@
         "psr-4": {
             "Treerful\\NewebPay\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Treerful\\NewebPay\\Providers\\NewebPayServiceProvider"
+            ],
+            "aliases": {
+                "NewebPay": "Treerful\\NewebPay\\NewebPay"
+            }
+        }
     }
 }

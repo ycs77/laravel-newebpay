@@ -10,14 +10,18 @@ Laravel-NewebPay 為針對 laravel 所寫的金流套件，主要實作藍新金
 
 
 ## Installation
-1. Install from comoposer:
+
+1. 使用 comoposer 安裝：
+
 ```
 composer require treerful/laravel-newebpay
 ```
 
-2. Copy the config file (2 methods):
+2. 註冊套件:
 
-(a)In `config/app.php`
+> Laravel 5.5 以上會自動註冊套件，可以跳過此步驟
+
+在 `config/app.php` 註冊套件：
 ```
  'providers' => [
         /*
@@ -27,20 +31,11 @@ composer require treerful/laravel-newebpay
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         ...
         ...
-        Treerful\NewebPay\NewebPayServiceProvider::class,
-```
-After adding the ServiceProvider, Publish the config file.
-```
-php artisan vendor:publish
+        Treerful\NewebPay\Providers\NewebPayServiceProvider::class,
 ```
 
-(b)Copy it manually without adding the provider.
-```
-cp vendor/treerful/laravel-newebpay/config/newebpay.php config/newebpay.php
-```
-*Remember that the filename `newebpay.php` should not be changed!*
+在 `config/app.php` 增加別名：
 
-3. Add aliases in `config/app.php`
 ```
  'aliases' => [
      ...
@@ -51,6 +46,12 @@ cp vendor/treerful/laravel-newebpay/config/newebpay.php config/newebpay.php
 
     'NewebPay' => Treerful\NewebPay\NewebPay::class,
  ]
+```
+
+3. 發布設置檔案：
+
+```
+php artisan vendor:publish --provider="Treerful\NewebPay\Providers\NewebPayServiceProvider"
 ```
 
 ## Usage
