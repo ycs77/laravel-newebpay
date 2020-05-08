@@ -11,13 +11,11 @@ Laravel-NewebPay 為針對 laravel 所寫的金流套件，主要實作藍新金
 
 ## 安裝
 
-1. 使用 comoposer 安裝：
-
 ```
 composer require ycs77/laravel-newebpay
 ```
 
-2. 註冊套件:
+### 註冊套件
 
 > Laravel 5.5 以上會自動註冊套件，可以跳過此步驟
 
@@ -42,7 +40,7 @@ composer require ycs77/laravel-newebpay
     ]
 ```
 
-3. 發布設置檔案：
+### 發布設置檔案
 
 ```
 php artisan vendor:publish --provider="Ycs77\NewebPay\Providers\NewebPayServiceProvider"
