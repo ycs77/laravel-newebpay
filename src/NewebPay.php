@@ -1,148 +1,145 @@
 <?php
 
-namespace Treerful\NewebPay;
+namespace Ycs77\NewebPay;
 
-use Treerful\NewebPay\Traits\EncryptionTrait;
-
-class NewebPay
+class NewebPay extends BaseNewebPay
 {
-
-    use EncryptionTrait;
-
-    private $MerchantID;
-    private $HashKey;
-    private $HashIV;
-
-    public function __construct($MerchantID = null, $HashKey = null, $HashIV = null)
-    {
-        $this->MerchantID = ($MerchantID != null ? $MerchantID : config('newebpay.MerchantID'));
-        $this->HashKey = ($HashKey != null ? $HashKey : config('newebpay.HashKey'));
-        $this->HashIV = ($HashIV != null ? $HashIV : config('newebpay.HashIV'));
-    }
-
-
-    /*
+    /**
      * 付款
-     * 
-     * no: 訂單編號
-     * amt: 訂單金額
-     * desc: 商品描述
-     * email: 連絡信箱
+     *
+     * @param  string  $no 訂單編號
+     * @param  int  $amt 訂單金額
+     * @param  string  $desc 商品描述
+     * @param  string  $email 連絡信箱
+     * @return \Ycs77\NewebPay\NewebPayMPG
      */
     public function payment($no, $amt, $desc, $email)
     {
-        $newebPay = new NewebPayMPG($this->MerchantID, $this->HashKey, $this->HashIV);
+        $newebPay = new NewebPayMPG($this->config);
         $newebPay->setOrder($no, $amt, $desc, $email);
+
         return $newebPay;
     }
 
-    /*
+    /**
      * 取消授權
-     * 
-     * no: 訂單編號
-     * amt: 訂單金額
-     * type:
-     *  'order' => 使用商店訂單編號追蹤
-     *  'trade' => 使用藍新金流交易序號追蹤
+     *
+     * @param  string  $no 訂單編號
+     * @param  int  $amt 訂單金額
+     * @param  string  $type 編號類型
+     *         'order' => 使用商店訂單編號追蹤
+     *         'trade' => 使用藍新金流交易序號追蹤
+     * @return \Ycs77\NewebPay\NewebPayCancel
      */
     public function creditCancel($no, $amt, $type = 'order')
     {
-        $newebPay = new NewebPayCancel($this->MerchantID, $this->HashKey, $this->HashIV);
+        $newebPay = new NewebPayCancel($this->config);
         $newebPay->setCancelOrder($no, $amt, $type);
 
         return $newebPay;
     }
 
-    /*
+    /**
      * 請款
      *
-     * no: 訂單編號
-     * amt: 訂單金額
-     * type: 
-     *  'order' => 使用商店訂單編號追蹤
-     *  'trade' => 使用藍新金流交易序號追蹤
+     * @param  string  $no 訂單編號
+     * @param  int  $amt 訂單金額
+     * @param  string  $type 編號類型
+     *         'order' => 使用商店訂單編號追蹤
+     *         'trade' => 使用藍新金流交易序號追蹤
+     * @return \Ycs77\NewebPay\NewebPayClose
      */
     public function requestPayment($no, $amt, $type = 'order')
     {
-        $newebPay = new NewebPayClose($this->MerchantID, $this->HashKey, $this->HashIV);
+        $newebPay = new NewebPayClose($this->config);
         $newebPay->setCloseOrder($no, $amt, $type);
         $newebPay->setCloseType('pay');
 
         return $newebPay;
     }
 
-    /*
-      * 退款
-      *
-      * no: 訂單編號
-      * amt: 訂單金額
-      * type: 
-      *  'order' => 使用商店訂單編號追蹤
-      *  'trade' => 使用藍新金流交易序號追蹤
-      */
+    /**
+     * 退款
+     *
+     * @param  string  $no 訂單編號
+     * @param  int  $amt 訂單金額
+     * @param  string  $type 編號類型
+     *         'order' => 使用商店訂單編號追蹤
+     *         'trade' => 使用藍新金流交易序號追蹤
+     * @return \Ycs77\NewebPay\NewebPayClose
+     */
     public function requestRefund($no, $amt, $type = 'order')
     {
-        $newebPay = new NewebPayClose($this->MerchantID, $this->HashKey, $this->HashIV);
+        $newebPay = new NewebPayClose($this->config);
         $newebPay->setCloseOrder($no, $amt, $type);
         $newebPay->setCloseType('refund');
 
         return $newebPay;
     }
 
-    /*
-      * 查詢
-      *
-      * no: 訂單編號
-      * amt: 訂單金額
-      */
+    /**
+     * 查詢
+     *
+     * @param  string  $no 訂單編號
+     * @param  int  $amt 訂單金額
+     * @return \Ycs77\NewebPay\NewebPayQuery
+     */
     public function query($no, $amt)
     {
-        $newebPay = new NewebPayQuery($this->MerchantID, $this->HashKey, $this->HashIV);
+        $newebPay = new NewebPayQuery($this->config);
         $newebPay->setQuery($no, $amt);
 
         return $newebPay;
     }
 
-    /** 
+    /**
      * 信用卡授權 - 首次交易
      *
-     * $data['no'] => 訂單編號
-     * $data['email'] => 購買者 email
-     * $data['cardNo'] => 信用卡號
-     * $data['exp'] => 到期日 格式: 2021/01 -> 2101
-     * $data['cvc'] => 信用卡驗證碼 格式: 3碼
-     * $data['desc] => 商品描述
-     * $data['amt'] => 綁定支付金額
-     * $data['tokenTerm'] => 約定信用卡付款之付款人綁定資料
+     * @param  array  $data
+     *                 $data['no'] => 訂單編號
+     *                 $data['email'] => 購買者 email
+     *                 $data['cardNo'] => 信用卡號
+     *                 $data['exp'] => 到期日 格式: 2021/01 -> 2101
+     *                 $data['cvc'] => 信用卡驗證碼 格式: 3碼
+     *                 $data['desc] => 商品描述
+     *                 $data['amt'] => 綁定支付金額
+     *                 $data['tokenTerm'] => 約定信用卡付款之付款人綁定資料
+     * @return \Ycs77\NewebPay\NewebPayCreditCard
      */
     public function creditcardFirstTrade($data)
     {
-        $newebPay = new NewebPayCreditCard($this->MerchantID, $this->HashKey, $this->HashIV);
+        $newebPay = new NewebPayCreditCard($this->config);
         $newebPay->firstTrade($data);
 
         return $newebPay;
     }
 
-    /** 
+    /**
      * 信用卡授權 - 使用已綁定信用卡進行交易
      *
-     * $data['no'] => 訂單編號
-     * $data['amt'] => 訂單金額
-     * $data['desc'] => 商品描述
-     * $data['email'] => 購買者 email
-     * $data['tokenValue'] => 綁定後取回的 token 值
-     * $data['tokenTerm'] => 約定信用卡付款之付款人綁定資料 要與第一次綁定時一樣
+     * @param  array  $data
+     *                $data['no'] => 訂單編號
+     *                $data['amt'] => 訂單金額
+     *                $data['desc'] => 商品描述
+     *                $data['email'] => 購買者 email
+     *                $data['tokenValue'] => 綁定後取回的 token 值
+     *                $data['tokenTerm'] => 約定信用卡付款之付款人綁定資料 要與第一次綁定時一樣
+     * @return \Ycs77\NewebPay\NewebPayCreditCard
      */
     public function creditcardTradeWithToken($data)
     {
-        $newebPay = new NewebPayCreditCard($this->MerchantID, $this->HashKey, $this->HashIV);
+        $newebPay = new NewebPayCreditCard($this->config);
         $newebPay->tradeWithToken($data);
 
         return $newebPay;
     }
 
-
-
+    /**
+     * 解碼加密字串
+     *
+     * @param  string  $encryptString
+     * @return mixed
+     */
     public function decodeCallback($encryptString)
     {
         $decryptString = $this->decryptDataByAES($encryptString, $this->HashKey, $this->HashIV);

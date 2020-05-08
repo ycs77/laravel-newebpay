@@ -1,5 +1,5 @@
 {
-    "name": "treerful/laravel-newebpay",
+    "name": "ycs77/laravel-newebpay",
     "description": "A library of connecting newebpay's API service.",
     "type": "library",
     "license": "MIT",
@@ -7,25 +7,33 @@
         {
             "name": "w4ll4se",
             "email": "wallase.huang@gmail.com"
+        },
+        {
+            "name": "Lucas Yang",
+            "email": "yangchenshin77@gmail.com"
         }
     ],
     "require": {
-        "php": ">=5.3.10",
-        "guzzlehttp/guzzle": "^6.3"
+        "php": ">=5.5.9",
+        "guzzlehttp/guzzle": "^6.3",
+        "illuminate/support": ">=5.1",
+        "illuminate/config": ">=5.1",
+        "illuminate/contracts": ">=5.1",
+        "nesbot/carbon": ">=1.0"
     },
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "Treerful\\NewebPay\\": "src/"
+            "Ycs77\\NewebPay\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Treerful\\NewebPay\\Providers\\NewebPayServiceProvider"
+                "Ycs77\\NewebPay\\NewebPayServiceProvider"
             ],
             "aliases": {
-                "NewebPay": "Treerful\\NewebPay\\NewebPay"
+                "NewebPay": "Ycs77\\NewebPay\\Facades\\NewebPay"
             }
         }
     }

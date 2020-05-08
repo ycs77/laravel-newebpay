@@ -1,72 +1,42 @@
 <?php
 
-namespace Treerful\NewebPay;
+namespace Ycs77\NewebPay;
 
-use Treerful\NewebPay\Traits\EncryptionTrait;
-use Treerful\NewebPay\Traits\RequestTrait;
-use GuzzleHttp\Client;
-
-class NewebPayCreditCard
+class NewebPayCreditCard extends BaseNewebPay
 {
-    use EncryptionTrait, RequestTrait;
-
-    private $MerchantID;
-    private $HashKey;
-    private $HashIV;
-
-    private $NewebPayCreditCardURL;
-
-    private $TradeData;
-
-    private $responseType;
-
-    public function __construct($MerchantID = null, $HashKey = null, $HashIV = null)
+    /**
+     * The newebpay boot hook.
+     *
+     * @return void
+     */
+    public function boot()
     {
-        $this->MerchantID = $MerchantID;
-        $this->HashKey = $HashKey;
-        $this->HashIV = $HashIV;
-
-        $this->setNewebPayCreditCardURL(config('newebpay.Debug'));
-
-        $this->TradeData['TimeStamp'] = time();
+        $this->setApiPath('API/CreditCard');
+        $this->setAsyncSender();
 
         $this->setP3D(false);
-        $this->setVersion();
-        $this->setResponseType();
     }
 
-    public function setNewebPayCreditCardURL($debug = true)
-    {
-        if ($debug) {
-            // 信用卡授權測試網址
-            $this->NewebPayCreditCardURL = "https://ccore.newebpay.com/API/CreditCard";
-        } else {
-            // 信用卡授權正式網址
-            $this->NewebPayCreditCardURL = "https://core.newebpay.com/API/CreditCard";
-        }
-    }
-
-    public function setVersion($version = "1.5")
-    {
-        $this->TradeData['Version'] = $version;
-        return $this;
-    }
-
-    public function setResponseType($type = "JSON")
-    {
-        $this->responseType = $type;
-        return $this;
-    }
-
-    // 3d 驗證交易
+    /**
+     * 3d 驗證交易
+     *
+     * @param  bool  $p3d
+     * @return self
+     */
     public function setP3D($p3d = false)
     {
-        // 需考慮傳送notify & return url when p3d is true;
+        // 需考慮傳送 notify & return url when p3d is true;
         $this->TradeData['P3D'] = $p3d;
+
         return $this;
     }
 
-    // 首次授權信用卡交易
+    /**
+     * 首次授權信用卡交易
+     *
+     * @param  array  $data
+     * @return self
+     */
     public function firstTrade($data)
     {
         $this->TradeData['TokenSwitch'] = 'get';
@@ -83,6 +53,12 @@ class NewebPayCreditCard
         return $this;
     }
 
+    /**
+     * 使用 Token 授權
+     *
+     * @param  array  $data
+     * @return self
+     */
     public function tradeWithToken($data)
     {
         $this->TradeData['TokenSwitch'] = 'on';
@@ -97,24 +73,19 @@ class NewebPayCreditCard
         return $this;
     }
 
-    public function submit()
+    /**
+     * Get request data.
+     *
+     * @return array
+     */
+    public function getRequestData()
     {
         $tradeInfo = $this->encryptDataByAES($this->TradeData, $this->HashKey, $this->HashIV);
 
-        $request = [
+        return [
             'MerchantID_' => $this->MerchantID,
             'PostData_' => $tradeInfo,
-            'Pos_' => $this->responseType
+            'Pos_' => $this->config->get('newebpay.RespondType'),
         ];
-
-        $url = $this->NewebPayCreditCardURL;
-        $parameter = [
-            'form_params' => $request,
-            'verify' => false,
-        ];
-
-        $client = new Client();
-        $result = json_decode($client->post($url, $parameter)->getBody(), true);
-        return $result;
     }
 }

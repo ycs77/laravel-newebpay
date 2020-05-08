@@ -1,9 +1,8 @@
 <?php
 
-namespace Treerful\NewebPay\Providers;
+namespace Ycs77\NewebPay;
 
 use Illuminate\Support\ServiceProvider;
-use Treerful\Pay2go\NewebPay;
 
 class NewebPayServiceProvider extends ServiceProvider
 {
@@ -15,9 +14,7 @@ class NewebPayServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(NewebPay::class, function($app) {
-            $config = $app['config']['newebpay'];
-
-            return new NewebPay($config['MerchantID'], $config['HashKey'], $config['HashIV']);
+            return new NewebPay($app['config']);
         });
     }
 

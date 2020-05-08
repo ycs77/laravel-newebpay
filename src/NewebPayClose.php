@@ -1,120 +1,85 @@
 <?php
 
-namespace Treerful\NewebPay;
+namespace Ycs77\NewebPay;
 
-use Treerful\NewebPay\Traits\EncryptionTrait;
-use Treerful\NewebPay\Traits\RequestTrait;
-
-class NewebPayClose
+class NewebPayClose extends BaseNewebPay
 {
-    use EncryptionTrait, RequestTrait;
-
-    protected $NewebPayCloseURL;
-
-    private $MerchantID;
-    private $HashKey;
-    private $HashIV;
-
-    private $TradeData;
-
-    public function __construct($MerchantID = null, $HashKey = null, $HashIV = null)
+    /**
+     * The newebpay boot hook.
+     *
+     * @return void
+     */
+    public function boot()
     {
-        $this->MerchantID = $MerchantID;
-        $this->HashKey = $HashKey;
-        $this->HashIV = $HashIV;
+        $this->setApiPath('API/CreditCard/Close');
+        $this->setAsyncSender();
 
-        $this->setNewebPayCloseURL(config('newebpay.Debug'));
-
-        $this->setRespondType();
-        $this->setVersion();
-        $this->TradeData['TimeStamp'] = time();
         $this->setNotifyURL();
     }
 
-    private function setNewebPayCloseURL($debug = true)
-    {
-        if ($debug) {
-            $this->NewebPayCloseURL = 'https://ccore.newebpay.com/API/CreditCard/Close';
-        } else {
-            $this->NewebPayCloseURL = 'https://core.newebpay.com/API/CreditCard/Close';
-        }
-    }
-
-    public function setRespondType($type = 'JSON')
-    {
-        $this->TradeData['RespondType'] = $type;
-        return $this;
-    }
-
-    public function setVersion($version = 1.0)
-    {
-        $this->TradeData['Version'] = $version;
-        return $this;
-    }
-
-    /*
+    /**
      * 設定請退款的模式
      *
-     * no: MerchartOrderNo/TradeNo (商店訂單編號/藍新金流交易序號)
-     * type: 
+     * @param  string  $no
+     * @param  int  $amt
+     * @param  string  $type
      *  'order': 使用商店訂單編號
      *  'trade': 使用藍新金流交易序號
-     * 
+     * @return self
      */
     public function setCloseOrder($no, $amt, $type = 'order')
     {
-
         if ($type === 'order') {
             $this->TradeData['MerchantOrderNo'] = $no;
             $this->TradeData['IndexType'] = 1;
-        } else if ($type === 'trade') {
+        } elseif ($type === 'trade') {
             $this->TradeData['TradeNo'] = $no;
             $this->TradeData['IndexType'] = 2;
         }
 
         $this->TradeData['Amt'] = $amt;
+
         return $this;
     }
 
-    public function setNotifyURL($url = null)
-    {
-        $this->TradeData['NotifyURL'] = $url;
-        return $this;
-    }
-
-    /*
+    /**
      * 設定請款或退款
      *
-     * type: 
+     * @param  string  $type
      *  'pay': 請款
      *  'refund': 退款
-     * 
+     * @return self
      */
     public function setCloseType($type = 'pay')
     {
         if ($type === 'pay') {
             $this->TradeData['CloseType'] = 1;
-        } else if ($type === 'refund') {
+        } elseif ($type === 'refund') {
             $this->TradeData['CloseType'] = 2;
         }
+
         return $this;
     }
 
     public function setCancel($isCancel = false)
     {
         $this->TradeData['Cancel'] = $isCancel;
+
         return $this;
     }
 
-    public function submit()
+    /**
+     * Get request data.
+     *
+     * @return array
+     */
+    public function getRequestData()
     {
         $postData = $this->encryptDataByAES($this->TradeData, $this->HashKey, $this->HashIV);
 
-        $request = [
+        return [
             'MerchantID_' => $this->MerchantID,
-            'PostData_' => $postData
+            'PostData_' => $postData,
         ];
-
-        return $this->setPostRequest($request, $this->NewebPayCloseURL);
     }
 }
