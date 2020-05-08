@@ -43,7 +43,7 @@ class NewebPayQuery extends BaseNewebPay
             'CheckValue' => $CheckValue,
             'TimeStamp' => $this->timestamp,
             'MerchantOrderNo' => $this->CheckValues['MerchantOrderNo'],
-            'Amt' => $this->CheckValues['Amt']
+            'Amt' => $this->CheckValues['Amt'],
         ];
     }
 }

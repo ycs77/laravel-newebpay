@@ -91,7 +91,6 @@ return [
 
     'ClientBackURL' => env('CASH_CLIENT_BACK_URL') != null ? env('APP_URL') . env('CASH_CLIENT_BACK_URL') : null,
 
-
     /*
      * 付款人電子信箱是否開放修改 (bool)
      *

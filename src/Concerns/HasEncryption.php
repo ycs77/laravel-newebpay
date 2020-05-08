@@ -20,7 +20,7 @@ trait HasEncryption
     {
         $postDataStr = 'HashKey=' . $hashKey . '&' . $parameter . '&HashIV=' . $hashIV;
 
-        return strtoupper(hash("sha256", $postDataStr));
+        return strtoupper(hash('sha256', $postDataStr));
     }
 
     protected function queryCheckValue($parameter, $hashKey, $hashIV)
@@ -29,7 +29,7 @@ trait HasEncryption
         $checkStr = http_build_query($parameter);
         $postDataStr = 'IV=' . $hashIV . '&' . $checkStr . '&Key=' . $hashKey;
 
-        return strtoupper(hash("sha256", $postDataStr));
+        return strtoupper(hash('sha256', $postDataStr));
     }
 
     protected function addPadding($string, $blocksize = 32)
@@ -47,11 +47,12 @@ trait HasEncryption
         $slastc = chr($slast);
         $pcheck = substr($string, -$slast);
 
-        if (preg_match("/$slastc{" . $slast . "}/", $string)) {
+        if (preg_match('/' . $slastc . '{' . $slast . '}/', $string)) {
             $string = substr($string, 0, strlen($string) - $slast);
+
             return $string;
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

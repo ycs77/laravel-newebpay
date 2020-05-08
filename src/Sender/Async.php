@@ -18,7 +18,7 @@ class Async implements Sender
     {
         $parameter = [
             'form_params' => $request,
-            'verify' => false
+            'verify' => false,
         ];
 
         $client = new Client();
