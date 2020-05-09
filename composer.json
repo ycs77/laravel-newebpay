@@ -13,6 +13,7 @@
             "email": "yangchenshin77@gmail.com"
         }
     ],
+    "homepage": "https://github.com/ycs77/laravel-newebpay",
     "require": {
         "php": ">=5.5.9",
         "guzzlehttp/guzzle": "^6.3",
@@ -21,7 +22,6 @@
         "illuminate/contracts": ">=5.1",
         "nesbot/carbon": ">=1.0"
     },
-    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "Ycs77\\NewebPay\\": "src/"
@@ -36,5 +36,8 @@
                 "NewebPay": "Ycs77\\NewebPay\\Facades\\NewebPay"
             }
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
