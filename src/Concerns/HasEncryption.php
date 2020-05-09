@@ -8,7 +8,7 @@ trait HasEncryption
     {
         $postDataStr = http_build_query($parameter);
 
-        return trim(bin2hex(openssl_encrypt($this->addPadding($postDataStr), 'aes-256-cbc', $hashKey, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $hashIV)));
+        return trim(bin2hex(openssl_encrypt($this->addPadding($postDataStr), 'AES-256-CBC', $hashKey, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $hashIV)));
     }
 
     protected function decryptDataByAES($parameter, $hashKey, $hashIV)

@@ -179,7 +179,7 @@ trait TradeData
      */
     public function setEmailModify($isModify = null)
     {
-        $this->TradeData['EmailModify'] = ($isModify !== null ? $isModify : $this->config->get('newebpay.EmailModify')) ? 1 : 0;
+        $this->TradeData['EmailModify'] = ($isModify !== null ? $isModify : $this->config->get('newebpay.EmailModify', false)) ? 1 : 0;
 
         return $this;
     }
@@ -192,7 +192,7 @@ trait TradeData
      */
     public function setLoginType($isLogin = false)
     {
-        $this->TradeData['LoginType'] = ($isLogin !== null ? $isLogin : $this->config->get('newebpay.LoginType')) ? 1 : 0;
+        $this->TradeData['LoginType'] = ($isLogin !== null ? $isLogin : $this->config->get('newebpay.LoginType', false)) ? 1 : 0;
 
         return $this;
     }

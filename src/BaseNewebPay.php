@@ -146,7 +146,10 @@ abstract class BaseNewebPay
      *
      * @return array
      */
-    abstract public function getRequestData();
+    public function getRequestData()
+    {
+        return [];
+    }
 
     /**
      * Submit data to newebpay API.

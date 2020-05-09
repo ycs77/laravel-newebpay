@@ -84,10 +84,11 @@ $newebpay = new NewebPay();
 ### NewebPay MPG - 多功能支付
 
 ```php
+use Ycs77\NewebPay\Facades\NewebPay;
+
 function order() 
 {
-    $newebpay = new NewebPay();
-    return $newebpay->payment(
+    return NewebPay::payment(
         no, // 訂單編號
         amt, // 交易金額
         desc, // 交易描述
@@ -99,9 +100,9 @@ function order()
 基本上一般交易可直接在 `config/newebpay.php`做設定，裡面有詳細的解說，但若遇到特殊情況，可依據個別交易做個別 function 設定。
 
 ```php
-$newebpay = new NewebPay();
+use Ycs77\NewebPay\Facades\NewebPay;
 
-return $newebpay->payment(
+return NewebPay::payment(
     no, // 訂單編號
     amt, // 交易金額
     desc, // 交易描述
@@ -127,25 +128,23 @@ return $newebpay->payment(
 *此版本1.5由籃新金流回傳後為加密訊息，所以回傳後需要進行解碼！*
 
 ```php
+use Illuminate\Http\Request;
+use Ycs77\NewebPay\Facades\NewebPay;
+
 function returnURL(Request $request)
 {
-    $retrunData = $request->all();
-
-    $newebpay = new NewebPay();
-    $retrunData['data'] = $newebpay->decodeCallback($retrunData['TradeInfo']);
-
-    return $retrunData;
+    return NewebPay::decode($request->input('TradeInfo'));
 }
 ```
 
 ### NewebPay Cancel - 信用卡取消授權
 
 ```php
+use Ycs77\NewebPay\Facades\NewebPay;
+
 function creditCancel()
 {
-    $newebpay = new NewebPay();
-
-    return $newebpay->creditCancel(
+    return NewebPay::creditCancel(
         no, // 該筆交易的訂單編號
         amt,  // 該筆交易的金額
         'order' // 可選擇是由 order->訂單編號 或是 trade->藍新交易編號來做申請
@@ -156,11 +155,11 @@ function creditCancel()
 ### NewebPay Close - 信用卡請款
 
 ```php
+use Ycs77\NewebPay\Facades\NewebPay;
+
 function requestPayment()
 {
-    $newebpay = new NewebPay();
-
-    return $newebpay->requestPayment(
+    return NewebPay::requestPayment(
         no, // 該筆交易的訂單編號
         amt,  // 該筆交易的金額
         'order' // 可選擇是由 order->訂單編號 或是 trade->藍新交易編號來做申請
@@ -171,11 +170,11 @@ function requestPayment()
 ### NewebPay close - 信用卡退款
 
 ```php
+use Ycs77\NewebPay\Facades\NewebPay;
+
 function requestRefund()
 {
-    $newebpay = new NewebPay();
-
-    return $newebpay->requestRefund(
+    return NewebPay::requestRefund(
         no, // 該筆交易的訂單編號
         amt,  // 該筆交易的金額
         'order' // 可選擇是由 order->訂單編號 或是 trade->藍新交易編號來做申請

@@ -2,6 +2,9 @@
 
 namespace Ycs77\NewebPay;
 
+use Throwable;
+use Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException;
+
 class NewebPay extends BaseNewebPay
 {
     /**
@@ -139,11 +142,17 @@ class NewebPay extends BaseNewebPay
      *
      * @param  string  $encryptString
      * @return mixed
+     *
+     * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
      */
-    public function decodeCallback($encryptString)
+    public function decode($encryptString)
     {
-        $decryptString = $this->decryptDataByAES($encryptString, $this->HashKey, $this->HashIV);
+        try {
+            $decryptString = $this->decryptDataByAES($encryptString, $this->HashKey, $this->HashIV);
 
-        return json_decode($decryptString, true);
+            return json_decode($decryptString, true);
+        } catch (Throwable $e) {
+            throw new NewebpayDecodeFailException($e, $encryptString);
+        }
     }
 }

@@ -38,8 +38,8 @@ class NewebPayQuery extends BaseNewebPay
 
         return [
             'MerchantID' => $this->MerchantID,
-            'Version' => $this->config->get('newebpay.Version'),
-            'RespondType' => $this->config->get('newebpay.RespondType'),
+            'Version' => $this->config->get('newebpay.Version', '1.5'),
+            'RespondType' => $this->config->get('newebpay.RespondType', 'json'),
             'CheckValue' => $CheckValue,
             'TimeStamp' => $this->timestamp,
             'MerchantOrderNo' => $this->CheckValues['MerchantOrderNo'],
