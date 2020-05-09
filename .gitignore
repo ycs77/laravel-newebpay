@@ -1,2 +1,7 @@
 /vendor
 .DS_Store
+/.vscode
+/build/coverage-report
+composer.lock
+phpunit.xml
+*.cache
