@@ -124,7 +124,7 @@ abstract class BaseNewebPay
      */
     public function setApiPath($path)
     {
-        $this->url = $this->url($path);
+        $this->url = $this->generateUrl($path);
 
         return $this;
     }
