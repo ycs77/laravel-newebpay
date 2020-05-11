@@ -94,10 +94,10 @@ return [
     /*
      * 付款人電子信箱是否開放修改 (bool)
      *
-     * default: false
+     * default: true
      */
 
-    'EmailModify' => false,
+    'EmailModify' => true,
 
     /*
      * 是否需要登入智付寶會員 (bool)
