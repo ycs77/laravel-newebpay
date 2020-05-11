@@ -43,7 +43,7 @@ trait TradeData
      */
     public function setVersion($version = null)
     {
-        $this->TradeData['Version'] = $version ?? $this->config->get('newebpay.Version', '1.5');
+        $this->TradeData['Version'] = $version ?? $this->config->get('newebpay.Version');
 
         return $this;
     }
@@ -58,7 +58,7 @@ trait TradeData
      */
     public function setRespondType($type = null)
     {
-        $this->TradeData['RespondType'] = $type ?? $this->config->get('newebpay.RespondType', 'JSON');
+        $this->TradeData['RespondType'] = $type ?? $this->config->get('newebpay.RespondType');
 
         return $this;
     }
@@ -73,7 +73,7 @@ trait TradeData
      */
     public function setLangType($lang = null)
     {
-        $this->TradeData['LangType'] = $lang ?? $this->config->get('newebpay.LangType', 'zh-tw');
+        $this->TradeData['LangType'] = $lang ?? $this->config->get('newebpay.LangType');
 
         return $this;
     }
@@ -90,7 +90,7 @@ trait TradeData
      */
     public function setTradeLimit($limit = null)
     {
-        $this->TradeData['TradeLimit'] = $limit !== null ? $limit : $this->config->get('newebpay.TradeLimit', 0);
+        $this->TradeData['TradeLimit'] = $limit !== null ? $limit : $this->config->get('newebpay.TradeLimit');
 
         return $this;
     }
@@ -103,7 +103,7 @@ trait TradeData
      */
     public function setExpireDate($day = null)
     {
-        $day = $day !== null ? $day : $this->config->get('newebpay.ExpireDate', 7);
+        $day = $day !== null ? $day : $this->config->get('newebpay.ExpireDate');
 
         $this->TradeData['ExpireDate'] = Carbon::now()->addDays($day)->format('Ymd');
 
@@ -179,7 +179,7 @@ trait TradeData
      */
     public function setEmailModify($isModify = null)
     {
-        $this->TradeData['EmailModify'] = ($isModify !== null ? $isModify : $this->config->get('newebpay.EmailModify', false)) ? 1 : 0;
+        $this->TradeData['EmailModify'] = ($isModify !== null ? $isModify : $this->config->get('newebpay.EmailModify')) ? 1 : 0;
 
         return $this;
     }
@@ -192,7 +192,7 @@ trait TradeData
      */
     public function setLoginType($isLogin = false)
     {
-        $this->TradeData['LoginType'] = ($isLogin !== null ? $isLogin : $this->config->get('newebpay.LoginType', false)) ? 1 : 0;
+        $this->TradeData['LoginType'] = ($isLogin !== null ? $isLogin : $this->config->get('newebpay.LoginType')) ? 1 : 0;
 
         return $this;
     }

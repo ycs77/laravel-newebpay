@@ -31,7 +31,7 @@ class NewebPayCancelTest extends TestCase
         $requestData = $newebpay->getRequestData();
 
         $this->assertEquals('TestMerchantID1234', $requestData['MerchantID_']);
-        $this->assertEquals('e88e33cc07d106bcba1c1bd02d5d421f29e99fa551a1062eb25c9eb769877734fc3682f79cdaba7e8489a37de705b826f131fb14552b6a862298c314b869888b', $requestData['PostData_']);
+        $this->assertEquals('e88e33cc07d106bcba1c1bd02d5d421f29e99fa551a1062eb25c9eb769877734278f598f155ed8332ac407ba9008404d1f5cee9d189ee7542d3952ca0553167c', $requestData['PostData_']);
     }
 
     public function testNewebPayCancelSubmit()

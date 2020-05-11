@@ -29,9 +29,9 @@ class TestCase extends BaseTestCase
         return $config;
     }
 
-    public function mockGetConfig(MockInterface $mock, $key, $default = null, $returnValue)
+    public function mockGetConfig(MockInterface $mock, $key, $returnValue)
     {
-        $withArgs = array_filter(array("newebpay.$key", $default), function ($value) {
+        $withArgs = array_filter(array("newebpay.$key"), function ($value) {
             return $value !== null;
         });
 
@@ -42,23 +42,23 @@ class TestCase extends BaseTestCase
 
     public function mockConfigValues(MockInterface $config)
     {
-        $this->mockGetConfig($config, 'Debug', null, true);
-        $this->mockGetConfig($config, 'MerchantID', null, 'TestMerchantID1234');
-        $this->mockGetConfig($config, 'HashKey', null, 'TestHashKey123456789');
-        $this->mockGetConfig($config, 'HashIV', null, '17ef14e533ed1c18'); // Generate with `bin2hex(openssl_random_pseudo_bytes(8));`
-        $this->mockGetConfig($config, 'Version', '1.5', '1.5');
-        $this->mockGetConfig($config, 'RespondType', 'JSON', 'JSON');
-        $this->mockGetConfig($config, 'LangType', 'zh-tw', 'zh-tw');
-        $this->mockGetConfig($config, 'TradeLimit', 0, 0);
-        $this->mockGetConfig($config, 'ExpireDate', 7, 7);
-        $this->mockGetConfig($config, 'ReturnURL', null, null);
-        $this->mockGetConfig($config, 'NotifyURL', null, null);
-        $this->mockGetConfig($config, 'CustomerURL', null, null);
-        $this->mockGetConfig($config, 'ClientBackURL', null, null);
-        $this->mockGetConfig($config, 'EmailModify', false, false);
-        $this->mockGetConfig($config, 'LoginType', false, false);
-        $this->mockGetConfig($config, 'OrderComment', null, null);
-        $this->mockGetConfig($config, 'PaymentMethod', null, [
+        $this->mockGetConfig($config, 'Debug', true);
+        $this->mockGetConfig($config, 'MerchantID', 'TestMerchantID1234');
+        $this->mockGetConfig($config, 'HashKey', 'TestHashKey123456789');
+        $this->mockGetConfig($config, 'HashIV', '17ef14e533ed1c18'); // Generate with `bin2hex(openssl_random_pseudo_bytes(8));`
+        $this->mockGetConfig($config, 'Version', '1.5');
+        $this->mockGetConfig($config, 'RespondType', 'JSON');
+        $this->mockGetConfig($config, 'LangType', 'zh-tw');
+        $this->mockGetConfig($config, 'TradeLimit', 0);
+        $this->mockGetConfig($config, 'ExpireDate', 7);
+        $this->mockGetConfig($config, 'ReturnURL', null);
+        $this->mockGetConfig($config, 'NotifyURL', null);
+        $this->mockGetConfig($config, 'CustomerURL', null);
+        $this->mockGetConfig($config, 'ClientBackURL', null);
+        $this->mockGetConfig($config, 'EmailModify', false);
+        $this->mockGetConfig($config, 'LoginType', false);
+        $this->mockGetConfig($config, 'OrderComment', null);
+        $this->mockGetConfig($config, 'PaymentMethod', [
             'CREDIT' => [
                 'Enable' => true,
                 'CreditRed' => false,
@@ -73,6 +73,6 @@ class TestCase extends BaseTestCase
             'BARCODE' => false,
             'P2G' => false,
         ]);
-        $this->mockGetConfig($config, 'CVSCOM', null, null);
+        $this->mockGetConfig($config, 'CVSCOM', null);
     }
 }
