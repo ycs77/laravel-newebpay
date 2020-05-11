@@ -49,7 +49,7 @@ composer require ycs77/laravel-newebpay
 ### 發布設置檔案
 
 ```
-php artisan vendor:publish --provider="Ycs77\NewebPay\Providers\NewebPayServiceProvider"
+php artisan vendor:publish --provider="Ycs77\NewebPay\NewebPayServiceProvider"
 ```
 
 ## 使用
