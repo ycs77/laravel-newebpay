@@ -47,7 +47,7 @@ class TestCase extends BaseTestCase
         $this->mockGetConfig($config, 'HashKey', null, 'TestHashKey123456789');
         $this->mockGetConfig($config, 'HashIV', null, '17ef14e533ed1c18'); // Generate with `bin2hex(openssl_random_pseudo_bytes(8));`
         $this->mockGetConfig($config, 'Version', '1.5', '1.5');
-        $this->mockGetConfig($config, 'RespondType', 'json', 'json');
+        $this->mockGetConfig($config, 'RespondType', 'JSON', 'JSON');
         $this->mockGetConfig($config, 'LangType', 'zh-tw', 'zh-tw');
         $this->mockGetConfig($config, 'TradeLimit', 0, 0);
         $this->mockGetConfig($config, 'ExpireDate', 7, 7);

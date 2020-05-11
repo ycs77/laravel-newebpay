@@ -85,7 +85,7 @@ class NewebPayCreditCard extends BaseNewebPay
         return [
             'MerchantID_' => $this->MerchantID,
             'PostData_' => $tradeInfo,
-            'Pos_' => $this->config->get('newebpay.RespondType', 'json'),
+            'Pos_' => $this->config->get('newebpay.RespondType', 'JSON'),
         ];
     }
 }

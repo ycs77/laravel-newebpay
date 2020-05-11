@@ -17,7 +17,7 @@ return [
     'HashIV' => env('CASH_STORE_HASH_IV'),
 
     /*
-     * 回傳格式 json/string
+     * 回傳格式 JSON/String
      */
 
     'RespondType' => 'JSON',

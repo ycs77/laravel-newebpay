@@ -51,14 +51,14 @@ trait TradeData
     /**
      * 回傳格式
      *
-     * Support types: "json", "string"
+     * Support types: "JSON", "String"
      *
      * @param  string|null  $type
      * @return self
      */
     public function setRespondType($type = null)
     {
-        $this->TradeData['RespondType'] = $type ?? $this->config->get('newebpay.RespondType', 'json');
+        $this->TradeData['RespondType'] = $type ?? $this->config->get('newebpay.RespondType', 'JSON');
 
         return $this;
     }
