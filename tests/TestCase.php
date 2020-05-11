@@ -31,7 +31,7 @@ class TestCase extends BaseTestCase
 
     public function mockGetConfig(MockInterface $mock, $key, $returnValue)
     {
-        $withArgs = array_filter(array("newebpay.$key"), function ($value) {
+        $withArgs = array_filter(["newebpay.$key"], function ($value) {
             return $value !== null;
         });
 

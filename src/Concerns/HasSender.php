@@ -75,7 +75,7 @@ trait HasSender
     public function setMockHttp($mockResponse)
     {
         if ($this->sender instanceof HasHttp) {
-            if (! $mockResponse instanceof MockHandler) {
+            if (!$mockResponse instanceof MockHandler) {
                 $mockHandler = new MockHandler($mockResponse);
             }
 
