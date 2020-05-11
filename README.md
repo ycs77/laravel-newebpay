@@ -1,4 +1,4 @@
-# Laravel-NewebPay
+# Laravel NewebPay - 藍新金流
 
 > Fork from [treerful/laravel-newebpay](https://bitbucket.org/pickone/laravel-newebpay)
 
@@ -8,9 +8,10 @@
 [![Style CI Build Status][ico-style-ci]][link-style-ci]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Laravel-NewebPay 為針對 laravel 所寫的金流套件，主要實作藍新金流（原智付通）功能。
+Laravel NewebPay 為針對 Laravel 所寫的金流套件，主要實作藍新金流（原智付通）功能。
 
 主要實作項目：
+
 * NewebPay MPG - 多功能收款
 * NewebPay Cancel - 信用卡取消授權
 * NewebPay Close - 信用卡請退款
