@@ -43,7 +43,7 @@ class NewebPayCancelTest extends TestCase
         $result = $newebpay
             ->setCancelOrder('TestNo123456', 100, 'order')
             ->setMockHttp([
-                new Response(200, [], '{"Status":"Code001","Message":"Test message.","Result":[]}')
+                new Response(200, [], '{"Status":"Code001","Message":"Test message.","Result":[]}'),
             ])
             ->submit();
 

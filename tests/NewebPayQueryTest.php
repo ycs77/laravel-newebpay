@@ -50,7 +50,7 @@ class NewebPayQueryTest extends TestCase
         $result = $newebpay
             ->setQuery('TestNo123456', 100)
             ->setMockHttp([
-                new Response(200, [], '{"Status":"Code001","Message":"Test message.","Result":[]}')
+                new Response(200, [], '{"Status":"Code001","Message":"Test message.","Result":[]}'),
             ])
             ->submit();
 

@@ -53,7 +53,7 @@ class NewebPayCreditCardTest extends TestCase
                 'tokenTerm' => '',
             ])
             ->setMockHttp([
-                new Response(200, [], '{"Status":"Code001","Message":"Test message.","Result":[]}')
+                new Response(200, [], '{"Status":"Code001","Message":"Test message.","Result":[]}'),
             ])
             ->submit();
 
