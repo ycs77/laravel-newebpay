@@ -221,7 +221,7 @@ trait TradeData
      */
     public function setPaymentMethod($arrPaymentMethod = [])
     {
-        $arrPaymentMethod = array_merge($arrPaymentMethod, $this->config->get('newebpay.PaymentMethod'));
+        $arrPaymentMethod = array_merge($this->config->get('newebpay.PaymentMethod'), $arrPaymentMethod);
 
         $this->TradeData['CREDIT'] = $arrPaymentMethod['CREDIT']['Enable'] ? 1 : 0;
         $this->TradeData['ANDROIDPAY'] = $arrPaymentMethod['ANDROIDPAY'] ? 1 : 0;
