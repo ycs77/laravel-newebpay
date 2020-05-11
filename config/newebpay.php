@@ -35,15 +35,15 @@ return [
     'LangType' => 'zh-tw',
 
     /*
-     * 交易秒數限制
+     * 交易秒數限制 (int)
      *
-     * default: null
-     * null: 不限制
+     * default: 0
+     * 0: 不限制
      * 秒數下限為 60 秒，當秒數介於 1~59 秒時，會以 60 秒計算
      * 秒數上限為 900 秒，當超過 900 秒時，會 以 900 秒計算
      */
 
-    'TradeLimit' => null,
+    'TradeLimit' => 0,
 
     /*
      * 繳費有效期限
