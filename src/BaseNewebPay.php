@@ -154,7 +154,7 @@ abstract class BaseNewebPay
     /**
      * Submit data to newebpay API.
      *
-     * @return string
+     * @return mixed
      */
     public function submit()
     {
