@@ -105,8 +105,8 @@ Route::get('/pay', function () {
 <script>
 export default {
   props: {
-    csrf_token: String,
-  },
+    csrf_token: String
+  }
 }
 </script>
 ```
@@ -290,6 +290,6 @@ function requestRefund()
 [ico-downloads]: https://img.shields.io/packagist/dt/ycs77/laravel-newebpay?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/ycs77/laravel-newebpay
-[link-ci]: https://travis-ci.org/ycs77/laravel-newebpay
+[link-ci]: https://app.travis-ci.com/github/ycs77/laravel-newebpay
 [link-style-ci]: https://github.styleci.io/repos/262404477
 [link-downloads]: https://packagist.org/packages/ycs77/laravel-newebpay
