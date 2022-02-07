@@ -103,7 +103,7 @@ abstract class BaseNewebPay
      */
     public function generateUrl($path)
     {
-        return ($this->config->get('newebpay.Debug') ? $this->testUrl : $this->productionUrl) . $path;
+        return ($this->config->get('newebpay.Debug') ? $this->testUrl : $this->productionUrl).$path;
     }
 
     /**

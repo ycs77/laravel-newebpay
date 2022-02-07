@@ -61,7 +61,7 @@ return [
      * default: null
      */
 
-    'ReturnURL' => env('CASH_RETURN_URL') != null ? env('APP_URL') . env('CASH_RETURN_URL') : null,
+    'ReturnURL' => env('CASH_RETURN_URL') != null ? env('APP_URL').env('CASH_RETURN_URL') : null,
 
     /*
      * 付款完成後的通知連結
@@ -71,7 +71,7 @@ return [
      * default: null
      */
 
-    'NotifyURL' => env('CASH_NOTIFY_URL') != null ? env('APP_URL') . env('CASH_NOTIFY_URL') : null,
+    'NotifyURL' => env('CASH_NOTIFY_URL') != null ? env('APP_URL').env('CASH_NOTIFY_URL') : null,
 
     /*
      * 商店取號網址
@@ -80,7 +80,7 @@ return [
      * default: null
      */
 
-    'CustomerURL' => env('CASH_CUSTOMER_URL') != null ? env('APP_URL') . env('CASH_CUSTOMER_URL') : null,
+    'CustomerURL' => env('CASH_CUSTOMER_URL') != null ? env('APP_URL').env('CASH_CUSTOMER_URL') : null,
 
     /*
      * 付款取消-返回商店網址
@@ -89,7 +89,7 @@ return [
      * default: null
      */
 
-    'ClientBackURL' => env('CASH_CLIENT_BACK_URL') != null ? env('APP_URL') . env('CASH_CLIENT_BACK_URL') : null,
+    'ClientBackURL' => env('CASH_CLIENT_BACK_URL') != null ? env('APP_URL').env('CASH_CLIENT_BACK_URL') : null,
 
     /*
      * 付款人電子信箱是否開放修改 (bool)
