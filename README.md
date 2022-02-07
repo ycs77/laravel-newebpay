@@ -274,7 +274,7 @@ function requestRefund()
 }
 ```
 
-## Official Reference
+## 參考
 
 [NewebPay Payment API](https://www.newebpay.com/website/Page/content/download_api#1)
 
