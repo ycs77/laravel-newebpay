@@ -21,7 +21,7 @@ class NewebPayCreditCard extends BaseNewebPay
      * 3d 驗證交易
      *
      * @param  bool  $p3d
-     * @return self
+     * @return $this
      */
     public function setP3D($p3d = false)
     {
@@ -35,7 +35,7 @@ class NewebPayCreditCard extends BaseNewebPay
      * 首次授權信用卡交易
      *
      * @param  array  $data
-     * @return self
+     * @return $this
      */
     public function firstTrade($data)
     {
@@ -57,7 +57,7 @@ class NewebPayCreditCard extends BaseNewebPay
      * 使用 Token 授權
      *
      * @param  array  $data
-     * @return self
+     * @return $this
      */
     public function tradeWithToken($data)
     {

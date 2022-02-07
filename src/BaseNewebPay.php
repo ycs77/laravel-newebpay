@@ -120,7 +120,7 @@ abstract class BaseNewebPay
      * Set the newebpay API path.
      *
      * @param  string  $path
-     * @return self
+     * @return $this
      */
     public function setApiPath($path)
     {
@@ -132,7 +132,7 @@ abstract class BaseNewebPay
     /**
      * Set now timestamp.
      *
-     * @return self
+     * @return $this
      */
     public function setTimestamp()
     {

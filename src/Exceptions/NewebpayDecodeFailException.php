@@ -17,7 +17,7 @@ class NewebpayDecodeFailException extends Exception
      */
     public function __construct(Throwable $previous, $errorData)
     {
-        Log::debug('The NewebPay decode error content: ', [$errorData]);
+        Log::error('The NewebPay decode error content: ', [$errorData]);
 
         parent::__construct('The NewebPay decode data error.', 400, $previous);
     }

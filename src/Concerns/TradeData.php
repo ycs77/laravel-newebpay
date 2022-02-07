@@ -39,7 +39,7 @@ trait TradeData
      * 串接版本
      *
      * @param  string|null  $version
-     * @return self
+     * @return $this
      */
     public function setVersion($version = null)
     {
@@ -54,7 +54,7 @@ trait TradeData
      * Support types: "JSON", "String"
      *
      * @param  string|null  $type
-     * @return self
+     * @return $this
      */
     public function setRespondType($type = null)
     {
@@ -69,7 +69,7 @@ trait TradeData
      * Support types: "zh-tw", "en"
      *
      * @param  string|null  $lang
-     * @return self
+     * @return $this
      */
     public function setLangType($lang = null)
     {
@@ -86,7 +86,7 @@ trait TradeData
      * 秒數上限為 900 秒，當超過 900 秒時，會 以 900 秒計算。
      *
      * @param  int|null  $limit
-     * @return self
+     * @return $this
      */
     public function setTradeLimit($limit = null)
     {
@@ -99,7 +99,7 @@ trait TradeData
      * 繳費有效期限
      *
      * @param  int|null  $day
-     * @return self
+     * @return $this
      */
     public function setExpireDate($day = null)
     {
@@ -116,7 +116,7 @@ trait TradeData
      * 僅接受 port 80 or 443
      *
      * @param  string|null  $url
-     * @return self
+     * @return $this
      */
     public function setReturnURL($url = null)
     {
@@ -132,7 +132,7 @@ trait TradeData
      * 僅接受 port 80 or 443
      *
      * @param  string|null  $url
-     * @return self
+     * @return $this
      */
     public function setNotifyURL($url = null)
     {
@@ -144,10 +144,10 @@ trait TradeData
     /**
      * 商店取號網址
      *
-     * 此參數若為空值，則會顯示取號結果在智付寶頁面。
+     * 此參數若為空值，則會顯示取號結果在藍新金流頁面。
      *
      * @param  string|null  $url
-     * @return self
+     * @return $this
      */
     public function setCustomerURL($url = null)
     {
@@ -162,7 +162,7 @@ trait TradeData
      * 當交易取消時，平台會出現返回鈕，使消費者依以此參數網址返回商店指定的頁面
      *
      * @param  string|null  $url
-     * @return self
+     * @return $this
      */
     public function setClientBackURL($url = null)
     {
@@ -175,7 +175,7 @@ trait TradeData
      * 付款人電子信箱是否開放修改
      *
      * @param  bool|null  $isModify
-     * @return self
+     * @return $this
      */
     public function setEmailModify($isModify = null)
     {
@@ -185,10 +185,10 @@ trait TradeData
     }
 
     /**
-     * 是否需要登入智付寶會員
+     * 是否需要登入藍新金流會員
      *
      * @param  bool|null  $isLogin
-     * @return self
+     * @return $this
      */
     public function setLoginType($isLogin = false)
     {
@@ -204,7 +204,7 @@ trait TradeData
      * 2.若有提供此參數，將會於 MPG 頁面呈現商店備註內容。
      *
      * @param  string|null  $comment
-     * @return self
+     * @return $this
      */
     public function setOrderComment($comment = null)
     {
@@ -216,24 +216,30 @@ trait TradeData
     /**
      * 支付方式
      *
-     * @param  array  $arrPaymentMethod
-     * @return self
+     * @param  array  $paymentMethod
+     * @return $this
      */
-    public function setPaymentMethod($arrPaymentMethod = [])
+    public function setPaymentMethod($paymentMethod = [])
     {
-        $arrPaymentMethod = array_merge($this->config->get('newebpay.PaymentMethod'), $arrPaymentMethod);
+        $paymentMethod = array_merge($this->config->get('newebpay.PaymentMethod'), $paymentMethod);
 
-        $this->TradeData['CREDIT'] = $arrPaymentMethod['CREDIT']['Enable'] ? 1 : 0;
-        $this->TradeData['ANDROIDPAY'] = $arrPaymentMethod['ANDROIDPAY'] ? 1 : 0;
-        $this->TradeData['SAMSUNGPAY'] = $arrPaymentMethod['SAMSUNGPAY'] ? 1 : 0;
-        $this->TradeData['InstFlag'] = ($arrPaymentMethod['CREDIT']['Enable'] and $arrPaymentMethod['CREDIT']['InstFlag']) ? $arrPaymentMethod['CREDIT']['InstFlag'] : 0;
-        $this->TradeData['CreditRed'] = ($arrPaymentMethod['CREDIT']['Enable'] and $arrPaymentMethod['CREDIT']['CreditRed']) ? 1 : 0;
-        $this->TradeData['UNIONPAY'] = $arrPaymentMethod['UNIONPAY'] ? 1 : 0;
-        $this->TradeData['WEBATM'] = $arrPaymentMethod['WEBATM'] ? 1 : 0;
-        $this->TradeData['VACC'] = $arrPaymentMethod['VACC'] ? 1 : 0;
-        $this->TradeData['CVS'] = $arrPaymentMethod['CVS'] ? 1 : 0;
-        $this->TradeData['BARCODE'] = $arrPaymentMethod['BARCODE'] ? 1 : 0;
-        $this->TradeData['P2G'] = $arrPaymentMethod['P2G'] ? 1 : 0;
+        $this->TradeData['CREDIT'] = $paymentMethod['CREDIT']['Enable'] ? 1 : 0;
+        $this->TradeData['ANDROIDPAY'] = $paymentMethod['ANDROIDPAY'] ? 1 : 0;
+        $this->TradeData['SAMSUNGPAY'] = $paymentMethod['SAMSUNGPAY'] ? 1 : 0;
+        $this->TradeData['LINEPAY'] = $paymentMethod['LINEPAY'] ? 1 : 0;
+        $this->TradeData['ImageUrl'] = isset($paymentMethod['ImageUrl']) && $paymentMethod['ImageUrl'] ? 1 : 0;
+        $this->TradeData['InstFlag'] = ($paymentMethod['CREDIT']['Enable'] && $paymentMethod['CREDIT']['InstFlag']) ? $paymentMethod['CREDIT']['InstFlag'] : 0;
+        $this->TradeData['CreditRed'] = ($paymentMethod['CREDIT']['Enable'] && $paymentMethod['CREDIT']['CreditRed']) ? 1 : 0;
+        $this->TradeData['UNIONPAY'] = $paymentMethod['UNIONPAY'] ? 1 : 0;
+        $this->TradeData['WEBATM'] = $paymentMethod['WEBATM'] ? 1 : 0;
+        $this->TradeData['VACC'] = $paymentMethod['VACC'] ? 1 : 0;
+        $this->TradeData['CVS'] = $paymentMethod['CVS'] ? 1 : 0;
+        $this->TradeData['BARCODE'] = $paymentMethod['BARCODE'] ? 1 : 0;
+        $this->TradeData['ESUNWALLET'] = $paymentMethod['ESUNWALLET'] ? 1 : 0;
+        $this->TradeData['TAIWANPAY'] = $paymentMethod['TAIWANPAY'] ? 1 : 0;
+        $this->TradeData['EZPAY'] = $paymentMethod['EZPAY'] ? 1 : 0;
+        $this->TradeData['EZPWECHAT'] = $paymentMethod['EZPWECHAT'] ? 1 : 0;
+        $this->TradeData['EZPALIPAY'] = $paymentMethod['EZPALIPAY'] ? 1 : 0;
 
         return $this;
     }
@@ -247,7 +253,7 @@ trait TradeData
      * null = 不開啟
      *
      * @param  int|null  $cvscom
-     * @return self
+     * @return $this
      */
     public function setCVSCOM($cvscom = null)
     {
@@ -260,7 +266,7 @@ trait TradeData
      * Set TokenTerm.
      *
      * @param  string  $token
-     * @return self
+     * @return $this
      */
     public function setTokenTerm($token = '')
     {
@@ -276,7 +282,7 @@ trait TradeData
      * @param  int  $amt
      * @param  string  $desc
      * @param  string  $email
-     * @return self
+     * @return $this
      */
     public function setOrder($no, $amt, $desc, $email)
     {

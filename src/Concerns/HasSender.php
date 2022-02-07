@@ -23,7 +23,7 @@ trait HasSender
      * Set the sender instance.
      *
      * @param  \Ycs77\NewebPay\Contracts\Sender  $sender
-     * @return self
+     * @return $this
      */
     public function setSender(Sender $sender)
     {
@@ -45,7 +45,7 @@ trait HasSender
     /**
      * Set sync sender.
      *
-     * @return self
+     * @return $this
      */
     public function setSyncSender()
     {
@@ -57,7 +57,7 @@ trait HasSender
     /**
      * Set async sender.
      *
-     * @return self
+     * @return $this
      */
     public function setAsyncSender()
     {
@@ -70,7 +70,7 @@ trait HasSender
      * Set mock http instance.
      *
      * @param  \GuzzleHttp\Handler\MockHandler|array  $mockHandler
-     * @return self
+     * @return $this
      */
     public function setMockHttp($mockResponse)
     {

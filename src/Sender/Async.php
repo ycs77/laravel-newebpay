@@ -49,7 +49,7 @@ class Async implements Sender, HasHttp
      * Set mock http client instance.
      *
      * @param  \GuzzleHttp\Client  $client
-     * @return self
+     * @return $this
      */
     public function setHttp(Client $client)
     {

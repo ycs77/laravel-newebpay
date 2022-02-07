@@ -81,12 +81,17 @@ class TestCase extends BaseTestCase
             ],
             'ANDROIDPAY' => false,
             'SAMSUNGPAY' => false,
+            'LINEPAY' => false,
             'UNIONPAY' => false,
             'WEBATM' => false,
             'VACC' => false,
             'CVS' => false,
             'BARCODE' => false,
-            'P2G' => false,
+            'ESUNWALLET' => false,
+            'TAIWANPAY' => false,
+            'EZPAY' => false,
+            'EZPWECHAT' => false,
+            'EZPALIPAY' => false,
         ]);
         $this->mockGetConfig($config, 'CVSCOM', null);
     }

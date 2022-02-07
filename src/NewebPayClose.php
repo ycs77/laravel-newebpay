@@ -25,7 +25,7 @@ class NewebPayClose extends BaseNewebPay
      * @param  string  $type
      *  'order': 使用商店訂單編號
      *  'trade': 使用藍新金流交易序號
-     * @return self
+     * @return $this
      */
     public function setCloseOrder($no, $amt, $type = 'order')
     {
@@ -48,7 +48,7 @@ class NewebPayClose extends BaseNewebPay
      * @param  string  $type
      *  'pay': 請款
      *  'refund': 退款
-     * @return self
+     * @return $this
      */
     public function setCloseType($type = 'pay')
     {

@@ -76,7 +76,7 @@ return [
     /*
      * 商店取號網址
      *
-     * 此參數若為空值，則會顯示取號結果在智付寶頁面。
+     * 此參數若為空值，則會顯示取號結果在藍新金流頁面。
      * default: null
      */
 
@@ -100,7 +100,7 @@ return [
     'EmailModify' => true,
 
     /*
-     * 是否需要登入智付寶會員 (bool)
+     * 是否需要登入藍新金流會員 (bool)
      */
 
     'LoginType' => false,
@@ -126,15 +126,14 @@ return [
          * Enable: 是否啟用信用卡支付
          * CreditRed: 是否啟用紅利
          * InstFlag: 是否啟用分期
-         *
-         * 0: 不啟用
-         * 1: 啟用全部分期
-         * 3: 分 3 期
-         * 6: 分 6 期功能
-         * 12: 分 12 期功能
-         * 18: 分 18 期功能
-         * 24: 分 24 期功能
-         * 以逗號方式開啟多種分期
+         *   0: 不啟用
+         *   1: 啟用全部分期
+         *   3: 分 3 期
+         *   6: 分 6 期
+         *   12: 分 12 期
+         *   18: 分 18 期
+         *   24: 分 24 期
+         *   以逗號方式開啟多種分期
          */
         'CREDIT' => [
             'Enable' => true,
@@ -148,13 +147,20 @@ return [
         // Samsung Pay (default: false)
         'SAMSUNGPAY' => false,
 
+        // LINE Pay (default: false)
+        'LINEPAY' => false,
+        // LINE PAY 產品圖檔連結網址
+        //   此連結的圖檔將顯示於 LinePay 付款前的產品圖片區，若無產品圖檔連結網址，會使用藍新系統預設圖檔。
+        //   圖片尺寸建議使用 84*84 像素。
+        // 'ImageUrl' => 'http://example.com/your-image-url',
+
         // 銀聯卡支付 (default: false)
         'UNIONPAY' => false,
 
-        // WEBATM支付 (default: false)
+        // WEBATM 支付 (default: false)
         'WEBATM' => false,
 
-        // ATM支付 (default: false)
+        // ATM 轉帳 (default: false)
         'VACC' => false,
 
         // 超商代碼繳費支付 (default: false)
@@ -163,8 +169,20 @@ return [
         // 條碼繳費支付 (default: false)
         'BARCODE' => false,
 
-        // ezPay 電子錢包 (default: false)
-        'P2G' => false,
+        // 玉山 Walle (default: false)
+        'ESUNWALLET' => false,
+
+        // 台灣 Pay (default: false)
+        'TAIWANPAY' => false,
+
+        // 簡單付電子錢包 (default: false)
+        'EZPAY' => false,
+
+        // 簡單付微信支付 (default: false)
+        'EZPWECHAT' => false,
+
+        // 簡單付支付寶 (default: false)
+        'EZPALIPAY' => false,
     ],
 
     /*
@@ -176,5 +194,19 @@ return [
      * null = 不開啟
      */
     'CVSCOM' => null,
+
+    /*
+     * 付款方式-物流啟用
+     *
+     * B2C = 超商大宗寄倉(目前僅支援統㇐超商)
+     * C2C = 超商店到店(目前僅支援全家)
+     * null = 預設
+     *
+     * 預設值情況說明：
+     *   a.系統優先啟用［B2C 大宗寄倉］。
+     *   b.若商店設定中未啟用［B2C 大宗寄倉］，則系統將會啟用［C2C 店到店］。
+     *   c.若商店設定中，［B2C 大宗寄倉］與［C2C 店到店］皆未啟用，則支付頁面中將不會出現物流選項。
+     */
+    'LgsType' => null,
 
 ];
