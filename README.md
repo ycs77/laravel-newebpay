@@ -211,6 +211,7 @@ return NewebPay::payment(
     ->setOrderComment() //商店備註
     ->setPaymentMethod() //付款方式 *依照 config 格式傳送*
     ->setCVSCOM() // 物流方式
+    ->setLgsType() // 物流型態
     ->setTokenTerm() // 快速付款 token
     ->submit();
 ```

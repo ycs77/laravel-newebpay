@@ -94,5 +94,6 @@ class TestCase extends BaseTestCase
             'EZPALIPAY' => false,
         ]);
         $this->mockGetConfig($config, 'CVSCOM', null);
+        $this->mockGetConfig($config, 'LgsType', null);
     }
 }

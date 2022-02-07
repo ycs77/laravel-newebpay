@@ -27,6 +27,7 @@ class NewebPayMPG extends BaseNewebPay
         $this->setPaymentMethod();
         $this->setTokenTerm();
         $this->setCVSCOM();
+        $this->setLgsType();
 
         $this->TradeData['MerchantID'] = $this->MerchantID;
     }
