@@ -74,14 +74,6 @@ CASH_CLIENT_BACK_URL= ...
 
 可依據個人商業使用上做調整。
 
-### 引用、初始化類別：
-
-```php
-use Ycs77\NewebPay\NewebPay;
-
-$newebpay = new NewebPay();
-```
-
 ### NewebPay MPG - 多功能支付
 
 ```php
