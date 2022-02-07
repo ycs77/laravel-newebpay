@@ -22,6 +22,7 @@ class TestCase extends BaseTestCase
      */
     public function createMockConfig()
     {
+        /** @var \Illuminate\Contracts\Config\Repository|\Mockery\MockInterface */
         $config = m::mock(Config::class);
 
         $this->mockConfigValues($config);
@@ -29,7 +30,15 @@ class TestCase extends BaseTestCase
         return $config;
     }
 
-    public function mockGetConfig(MockInterface $mock, $key, $returnValue)
+    /**
+     * Mock the config.
+     *
+     * @param  \Mockery\MockInterface  $mock
+     * @param  string  $key
+     * @param  mixed  $returnValue
+     * @return void
+     */
+    public function mockGetConfig($mock, $key, $returnValue)
     {
         $withArgs = array_filter(["newebpay.$key"], function ($value) {
             return $value !== null;
@@ -40,6 +49,12 @@ class TestCase extends BaseTestCase
             ->andReturn($returnValue);
     }
 
+    /**
+     * Mock the config.
+     *
+     * @param  \Mockery\MockInterface  $config
+     * @return void
+     */
     public function mockConfigValues(MockInterface $config)
     {
         $this->mockGetConfig($config, 'Debug', true);

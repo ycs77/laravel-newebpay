@@ -36,7 +36,7 @@ class NewebPayQueryTest extends TestCase
         $this->assertEquals('1.5', $requestData['Version']);
         $this->assertEquals('JSON', $requestData['RespondType']);
         $this->assertEquals('A314C865681049301D80A33318E5043B51425EAC58736E9ACF4FAC5854ABD59F', $requestData['CheckValue']);
-        $this->assertEquals(1577833200, $requestData['TimeStamp']);
+        $this->assertEquals(1577836800, $requestData['TimeStamp']);
         $this->assertEquals('TestNo123456', $requestData['MerchantOrderNo']);
         $this->assertEquals(100, $requestData['Amt']);
     }

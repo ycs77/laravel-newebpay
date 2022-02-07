@@ -256,6 +256,12 @@ trait TradeData
         return $this;
     }
 
+    /**
+     * Set TokenTerm.
+     *
+     * @param  string  $token
+     * @return self
+     */
     public function setTokenTerm($token = '')
     {
         $this->TradeData['TokenTerm'] = $token;
@@ -263,6 +269,15 @@ trait TradeData
         return $this;
     }
 
+    /**
+     * Set Order.
+     *
+     * @param  string  $no
+     * @param  int  $amt
+     * @param  string  $desc
+     * @param  string  $email
+     * @return self
+     */
     public function setOrder($no, $amt, $desc, $email)
     {
         $this->TradeData['MerchantOrderNo'] = $no;

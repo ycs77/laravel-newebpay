@@ -76,7 +76,7 @@ CASH_CLIENT_BACK_URL= ...
 
 ### 引用、初始化類別：
 
-```
+```php
 use Ycs77\NewebPay\NewebPay;
 
 $newebpay = new NewebPay();
@@ -87,7 +87,7 @@ $newebpay = new NewebPay();
 ```php
 use Ycs77\NewebPay\Facades\NewebPay;
 
-function order() 
+function order()
 {
     return NewebPay::payment(
         no, // 訂單編號
