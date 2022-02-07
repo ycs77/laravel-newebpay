@@ -15,10 +15,10 @@ class Sync implements Sender
      */
     public function send($request, $url)
     {
-        $result = '<form id="order-form" method="post" action=' . $url . ' >';
+        $result = '<form id="order-form" method="post" action='.$url.' >';
 
         foreach ($request as $key => $value) {
-            $result .= '<input type="hidden" name="' . $key . '" value="' . $value . '">';
+            $result .= '<input type="hidden" name="'.$key.'" value="'.$value.'">';
         }
 
         $result .= '</form><script type="text/javascript">document.getElementById(\'order-form\').submit();</script>';

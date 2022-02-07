@@ -42,7 +42,7 @@ trait HasEncryption
      */
     protected function encryptDataBySHA($parameter, $hashKey, $hashIV)
     {
-        $postDataStr = 'HashKey=' . $hashKey . '&' . $parameter . '&HashIV=' . $hashIV;
+        $postDataStr = 'HashKey='.$hashKey.'&'.$parameter.'&HashIV='.$hashIV;
 
         return strtoupper(hash('sha256', $postDataStr));
     }
@@ -59,7 +59,7 @@ trait HasEncryption
     {
         ksort($parameter);
         $checkStr = http_build_query($parameter);
-        $postDataStr = 'IV=' . $hashIV . '&' . $checkStr . '&Key=' . $hashKey;
+        $postDataStr = 'IV='.$hashIV.'&'.$checkStr.'&Key='.$hashKey;
 
         return strtoupper(hash('sha256', $postDataStr));
     }
@@ -92,7 +92,7 @@ trait HasEncryption
         $slastc = chr($slast);
         $pcheck = substr($string, -$slast);
 
-        if (preg_match('/' . $slastc . '{' . $slast . '}/', $string)) {
+        if (preg_match('/'.$slastc.'{'.$slast.'}/', $string)) {
             $string = substr($string, 0, strlen($string) - $slast);
 
             return $string;
