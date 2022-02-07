@@ -67,9 +67,10 @@ CASH_NOTIFY_URL=...      # 付款完成後，後端自動響應的網址   (Ex: 
 CASH_CLIENT_BACK_URL=... # 取消付款時，返回的網址          (Ex: /pay/cancel)
 ```
 
-首先先建立...
+首先先建立一個頁面，和一個「付款」按鈕：
 
 ```php
+// 路由
 Route::get('/pay', function () {
     return view('pay');
 });
@@ -83,7 +84,10 @@ Route::get('/pay', function () {
 </form>
 ```
 
+Inertia.js 可以參考以下：
+
 ```php
+// 路由
 Route::get('/pay', function () {
     return Inertia::render('Pay', ['csrf_token' => csrf_token()]);
 });
@@ -107,29 +111,33 @@ export default {
 </script>
 ```
 
+然後建立送出付款的路由：
+
 ```php
-Route::post('/pay', function () {
+// 路由
+Route::post('/pay', 'PaymentController@payment');
+
+// PaymentController.php
+
+use Ycs77\NewebPay\Facades\NewebPay;
+
+function payment()
+{
     $no = '0001';                // 訂單編號
     $amt = 120;                  // 交易金額
     $desc = '我的商品';           // 商品名稱
     $email = 'test@example.com'; // 付款人信箱
 
     return NewebPay::payment($no, $amt, $desc, $email)->submit();
-});
-```
-
-```php
-use Illuminate\Http\Request;
-use Ycs77\NewebPay\Facades\NewebPay;
-
-function callback(Request $request)
-{
-    return NewebPay::decode($request->input('TradeInfo'));
 }
 ```
 
+然後是回傳的路由，如果是信用卡之類的付款方式，可以付款後直接跳轉回本網站的，可以只設定 callback。如果是 ATM 的付款方式，需要透過幕後回傳的，可以只設定 notify。
+
+> 記得要在 `.env` 裡設定網址。
+
 ```php
-// routes/web.php
+// 路由
 Route::post('/pay/callback', 'PaymentController@callback');
 Route::post('/pay/notify', 'PaymentController@notify');
 
@@ -140,20 +148,20 @@ use Ycs77\NewebPay\Facades\NewebPay;
 
 function callback(Request $request)
 {
-    $data = NewebPay::decode($request->input('TradeInfo'));
+    $data = NewebPay::decodeFromRequest();
     dd($data);
     // 儲存資料 和 重導向...
 }
 
 function notify(Request $request)
 {
-    $data = NewebPay::decode($request->input('TradeInfo'));
+    $data = NewebPay::decodeFromRequest();
     dd($data);
     // 儲存資料 和 發送付款成功通知...
 }
 ```
 
-419
+然後要把這些路徑排除 CSRF 檢查：
 
 *app/Http/Middleware/VerifyCsrfToken.php*
 ```php
@@ -215,7 +223,7 @@ use Ycs77\NewebPay\Facades\NewebPay;
 
 function callback(Request $request)
 {
-    $data = NewebPay::decode($request->input('TradeInfo'));
+    $data = NewebPay::decodeFromRequest();
     dd($data);
     // 儲存資料 和 重導向...
 }

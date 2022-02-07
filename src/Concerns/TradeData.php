@@ -226,7 +226,7 @@ trait TradeData
         $this->TradeData['CREDIT'] = $paymentMethod['CREDIT']['Enable'] ? 1 : 0;
         $this->TradeData['ANDROIDPAY'] = $paymentMethod['ANDROIDPAY'] ? 1 : 0;
         $this->TradeData['SAMSUNGPAY'] = $paymentMethod['SAMSUNGPAY'] ? 1 : 0;
-        $this->TradeData['LINEPAY'] = $paymentMethod['LINEPAY'] ? 1 : 0;
+        $this->TradeData['LINEPAY'] = isset($paymentMethod['LINEPAY']) && $paymentMethod['LINEPAY'] ? 1 : 0;
         $this->TradeData['ImageUrl'] = isset($paymentMethod['ImageUrl']) && $paymentMethod['ImageUrl'] ? 1 : 0;
         $this->TradeData['InstFlag'] = ($paymentMethod['CREDIT']['Enable'] && $paymentMethod['CREDIT']['InstFlag']) ? $paymentMethod['CREDIT']['InstFlag'] : 0;
         $this->TradeData['CreditRed'] = ($paymentMethod['CREDIT']['Enable'] && $paymentMethod['CREDIT']['CreditRed']) ? 1 : 0;
@@ -235,11 +235,11 @@ trait TradeData
         $this->TradeData['VACC'] = $paymentMethod['VACC'] ? 1 : 0;
         $this->TradeData['CVS'] = $paymentMethod['CVS'] ? 1 : 0;
         $this->TradeData['BARCODE'] = $paymentMethod['BARCODE'] ? 1 : 0;
-        $this->TradeData['ESUNWALLET'] = $paymentMethod['ESUNWALLET'] ? 1 : 0;
-        $this->TradeData['TAIWANPAY'] = $paymentMethod['TAIWANPAY'] ? 1 : 0;
-        $this->TradeData['EZPAY'] = $paymentMethod['EZPAY'] ? 1 : 0;
-        $this->TradeData['EZPWECHAT'] = $paymentMethod['EZPWECHAT'] ? 1 : 0;
-        $this->TradeData['EZPALIPAY'] = $paymentMethod['EZPALIPAY'] ? 1 : 0;
+        $this->TradeData['ESUNWALLET'] = isset($paymentMethod['ESUNWALLET']) && $paymentMethod['ESUNWALLET'] ? 1 : 0;
+        $this->TradeData['TAIWANPAY'] = isset($paymentMethod['TAIWANPAY']) && $paymentMethod['TAIWANPAY'] ? 1 : 0;
+        $this->TradeData['EZPAY'] = isset($paymentMethod['EZPAY']) && $paymentMethod['EZPAY'] ? 1 : 0;
+        $this->TradeData['EZPWECHAT'] = isset($paymentMethod['EZPWECHAT']) && $paymentMethod['EZPWECHAT'] ? 1 : 0;
+        $this->TradeData['EZPALIPAY'] = isset($paymentMethod['EZPALIPAY']) && $paymentMethod['EZPALIPAY'] ? 1 : 0;
 
         return $this;
     }

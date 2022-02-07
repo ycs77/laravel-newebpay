@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay;
 
+use Illuminate\Support\Facades\Request;
 use Throwable;
 use Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException;
 
@@ -154,5 +155,17 @@ class NewebPay extends BaseNewebPay
         } catch (Throwable $e) {
             throw new NewebpayDecodeFailException($e, $encryptString);
         }
+    }
+
+    /**
+     * 從 request 取得解碼加密字串
+     *
+     * @return mixed
+     *
+     * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
+     */
+    public function decodeFromRequest()
+    {
+        return $this->decode(Request::input('TradeInfo'));
     }
 }

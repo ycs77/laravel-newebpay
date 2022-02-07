@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Ycs77\NewebPay\NewebPayCreditCard creditcardFirstTrade(array $data)
  * @method static \Ycs77\NewebPay\NewebPayCreditCard creditcardTradeWithToken(array $data)
  * @method static mixed decode(string $encryptString)
+ * @method static mixed decodeFromRequest()
  *
  * @see \Ycs77\NewebPay\NewebPay
  */
