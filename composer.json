@@ -16,7 +16,7 @@
     "homepage": "https://github.com/ycs77/laravel-newebpay",
     "require": {
         "php": ">=5.6",
-        "guzzlehttp/guzzle": ">=6.5.7",
+        "guzzlehttp/guzzle": ">=6.5.8",
         "illuminate/config": ">=5.1",
         "illuminate/contracts": ">=5.1",
         "illuminate/log": ">=5.1",
