@@ -1,10 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Test;
+namespace Webcs4JIG\NewebPay\Test;
 
 use GuzzleHttp\Psr7\Response;
-use Ycs77\NewebPay\NewebPayCancel;
-use Ycs77\NewebPay\Sender\Async;
+use Webcs4JIG\NewebPay\NewebPayCancel;
+use Webcs4JIG\NewebPay\Sender\Async;
 
 class NewebPayCancelTest extends TestCase
 {

@@ -1,28 +1,28 @@
 <?php
 
-namespace Ycs77\NewebPay\Concerns;
+namespace Webcs4JIG\NewebPay\Concerns;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use Ycs77\NewebPay\Contracts\HasHttp;
-use Ycs77\NewebPay\Contracts\Sender;
-use Ycs77\NewebPay\Sender\Async;
-use Ycs77\NewebPay\Sender\Sync;
+use Webcs4JIG\NewebPay\Contracts\HasHttp;
+use Webcs4JIG\NewebPay\Contracts\Sender;
+use Webcs4JIG\NewebPay\Sender\Async;
+use Webcs4JIG\NewebPay\Sender\Sync;
 
 trait HasSender
 {
     /**
      * The sender instance.
      *
-     * @var \Ycs77\NewebPay\Contracts\Sender
+     * @var \Webcs4JIG\NewebPay\Contracts\Sender
      */
     protected $sender;
 
     /**
      * Set the sender instance.
      *
-     * @param  \Ycs77\NewebPay\Contracts\Sender  $sender
+     * @param  \Webcs4JIG\NewebPay\Contracts\Sender  $sender
      * @return $this
      */
     public function setSender(Sender $sender)
@@ -35,7 +35,7 @@ trait HasSender
     /**
      * Get the sender instance.
      *
-     * @return \Ycs77\NewebPay\Contracts\Sender
+     * @return \Webcs4JIG\NewebPay\Contracts\Sender
      */
     public function getSender()
     {

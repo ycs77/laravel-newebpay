@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Contracts;
+namespace Webcs4JIG\NewebPay\Contracts;
 
 use GuzzleHttp\Client;
 

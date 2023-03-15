@@ -1,9 +1,9 @@
 <?php
 
-namespace Ycs77\NewebPay\Test;
+namespace Webcs4JIG\NewebPay\Test;
 
-use Ycs77\NewebPay\NewebPayMPG;
-use Ycs77\NewebPay\Sender\Sync;
+use Webcs4JIG\NewebPay\NewebPayMPG;
+use Webcs4JIG\NewebPay\Sender\Sync;
 
 class NewebPayMPGTest extends TestCase
 {

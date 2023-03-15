@@ -19,7 +19,7 @@ Laravel NewebPay 為針對 Laravel 所寫的金流套件，主要實作藍新金
 ## 安裝
 
 ```
-composer require ycs77/laravel-newebpay
+composer require webcs4JIG/laravel-newebpay
 ```
 
 ### 註冊套件
@@ -35,19 +35,19 @@ composer require ycs77/laravel-newebpay
         /*
          * Package Service Providers...
          */
-        Ycs77\NewebPay\NewebPayServiceProvider::class,
+        Webcs4JIG\NewebPay\NewebPayServiceProvider::class,
     ],
 
     'aliases' => [
         ...
-        'NewebPay' => Ycs77\NewebPay\Facades\NewebPay::class,
+        'NewebPay' => Webcs4JIG\NewebPay\Facades\NewebPay::class,
     ]
 ```
 
 ### 發布設置檔案
 
 ```
-php artisan vendor:publish --provider="Ycs77\NewebPay\NewebPayServiceProvider"
+php artisan vendor:publish --provider="webcs4JIG\NewebPay\NewebPayServiceProvider"
 ```
 
 ## 使用
@@ -57,14 +57,14 @@ php artisan vendor:publish --provider="Ycs77\NewebPay\NewebPayServiceProvider"
 設定 `.env` 檔，更多設定需開啟 `config/newebpay.php` 修改：
 
 ```
-CASH_STORE_ID=...        # 貼上 商店代號 (Ex: MS3311...)
-CASH_STORE_HASH_KEY=...  # 貼上 HashKey
-CASH_STORE_HASH_IV=...   # 貼上 HashIV
-CASH_STORE_DEBUG=true    # debug 模式
+NEWEBPAY_ID=...        # 貼上 商店代號 (Ex: MS3311...)
+NEWEBPAY_HASH_KEY=...  # 貼上 HashKey
+NEWEBPAY_HASH_IV=...   # 貼上 HashIV
+NEWEBPAY_DEBUG=true    # debug 模式
 
-CASH_RETURN_URL=...      # 付款完成後，前端重導向回來的網址 (Ex: /pay/callback)
-CASH_NOTIFY_URL=...      # 付款完成後，後端自動響應的網址   (Ex: /pay/notify)
-CASH_CLIENT_BACK_URL=... # 取消付款時，返回的網址          (Ex: /pay/cancel)
+NEWEBPAY_RETURN_URL=...      # 付款完成後，前端重導向回來的網址 (Ex: /pay/callback)
+NEWEBPAY_NOTIFY_URL=...      # 付款完成後，後端自動響應的網址   (Ex: /pay/notify)
+NEWEBPAY_CLIENT_BACK_URL=... # 取消付款時，返回的網址          (Ex: /pay/cancel)
 ```
 
 首先先建立一個頁面，和一個「付款」按鈕：
@@ -119,7 +119,7 @@ Route::post('/pay', 'PaymentController@payment');
 
 // PaymentController.php
 
-use Ycs77\NewebPay\Facades\NewebPay;
+use webcs4JIG\NewebPay\Facades\NewebPay;
 
 function payment()
 {
@@ -144,7 +144,7 @@ Route::post('/pay/notify', 'PaymentController@notify');
 // PaymentController.php
 
 use Illuminate\Http\Request;
-use Ycs77\NewebPay\Facades\NewebPay;
+use Webcs4JIG\NewebPay\Facades\NewebPay;
 
 function callback(Request $request)
 {
@@ -174,7 +174,7 @@ protected $except = [
 ### NewebPay MPG - 多功能支付
 
 ```php
-use Ycs77\NewebPay\Facades\NewebPay;
+use Webcs4JIG\NewebPay\Facades\NewebPay;
 
 function order()
 {
@@ -190,7 +190,7 @@ function order()
 基本上一般交易可直接在 `config/newebpay.php` 做設定，裡面有詳細的解說，但若遇到特殊情況，可依據個別交易做個別 function 設定。
 
 ```php
-use Ycs77\NewebPay\Facades\NewebPay;
+use Webcs4JIG\NewebPay\Facades\NewebPay;
 
 return NewebPay::payment(
     no, // 訂單編號
@@ -220,7 +220,7 @@ return NewebPay::payment(
 
 ```php
 use Illuminate\Http\Request;
-use Ycs77\NewebPay\Facades\NewebPay;
+use Webcs4JIG\NewebPay\Facades\NewebPay;
 
 function callback(Request $request)
 {
@@ -233,7 +233,7 @@ function callback(Request $request)
 ### NewebPay Cancel - 信用卡取消授權
 
 ```php
-use Ycs77\NewebPay\Facades\NewebPay;
+use Webcs4JIG\NewebPay\Facades\NewebPay;
 
 function creditCancel()
 {
@@ -248,7 +248,7 @@ function creditCancel()
 ### NewebPay Close - 信用卡請款
 
 ```php
-use Ycs77\NewebPay\Facades\NewebPay;
+use Webcs4JIG\NewebPay\Facades\NewebPay;
 
 function requestPayment()
 {
@@ -263,7 +263,7 @@ function requestPayment()
 ### NewebPay close - 信用卡退款
 
 ```php
-use Ycs77\NewebPay\Facades\NewebPay;
+use Webcs4JIG\NewebPay\Facades\NewebPay;
 
 function requestRefund()
 {
@@ -283,13 +283,13 @@ function requestRefund()
 
 [MIT](./LICENSE)
 
-[ico-version]: https://img.shields.io/packagist/v/ycs77/laravel-newebpay?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/webcs4JIG/laravel-newebpay?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
-[ico-ci]: https://img.shields.io/travis/ycs77/laravel-newebpay?style=flat-square
+[ico-ci]: https://img.shields.io/travis/webcs4JIG/laravel-newebpay?style=flat-square
 [ico-style-ci]: https://github.styleci.io/repos/262404477/shield?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/ycs77/laravel-newebpay?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/webcs4JIG/laravel-newebpay?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/ycs77/laravel-newebpay
-[link-ci]: https://app.travis-ci.com/github/ycs77/laravel-newebpay
+[link-packagist]: https://packagist.org/packages/webcs4JIG/laravel-newebpay
+[link-ci]: https://app.travis-ci.com/github/webcs4JIG/laravel-newebpay
 [link-style-ci]: https://github.styleci.io/repos/262404477
-[link-downloads]: https://packagist.org/packages/ycs77/laravel-newebpay
+[link-downloads]: https://packagist.org/packages/webcs4JIG/laravel-newebpay

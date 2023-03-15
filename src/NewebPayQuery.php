@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay;
+namespace Webcs4JIG\NewebPay;
 
 class NewebPayQuery extends BaseNewebPay
 {

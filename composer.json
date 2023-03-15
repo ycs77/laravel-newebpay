@@ -1,9 +1,13 @@
 {
-    "name": "ycs77/laravel-newebpay",
+    "name": "Webcs4JIG/laravel-newebpay",
     "description": "A library of connecting newebpay's API service.",
     "type": "library",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Webcs JTN",
+            "email": "webcsjtn@gmail.com"
+        },
         {
             "name": "w4ll4se",
             "email": "wallase.huang@gmail.com"
@@ -13,9 +17,9 @@
             "email": "yangchenshin77@gmail.com"
         }
     ],
-    "homepage": "https://github.com/ycs77/laravel-newebpay",
+    "homepage": "https://github.com/webcs4JIG/laravel-newebpay",
     "require": {
-        "php": ">=5.6",
+        "php": ">=8.1",
         "guzzlehttp/guzzle": ">=6.5.8",
         "illuminate/config": ">=5.1",
         "illuminate/contracts": ">=5.1",
@@ -29,21 +33,21 @@
     },
     "autoload": {
         "psr-4": {
-            "Ycs77\\NewebPay\\": "src/"
+            "Webcs4JIG\\NewebPay\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Ycs77\\NewebPay\\Test\\": "tests"
+            "Webcs4JIG\\NewebPay\\Test\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Ycs77\\NewebPay\\NewebPayServiceProvider"
+                "Webcs4JIG\\NewebPay\\NewebPayServiceProvider"
             ],
             "aliases": {
-                "NewebPay": "Ycs77\\NewebPay\\Facades\\NewebPay"
+                "NewebPay": "Webcs4JIG\\NewebPay\\Facades\\NewebPay"
             }
         }
     },

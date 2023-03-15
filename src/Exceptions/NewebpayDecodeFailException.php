@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Exceptions;
+namespace Webcs4JIG\NewebPay\Exceptions;
 
 use Exception;
 use Illuminate\Support\Facades\Log;

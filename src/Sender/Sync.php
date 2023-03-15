@@ -1,8 +1,8 @@
 <?php
 
-namespace Ycs77\NewebPay\Sender;
+namespace Webcs4JIG\NewebPay\Sender;
 
-use Ycs77\NewebPay\Contracts\Sender;
+use Webcs4JIG\NewebPay\Contracts\Sender;
 
 class Sync implements Sender
 {

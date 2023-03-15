@@ -1,10 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Test;
+namespace Webcs4JIG\NewebPay\Test;
 
 use GuzzleHttp\Psr7\Response;
-use Ycs77\NewebPay\NewebPayCreditCard;
-use Ycs77\NewebPay\Sender\Async;
+use Webcs4JIG\NewebPay\NewebPayCreditCard;
+use Webcs4JIG\NewebPay\Sender\Async;
 
 class NewebPayCreditCardTest extends TestCase
 {

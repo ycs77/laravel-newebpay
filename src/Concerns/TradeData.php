@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Concerns;
+namespace Webcs4JIG\NewebPay\Concerns;
 
 use Illuminate\Support\Carbon;
 

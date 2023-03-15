@@ -1,10 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay;
+namespace Webcs4JIG\NewebPay;
 
 use Illuminate\Support\Facades\Request;
 use Throwable;
-use Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException;
+use Webcs4JIG\NewebPay\Exceptions\NewebpayDecodeFailException;
 
 class NewebPay extends BaseNewebPay
 {
@@ -15,7 +15,7 @@ class NewebPay extends BaseNewebPay
      * @param  int  $amt  訂單金額
      * @param  string  $desc  商品描述
      * @param  string  $email  連絡信箱
-     * @return \Ycs77\NewebPay\NewebPayMPG
+     * @return \Webcs4JIG\NewebPay\NewebPayMPG
      */
     public function payment($no, $amt, $desc, $email)
     {
@@ -33,7 +33,7 @@ class NewebPay extends BaseNewebPay
      * @param  string  $type  編號類型
      *                        'order' => 使用商店訂單編號追蹤
      *                        'trade' => 使用藍新金流交易序號追蹤
-     * @return \Ycs77\NewebPay\NewebPayCancel
+     * @return \Webcs4JIG\NewebPay\NewebPayCancel
      */
     public function creditCancel($no, $amt, $type = 'order')
     {
@@ -51,7 +51,7 @@ class NewebPay extends BaseNewebPay
      * @param  string  $type  編號類型
      *                        'order' => 使用商店訂單編號追蹤
      *                        'trade' => 使用藍新金流交易序號追蹤
-     * @return \Ycs77\NewebPay\NewebPayClose
+     * @return \Webcs4JIG\NewebPay\NewebPayClose
      */
     public function requestPayment($no, $amt, $type = 'order')
     {
@@ -70,7 +70,7 @@ class NewebPay extends BaseNewebPay
      * @param  string  $type  編號類型
      *                        'order' => 使用商店訂單編號追蹤
      *                        'trade' => 使用藍新金流交易序號追蹤
-     * @return \Ycs77\NewebPay\NewebPayClose
+     * @return \Webcs4JIG\NewebPay\NewebPayClose
      */
     public function requestRefund($no, $amt, $type = 'order')
     {
@@ -86,7 +86,7 @@ class NewebPay extends BaseNewebPay
      *
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
-     * @return \Ycs77\NewebPay\NewebPayQuery
+     * @return \Webcs4JIG\NewebPay\NewebPayQuery
      */
     public function query($no, $amt)
     {
@@ -108,7 +108,7 @@ class NewebPay extends BaseNewebPay
      *                       $data['desc] => 商品描述
      *                       $data['amt'] => 綁定支付金額
      *                       $data['tokenTerm'] => 約定信用卡付款之付款人綁定資料
-     * @return \Ycs77\NewebPay\NewebPayCreditCard
+     * @return \Webcs4JIG\NewebPay\NewebPayCreditCard
      */
     public function creditcardFirstTrade($data)
     {
@@ -128,7 +128,7 @@ class NewebPay extends BaseNewebPay
      *                       $data['email'] => 購買者 email
      *                       $data['tokenValue'] => 綁定後取回的 token 值
      *                       $data['tokenTerm'] => 約定信用卡付款之付款人綁定資料 要與第一次綁定時一樣
-     * @return \Ycs77\NewebPay\NewebPayCreditCard
+     * @return \Webcs4JIG\NewebPay\NewebPayCreditCard
      */
     public function creditcardTradeWithToken($data)
     {
@@ -144,7 +144,7 @@ class NewebPay extends BaseNewebPay
      * @param  string  $encryptString
      * @return mixed
      *
-     * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
+     * @throws \Webcs4JIG\NewebPay\Exceptions\NewebpayDecodeFailException
      */
     public function decode($encryptString)
     {
@@ -162,7 +162,7 @@ class NewebPay extends BaseNewebPay
      *
      * @return mixed
      *
-     * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
+     * @throws \Webcs4JIG\NewebPay\Exceptions\NewebpayDecodeFailException
      */
     public function decodeFromRequest()
     {

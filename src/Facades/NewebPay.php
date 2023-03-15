@@ -1,21 +1,21 @@
 <?php
 
-namespace Ycs77\NewebPay\Facades;
+namespace Webcs4JIG\NewebPay\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Ycs77\NewebPay\NewebPayMPG payment(string $no, int $amt, string $desc, string $email) 付款
- * @method static \Ycs77\NewebPay\NewebPayCancel creditCancel(string $no, int $amt, string $type = 'order')
- * @method static \Ycs77\NewebPay\NewebPayClose requestPayment(string $no, int $amt, string $type = 'order')
- * @method static \Ycs77\NewebPay\NewebPayClose requestRefund(string $no, int $amt, string $type = 'order')
- * @method static \Ycs77\NewebPay\NewebPayQuery query(string $no, int $amt)
- * @method static \Ycs77\NewebPay\NewebPayCreditCard creditcardFirstTrade(array $data)
- * @method static \Ycs77\NewebPay\NewebPayCreditCard creditcardTradeWithToken(array $data)
+ * @method static \Webcs4JIG\NewebPay\NewebPayMPG payment(string $no, int $amt, string $desc, string $email) 付款
+ * @method static \Webcs4JIG\NewebPay\NewebPayCancel creditCancel(string $no, int $amt, string $type = 'order')
+ * @method static \Webcs4JIG\NewebPay\NewebPayClose requestPayment(string $no, int $amt, string $type = 'order')
+ * @method static \Webcs4JIG\NewebPay\NewebPayClose requestRefund(string $no, int $amt, string $type = 'order')
+ * @method static \Webcs4JIG\NewebPay\NewebPayQuery query(string $no, int $amt)
+ * @method static \Webcs4JIG\NewebPay\NewebPayCreditCard creditcardFirstTrade(array $data)
+ * @method static \Webcs4JIG\NewebPay\NewebPayCreditCard creditcardTradeWithToken(array $data)
  * @method static mixed decode(string $encryptString)
  * @method static mixed decodeFromRequest()
  *
- * @see \Ycs77\NewebPay\NewebPay
+ * @see \Webcs4JIG\NewebPay\NewebPay
  */
 class NewebPay extends Facade
 {
@@ -26,6 +26,6 @@ class NewebPay extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Ycs77\NewebPay\NewebPay::class;
+        return \Webcs4JIG\NewebPay\NewebPay::class;
     }
 }

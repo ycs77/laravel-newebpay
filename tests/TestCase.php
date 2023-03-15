@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Test;
+namespace Webcs4JIG\NewebPay\Test;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository as Config;
