@@ -139,6 +139,21 @@ class NewebPay extends BaseNewebPay
     }
 
     /**
+     * 單筆交易查詢
+     *
+     * @param  string  $no  訂單編號
+     * @param  int  $amt  訂單金額
+     * @return \Webcs4JIG\NewebPay\NewebPayTradeInfo
+     */
+    public function tradeinfo($no, $amt)
+    {
+        $newebPay = new NewebPayTradeInfo($this->config);
+        $newebPay->setOrder($no, $amt);
+
+        return $newebPay;
+    }
+
+    /**
      * 解碼加密字串
      *
      * @param  string  $encryptString
