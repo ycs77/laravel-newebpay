@@ -101,7 +101,7 @@ class PaymentController
 {
     public function payment()
     {
-        $no = '0001';                // 訂單編號
+        $no = 'Vanespl_ec_'.time();  // 訂單編號
         $amt = 120;                  // 交易金額
         $desc = '我的商品';           // 商品名稱
         $email = 'test@example.com'; // 付款人信箱

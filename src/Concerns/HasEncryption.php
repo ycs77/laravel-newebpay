@@ -18,18 +18,18 @@ trait HasEncryption
 
     protected function encryptDataBySHA(string $parameter, string $hashKey, string $hashIV): string
     {
-        $postDataStr = 'HashKey='.$hashKey.'&'.$parameter.'&HashIV='.$hashIV;
+        $hashs = 'HashKey='.$hashKey.'&'.$parameter.'&HashIV='.$hashIV;
 
-        return strtoupper(hash('sha256', $postDataStr));
+        return strtoupper(hash('sha256', $hashs));
     }
 
     protected function queryCheckValue(array $parameter, string $hashKey, string $hashIV): string
     {
         ksort($parameter);
         $checkStr = http_build_query($parameter);
-        $postDataStr = 'IV='.$hashIV.'&'.$checkStr.'&Key='.$hashKey;
+        $hashs = 'IV='.$hashIV.'&'.$checkStr.'&Key='.$hashKey;
 
-        return strtoupper(hash('sha256', $postDataStr));
+        return strtoupper(hash('sha256', $hashs));
     }
 
     protected function addPadding(string $string, int $blocksize = 32): string

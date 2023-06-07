@@ -9,7 +9,7 @@ use Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException;
 class NewebPay extends BaseNewebPay
 {
     /**
-     * 付款
+     * MPG 交易
      *
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
@@ -20,6 +20,20 @@ class NewebPay extends BaseNewebPay
     {
         $newebPay = new NewebPayMPG($this->config);
         $newebPay->setOrder($no, $amt, $desc, $email);
+
+        return $newebPay;
+    }
+
+    /**
+     * 單筆交易查詢
+     *
+     * @param  string  $no  訂單編號
+     * @param  int  $amt  訂單金額
+     */
+    public function query(string $no, int $amt): NewebPayQuery
+    {
+        $newebPay = new NewebPayQuery($this->config);
+        $newebPay->setQuery($no, $amt);
 
         return $newebPay;
     }
@@ -73,20 +87,6 @@ class NewebPay extends BaseNewebPay
         $newebPay = new NewebPayClose($this->config);
         $newebPay->setCloseOrder($no, $amt, $type);
         $newebPay->setCloseType('refund');
-
-        return $newebPay;
-    }
-
-    /**
-     * 查詢
-     *
-     * @param  string  $no  訂單編號
-     * @param  int  $amt  訂單金額
-     */
-    public function query(string $no, int $amt): NewebPayQuery
-    {
-        $newebPay = new NewebPayQuery($this->config);
-        $newebPay->setQuery($no, $amt);
 
         return $newebPay;
     }

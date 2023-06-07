@@ -11,7 +11,7 @@ class Sync implements Sender
      */
     public function send(array $request, string $url): mixed
     {
-        $result = '<form id="order-form" method="post" action='.$url.' >';
+        $result = '<form id="order-form" method="post" action="'.$url.'">';
 
         foreach ($request as $key => $value) {
             $result .= '<input type="hidden" name="'.$key.'" value="'.$value.'">';

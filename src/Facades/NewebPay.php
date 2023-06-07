@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static \Ycs77\NewebPay\NewebPayMPG payment(string $no, int $amt, string $desc, string $email)
+ * @method static \Ycs77\NewebPay\NewebPayQuery query(string $no, int $amt)
  * @method static \Ycs77\NewebPay\NewebPayCancel creditCancel(string $no, int $amt, string $type = 'order')
  * @method static \Ycs77\NewebPay\NewebPayClose requestPayment(string $no, int $amt, string $type = 'order')
  * @method static \Ycs77\NewebPay\NewebPayClose requestRefund(string $no, int $amt, string $type = 'order')
- * @method static \Ycs77\NewebPay\NewebPayQuery query(string $no, int $amt)
  * @method static \Ycs77\NewebPay\NewebPayCreditCard creditcardFirstTrade(array $data)
  * @method static \Ycs77\NewebPay\NewebPayCreditCard creditcardTradeWithToken(array $data)
  * @method static mixed decode(string $encryptString)
