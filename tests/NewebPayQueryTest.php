@@ -8,21 +8,21 @@ use Ycs77\NewebPay\Sender\Async;
 
 class NewebPayQueryTest extends TestCase
 {
-    public function testNewebPayQueryGetUrl()
+    public function test_neweb_pay_query_get_url()
     {
         $newebpay = new NewebPayQuery($this->createMockConfig());
 
         $this->assertEquals('https://ccore.newebpay.com/API/QueryTradeInfo', $newebpay->getUrl());
     }
 
-    public function testNewebPayQuerySenderIsSync()
+    public function test_neweb_pay_query_sender_is_sync()
     {
         $newebpay = new NewebPayQuery($this->createMockConfig());
 
         $this->assertInstanceOf(Async::class, $newebpay->getSender());
     }
 
-    public function testNewebPayQueryGetRequestData()
+    public function test_neweb_pay_query_get_request_data()
     {
         $this->setTestNow();
 
@@ -41,7 +41,7 @@ class NewebPayQueryTest extends TestCase
         $this->assertEquals(100, $requestData['Amt']);
     }
 
-    public function testNewebPayQuerySubmit()
+    public function test_neweb_pay_query_submit()
     {
         $this->setTestNow();
 

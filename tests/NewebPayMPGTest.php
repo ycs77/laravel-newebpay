@@ -7,21 +7,21 @@ use Ycs77\NewebPay\Sender\Sync;
 
 class NewebPayMPGTest extends TestCase
 {
-    public function testNewebPayMPGGetUrl()
+    public function test_neweb_pay_mpg_get_url()
     {
         $newebpay = new NewebPayMPG($this->createMockConfig());
 
         $this->assertEquals('https://ccore.newebpay.com/MPG/mpg_gateway', $newebpay->getUrl());
     }
 
-    public function testNewebPayMPGSenderIsSync()
+    public function test_neweb_pay_mpg_sender_is_sync()
     {
         $newebpay = new NewebPayMPG($this->createMockConfig());
 
         $this->assertInstanceOf(Sync::class, $newebpay->getSender());
     }
 
-    public function testNewebPayMPGGetRequestData()
+    public function test_neweb_pay_mpg_get_request_data()
     {
         $this->setTestNow();
 
@@ -35,7 +35,7 @@ class NewebPayMPGTest extends TestCase
         $this->assertEquals('1.5', $requestData['Version']);
     }
 
-    public function testNewebPayMPGSubmit()
+    public function test_neweb_pay_mpg_submit()
     {
         $this->setTestNow();
 

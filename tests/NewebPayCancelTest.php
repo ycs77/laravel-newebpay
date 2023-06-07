@@ -8,21 +8,21 @@ use Ycs77\NewebPay\Sender\Async;
 
 class NewebPayCancelTest extends TestCase
 {
-    public function testNewebPayCancelGetUrl()
+    public function test_neweb_pay_cancel_get_url()
     {
         $newebpay = new NewebPayCancel($this->createMockConfig());
 
         $this->assertEquals('https://ccore.newebpay.com/API/CreditCard/Cancel', $newebpay->getUrl());
     }
 
-    public function testNewebPayCancelSenderIsSync()
+    public function test_neweb_pay_cancel_sender_is_sync()
     {
         $newebpay = new NewebPayCancel($this->createMockConfig());
 
         $this->assertInstanceOf(Async::class, $newebpay->getSender());
     }
 
-    public function testNewebPayCancelGetRequestData()
+    public function test_neweb_pay_cancel_get_request_data()
     {
         $this->setTestNow();
 
@@ -34,7 +34,7 @@ class NewebPayCancelTest extends TestCase
         $this->assertEquals('e88e33cc07d106bcba1c1bd02d5d421fa9f86ef5a1469c0e801b3813b360f8333fd9fef8bf7312a3e5e66e1f6b5601b6c2ad3875eb127ca33809ddd77de94550', $requestData['PostData_']);
     }
 
-    public function testNewebPayCancelSubmit()
+    public function test_neweb_pay_cancel_submit()
     {
         $this->setTestNow();
 

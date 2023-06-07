@@ -8,21 +8,21 @@ use Ycs77\NewebPay\Sender\Async;
 
 class NewebPayCreditCardTest extends TestCase
 {
-    public function testNewebPayCreditCardGetUrl()
+    public function test_neweb_pay_credit_card_get_url()
     {
         $newebpay = new NewebPayCreditCard($this->createMockConfig());
 
         $this->assertEquals('https://ccore.newebpay.com/API/CreditCard', $newebpay->getUrl());
     }
 
-    public function testNewebPayCreditCardSenderIsSync()
+    public function test_neweb_pay_credit_card_sender_is_sync()
     {
         $newebpay = new NewebPayCreditCard($this->createMockConfig());
 
         $this->assertInstanceOf(Async::class, $newebpay->getSender());
     }
 
-    public function testNewebPayCreditCardGetRequestData()
+    public function test_neweb_pay_credit_card_get_request_data()
     {
         $this->setTestNow();
 
@@ -35,7 +35,7 @@ class NewebPayCreditCardTest extends TestCase
         $this->assertEquals('JSON', $requestData['Pos_']);
     }
 
-    public function testNewebPayCreditCardSubmit()
+    public function test_neweb_pay_credit_card_submit()
     {
         $this->setTestNow();
 
