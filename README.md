@@ -97,14 +97,17 @@ Route::post('/pay', 'PaymentController@payment');
 
 use Ycs77\NewebPay\Facades\NewebPay;
 
-function payment()
+class PaymentController
 {
-    $no = '0001';                // 訂單編號
-    $amt = 120;                  // 交易金額
-    $desc = '我的商品';           // 商品名稱
-    $email = 'test@example.com'; // 付款人信箱
+    public function payment()
+    {
+        $no = '0001';                // 訂單編號
+        $amt = 120;                  // 交易金額
+        $desc = '我的商品';           // 商品名稱
+        $email = 'test@example.com'; // 付款人信箱
 
-    return NewebPay::payment($no, $amt, $desc, $email)->submit();
+        return NewebPay::payment($no, $amt, $desc, $email)->submit();
+    }
 }
 ```
 
@@ -119,21 +122,23 @@ Route::post('/pay/notify', 'PaymentController@notify');
 
 // PaymentController.php
 
-use Illuminate\Http\Request;
 use Ycs77\NewebPay\Facades\NewebPay;
 
-function callback(Request $request)
+class PaymentController
 {
-    $data = NewebPay::decodeFromRequest();
-    dd($data);
-    // 儲存資料 和 重導向...
-}
+    public function callback()
+    {
+        $data = NewebPay::decodeFromRequest();
+        dd($data);
+        // 儲存資料 和 重導向...
+    }
 
-function notify(Request $request)
-{
-    $data = NewebPay::decodeFromRequest();
-    dd($data);
-    // 儲存資料 和 發送付款成功通知...
+    public function notify()
+    {
+        $data = NewebPay::decodeFromRequest();
+        dd($data);
+        // 儲存資料 和 發送付款成功通知...
+    }
 }
 ```
 
@@ -141,11 +146,25 @@ function notify(Request $request)
 
 *app/Http/Middleware/VerifyCsrfToken.php*
 ```php
-protected $except = [
-    '/pay/callback',
-    '/pay/notify',
-];
+class VerifyCsrfToken extends Middleware
+{
+    protected $except = [
+        '/pay/callback',
+        '/pay/notify',
+    ];
+}
 ```
+
+### 測試用帳號
+
+測試環境僅接受以下的測試信用卡號：
+
+* 4000-2211-1111-1111 (一次付清+分期付款)
+* 4003-5511-1111-1111 (紅利折抵)
+
+測試卡號有效月年及卡片背面末三碼，可任意填寫。
+
+更多詳細資訊請參考藍新金流 API 文件。s
 
 ### NewebPay MPG - 多功能支付
 
@@ -192,7 +211,7 @@ return NewebPay::payment(
     ->submit();
 ```
 
-*此版本1.5由籃新金流回傳後為加密訊息，所以回傳後需要進行解碼！*
+籃新金流回傳後為加密訊息，需要進行解碼：
 
 ```php
 use Illuminate\Http\Request;
