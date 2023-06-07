@@ -2,8 +2,8 @@
 
 namespace Ycs77\NewebPay\Test;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Support\Carbon;
 use Mockery as m;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase as BaseTestCase;

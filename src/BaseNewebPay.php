@@ -2,8 +2,8 @@
 
 namespace Ycs77\NewebPay;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Support\Carbon;
 
 abstract class BaseNewebPay
 {
