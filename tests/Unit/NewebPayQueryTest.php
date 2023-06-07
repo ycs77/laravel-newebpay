@@ -26,7 +26,7 @@ test('NewebPay query can be get request data', function () {
         ->getRequestData();
 
     expect($requestData['MerchantID'])->toBe('TestMerchantID1234');
-    expect($requestData['Version'])->toBe('1.5');
+    expect($requestData['Version'])->toBe('2.0');
     expect($requestData['RespondType'])->toBe('JSON');
     expect($requestData['CheckValue'])->toBe('A314C865681049301D80A33318E5043B51425EAC58736E9ACF4FAC5854ABD59F');
     expect($requestData['TimeStamp'])->toBe(1577836800);
