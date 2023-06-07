@@ -102,12 +102,10 @@ Route::get('/pay', function () {
   </form>
 </template>
 
-<script>
-export default {
-  props: {
-    csrf_token: String
-  }
-}
+<script setup>
+defineProps({
+  csrf_token: String,
+})
 </script>
 ```
 
