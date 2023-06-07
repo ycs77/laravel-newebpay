@@ -22,28 +22,6 @@ Laravel NewebPay 為針對 Laravel 所寫的金流套件，主要實作藍新金
 composer require ycs77/laravel-newebpay
 ```
 
-### 註冊套件
-
-> Laravel 5.5 以上會自動註冊套件，可以跳過此步驟
-
-在 `config/app.php` 註冊套件和增加別名：
-
-```php
-    'providers' => [
-        ...
-
-        /*
-         * Package Service Providers...
-         */
-        Ycs77\NewebPay\NewebPayServiceProvider::class,
-    ],
-
-    'aliases' => [
-        ...
-        'NewebPay' => Ycs77\NewebPay\Facades\NewebPay::class,
-    ]
-```
-
 ### 發布設置檔案
 
 ```
@@ -60,7 +38,7 @@ php artisan vendor:publish --provider="Ycs77\NewebPay\NewebPayServiceProvider"
 NEWEBPAY_STORE_ID=...        # 貼上 商店代號 (Ex: MS3311...)
 NEWEBPAY_STORE_HASH_KEY=...  # 貼上 HashKey
 NEWEBPAY_STORE_HASH_IV=...   # 貼上 HashIV
-NEWEBPAY_DEBUG=true    # debug 模式
+NEWEBPAY_DEBUG=true          # debug 模式
 
 NEWEBPAY_RETURN_URL=...      # 付款完成後，前端重導向回來的網址 (Ex: /pay/callback)
 NEWEBPAY_NOTIFY_URL=...      # 付款完成後，後端自動響應的網址   (Ex: /pay/notify)
