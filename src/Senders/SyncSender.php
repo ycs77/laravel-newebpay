@@ -1,10 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Sender;
+namespace Ycs77\NewebPay\Senders;
 
 use Ycs77\NewebPay\Contracts\Sender;
 
-class Sync implements Sender
+class SyncSender implements Sender
 {
     /**
      * Send the data to API.

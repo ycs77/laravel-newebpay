@@ -2,7 +2,7 @@
 
 use GuzzleHttp\Psr7\Response;
 use Ycs77\NewebPay\NewebPayClose;
-use Ycs77\NewebPay\Sender\Async;
+use Ycs77\NewebPay\Senders\AsyncSender;
 
 test('NewebPay close can be get url', function () {
     $newebpay = new NewebPayClose(app('config'));
@@ -13,7 +13,7 @@ test('NewebPay close can be get url', function () {
 test('NewebPay close sender is sync', function () {
     $newebpay = new NewebPayClose(app('config'));
 
-    expect($newebpay->getSender())->toBeInstanceOf(Async::class);
+    expect($newebpay->getSender())->toBeInstanceOf(AsyncSender::class);
 });
 
 test('NewebPay close can be get request data', function () {

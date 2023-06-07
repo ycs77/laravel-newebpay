@@ -2,7 +2,7 @@
 
 use GuzzleHttp\Psr7\Response;
 use Ycs77\NewebPay\NewebPayCreditCard;
-use Ycs77\NewebPay\Sender\Async;
+use Ycs77\NewebPay\Senders\AsyncSender;
 
 test('NewebPay credit card can be get url', function () {
     $newebpay = new NewebPayCreditCard(app('config'));
@@ -13,7 +13,7 @@ test('NewebPay credit card can be get url', function () {
 test('NewebPay credit card sender is sync', function () {
     $newebpay = new NewebPayCreditCard(app('config'));
 
-    expect($newebpay->getSender())->toBeInstanceOf(Async::class);
+    expect($newebpay->getSender())->toBeInstanceOf(AsyncSender::class);
 });
 
 test('NewebPay credit card can be get request data', function () {

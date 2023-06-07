@@ -1,12 +1,12 @@
 <?php
 
-namespace Ycs77\NewebPay\Sender;
+namespace Ycs77\NewebPay\Senders;
 
 use GuzzleHttp\Client;
 use Ycs77\NewebPay\Contracts\HasHttp;
 use Ycs77\NewebPay\Contracts\Sender;
 
-class Async implements Sender, HasHttp
+class AsyncSender implements Sender, HasHttp
 {
     /**
      * The guzzle http client instance.

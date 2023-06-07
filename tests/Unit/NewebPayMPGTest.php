@@ -1,7 +1,7 @@
 <?php
 
 use Ycs77\NewebPay\NewebPayMPG;
-use Ycs77\NewebPay\Sender\Sync;
+use Ycs77\NewebPay\Senders\SyncSender;
 
 test('NewebPay MPG can be get url', function () {
     $newebpay = new NewebPayMPG(app('config'));
@@ -12,7 +12,7 @@ test('NewebPay MPG can be get url', function () {
 test('NewebPay MPG sender is sync', function () {
     $newebpay = new NewebPayMPG(app('config'));
 
-    expect($newebpay->getSender())->toBeInstanceOf(Sync::class);
+    expect($newebpay->getSender())->toBeInstanceOf(SyncSender::class);
 });
 
 test('NewebPay MPG can be get request data', function () {
