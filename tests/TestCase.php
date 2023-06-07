@@ -10,6 +10,11 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
+    /**
+     * Set the fake now time for testing.
+     *
+     * @return void
+     */
     public function setTestNow()
     {
         Carbon::setTestNow(Carbon::create(2020, 1, 1));
