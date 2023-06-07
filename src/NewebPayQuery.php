@@ -4,7 +4,7 @@ namespace Ycs77\NewebPay;
 
 class NewebPayQuery extends BaseNewebPay
 {
-    protected $CheckValues;
+    protected array $checkValues;
 
     /**
      * The newebpay boot hook.
@@ -14,7 +14,7 @@ class NewebPayQuery extends BaseNewebPay
         $this->setApiPath('API/QueryTradeInfo');
         $this->setAsyncSender();
 
-        $this->CheckValues['MerchantID'] = $this->MerchantID;
+        $this->checkValues['MerchantID'] = $this->MerchantID;
     }
 
     /**
@@ -25,8 +25,8 @@ class NewebPayQuery extends BaseNewebPay
      */
     public function setQuery(string $no, int $amt): self
     {
-        $this->CheckValues['MerchantOrderNo'] = $no;
-        $this->CheckValues['Amt'] = $amt;
+        $this->checkValues['MerchantOrderNo'] = $no;
+        $this->checkValues['Amt'] = $amt;
 
         return $this;
     }
@@ -36,7 +36,7 @@ class NewebPayQuery extends BaseNewebPay
      */
     public function getRequestData(): array
     {
-        $CheckValue = $this->queryCheckValue($this->CheckValues, $this->HashKey, $this->HashIV);
+        $CheckValue = $this->queryCheckValue($this->checkValues, $this->HashKey, $this->HashIV);
 
         return [
             'MerchantID' => $this->MerchantID,
@@ -44,8 +44,8 @@ class NewebPayQuery extends BaseNewebPay
             'RespondType' => $this->config->get('newebpay.respond_type'),
             'CheckValue' => $CheckValue,
             'TimeStamp' => $this->timestamp,
-            'MerchantOrderNo' => $this->CheckValues['MerchantOrderNo'],
-            'Amt' => $this->CheckValues['Amt'],
+            'MerchantOrderNo' => $this->checkValues['MerchantOrderNo'],
+            'Amt' => $this->checkValues['Amt'],
         ];
     }
 }
