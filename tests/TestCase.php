@@ -16,23 +16,23 @@ class TestCase extends BaseTestCase
     protected function defineEnvironment($app)
     {
         tap($app['config'], function (Config $config) {
-            $config->set('newebpay.Debug', true);
-            $config->set('newebpay.MerchantID', 'TestMerchantID1234');
-            $config->set('newebpay.HashKey', 'TestHashKey123456789');
-            $config->set('newebpay.HashIV', '17ef14e533ed1c18'); // Generate with `bin2hex(openssl_random_pseudo_bytes(8));`
-            $config->set('newebpay.Version', '1.5');
-            $config->set('newebpay.RespondType', 'JSON');
-            $config->set('newebpay.LangType', 'zh-tw');
-            $config->set('newebpay.TradeLimit', 0);
-            $config->set('newebpay.ExpireDate', 7);
-            $config->set('newebpay.ReturnURL', null);
-            $config->set('newebpay.NotifyURL', null);
-            $config->set('newebpay.CustomerURL', null);
-            $config->set('newebpay.ClientBackURL', null);
-            $config->set('newebpay.EmailModify', false);
-            $config->set('newebpay.LoginType', false);
-            $config->set('newebpay.OrderComment', null);
-            $config->set('newebpay.PaymentMethod', [
+            $config->set('newebpay.debug', true);
+            $config->set('newebpay.merchant_id', 'TestMerchantID1234');
+            $config->set('newebpay.hash_key', 'TestHashKey123456789');
+            $config->set('newebpay.hash_iv', '17ef14e533ed1c18'); // Generate with `bin2hex(openssl_random_pseudo_bytes(8));`
+            $config->set('newebpay.version', '1.5');
+            $config->set('newebpay.respond_type', 'JSON');
+            $config->set('newebpay.lang_type', 'zh-tw');
+            $config->set('newebpay.trade_limit', 0);
+            $config->set('newebpay.expire_date', 7);
+            $config->set('newebpay.return_url', null);
+            $config->set('newebpay.notify_url', null);
+            $config->set('newebpay.customer_url', null);
+            $config->set('newebpay.client_back_url', null);
+            $config->set('newebpay.email_modify', false);
+            $config->set('newebpay.login_type', false);
+            $config->set('newebpay.order_comment', null);
+            $config->set('newebpay.payment_method', [
                 'CREDIT' => [
                     'Enable' => true,
                     'CreditRed' => false,
@@ -53,7 +53,7 @@ class TestCase extends BaseTestCase
                 'EZPALIPAY' => false,
             ]);
             $config->set('newebpay.CVSCOM', null);
-            $config->set('newebpay.LgsType', null);
+            $config->set('newebpay.lgs_type', null);
         });
     }
 }

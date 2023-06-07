@@ -6,33 +6,33 @@ return [
      * 開啟藍新金流測試模式 (bool)
      */
 
-    'Debug' => env('NEWEBPAY_DEBUG'),
+    'debug' => env('NEWEBPAY_DEBUG'),
 
     /*
      * 藍新金流商店代號
      */
 
-    'MerchantID' => env('NEWEBPAY_STORE_ID'),
-    'HashKey' => env('NEWEBPAY_STORE_HASH_KEY'),
-    'HashIV' => env('NEWEBPAY_STORE_HASH_IV'),
+    'merchant_id' => env('NEWEBPAY_STORE_ID'),
+    'hash_key' => env('NEWEBPAY_STORE_HASH_KEY'),
+    'hash_iv' => env('NEWEBPAY_STORE_HASH_IV'),
 
     /*
      * 回傳格式 JSON/String
      */
 
-    'RespondType' => 'JSON',
+    'respond_type' => 'JSON',
 
     /*
      * 串接版本
      */
 
-    'Version' => '1.5',
+    'version' => '1.5',
 
     /*
      * 語系 zh-tw/en
      */
 
-    'LangType' => 'zh-tw',
+    'lang_type' => 'zh-tw',
 
     /*
      * 交易秒數限制 (int)
@@ -43,7 +43,7 @@ return [
      * 秒數上限為 900 秒，當超過 900 秒時，會 以 900 秒計算
      */
 
-    'TradeLimit' => 0,
+    'trade_limit' => 0,
 
     /*
      * 繳費有效期限
@@ -52,7 +52,7 @@ return [
      * maxValue: 180
      */
 
-    'ExpireDate' => 7,
+    'expire_date' => 7,
 
     /*
      * 付款完成後導向頁面
@@ -61,7 +61,7 @@ return [
      * default: null
      */
 
-    'ReturnURL' => env('NEWEBPAY_RETURN_URL') != null ? env('APP_URL').env('NEWEBPAY_RETURN_URL') : null,
+    'return_url' => env('NEWEBPAY_RETURN_URL') != null ? env('APP_URL').env('NEWEBPAY_RETURN_URL') : null,
 
     /*
      * 付款完成後的通知連結
@@ -71,7 +71,7 @@ return [
      * default: null
      */
 
-    'NotifyURL' => env('NEWEBPAY_NOTIFY_URL') != null ? env('APP_URL').env('NEWEBPAY_NOTIFY_URL') : null,
+    'notify_url' => env('NEWEBPAY_NOTIFY_URL') != null ? env('APP_URL').env('NEWEBPAY_NOTIFY_URL') : null,
 
     /*
      * 商店取號網址
@@ -80,7 +80,7 @@ return [
      * default: null
      */
 
-    'CustomerURL' => env('NEWEBPAY_CUSTOMER_URL') != null ? env('APP_URL').env('NEWEBPAY_CUSTOMER_URL') : null,
+    'customer_url' => env('NEWEBPAY_CUSTOMER_URL') != null ? env('APP_URL').env('NEWEBPAY_CUSTOMER_URL') : null,
 
     /*
      * 付款取消-返回商店網址
@@ -89,7 +89,7 @@ return [
      * default: null
      */
 
-    'ClientBackURL' => env('NEWEBPAY_CLIENT_BACK_URL') != null ? env('APP_URL').env('NEWEBPAY_CLIENT_BACK_URL') : null,
+    'client_back_url' => env('NEWEBPAY_CLIENT_BACK_URL') != null ? env('APP_URL').env('NEWEBPAY_CLIENT_BACK_URL') : null,
 
     /*
      * 付款人電子信箱是否開放修改 (bool)
@@ -97,13 +97,13 @@ return [
      * default: true
      */
 
-    'EmailModify' => true,
+    'email_modify' => true,
 
     /*
      * 是否需要登入藍新金流會員 (bool)
      */
 
-    'LoginType' => false,
+    'login_type' => false,
 
     /*
      * 商店備註
@@ -113,13 +113,13 @@ return [
      * default: null
      */
 
-    'OrderComment' => null,
+    'order_comment' => null,
 
     /*
      * 支付方式
      */
 
-    'PaymentMethod' => [
+    'payment_method' => [
 
         /*
          * 信用卡支付 (default: true)
@@ -207,6 +207,6 @@ return [
      *   b.若商店設定中未啟用［B2C 大宗寄倉］，則系統將會啟用［C2C 店到店］。
      *   c.若商店設定中，［B2C 大宗寄倉］與［C2C 店到店］皆未啟用，則支付頁面中將不會出現物流選項。
      */
-    'LgsType' => null,
+    'lgs_type' => null,
 
 ];

@@ -76,9 +76,9 @@ abstract class BaseNewebPay
     public function __construct(Config $config)
     {
         $this->config = $config;
-        $this->MerchantID = $this->config->get('newebpay.MerchantID');
-        $this->HashKey = $this->config->get('newebpay.HashKey');
-        $this->HashIV = $this->config->get('newebpay.HashIV');
+        $this->MerchantID = $this->config->get('newebpay.merchant_id');
+        $this->HashKey = $this->config->get('newebpay.hash_key');
+        $this->HashIV = $this->config->get('newebpay.hash_iv');
 
         $this->setTimestamp();
         $this->tradeDataBoot();
@@ -103,7 +103,7 @@ abstract class BaseNewebPay
      */
     public function generateUrl($path)
     {
-        return ($this->config->get('newebpay.Debug') ? $this->testUrl : $this->productionUrl).$path;
+        return ($this->config->get('newebpay.debug') ? $this->testUrl : $this->productionUrl).$path;
     }
 
     /**
