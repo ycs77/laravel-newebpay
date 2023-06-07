@@ -57,14 +57,14 @@ php artisan vendor:publish --provider="Ycs77\NewebPay\NewebPayServiceProvider"
 設定 `.env` 檔，更多設定需開啟 `config/newebpay.php` 修改：
 
 ```
-CASH_STORE_ID=...        # 貼上 商店代號 (Ex: MS3311...)
-CASH_STORE_HASH_KEY=...  # 貼上 HashKey
-CASH_STORE_HASH_IV=...   # 貼上 HashIV
-CASH_STORE_DEBUG=true    # debug 模式
+NEWEBPAY_STORE_ID=...        # 貼上 商店代號 (Ex: MS3311...)
+NEWEBPAY_STORE_HASH_KEY=...  # 貼上 HashKey
+NEWEBPAY_STORE_HASH_IV=...   # 貼上 HashIV
+NEWEBPAY_DEBUG=true    # debug 模式
 
-CASH_RETURN_URL=...      # 付款完成後，前端重導向回來的網址 (Ex: /pay/callback)
-CASH_NOTIFY_URL=...      # 付款完成後，後端自動響應的網址   (Ex: /pay/notify)
-CASH_CLIENT_BACK_URL=... # 取消付款時，返回的網址          (Ex: /pay/cancel)
+NEWEBPAY_RETURN_URL=...      # 付款完成後，前端重導向回來的網址 (Ex: /pay/callback)
+NEWEBPAY_NOTIFY_URL=...      # 付款完成後，後端自動響應的網址   (Ex: /pay/notify)
+NEWEBPAY_CLIENT_BACK_URL=... # 取消付款時，返回的網址          (Ex: /pay/cancel)
 ```
 
 首先先建立一個頁面，和一個「付款」按鈕：

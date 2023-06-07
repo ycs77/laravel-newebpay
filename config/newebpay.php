@@ -6,15 +6,15 @@ return [
      * 開啟藍新金流測試模式 (bool)
      */
 
-    'Debug' => env('CASH_STORE_DEBUG'),
+    'Debug' => env('NEWEBPAY_DEBUG'),
 
     /*
      * 藍新金流商店代號
      */
 
-    'MerchantID' => env('CASH_STORE_ID'),
-    'HashKey' => env('CASH_STORE_HASH_KEY'),
-    'HashIV' => env('CASH_STORE_HASH_IV'),
+    'MerchantID' => env('NEWEBPAY_STORE_ID'),
+    'HashKey' => env('NEWEBPAY_STORE_HASH_KEY'),
+    'HashIV' => env('NEWEBPAY_STORE_HASH_IV'),
 
     /*
      * 回傳格式 JSON/String
@@ -61,7 +61,7 @@ return [
      * default: null
      */
 
-    'ReturnURL' => env('CASH_RETURN_URL') != null ? env('APP_URL').env('CASH_RETURN_URL') : null,
+    'ReturnURL' => env('NEWEBPAY_RETURN_URL') != null ? env('APP_URL').env('NEWEBPAY_RETURN_URL') : null,
 
     /*
      * 付款完成後的通知連結
@@ -71,7 +71,7 @@ return [
      * default: null
      */
 
-    'NotifyURL' => env('CASH_NOTIFY_URL') != null ? env('APP_URL').env('CASH_NOTIFY_URL') : null,
+    'NotifyURL' => env('NEWEBPAY_NOTIFY_URL') != null ? env('APP_URL').env('NEWEBPAY_NOTIFY_URL') : null,
 
     /*
      * 商店取號網址
@@ -80,7 +80,7 @@ return [
      * default: null
      */
 
-    'CustomerURL' => env('CASH_CUSTOMER_URL') != null ? env('APP_URL').env('CASH_CUSTOMER_URL') : null,
+    'CustomerURL' => env('NEWEBPAY_CUSTOMER_URL') != null ? env('APP_URL').env('NEWEBPAY_CUSTOMER_URL') : null,
 
     /*
      * 付款取消-返回商店網址
@@ -89,7 +89,7 @@ return [
      * default: null
      */
 
-    'ClientBackURL' => env('CASH_CLIENT_BACK_URL') != null ? env('APP_URL').env('CASH_CLIENT_BACK_URL') : null,
+    'ClientBackURL' => env('NEWEBPAY_CLIENT_BACK_URL') != null ? env('APP_URL').env('NEWEBPAY_CLIENT_BACK_URL') : null,
 
     /*
      * 付款人電子信箱是否開放修改 (bool)
