@@ -6,10 +6,6 @@ interface Sender
 {
     /**
      * Send the data to API.
-     *
-     * @param  array  $request
-     * @param  string  $url
-     * @return mixed
      */
-    public function send($request, $url);
+    public function send(array $request, string $url): mixed;
 }

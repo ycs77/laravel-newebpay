@@ -6,10 +6,8 @@ class NewebPayMPG extends BaseNewebPay
 {
     /**
      * The newebpay boot hook.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->setApiPath('MPG/mpg_gateway');
         $this->setSyncSender();
@@ -34,10 +32,8 @@ class NewebPayMPG extends BaseNewebPay
 
     /**
      * Get request data.
-     *
-     * @return array
      */
-    public function getRequestData()
+    public function getRequestData(): array
     {
         $tradeInfo = $this->encryptDataByAES($this->TradeData, $this->HashKey, $this->HashIV);
         $tradeSha = $this->encryptDataBySHA($tradeInfo, $this->HashKey, $this->HashIV);

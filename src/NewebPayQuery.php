@@ -8,10 +8,8 @@ class NewebPayQuery extends BaseNewebPay
 
     /**
      * The newebpay boot hook.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->setApiPath('API/QueryTradeInfo');
         $this->setAsyncSender();
@@ -19,7 +17,13 @@ class NewebPayQuery extends BaseNewebPay
         $this->CheckValues['MerchantID'] = $this->MerchantID;
     }
 
-    public function setQuery($no, $amt)
+    /**
+     * 查詢訂單
+     *
+     * @param  string  $no  訂單編號
+     * @param  int  $amt  訂單金額
+     */
+    public function setQuery(string $no, int $amt): self
     {
         $this->CheckValues['MerchantOrderNo'] = $no;
         $this->CheckValues['Amt'] = $amt;
@@ -29,10 +33,8 @@ class NewebPayQuery extends BaseNewebPay
 
     /**
      * Get request data.
-     *
-     * @return array
      */
-    public function getRequestData()
+    public function getRequestData(): array
     {
         $CheckValue = $this->queryCheckValue($this->CheckValues, $this->HashKey, $this->HashIV);
 

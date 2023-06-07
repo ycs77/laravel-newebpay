@@ -8,40 +8,28 @@ trait TradeData
 {
     /**
      * The newebpay trade data.
-     *
-     * @var array
      */
-    protected $TradeData = [];
+    protected array $TradeData = [];
 
     /**
      * Bootstrap the trade data.
-     *
-     * @return void
      */
-    public function tradeDataBoot()
+    public function tradeDataBoot(): void
     {
         $this->TradeData['TimeStamp'] = $this->timestamp;
         $this->setVersion();
         $this->setRespondType();
     }
 
-    /**
-     * Get the newebpay TradeData.
-     *
-     * @return array
-     */
-    public function getTradeData()
+    public function getTradeData(): array
     {
         return $this->TradeData;
     }
 
     /**
      * 串接版本
-     *
-     * @param  string|null  $version
-     * @return $this
      */
-    public function setVersion($version = null)
+    public function setVersion(string $version = null): self
     {
         $this->TradeData['Version'] = $version ?? $this->config->get('newebpay.version');
 
@@ -51,12 +39,9 @@ trait TradeData
     /**
      * 回傳格式
      *
-     * Support types: "JSON", "String"
-     *
-     * @param  string|null  $type
-     * @return $this
+     * 回傳格式可設定 "JSON" 或 "String"。
      */
-    public function setRespondType($type = null)
+    public function setRespondType(string $type = null): self
     {
         $this->TradeData['RespondType'] = $type ?? $this->config->get('newebpay.respond_type');
 
@@ -66,12 +51,9 @@ trait TradeData
     /**
      * 語系
      *
-     * Support types: "zh-tw", "en"
-     *
-     * @param  string|null  $lang
-     * @return $this
+     * 語系可設定 "zh-tw"、"en"。
      */
-    public function setLangType($lang = null)
+    public function setLangType(string $lang = null): self
     {
         $this->TradeData['LangType'] = $lang ?? $this->config->get('newebpay.lang_type');
 
@@ -84,24 +66,20 @@ trait TradeData
      * 0: 不限制
      * 秒數下限為 60 秒，當秒數介於 1~59 秒時，會以 60 秒計算。
      * 秒數上限為 900 秒，當超過 900 秒時，會 以 900 秒計算。
-     *
-     * @param  int|null  $limit
-     * @return $this
      */
-    public function setTradeLimit($limit = null)
+    public function setTradeLimit(int $limit = null): self
     {
-        $this->TradeData['TradeLimit'] = $limit !== null ? $limit : $this->config->get('newebpay.trade_limit');
+        $this->TradeData['TradeLimit'] = $limit !== null
+            ? $limit
+            : $this->config->get('newebpay.trade_limit');
 
         return $this;
     }
 
     /**
      * 繳費有效期限
-     *
-     * @param  int|null  $day
-     * @return $this
      */
-    public function setExpireDate($day = null)
+    public function setExpireDate(int $day = null): self
     {
         $day = $day !== null ? $day : $this->config->get('newebpay.expire_date');
 
@@ -113,12 +91,9 @@ trait TradeData
     /**
      * 付款完成後導向頁面
      *
-     * 僅接受 port 80 or 443
-     *
-     * @param  string|null  $url
-     * @return $this
+     * 僅接受 port 80 或 443。
      */
-    public function setReturnURL($url = null)
+    public function setReturnURL(string $url = null): self
     {
         $this->TradeData['ReturnURL'] = $url ?? $this->config->get('newebpay.return_url');
 
@@ -129,12 +104,9 @@ trait TradeData
      * 付款完成後的通知連結
      *
      * 以幕後方式回傳給商店相關支付結果資料
-     * 僅接受 port 80 or 443
-     *
-     * @param  string|null  $url
-     * @return $this
+     * 僅接受 port 80 或 443。
      */
-    public function setNotifyURL($url = null)
+    public function setNotifyURL(string $url = null): self
     {
         $this->TradeData['NotifyURL'] = $url ?? $this->config->get('newebpay.notify_url');
 
@@ -144,12 +116,9 @@ trait TradeData
     /**
      * 商店取號網址
      *
-     * 此參數若為空值，則會顯示取號結果在藍新金流頁面。
-     *
-     * @param  string|null  $url
-     * @return $this
+     * 如果設定為 null，則會顯示取號結果在藍新金流頁面。
      */
-    public function setCustomerURL($url = null)
+    public function setCustomerURL(string $url = null): self
     {
         $this->TradeData['CustomerURL'] = $url ?? $this->config->get('newebpay.customer_url');
 
@@ -157,14 +126,11 @@ trait TradeData
     }
 
     /**
-     * 付款取消-返回商店網址
+     * 付款取消時返回商店網址
      *
-     * 當交易取消時，平台會出現返回鈕，使消費者依以此參數網址返回商店指定的頁面
-     *
-     * @param  string|null  $url
-     * @return $this
+     * 當交易取消時，平台會出現返回鈕，使消費者依以此參數網址返回商店指定的頁面。
      */
-    public function setClientBackURL($url = null)
+    public function setClientBackURL(string $url = null): self
     {
         $this->TradeData['ClientBackURL'] = $url ?? $this->config->get('newebpay.client_back_url');
 
@@ -173,26 +139,28 @@ trait TradeData
 
     /**
      * 付款人電子信箱是否開放修改
-     *
-     * @param  bool|null  $isModify
-     * @return $this
      */
-    public function setEmailModify($isModify = null)
+    public function setEmailModify(bool $isModify = null): self
     {
-        $this->TradeData['EmailModify'] = ($isModify !== null ? $isModify : $this->config->get('newebpay.email_modify')) ? 1 : 0;
+        $this->TradeData['EmailModify'] = (
+            $isModify !== null
+                ? $isModify
+                : $this->config->get('newebpay.email_modify')
+        ) ? 1 : 0;
 
         return $this;
     }
 
     /**
      * 是否需要登入藍新金流會員
-     *
-     * @param  bool|null  $isLogin
-     * @return $this
      */
-    public function setLoginType($isLogin = false)
+    public function setLoginType(bool $isLogin = false): self
     {
-        $this->TradeData['LoginType'] = ($isLogin !== null ? $isLogin : $this->config->get('newebpay.login_type')) ? 1 : 0;
+        $this->TradeData['LoginType'] = (
+            $isLogin !== null
+                ? $isLogin
+                : $this->config->get('newebpay.login_type')
+        ) ? 1 : 0;
 
         return $this;
     }
@@ -200,26 +168,22 @@ trait TradeData
     /**
      * 商店備註
      *
-     * 1.限制長度為 300 字。
-     * 2.若有提供此參數，將會於 MPG 頁面呈現商店備註內容。
-     *
-     * @param  string|null  $comment
-     * @return $this
+     * 1. 商店備註限制長度為 300 字。
+     * 2. 若有輸入此參數，將會於 MPG 頁面呈現商店備註內容。
      */
-    public function setOrderComment($comment = null)
+    public function setOrderComment(string $comment = null): self
     {
-        $this->TradeData['OrderComment'] = $comment !== null ? $comment : $this->config->get('newebpay.order_comment');
+        $this->TradeData['OrderComment'] = $comment !== null
+            ? $comment
+            : $this->config->get('newebpay.order_comment');
 
         return $this;
     }
 
     /**
-     * 支付方式
-     *
-     * @param  array  $paymentMethod
-     * @return $this
+     * 設定商店需要使用的支付方式
      */
-    public function setPaymentMethod($paymentMethod = [])
+    public function setPaymentMethod(array $paymentMethod = []): self
     {
         $paymentMethod = array_merge($this->config->get('newebpay.payment_method'), $paymentMethod);
 
@@ -245,17 +209,14 @@ trait TradeData
     }
 
     /**
-     * 付款方式-物流啟用
+     * 物流搭配付款方式
      *
-     * 1 = 啟用超商取貨不付款
-     * 2 = 啟用超商取貨付款
-     * 3 = 啟用超商取貨不付款及超商取貨付款
-     * null = 不開啟
-     *
-     * @param  int|null  $cvscom
-     * @return $this
+     * 1: 啟用超商取貨不付款
+     * 2: 啟用超商取貨付款
+     * 3: 啟用超商取貨不付款及超商取貨付款
+     * null: 不開啟
      */
-    public function setCVSCOM($cvscom = null)
+    public function setCVSCOM(int $cvscom = null): self
     {
         $this->TradeData['CVSCOM'] = $cvscom !== null ? $cvscom : $this->config->get('newebpay.CVSCOM');
 
@@ -265,48 +226,30 @@ trait TradeData
     /**
      * 物流型態
      *
-     * B2C = 超商大宗寄倉(目前僅支援統㇐超商)
-     * C2C = 超商店到店(目前僅支援全家)
-     * null = 預設
+     * B2C: 超商大宗寄倉(目前僅支援統㇐超商)
+     * C2C: 超商店到店(目前僅支援全家)
+     * null: 預設
      *
      * 預設值情況說明：
-     *   a.系統優先啟用［B2C 大宗寄倉］。
-     *   b.若商店設定中未啟用［B2C 大宗寄倉］，則系統將會啟用［C2C 店到店］。
-     *   c.若商店設定中，［B2C 大宗寄倉］與［C2C 店到店］皆未啟用，則支付頁面中將不會出現物流選項。
-     *
-     * @param  string|null  $lgsType
-     * @return $this
+     * 1. 系統優先啟用［B2C 大宗寄倉］。
+     * 2. 若商店設定中未啟用［B2C 大宗寄倉］，則系統將會啟用［C2C 店到店］。
+     * 3. 若商店設定中，［B2C 大宗寄倉］與［C2C 店到店］皆未啟用，則支付頁面中將不會出現物流選項。
      */
-    public function setLgsType($lgsType = null)
+    public function setLgsType(string $lgsType = null): self
     {
         $this->TradeData['LgsType'] = $lgsType !== null ? $lgsType : $this->config->get('newebpay.lgs_type');
 
         return $this;
     }
 
-    /**
-     * Set TokenTerm.
-     *
-     * @param  string  $token
-     * @return $this
-     */
-    public function setTokenTerm($token = '')
+    public function setTokenTerm(string $token = ''): self
     {
         $this->TradeData['TokenTerm'] = $token;
 
         return $this;
     }
 
-    /**
-     * Set Order.
-     *
-     * @param  string  $no
-     * @param  int  $amt
-     * @param  string  $desc
-     * @param  string  $email
-     * @return $this
-     */
-    public function setOrder($no, $amt, $desc, $email)
+    public function setOrder(string $no, int $amt, string $desc, string $email): self
     {
         $this->TradeData['MerchantOrderNo'] = $no;
         $this->TradeData['Amt'] = $amt;

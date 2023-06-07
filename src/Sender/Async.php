@@ -10,17 +10,9 @@ class Async implements Sender, HasHttp
 {
     /**
      * The guzzle http client instance.
-     *
-     * @var \GuzzleHttp\Client
      */
-    protected $http;
+    protected Client $http;
 
-    /**
-     * Create a new async instance.
-     *
-     * @param  \GuzzleHttp\Client  $client
-     * @return void
-     */
     public function __construct(Client $client)
     {
         $this->http = $client;
@@ -28,12 +20,8 @@ class Async implements Sender, HasHttp
 
     /**
      * Send the data to API.
-     *
-     * @param  array  $request
-     * @param  string  $url
-     * @return mixed
      */
-    public function send($request, $url)
+    public function send(array $request, string $url): mixed
     {
         $parameter = [
             'form_params' => $request,
@@ -45,13 +33,7 @@ class Async implements Sender, HasHttp
         return $result;
     }
 
-    /**
-     * Set mock http client instance.
-     *
-     * @param  \GuzzleHttp\Client  $client
-     * @return $this
-     */
-    public function setHttp(Client $client)
+    public function setHttp(Client $client): self
     {
         $this->http = $client;
 

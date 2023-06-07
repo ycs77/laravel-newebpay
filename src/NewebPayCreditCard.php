@@ -6,10 +6,8 @@ class NewebPayCreditCard extends BaseNewebPay
 {
     /**
      * The newebpay boot hook.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->setApiPath('API/CreditCard');
         $this->setAsyncSender();
@@ -19,11 +17,8 @@ class NewebPayCreditCard extends BaseNewebPay
 
     /**
      * 3d 驗證交易
-     *
-     * @param  bool  $p3d
-     * @return $this
      */
-    public function setP3D($p3d = false)
+    public function setP3D(bool $p3d = false): self
     {
         // 需考慮傳送 notify & return url when p3d is true;
         $this->TradeData['P3D'] = $p3d;
@@ -33,11 +28,8 @@ class NewebPayCreditCard extends BaseNewebPay
 
     /**
      * 首次授權信用卡交易
-     *
-     * @param  array  $data
-     * @return $this
      */
-    public function firstTrade($data)
+    public function firstTrade(array $data): self
     {
         $this->TradeData['TokenSwitch'] = 'get';
 
@@ -55,11 +47,8 @@ class NewebPayCreditCard extends BaseNewebPay
 
     /**
      * 使用 Token 授權
-     *
-     * @param  array  $data
-     * @return $this
      */
-    public function tradeWithToken($data)
+    public function tradeWithToken(array $data): self
     {
         $this->TradeData['TokenSwitch'] = 'on';
 
@@ -75,10 +64,8 @@ class NewebPayCreditCard extends BaseNewebPay
 
     /**
      * Get request data.
-     *
-     * @return array
      */
-    public function getRequestData()
+    public function getRequestData(): array
     {
         $tradeInfo = $this->encryptDataByAES($this->TradeData, $this->HashKey, $this->HashIV);
 

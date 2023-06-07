@@ -7,11 +7,9 @@ use Illuminate\Support\ServiceProvider;
 class NewebPayServiceProvider extends ServiceProvider
 {
     /**
-     * Register services.
-     *
-     * @return void
+     * Register service for package.
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/newebpay.php', 'newebpay');
 
@@ -21,11 +19,9 @@ class NewebPayServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap services.
-     *
-     * @return void
+     * Bootstrap service for package.
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
             __DIR__.'/../config/newebpay.php' => config_path('newebpay.php'),

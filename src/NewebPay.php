@@ -14,10 +14,9 @@ class NewebPay extends BaseNewebPay
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
      * @param  string  $desc  商品描述
-     * @param  string  $email  連絡信箱
-     * @return \Ycs77\NewebPay\NewebPayMPG
+     * @param  string  $email  聯絡信箱
      */
-    public function payment($no, $amt, $desc, $email)
+    public function payment(string $no, int $amt, string $desc, string $email): NewebPayMPG
     {
         $newebPay = new NewebPayMPG($this->config);
         $newebPay->setOrder($no, $amt, $desc, $email);
@@ -33,9 +32,8 @@ class NewebPay extends BaseNewebPay
      * @param  string  $type  編號類型
      *                        'order' => 使用商店訂單編號追蹤
      *                        'trade' => 使用藍新金流交易序號追蹤
-     * @return \Ycs77\NewebPay\NewebPayCancel
      */
-    public function creditCancel($no, $amt, $type = 'order')
+    public function creditCancel(string $no, int $amt, string $type = 'order'): NewebPayCancel
     {
         $newebPay = new NewebPayCancel($this->config);
         $newebPay->setCancelOrder($no, $amt, $type);
@@ -51,9 +49,8 @@ class NewebPay extends BaseNewebPay
      * @param  string  $type  編號類型
      *                        'order' => 使用商店訂單編號追蹤
      *                        'trade' => 使用藍新金流交易序號追蹤
-     * @return \Ycs77\NewebPay\NewebPayClose
      */
-    public function requestPayment($no, $amt, $type = 'order')
+    public function requestPayment(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         $newebPay = new NewebPayClose($this->config);
         $newebPay->setCloseOrder($no, $amt, $type);
@@ -70,9 +67,8 @@ class NewebPay extends BaseNewebPay
      * @param  string  $type  編號類型
      *                        'order' => 使用商店訂單編號追蹤
      *                        'trade' => 使用藍新金流交易序號追蹤
-     * @return \Ycs77\NewebPay\NewebPayClose
      */
-    public function requestRefund($no, $amt, $type = 'order')
+    public function requestRefund(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         $newebPay = new NewebPayClose($this->config);
         $newebPay->setCloseOrder($no, $amt, $type);
@@ -86,9 +82,8 @@ class NewebPay extends BaseNewebPay
      *
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
-     * @return \Ycs77\NewebPay\NewebPayQuery
      */
-    public function query($no, $amt)
+    public function query(string $no, int $amt): NewebPayQuery
     {
         $newebPay = new NewebPayQuery($this->config);
         $newebPay->setQuery($no, $amt);
@@ -108,9 +103,8 @@ class NewebPay extends BaseNewebPay
      *                       $data['desc] => 商品描述
      *                       $data['amt'] => 綁定支付金額
      *                       $data['tokenTerm'] => 約定信用卡付款之付款人綁定資料
-     * @return \Ycs77\NewebPay\NewebPayCreditCard
      */
-    public function creditcardFirstTrade($data)
+    public function creditcardFirstTrade(array $data): NewebPayCreditCard
     {
         $newebPay = new NewebPayCreditCard($this->config);
         $newebPay->firstTrade($data);
@@ -128,9 +122,8 @@ class NewebPay extends BaseNewebPay
      *                       $data['email'] => 購買者 email
      *                       $data['tokenValue'] => 綁定後取回的 token 值
      *                       $data['tokenTerm'] => 約定信用卡付款之付款人綁定資料 要與第一次綁定時一樣
-     * @return \Ycs77\NewebPay\NewebPayCreditCard
      */
-    public function creditcardTradeWithToken($data)
+    public function creditcardTradeWithToken(array $data): NewebPayCreditCard
     {
         $newebPay = new NewebPayCreditCard($this->config);
         $newebPay->tradeWithToken($data);
@@ -141,12 +134,9 @@ class NewebPay extends BaseNewebPay
     /**
      * 解碼加密字串
      *
-     * @param  string  $encryptString
-     * @return mixed
-     *
      * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
      */
-    public function decode($encryptString)
+    public function decode(string $encryptString): mixed
     {
         try {
             $decryptString = $this->decryptDataByAES($encryptString, $this->HashKey, $this->HashIV);
@@ -160,11 +150,9 @@ class NewebPay extends BaseNewebPay
     /**
      * 從 request 取得解碼加密字串
      *
-     * @return mixed
-     *
      * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
      */
-    public function decodeFromRequest()
+    public function decodeFromRequest(): mixed
     {
         return $this->decode(Request::input('TradeInfo'));
     }

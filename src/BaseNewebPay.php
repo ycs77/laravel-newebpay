@@ -7,71 +7,49 @@ use Illuminate\Support\Carbon;
 
 abstract class BaseNewebPay
 {
-    use Concerns\HasEncryption,
-        Concerns\HasSender,
-        Concerns\TradeData;
+    use Concerns\HasEncryption;
+    use Concerns\HasSender;
+    use Concerns\TradeData;
 
-    /**
-     * The config instance.
-     *
-     * @var \Illuminate\Contracts\Config\Repository
-     */
-    protected $config;
+    protected Config $config;
 
     /**
      * The newebpay MerchantID.
-     *
-     * @var string
      */
-    protected $MerchantID;
+    protected string $MerchantID;
 
     /**
      * The newebpay HashKey.
-     *
-     * @var string
      */
-    protected $HashKey;
+    protected string $HashKey;
 
     /**
      * The newebpay HashIV.
-     *
-     * @var string
      */
-    protected $HashIV;
+    protected string $HashIV;
 
     /**
      * The newebpay URL.
-     *
-     * @var string
      */
-    protected $url;
+    protected string $url;
 
     /**
      * The newebpay production base URL.
-     *
-     * @var string
      */
-    protected $productionUrl = 'https://core.newebpay.com/';
+    protected string $productionUrl = 'https://core.newebpay.com/';
 
     /**
      * The newebpay test base URL.
-     *
-     * @var string
      */
-    protected $testUrl = 'https://ccore.newebpay.com/';
+    protected string $testUrl = 'https://ccore.newebpay.com/';
 
     /**
      * Now timestamp.
-     *
-     * @var int
      */
-    protected $timestamp;
+    protected int $timestamp;
 
     /**
      * Create a new base newebpay instance.
-     *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
-     * @return void
      */
     public function __construct(Config $config)
     {
@@ -87,42 +65,32 @@ abstract class BaseNewebPay
 
     /**
      * The newebpay boot hook.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }
 
     /**
      * Generate the newebpay full URL.
-     *
-     * @param  string  $path
-     * @return string
      */
-    public function generateUrl($path)
+    public function generateUrl(string $path): string
     {
         return ($this->config->get('newebpay.debug') ? $this->testUrl : $this->productionUrl).$path;
     }
 
     /**
      * Get the newebpay full URL.
-     *
-     * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
 
     /**
      * Set the newebpay API path.
-     *
-     * @param  string  $path
-     * @return $this
      */
-    public function setApiPath($path)
+    public function setApiPath(string $path): self
     {
         $this->url = $this->generateUrl($path);
 
@@ -131,10 +99,8 @@ abstract class BaseNewebPay
 
     /**
      * Set now timestamp.
-     *
-     * @return $this
      */
-    public function setTimestamp()
+    public function setTimestamp(): self
     {
         $this->timestamp = Carbon::now()->timestamp;
 
@@ -143,20 +109,16 @@ abstract class BaseNewebPay
 
     /**
      * Get request data.
-     *
-     * @return array
      */
-    public function getRequestData()
+    public function getRequestData(): array
     {
         return [];
     }
 
     /**
      * Submit data to newebpay API.
-     *
-     * @return mixed
      */
-    public function submit()
+    public function submit(): mixed
     {
         return $this->sender->send($this->getRequestData(), $this->url);
     }

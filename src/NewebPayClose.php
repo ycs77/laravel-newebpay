@@ -6,10 +6,8 @@ class NewebPayClose extends BaseNewebPay
 {
     /**
      * The newebpay boot hook.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->setApiPath('API/CreditCard/Close');
         $this->setAsyncSender();
@@ -20,14 +18,13 @@ class NewebPayClose extends BaseNewebPay
     /**
      * 設定請退款的模式
      *
-     * @param  string  $no
-     * @param  int  $amt
-     * @param  string  $type
-     *                        'order': 使用商店訂單編號
-     *                        'trade': 使用藍新金流交易序號
-     * @return $this
+     * @param  string  $no  訂單編號
+     * @param  int  $amt  訂單金額
+     * @param  string  $type  編號類型
+     *                        'order' => 使用商店訂單編號追蹤
+     *                        'trade' => 使用藍新金流交易序號追蹤
      */
-    public function setCloseOrder($no, $amt, $type = 'order')
+    public function setCloseOrder(string $no, int $amt, string $type = 'order'): self
     {
         if ($type === 'order') {
             $this->TradeData['MerchantOrderNo'] = $no;
@@ -45,12 +42,11 @@ class NewebPayClose extends BaseNewebPay
     /**
      * 設定請款或退款
      *
-     * @param  string  $type
+     * @param  string  $type  類型
      *                        'pay': 請款
      *                        'refund': 退款
-     * @return $this
      */
-    public function setCloseType($type = 'pay')
+    public function setCloseType(string $type = 'pay'): self
     {
         if ($type === 'pay') {
             $this->TradeData['CloseType'] = 1;
@@ -61,7 +57,7 @@ class NewebPayClose extends BaseNewebPay
         return $this;
     }
 
-    public function setCancel($isCancel = false)
+    public function setCancel(bool $isCancel = false): self
     {
         $this->TradeData['Cancel'] = $isCancel;
 
@@ -70,10 +66,8 @@ class NewebPayClose extends BaseNewebPay
 
     /**
      * Get request data.
-     *
-     * @return array
      */
-    public function getRequestData()
+    public function getRequestData(): array
     {
         $postData = $this->encryptDataByAES($this->TradeData, $this->HashKey, $this->HashIV);
 

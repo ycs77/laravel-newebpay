@@ -12,67 +12,35 @@ use Ycs77\NewebPay\Sender\Sync;
 
 trait HasSender
 {
-    /**
-     * The sender instance.
-     *
-     * @var \Ycs77\NewebPay\Contracts\Sender
-     */
-    protected $sender;
+    protected Sender $sender;
 
-    /**
-     * Set the sender instance.
-     *
-     * @param  \Ycs77\NewebPay\Contracts\Sender  $sender
-     * @return $this
-     */
-    public function setSender(Sender $sender)
+    public function setSender(Sender $sender): self
     {
         $this->sender = $sender;
 
         return $this;
     }
 
-    /**
-     * Get the sender instance.
-     *
-     * @return \Ycs77\NewebPay\Contracts\Sender
-     */
-    public function getSender()
+    public function getSender(): Sender
     {
         return $this->sender;
     }
 
-    /**
-     * Set sync sender.
-     *
-     * @return $this
-     */
-    public function setSyncSender()
+    public function setSyncSender(): self
     {
         $this->setSender(new Sync());
 
         return $this;
     }
 
-    /**
-     * Set async sender.
-     *
-     * @return $this
-     */
-    public function setAsyncSender()
+    public function setAsyncSender(): self
     {
         $this->setSender(new Async($this->createHttp()));
 
         return $this;
     }
 
-    /**
-     * Set mock http instance.
-     *
-     * @param  \GuzzleHttp\Handler\MockHandler|array  $mockHandler
-     * @return $this
-     */
-    public function setMockHttp($mockResponse)
+    public function setMockHttp(MockHandler|array $mockResponse): self
     {
         if ($this->sender instanceof HasHttp) {
             if (! $mockResponse instanceof MockHandler) {
@@ -85,13 +53,7 @@ trait HasSender
         return $this;
     }
 
-    /**
-     * Create http instance.
-     *
-     * @param  \GuzzleHttp\Handler\MockHandler|null  $mockHttpHandler
-     * @return \GuzzleHttp\Client
-     */
-    protected function createHttp($mockHttpHandler = null)
+    protected function createHttp(MockHandler $mockHttpHandler = null): Client
     {
         $attributes = [
             'handler' => $mockHttpHandler ? HandlerStack::create($mockHttpHandler) : null,
