@@ -2,12 +2,25 @@
 
 namespace Ycs77\NewebPay;
 
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Facades\Request;
 use Throwable;
 use Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException;
 
-class NewebPay extends BaseNewebPay
+class Factory
 {
+    use Concerns\HasEncryption;
+
+    /**
+     * Create a new newebpay factory instance.
+     */
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+        $this->HashKey = $this->config->get('newebpay.hash_key');
+        $this->HashIV = $this->config->get('newebpay.hash_iv');
+    }
+
     /**
      * MPG 交易
      *

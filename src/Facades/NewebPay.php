@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static mixed decode(string $encryptString)
  * @method static mixed decodeFromRequest()
  *
- * @see \Ycs77\NewebPay\NewebPay
+ * @see \Ycs77\NewebPay\Factory
  */
 class NewebPay extends Facade
 {
@@ -26,6 +26,6 @@ class NewebPay extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Ycs77\NewebPay\NewebPay::class;
+        return \Ycs77\NewebPay\Factory::class;
     }
 }
