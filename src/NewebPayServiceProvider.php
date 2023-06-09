@@ -13,8 +13,8 @@ class NewebPayServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/newebpay.php', 'newebpay');
 
-        $this->app->singleton(NewebPay::class, function ($app) {
-            return new NewebPay($app['config']);
+        $this->app->singleton(Factory::class, function ($app) {
+            return new Factory($app['config']);
         });
     }
 
