@@ -5,13 +5,13 @@ use Ycs77\NewebPay\NewebPayQuery;
 use Ycs77\NewebPay\Senders\AsyncSender;
 
 test('NewebPay query can be get url', function () {
-    $newebpay = new NewebPayQuery(app('config'));
+    $newebpay = new NewebPayQuery(app('config'), app('session.store'));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/QueryTradeInfo');
 });
 
 test('NewebPay query sender is sync', function () {
-    $newebpay = new NewebPayQuery(app('config'));
+    $newebpay = new NewebPayQuery(app('config'), app('session.store'));
 
     expect($newebpay->getSender())->toBeInstanceOf(AsyncSender::class);
 });
@@ -19,7 +19,7 @@ test('NewebPay query sender is sync', function () {
 test('NewebPay query can be get request data', function () {
     setTestNow();
 
-    $newebpay = new NewebPayQuery(app('config'));
+    $newebpay = new NewebPayQuery(app('config'), app('session.store'));
 
     $requestData = $newebpay
         ->setQuery('TestNo123456', 100)
@@ -37,7 +37,7 @@ test('NewebPay query can be get request data', function () {
 test('NewebPay query can be submit', function () {
     setTestNow();
 
-    $newebpay = new NewebPayQuery(app('config'));
+    $newebpay = new NewebPayQuery(app('config'), app('session.store'));
 
     $result = $newebpay
         ->setQuery('TestNo123456', 100)

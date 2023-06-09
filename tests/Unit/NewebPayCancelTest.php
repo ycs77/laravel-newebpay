@@ -5,13 +5,13 @@ use Ycs77\NewebPay\NewebPayCancel;
 use Ycs77\NewebPay\Senders\AsyncSender;
 
 test('NewebPay cancel can be get url', function () {
-    $newebpay = new NewebPayCancel(app('config'));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/CreditCard/Cancel');
 });
 
 test('NewebPay cancel sender is sync', function () {
-    $newebpay = new NewebPayCancel(app('config'));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     expect($newebpay->getSender())->toBeInstanceOf(AsyncSender::class);
 });
@@ -19,7 +19,7 @@ test('NewebPay cancel sender is sync', function () {
 test('NewebPay cancel can be get request data', function () {
     setTestNow();
 
-    $newebpay = new NewebPayCancel(app('config'));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     $requestData = $newebpay->getRequestData();
 
@@ -30,7 +30,7 @@ test('NewebPay cancel can be get request data', function () {
 test('NewebPay cancel can be submit', function () {
     setTestNow();
 
-    $newebpay = new NewebPayCancel(app('config'));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     $result = $newebpay
         ->setCancelOrder('TestNo123456', 100, 'order')

@@ -3,15 +3,15 @@
 namespace Ycs77\NewebPay;
 
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Carbon;
 
 abstract class BaseNewebPay
 {
     use Concerns\HasEncryption;
     use Concerns\HasSender;
+    use Concerns\WithSessionId;
     use Concerns\TradeData;
-
-    protected Config $config;
 
     /**
      * The newebpay MerchantID.
@@ -51,9 +51,10 @@ abstract class BaseNewebPay
     /**
      * Create a new base newebpay instance.
      */
-    public function __construct(Config $config)
-    {
-        $this->config = $config;
+    public function __construct(
+        protected Config $config,
+        protected Session $session
+    ) {
         $this->MerchantID = $this->config->get('newebpay.merchant_id');
         $this->HashKey = $this->config->get('newebpay.hash_key');
         $this->HashIV = $this->config->get('newebpay.hash_iv');

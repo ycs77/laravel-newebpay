@@ -3,6 +3,8 @@
 namespace Ycs77\NewebPay;
 
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Session\Session;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Request;
 use Throwable;
 use Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException;
@@ -14,9 +16,12 @@ class Factory
     /**
      * Create a new newebpay factory instance.
      */
-    public function __construct(Config $config)
-    {
+    public function __construct(
+        protected Config $config,
+        protected Session $session
+    ) {
         $this->config = $config;
+        $this->session = $session;
         $this->HashKey = $this->config->get('newebpay.hash_key');
         $this->HashIV = $this->config->get('newebpay.hash_iv');
     }
@@ -31,7 +36,7 @@ class Factory
      */
     public function payment(string $no, int $amt, string $desc, string $email): NewebPayMPG
     {
-        $newebPay = new NewebPayMPG($this->config);
+        $newebPay = new NewebPayMPG($this->config, $this->session);
         $newebPay->setOrder($no, $amt, $desc, $email);
 
         return $newebPay;
@@ -45,7 +50,7 @@ class Factory
      */
     public function query(string $no, int $amt): NewebPayQuery
     {
-        $newebPay = new NewebPayQuery($this->config);
+        $newebPay = new NewebPayQuery($this->config, $this->session);
         $newebPay->setQuery($no, $amt);
 
         return $newebPay;
@@ -62,7 +67,7 @@ class Factory
      */
     public function creditCancel(string $no, int $amt, string $type = 'order'): NewebPayCancel
     {
-        $newebPay = new NewebPayCancel($this->config);
+        $newebPay = new NewebPayCancel($this->config, $this->session);
         $newebPay->setCancelOrder($no, $amt, $type);
 
         return $newebPay;
@@ -79,7 +84,7 @@ class Factory
      */
     public function requestPayment(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
-        $newebPay = new NewebPayClose($this->config);
+        $newebPay = new NewebPayClose($this->config, $this->session);
         $newebPay->setCloseOrder($no, $amt, $type);
         $newebPay->setCloseType('pay');
 
@@ -97,7 +102,7 @@ class Factory
      */
     public function requestRefund(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
-        $newebPay = new NewebPayClose($this->config);
+        $newebPay = new NewebPayClose($this->config, $this->session);
         $newebPay->setCloseOrder($no, $amt, $type);
         $newebPay->setCloseType('refund');
 
@@ -119,7 +124,7 @@ class Factory
      */
     public function creditcardFirstTrade(array $data): NewebPayCreditCard
     {
-        $newebPay = new NewebPayCreditCard($this->config);
+        $newebPay = new NewebPayCreditCard($this->config, $this->session);
         $newebPay->firstTrade($data);
 
         return $newebPay;
@@ -138,7 +143,7 @@ class Factory
      */
     public function creditcardTradeWithToken(array $data): NewebPayCreditCard
     {
-        $newebPay = new NewebPayCreditCard($this->config);
+        $newebPay = new NewebPayCreditCard($this->config, $this->session);
         $newebPay->tradeWithToken($data);
 
         return $newebPay;
@@ -165,8 +170,10 @@ class Factory
      *
      * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
      */
-    public function decodeFromRequest(): mixed
+    public function decodeFromRequest(HttpRequest $request = null): mixed
     {
-        return $this->decode(Request::input('TradeInfo'));
+        $request = $request ?? Request::instance();
+
+        return $this->decode($request->input('TradeInfo'));
     }
 }

@@ -155,6 +155,60 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
+因為現在 Laravel 的 Cookie SameSite 預設值是 `Lax`，使用 Form Post 傳到其他網域的網站時不會帶上 Cookie，導致在付款完成後導向回原網站時，會因為讀取不到原本登入的 Cookie，而出現自動登出的問題。因此這裡要加上 `RestoreSessionId` 中間件，會自動從 Callback 網址中讀取加密過的 session id 並設定回原本的 session 狀態：
+
+```php
+Route::post('/pay/callback', [PaymentController::class, 'callback'])
+    ->middleware(\Ycs77\NewebPay\Http\Middleware\RestoreSessionId::class);
+```
+
+> 詳細跟 SameSite 相關可參考: https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure
+
+但如果把 Callback 網址加上 `'auth'` 中間件的話就會失效。這裡需要調整中間件的順序，讓 `RestoreSessionId` 的順序是在 `StartSession` 的下面。預設 Laravel 的 `Kernel` 是不會有 `$middlewarePriority` 屬性，可以在 Laravel Framework 中找到，或直接複製下方到 `app/Http/Kernel.php` 中：
+
+*app/Http/Kernel.php*
+```php
+class Kernel extends HttpKernel
+{
+    /**
+     * The priority-sorted list of middleware.
+     *
+     * Forces non-global middleware to always be in the given order.
+     *
+     * @var string[]
+     */
+    protected $middlewarePriority = [
+        \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
+        \Illuminate\Cookie\Middleware\EncryptCookies::class,
+        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Ycs77\NewebPay\Http\Middleware\RestoreSessionId::class, // 必須要將 `RestoreSessionId` 放在 `StartSession` 的下面
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
+        \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
+        \Illuminate\Contracts\Session\Middleware\AuthenticatesSessions::class,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        \Illuminate\Auth\Middleware\Authorize::class,
+    ];
+}
+```
+
+然後就可以正常加上 `'auth'` 中間件來使用了：
+
+```php
+Route::middleware('auth')->group(function () {
+    Route::post('/pay/callback', [PaymentController::class, 'callback'])
+        ->middleware(\Ycs77\NewebPay\Http\Middleware\RestoreSessionId::class);
+});
+// 或
+Route::post('/pay/callback', [PaymentController::class, 'callback'])
+    ->middleware([
+        'auth',
+        \Ycs77\NewebPay\Http\Middleware\RestoreSessionId::class,
+    ]);
+```
+
 ### 測試用帳號
 
 測試環境僅接受以下的測試信用卡號：

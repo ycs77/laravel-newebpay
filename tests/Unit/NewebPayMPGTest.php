@@ -4,13 +4,13 @@ use Ycs77\NewebPay\NewebPayMPG;
 use Ycs77\NewebPay\Senders\SyncSender;
 
 test('NewebPay MPG can be get url', function () {
-    $newebpay = new NewebPayMPG(app('config'));
+    $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/MPG/mpg_gateway');
 });
 
 test('NewebPay MPG sender is sync', function () {
-    $newebpay = new NewebPayMPG(app('config'));
+    $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->getSender())->toBeInstanceOf(SyncSender::class);
 });
@@ -18,7 +18,7 @@ test('NewebPay MPG sender is sync', function () {
 test('NewebPay MPG can be get request data', function () {
     setTestNow();
 
-    $newebpay = new NewebPayMPG(app('config'));
+    $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     $requestData = $newebpay->getRequestData();
 
@@ -31,7 +31,7 @@ test('NewebPay MPG can be get request data', function () {
 test('NewebPay MPG can be submit', function () {
     setTestNow();
 
-    $newebpay = new NewebPayMPG(app('config'));
+    $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     $result = $newebpay
         ->setOrder('TestNo123456', 100, '測試商品', 'test@email.com')

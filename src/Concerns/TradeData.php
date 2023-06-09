@@ -4,6 +4,9 @@ namespace Ycs77\NewebPay\Concerns;
 
 use Illuminate\Support\Carbon;
 
+/**
+ * @property \Illuminate\Contracts\Config\Repository $config
+ */
 trait TradeData
 {
     /**
@@ -97,6 +100,8 @@ trait TradeData
     {
         $this->TradeData['ReturnURL'] = $url ?? $this->config->get('newebpay.return_url');
 
+        $this->withSessionId('ReturnURL');
+
         return $this;
     }
 
@@ -133,6 +138,8 @@ trait TradeData
     public function setClientBackURL(string $url = null)
     {
         $this->TradeData['ClientBackURL'] = $url ?? $this->config->get('newebpay.client_back_url');
+
+        $this->withSessionId('ClientBackURL');
 
         return $this;
     }
