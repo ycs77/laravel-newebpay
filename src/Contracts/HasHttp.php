@@ -6,5 +6,5 @@ use GuzzleHttp\Client;
 
 interface HasHttp
 {
-    public function setHttp(Client $client): self;
+    public function setHttp(Client $client);
 }

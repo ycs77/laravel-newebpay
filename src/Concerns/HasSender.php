@@ -14,7 +14,7 @@ trait HasSender
 {
     protected Sender $sender;
 
-    public function setSender(Sender $sender): self
+    public function setSender(Sender $sender)
     {
         $this->sender = $sender;
 
@@ -26,21 +26,21 @@ trait HasSender
         return $this->sender;
     }
 
-    public function setSyncSender(): self
+    public function setSyncSender()
     {
         $this->setSender(new SyncSender());
 
         return $this;
     }
 
-    public function setAsyncSender(): self
+    public function setAsyncSender()
     {
         $this->setSender(new AsyncSender($this->createHttp()));
 
         return $this;
     }
 
-    public function setMockHttp(MockHandler|array $mockResponse): self
+    public function setMockHttp(MockHandler|array $mockResponse)
     {
         if ($this->sender instanceof HasHttp) {
             if (! $mockResponse instanceof MockHandler) {

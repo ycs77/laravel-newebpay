@@ -33,7 +33,7 @@ class AsyncSender implements Sender, HasHttp
         return $result;
     }
 
-    public function setHttp(Client $client): self
+    public function setHttp(Client $client)
     {
         $this->http = $client;
 

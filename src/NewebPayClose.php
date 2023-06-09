@@ -24,7 +24,7 @@ class NewebPayClose extends BaseNewebPay
      *                        'order' => 使用商店訂單編號追蹤
      *                        'trade' => 使用藍新金流交易序號追蹤
      */
-    public function setCloseOrder(string $no, int $amt, string $type = 'order'): self
+    public function setCloseOrder(string $no, int $amt, string $type = 'order')
     {
         if ($type === 'order') {
             $this->TradeData['MerchantOrderNo'] = $no;
@@ -46,7 +46,7 @@ class NewebPayClose extends BaseNewebPay
      *                        'pay': 請款
      *                        'refund': 退款
      */
-    public function setCloseType(string $type = 'pay'): self
+    public function setCloseType(string $type = 'pay')
     {
         if ($type === 'pay') {
             $this->TradeData['CloseType'] = 1;
@@ -57,7 +57,7 @@ class NewebPayClose extends BaseNewebPay
         return $this;
     }
 
-    public function setCancel(bool $isCancel = false): self
+    public function setCancel(bool $isCancel = false)
     {
         $this->TradeData['Cancel'] = $isCancel;
 

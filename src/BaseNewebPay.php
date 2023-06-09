@@ -90,7 +90,7 @@ abstract class BaseNewebPay
     /**
      * Set the newebpay API path.
      */
-    public function setApiPath(string $path): self
+    public function setApiPath(string $path)
     {
         $this->url = $this->generateUrl($path);
 
@@ -100,7 +100,7 @@ abstract class BaseNewebPay
     /**
      * Set now timestamp.
      */
-    public function setTimestamp(): self
+    public function setTimestamp()
     {
         $this->timestamp = Carbon::now()->timestamp;
 

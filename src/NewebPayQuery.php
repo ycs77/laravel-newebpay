@@ -24,7 +24,7 @@ class NewebPayQuery extends BaseNewebPay
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
      */
-    public function setQuery(string $no, int $amt): self
+    public function setQuery(string $no, int $amt)
     {
         $this->checkValues['MerchantOrderNo'] = $no;
         $this->checkValues['Amt'] = $amt;
@@ -40,7 +40,7 @@ class NewebPayQuery extends BaseNewebPay
      * 若為複合式商店(MS5 開頭)，此欄位為必填，且要固定填入："Composite"。
      * 若沒有帶[Gateway]或是帶入其他參數值，則查詢一般商店代號。
      */
-    public function setGateway(string $gateway = null): self
+    public function setGateway(string $gateway = null)
     {
         $this->gateway = $gateway;
 

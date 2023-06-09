@@ -18,7 +18,7 @@ class NewebPayCreditCard extends BaseNewebPay
     /**
      * 3d 驗證交易
      */
-    public function setP3D(bool $p3d = false): self
+    public function setP3D(bool $p3d = false)
     {
         // 需考慮傳送 notify & return url when p3d is true;
         $this->TradeData['P3D'] = $p3d;
@@ -29,7 +29,7 @@ class NewebPayCreditCard extends BaseNewebPay
     /**
      * 首次授權信用卡交易
      */
-    public function firstTrade(array $data): self
+    public function firstTrade(array $data)
     {
         $this->TradeData['TokenSwitch'] = 'get';
 
@@ -48,7 +48,7 @@ class NewebPayCreditCard extends BaseNewebPay
     /**
      * 使用 Token 授權
      */
-    public function tradeWithToken(array $data): self
+    public function tradeWithToken(array $data)
     {
         $this->TradeData['TokenSwitch'] = 'on';
 

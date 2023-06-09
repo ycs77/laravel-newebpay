@@ -24,7 +24,7 @@ class NewebPayCancel extends BaseNewebPay
      *                        'order' => 使用商店訂單編號追蹤
      *                        'trade' => 使用藍新金流交易序號追蹤
      */
-    public function setCancelOrder(string $no, int $amt, string $type = 'order'): self
+    public function setCancelOrder(string $no, int $amt, string $type = 'order')
     {
         if ($type === 'order') {
             $this->TradeData['MerchantOrderNo'] = $no;
