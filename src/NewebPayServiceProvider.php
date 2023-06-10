@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class NewebPayServiceProvider extends ServiceProvider
@@ -13,8 +14,8 @@ class NewebPayServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/newebpay.php', 'newebpay');
 
-        $this->app->singleton(Factory::class, function ($app) {
-            return new Factory($app['config'], $app['session.store']);
+        $this->app->singleton(Factory::class, function (Application $app) {
+            return new Factory($app->make('config'), $app->make('session.store'));
         });
     }
 
