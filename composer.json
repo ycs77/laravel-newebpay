@@ -20,7 +20,8 @@
         "illuminate/config": ">=9.0",
         "illuminate/contracts": ">=9.0",
         "illuminate/log": ">=9.0",
-        "illuminate/support": ">=9.0"
+        "illuminate/support": ">=9.0",
+        "ycs77/laravel-restore-session-id": "^1.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.4",
