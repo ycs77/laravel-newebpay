@@ -4,6 +4,7 @@ namespace Ycs77\NewebPay;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Ycs77\LaravelRecoverSession\UserSource;
 
 class NewebPayServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,11 @@ class NewebPayServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/newebpay.php', 'newebpay');
 
         $this->app->singleton(Factory::class, function (Application $app) {
-            return new Factory($app->make('config'), $app->make('session.store'));
+            return new Factory(
+                $app->make('config'),
+                $app->make('session.store'),
+                $app->make(UserSource::class)
+            );
         });
     }
 

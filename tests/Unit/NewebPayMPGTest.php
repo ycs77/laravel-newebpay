@@ -1,16 +1,17 @@
 <?php
 
+use Ycs77\LaravelRecoverSession\UserSource;
 use Ycs77\NewebPay\NewebPayMPG;
 use Ycs77\NewebPay\Senders\SyncSender;
 
 test('NewebPay MPG can be get url', function () {
-    $newebpay = new NewebPayMPG(app('config'), app('session.store'));
+    $newebpay = new NewebPayMPG(app('config'), app('session.store'), app(UserSource::class));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/MPG/mpg_gateway');
 });
 
 test('NewebPay MPG sender is sync', function () {
-    $newebpay = new NewebPayMPG(app('config'), app('session.store'));
+    $newebpay = new NewebPayMPG(app('config'), app('session.store'), app(UserSource::class));
 
     expect($newebpay->getSender())->toBeInstanceOf(SyncSender::class);
 });
@@ -18,7 +19,7 @@ test('NewebPay MPG sender is sync', function () {
 test('NewebPay MPG can be get request data', function () {
     setTestNow();
 
-    $newebpay = new NewebPayMPG(app('config'), app('session.store'));
+    $newebpay = new NewebPayMPG(app('config'), app('session.store'), app(UserSource::class));
 
     $requestData = $newebpay->getRequestData();
 
@@ -31,7 +32,7 @@ test('NewebPay MPG can be get request data', function () {
 test('NewebPay MPG can be submit', function () {
     setTestNow();
 
-    $newebpay = new NewebPayMPG(app('config'), app('session.store'));
+    $newebpay = new NewebPayMPG(app('config'), app('session.store'), app(UserSource::class));
 
     $result = $newebpay
         ->setOrder('TestNo123456', 100, '測試商品', 'test@email.com')

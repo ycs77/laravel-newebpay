@@ -1,17 +1,18 @@
 <?php
 
 use GuzzleHttp\Psr7\Response;
+use Ycs77\LaravelRecoverSession\UserSource;
 use Ycs77\NewebPay\NewebPayCreditCard;
 use Ycs77\NewebPay\Senders\AsyncSender;
 
 test('NewebPay credit card can be get url', function () {
-    $newebpay = new NewebPayCreditCard(app('config'), app('session.store'));
+    $newebpay = new NewebPayCreditCard(app('config'), app('session.store'), app(UserSource::class));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/CreditCard');
 });
 
 test('NewebPay credit card sender is sync', function () {
-    $newebpay = new NewebPayCreditCard(app('config'), app('session.store'));
+    $newebpay = new NewebPayCreditCard(app('config'), app('session.store'), app(UserSource::class));
 
     expect($newebpay->getSender())->toBeInstanceOf(AsyncSender::class);
 });
@@ -19,7 +20,7 @@ test('NewebPay credit card sender is sync', function () {
 test('NewebPay credit card can be get request data', function () {
     setTestNow();
 
-    $newebpay = new NewebPayCreditCard(app('config'), app('session.store'));
+    $newebpay = new NewebPayCreditCard(app('config'), app('session.store'), app(UserSource::class));
 
     $requestData = $newebpay->getRequestData();
 
@@ -31,7 +32,7 @@ test('NewebPay credit card can be get request data', function () {
 test('NewebPay credit card can be submit', function () {
     setTestNow();
 
-    $newebpay = new NewebPayCreditCard(app('config'), app('session.store'));
+    $newebpay = new NewebPayCreditCard(app('config'), app('session.store'), app(UserSource::class));
 
     $result = $newebpay
         ->firstTrade([

@@ -5,6 +5,8 @@ namespace Ycs77\NewebPay;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Request;
+use Ycs77\LaravelRecoverSession\UserSource;
 
 abstract class BaseNewebPay
 {
@@ -53,7 +55,8 @@ abstract class BaseNewebPay
      */
     public function __construct(
         protected Config $config,
-        protected Session $session
+        protected Session $session,
+        protected UserSource $userSource
     ) {
         $this->MerchantID = $this->config->get('newebpay.merchant_id');
         $this->HashKey = $this->config->get('newebpay.hash_key');
@@ -121,6 +124,8 @@ abstract class BaseNewebPay
      */
     public function submit(): mixed
     {
+        $this->userSource->preserve(Request::instance());
+
         return $this->sender->send($this->getRequestData(), $this->url);
     }
 }
