@@ -3,7 +3,7 @@
 namespace Ycs77\NewebPay\Concerns;
 
 use Illuminate\Support\Facades\Crypt;
-use Ycs77\NewebPay\Support\Base64Url;
+use Ycs77\LaravelRestoreSessionId\Support\Base64Url;
 
 /**
  * @property array $TradeData
