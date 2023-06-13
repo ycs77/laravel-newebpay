@@ -7,8 +7,8 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use Ycs77\NewebPay\Contracts\HasHttp;
 use Ycs77\NewebPay\Contracts\Sender;
-use Ycs77\NewebPay\Senders\AsyncSender;
-use Ycs77\NewebPay\Senders\SyncSender;
+use Ycs77\NewebPay\Senders\BackgroundSender;
+use Ycs77\NewebPay\Senders\FrontendSender;
 
 trait HasSender
 {
@@ -26,16 +26,16 @@ trait HasSender
         return $this->sender;
     }
 
-    public function setSyncSender()
+    public function setFrontendSender()
     {
-        $this->setSender(new SyncSender());
+        $this->setSender(new FrontendSender());
 
         return $this;
     }
 
-    public function setAsyncSender()
+    public function setBackgroundSender()
     {
-        $this->setSender(new AsyncSender($this->createHttp()));
+        $this->setSender(new BackgroundSender($this->createHttp()));
 
         return $this;
     }

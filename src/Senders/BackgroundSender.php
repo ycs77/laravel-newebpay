@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use Ycs77\NewebPay\Contracts\HasHttp;
 use Ycs77\NewebPay\Contracts\Sender;
 
-class AsyncSender implements Sender, HasHttp
+class BackgroundSender implements Sender, HasHttp
 {
     /**
      * The guzzle http client instance.

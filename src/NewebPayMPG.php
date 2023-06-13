@@ -28,7 +28,7 @@ class NewebPayMPG extends BaseNewebPay
         $this->tradeData['TimeStamp'] = $this->timestamp;
 
         $this->setApiPath('/MPG/mpg_gateway');
-        $this->setSyncSender();
+        $this->setFrontendSender();
 
         $this->setVersion();
         $this->setRespondType();

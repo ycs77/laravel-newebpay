@@ -27,7 +27,7 @@ class NewebPayQuery extends BaseNewebPay
     public function boot(): void
     {
         $this->setApiPath('/API/QueryTradeInfo');
-        $this->setAsyncSender();
+        $this->setBackgroundSender();
 
         $this->setRespondType();
 

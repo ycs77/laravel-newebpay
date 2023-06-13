@@ -8,7 +8,7 @@ use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\NTCBLocate;
 use Ycs77\NewebPay\NewebPayMPG;
-use Ycs77\NewebPay\Senders\SyncSender;
+use Ycs77\NewebPay\Senders\FrontendSender;
 
 beforeEach(function () {
     setTestNow();
@@ -23,7 +23,7 @@ test('NewebPay MPG can be get url', function () {
 test('NewebPay MPG sender is sync', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'), app(UserSource::class));
 
-    expect($newebpay->getSender())->toBeInstanceOf(SyncSender::class);
+    expect($newebpay->getSender())->toBeInstanceOf(FrontendSender::class);
 });
 
 test('NewebPay MPG default TradeData', function () {

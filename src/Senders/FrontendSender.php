@@ -4,7 +4,7 @@ namespace Ycs77\NewebPay\Senders;
 
 use Ycs77\NewebPay\Contracts\Sender;
 
-class SyncSender implements Sender
+class FrontendSender implements Sender
 {
     /**
      * Send the data to API.

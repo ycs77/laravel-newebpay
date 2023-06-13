@@ -3,7 +3,7 @@
 use GuzzleHttp\Psr7\Response;
 use Ycs77\LaravelRecoverSession\UserSource;
 use Ycs77\NewebPay\NewebPayQuery;
-use Ycs77\NewebPay\Senders\AsyncSender;
+use Ycs77\NewebPay\Senders\BackgroundSender;
 
 test('NewebPay query can be get url', function () {
     $newebpay = new NewebPayQuery(app('config'), app('session.store'), app(UserSource::class));
@@ -14,7 +14,7 @@ test('NewebPay query can be get url', function () {
 test('NewebPay query sender is sync', function () {
     $newebpay = new NewebPayQuery(app('config'), app('session.store'), app(UserSource::class));
 
-    expect($newebpay->getSender())->toBeInstanceOf(AsyncSender::class);
+    expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);
 });
 
 test('NewebPay query can be get request data', function () {

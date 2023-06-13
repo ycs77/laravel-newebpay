@@ -19,7 +19,7 @@ class NewebPayClose extends BaseNewebPay
         $this->tradeData['TimeStamp'] = $this->timestamp;
 
         $this->setApiPath('/API/CreditCard/Close');
-        $this->setAsyncSender();
+        $this->setBackgroundSender();
 
         $this->setVersion();
         $this->setRespondType();

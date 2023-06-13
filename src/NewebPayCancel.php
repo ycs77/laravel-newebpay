@@ -19,7 +19,7 @@ class NewebPayCancel extends BaseNewebPay
         $this->tradeData['TimeStamp'] = $this->timestamp;
 
         $this->setApiPath('/API/CreditCard/Cancel');
-        $this->setAsyncSender();
+        $this->setBackgroundSender();
 
         $this->setVersion();
         $this->setRespondType();
