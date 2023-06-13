@@ -3,6 +3,12 @@
 namespace Ycs77\NewebPay;
 
 use Illuminate\Support\Carbon;
+use Ycs77\NewebPay\Enums\Bank;
+use Ycs77\NewebPay\Enums\CreditInst;
+use Ycs77\NewebPay\Enums\CreditRememberDemand;
+use Ycs77\NewebPay\Enums\CVSCOM;
+use Ycs77\NewebPay\Enums\LgsType;
+use Ycs77\NewebPay\Enums\RespondType;
 
 class NewebPayMPG extends BaseNewebPay
 {
@@ -11,17 +17,17 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * The newebpay trade data.
      */
-    protected array $TradeData = [];
+    protected array $tradeData = [];
 
     /**
      * The newebpay boot hook.
      */
     public function boot(): void
     {
-        $this->TradeData['MerchantID'] = $this->merchantID;
-        $this->TradeData['TimeStamp'] = $this->timestamp;
+        $this->tradeData['MerchantID'] = $this->merchantID;
+        $this->tradeData['TimeStamp'] = $this->timestamp;
 
-        $this->setApiPath('MPG/mpg_gateway');
+        $this->setApiPath('/MPG/mpg_gateway');
         $this->setSyncSender();
 
         $this->setVersion();
@@ -36,15 +42,14 @@ class NewebPayMPG extends BaseNewebPay
         $this->setEmailModify();
         $this->setLoginType();
         $this->setOrderComment();
-        $this->setPaymentMethod();
-        $this->setTokenTerm();
+        $this->setPaymentMethods();
         $this->setCVSCOM();
         $this->setLgsType();
     }
 
     public function getTradeData(): array
     {
-        return $this->TradeData;
+        return $this->tradeData;
     }
 
     /**
@@ -52,7 +57,7 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function setVersion(string $version = null)
     {
-        $this->TradeData['Version'] = $version ?? $this->config->get('newebpay.version');
+        $this->tradeData['Version'] = $version ?? $this->config->get('newebpay.version');
 
         return $this;
     }
@@ -60,11 +65,13 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * 回傳格式
      *
-     * 回傳格式可設定 "JSON" 或 "String"。
+     * 回傳格式可設定 JSON 或 String。
      */
-    public function setRespondType(string $type = null)
+    public function setRespondType(RespondType $type = null)
     {
-        $this->TradeData['RespondType'] = $type ?? $this->config->get('newebpay.respond_type');
+        $this->tradeData['RespondType'] = $type
+            ? $type->value
+            : $this->config->get('newebpay.respond_type')->value;
 
         return $this;
     }
@@ -72,11 +79,11 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * 語系
      *
-     * 語系可設定 "zh-tw"、"en"。
+     * 語系可設定 "zh-tw", "en", "jp"。
      */
     public function setLangType(string $lang = null)
     {
-        $this->TradeData['LangType'] = $lang ?? $this->config->get('newebpay.lang_type');
+        $this->tradeData['LangType'] = $lang ?? $this->config->get('newebpay.lang_type');
 
         return $this;
     }
@@ -84,13 +91,13 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * 交易秒數限制
      *
-     * 0: 不限制
-     * 秒數下限為 60 秒，當秒數介於 1~59 秒時，會以 60 秒計算。
-     * 秒數上限為 900 秒，當超過 900 秒時，會 以 900 秒計算。
+     * * 0: 不限制
+     * * 秒數下限為 60 秒，當秒數介於 1~59 秒時，會以 60 秒計算。
+     * * 秒數上限為 900 秒，當超過 900 秒時，會 以 900 秒計算。
      */
     public function setTradeLimit(int $limit = null)
     {
-        $this->TradeData['TradeLimit'] = $limit !== null
+        $this->tradeData['TradeLimit'] = $limit !== null
             ? $limit
             : $this->config->get('newebpay.trade_limit');
 
@@ -99,12 +106,14 @@ class NewebPayMPG extends BaseNewebPay
 
     /**
      * 繳費有效期限
+     *
+     * 預設值為 7 天，上限為 180 天。
      */
     public function setExpireDate(int $day = null)
     {
         $day = $day !== null ? $day : $this->config->get('newebpay.expire_date');
 
-        $this->TradeData['ExpireDate'] = Carbon::now()->addDays($day)->format('Ymd');
+        $this->tradeData['ExpireDate'] = Carbon::now()->addDays($day)->format('Ymd');
 
         return $this;
     }
@@ -116,9 +125,11 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function setReturnURL(string $url = null)
     {
-        $this->TradeData['ReturnURL'] = $url ?? $this->config->get('newebpay.return_url');
+        $this->tradeData['ReturnURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.return_url'));
 
-        $this->withSessionId('ReturnURL');
+        if ($this->config->get('newebpay.with_session_id')) {
+            $this->withSessionId('ReturnURL');
+        }
 
         return $this;
     }
@@ -126,12 +137,12 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * 付款完成後的通知連結
      *
-     * 以幕後方式回傳給商店相關支付結果資料
-     * 僅接受 port 80 或 443。
+     * 1. 以幕後方式回傳給商店相關支付結果資料
+     * 2. 僅接受 port 80 或 443。
      */
     public function setNotifyURL(string $url = null)
     {
-        $this->TradeData['NotifyURL'] = $url ?? $this->config->get('newebpay.notify_url');
+        $this->tradeData['NotifyURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.notify_url'));
 
         return $this;
     }
@@ -143,7 +154,11 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function setCustomerURL(string $url = null)
     {
-        $this->TradeData['CustomerURL'] = $url ?? $this->config->get('newebpay.customer_url');
+        $this->tradeData['CustomerURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.customer_url'));
+
+        if ($this->config->get('newebpay.with_session_id')) {
+            $this->withSessionId('CustomerURL');
+        }
 
         return $this;
     }
@@ -155,9 +170,7 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function setClientBackURL(string $url = null)
     {
-        $this->TradeData['ClientBackURL'] = $url ?? $this->config->get('newebpay.client_back_url');
-
-        $this->withSessionId('ClientBackURL');
+        $this->tradeData['ClientBackURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.client_back_url'));
 
         return $this;
     }
@@ -167,7 +180,7 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function setEmailModify(bool $isModify = null)
     {
-        $this->TradeData['EmailModify'] = (
+        $this->tradeData['EmailModify'] = (
             $isModify !== null
                 ? $isModify
                 : $this->config->get('newebpay.email_modify')
@@ -181,7 +194,7 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function setLoginType(bool $isLogin = false)
     {
-        $this->TradeData['LoginType'] = (
+        $this->tradeData['LoginType'] = (
             $isLogin !== null
                 ? $isLogin
                 : $this->config->get('newebpay.login_type')
@@ -198,7 +211,7 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function setOrderComment(string $comment = null)
     {
-        $this->TradeData['OrderComment'] = $comment !== null
+        $this->tradeData['OrderComment'] = $comment !== null
             ? $comment
             : $this->config->get('newebpay.order_comment');
 
@@ -208,27 +221,92 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * 設定商店需要使用的支付方式
      */
-    public function setPaymentMethod(array $paymentMethod = [])
+    public function setPaymentMethods(array $paymentMethods = [])
     {
-        $paymentMethod = array_merge($this->config->get('newebpay.payment_method'), $paymentMethod);
+        $paymentMethods = array_merge($this->config->get('newebpay.payment_methods'), $paymentMethods);
 
-        $this->TradeData['CREDIT'] = $paymentMethod['CREDIT']['Enable'] ? 1 : 0;
-        $this->TradeData['ANDROIDPAY'] = $paymentMethod['ANDROIDPAY'] ? 1 : 0;
-        $this->TradeData['SAMSUNGPAY'] = $paymentMethod['SAMSUNGPAY'] ? 1 : 0;
-        $this->TradeData['LINEPAY'] = isset($paymentMethod['LINEPAY']) && $paymentMethod['LINEPAY'] ? 1 : 0;
-        $this->TradeData['ImageUrl'] = isset($paymentMethod['ImageUrl']) && $paymentMethod['ImageUrl'] ? 1 : 0;
-        $this->TradeData['InstFlag'] = ($paymentMethod['CREDIT']['Enable'] && $paymentMethod['CREDIT']['InstFlag']) ? $paymentMethod['CREDIT']['InstFlag'] : 0;
-        $this->TradeData['CreditRed'] = ($paymentMethod['CREDIT']['Enable'] && $paymentMethod['CREDIT']['CreditRed']) ? 1 : 0;
-        $this->TradeData['UNIONPAY'] = $paymentMethod['UNIONPAY'] ? 1 : 0;
-        $this->TradeData['WEBATM'] = $paymentMethod['WEBATM'] ? 1 : 0;
-        $this->TradeData['VACC'] = $paymentMethod['VACC'] ? 1 : 0;
-        $this->TradeData['CVS'] = $paymentMethod['CVS'] ? 1 : 0;
-        $this->TradeData['BARCODE'] = $paymentMethod['BARCODE'] ? 1 : 0;
-        $this->TradeData['ESUNWALLET'] = isset($paymentMethod['ESUNWALLET']) && $paymentMethod['ESUNWALLET'] ? 1 : 0;
-        $this->TradeData['TAIWANPAY'] = isset($paymentMethod['TAIWANPAY']) && $paymentMethod['TAIWANPAY'] ? 1 : 0;
-        $this->TradeData['EZPAY'] = isset($paymentMethod['EZPAY']) && $paymentMethod['EZPAY'] ? 1 : 0;
-        $this->TradeData['EZPWECHAT'] = isset($paymentMethod['EZPWECHAT']) && $paymentMethod['EZPWECHAT'] ? 1 : 0;
-        $this->TradeData['EZPALIPAY'] = isset($paymentMethod['EZPALIPAY']) && $paymentMethod['EZPALIPAY'] ? 1 : 0;
+        if ($paymentMethods['credit']['enabled']) {
+            $this->tradeData['CREDIT'] = 1;
+
+            if ($paymentMethods['credit']['red']) $this->tradeData['CreditRed'] = 1;
+
+            if ($paymentMethods['credit']['inst'] instanceof CreditInst &&
+                $paymentMethods['credit']['inst'] !== CreditInst::NONE ||
+                is_array($paymentMethods['credit']['inst'])
+            ) {
+                $this->tradeData['InstFlag'] = collect($paymentMethods['credit']['inst'])
+                    ->map(fn (CreditInst $inst) => $inst->value)
+                    ->join(',');
+            } elseif (is_numeric($paymentMethods['credit']['inst']) || is_string($paymentMethods['credit']['inst'])) {
+                $this->tradeData['InstFlag'] = $paymentMethods['credit']['inst'];
+            }
+        }
+        if ($paymentMethods['webATM']) $this->tradeData['WEBATM'] = 1;
+        if ($paymentMethods['VACC']) $this->tradeData['VACC'] = 1;
+        if ($paymentMethods['bank'] instanceof Bank &&
+            $paymentMethods['bank'] !== Bank::ALL ||
+            is_array($paymentMethods['bank'])
+        ) {
+            $this->tradeData['BankType'] = collect($paymentMethods['bank'])
+                    ->map(fn (Bank $inst) => $inst->value)
+                    ->join(',');
+        } elseif (is_string($paymentMethods['bank'])) {
+            $this->tradeData['BankType'] = $paymentMethods['bank'];
+        }
+        if ($paymentMethods['NTCB']['enabled']) {
+            $this->tradeData['NTCB'] = 1;
+            /** @see \Ycs77\NewebPay\Enums\NTCBLocate */
+            $this->tradeData['NTCBLocate'] = $paymentMethods['NTCB']['locate']->value;
+            $this->tradeData['NTCBStartDate'] = $paymentMethods['NTCB']['start_date'];
+            $this->tradeData['NTCBEndDate'] = $paymentMethods['NTCB']['end_date'];
+        }
+
+        if ($paymentMethods['googlePay']) $this->tradeData['ANDROIDPAY'] = 1;
+        if ($paymentMethods['samsungPay']) $this->tradeData['SAMSUNGPAY'] = 1;
+        if (is_array($paymentMethods['linePay']) && $paymentMethods['linePay']['enabled'] ||
+            $paymentMethods['linePay'] === true
+        ) {
+            $this->tradeData['LINEPAY'] = 1;
+            if (isset($paymentMethods['linePay']['image_url'])) {
+                $this->tradeData['ImageUrl'] = $paymentMethods['linePay']['image_url'];
+            }
+        }
+        if ($paymentMethods['unionPay']) $this->tradeData['UNIONPAY'] = 1;
+        if ($paymentMethods['esunWallet']) $this->tradeData['ESUNWALLET'] = 1;
+        if ($paymentMethods['taiwanPay']) $this->tradeData['TAIWANPAY'] = 1;
+        if ($paymentMethods['ezPay']) $this->tradeData['EZPAY'] = 1;
+        if ($paymentMethods['ezpWeChat']) $this->tradeData['EZPWECHAT'] = 1;
+        if ($paymentMethods['ezpAlipay']) $this->tradeData['EZPALIPAY'] = 1;
+
+        if ($paymentMethods['CVS']) $this->tradeData['CVS'] = 1;
+        if ($paymentMethods['barcode']) $this->tradeData['BARCODE'] = 1;
+
+        return $this;
+    }
+
+    /**
+     * 信用卡記憶卡號
+     *
+     * @param string $identifier
+     * * 可對應付款人之資料，用於綁定付款人與信用卡卡號時使用
+     * * 例：會員編號、Email。
+     * * 限英、數字，「.」、「_」、「@」、「-」格式。
+     *
+     * @param \Ycs77\NewebPay\Enums\CreditRememberDemand $demand 指定付款人信用卡快速結帳必填欄位
+     * * **CreditInst::EXPIRATION_DATE_AND_CVC**  必填信用卡到期日與背面末三碼
+     * * **CreditInst::EXPIRATION_DATE**                    必填信用卡到期日
+     * * **CreditInst::CVC**                      必填背面末三碼
+     */
+    public function creditRemember(string $identifier, CreditRememberDemand $demand = null)
+    {
+        $creditRemember = $this->config->get('newebpay.payment_methods.credit_remember');
+
+        if ($creditRemember['enabled']) {
+            $this->tradeData['TokenTerm'] = $identifier;
+            $this->tradeData['TokenTermDemand'] = $demand
+                ? $demand->value
+                : $creditRemember['demand']->value;
+        }
 
         return $this;
     }
@@ -236,14 +314,19 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * 物流搭配付款方式
      *
-     * 1: 啟用超商取貨不付款
-     * 2: 啟用超商取貨付款
-     * 3: 啟用超商取貨不付款及超商取貨付款
-     * null: 不開啟
+     * @param \Ycs77\NewebPay\Enums\CVSCOM $cvscom
+     * * **CVSCOM::NOT_PAY**          啟用超商取貨不付款
+     * * **CVSCOM::PAY**              啟用超商取貨付款
+     * * **CVSCOM::NOT_PAY_AND_PAY**  啟用超商取貨不付款 及 超商取貨付款
+     * * **CVSCOM::NONE**             不開啟
      */
-    public function setCVSCOM(int $cvscom = null)
+    public function setCVSCOM(CVSCOM $cvscom = null)
     {
-        $this->TradeData['CVSCOM'] = $cvscom !== null ? $cvscom : $this->config->get('newebpay.CVSCOM');
+        $cvscom = $cvscom ?? $this->config->get('newebpay.CVSCOM');
+
+        if ($cvscom !== CVSCOM::NONE) {
+            $this->tradeData['CVSCOM'] = $cvscom->value;
+        }
 
         return $this;
     }
@@ -251,35 +334,36 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * 物流型態
      *
-     * B2C: 超商大宗寄倉(目前僅支援統㇐超商)
-     * C2C: 超商店到店(目前僅支援全家)
-     * null: 預設
+     * @param \Ycs77\NewebPay\Enums\LgsType $lgsType
+     * * **LgsType::B2C**      超商大宗寄倉(目前僅支援統㇐超商)
+     * * **LgsType::C2C**      超商店到店(目前僅支援全家)
+     * * **LgsType::DEFAULT**  預設
      *
      * 預設值情況說明：
      * 1. 系統優先啟用［B2C 大宗寄倉］。
      * 2. 若商店設定中未啟用［B2C 大宗寄倉］，則系統將會啟用［C2C 店到店］。
      * 3. 若商店設定中，［B2C 大宗寄倉］與［C2C 店到店］皆未啟用，則支付頁面中將不會出現物流選項。
      */
-    public function setLgsType(string $lgsType = null)
+    public function setLgsType(LgsType $lgsType = null)
     {
-        $this->TradeData['LgsType'] = $lgsType !== null ? $lgsType : $this->config->get('newebpay.lgs_type');
+        $lgsType = $lgsType ?? $this->config->get('newebpay.lgs_type');
+
+        if ($lgsType !== LgsType::DEFAULT) {
+            $this->tradeData['LgsType'] = $lgsType->value;
+        }
 
         return $this;
     }
 
-    public function setTokenTerm(string $token = '')
-    {
-        $this->TradeData['TokenTerm'] = $token;
-
-        return $this;
-    }
-
+    /**
+     * Set the order detail data.
+     */
     public function setOrder(string $no, int $amt, string $desc, string $email)
     {
-        $this->TradeData['MerchantOrderNo'] = $no;
-        $this->TradeData['Amt'] = $amt;
-        $this->TradeData['ItemDesc'] = $desc;
-        $this->TradeData['Email'] = $email;
+        $this->tradeData['MerchantOrderNo'] = $no;
+        $this->tradeData['Amt'] = $amt;
+        $this->tradeData['ItemDesc'] = $desc;
+        $this->tradeData['Email'] = $email;
 
         return $this;
     }
@@ -289,14 +373,14 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function getRequestData(): array
     {
-        $tradeInfo = $this->encryptDataByAES($this->TradeData, $this->hashKey, $this->hashIV);
+        $tradeInfo = $this->encryptDataByAES($this->tradeData, $this->hashKey, $this->hashIV);
         $tradeSha = $this->encryptDataBySHA($tradeInfo, $this->hashKey, $this->hashIV);
 
         return [
             'MerchantID' => $this->merchantID,
             'TradeInfo' => $tradeInfo,
             'TradeSha' => $tradeSha,
-            'Version' => $this->TradeData['Version'],
+            'Version' => $this->tradeData['Version'],
         ];
     }
 }

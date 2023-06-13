@@ -1,5 +1,13 @@
 <?php
 
+use Ycs77\NewebPay\Enums\Bank;
+use Ycs77\NewebPay\Enums\CreditInst;
+use Ycs77\NewebPay\Enums\CreditRememberDemand;
+use Ycs77\NewebPay\Enums\CVSCOM;
+use Ycs77\NewebPay\Enums\LgsType;
+use Ycs77\NewebPay\Enums\NTCBLocate;
+use Ycs77\NewebPay\Enums\RespondType;
+
 return [
 
     /*
@@ -11,7 +19,7 @@ return [
     |
     */
 
-    'debug' => env('NEWEBPAY_DEBUG'),
+    'debug' => env('NEWEBPAY_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -31,11 +39,11 @@ return [
     | 回傳格式
     |--------------------------------------------------------------------------
     |
-    | 回傳格式可設定 "JSON" 或 "String"。
+    | 回傳格式可設定 JSON 或 String。
     |
     */
 
-    'respond_type' => 'JSON',
+    'respond_type' => RespondType::JSON,
 
     /*
     |--------------------------------------------------------------------------
@@ -53,7 +61,7 @@ return [
     | 語系
     |--------------------------------------------------------------------------
     |
-    | 語系可設定 "zh-tw"、"en"。
+    | 語系可設定 "zh-tw", "en", "jp"。
     |
     */
 
@@ -79,7 +87,7 @@ return [
     | 繳費有效期限
     |--------------------------------------------------------------------------
     |
-    | 預設值為 7，上限為 180。
+    | 預設值為 7 天，上限為 180 天。
     |
     */
 
@@ -94,7 +102,7 @@ return [
     |
     */
 
-    'return_url' => env('NEWEBPAY_RETURN_URL') != null ? env('APP_URL').env('NEWEBPAY_RETURN_URL') : null,
+    'return_url' => env('NEWEBPAY_RETURN_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -107,7 +115,7 @@ return [
     |
     */
 
-    'notify_url' => env('NEWEBPAY_NOTIFY_URL') != null ? env('APP_URL').env('NEWEBPAY_NOTIFY_URL') : null,
+    'notify_url' => env('NEWEBPAY_NOTIFY_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -118,7 +126,7 @@ return [
     |
     */
 
-    'customer_url' => env('NEWEBPAY_CUSTOMER_URL') != null ? env('APP_URL').env('NEWEBPAY_CUSTOMER_URL') : null,
+    'customer_url' => env('NEWEBPAY_CUSTOMER_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -129,7 +137,19 @@ return [
     |
     */
 
-    'client_back_url' => env('NEWEBPAY_CLIENT_BACK_URL') != null ? env('APP_URL').env('NEWEBPAY_CLIENT_BACK_URL') : null,
+    'client_back_url' => env('NEWEBPAY_CLIENT_BACK_URL'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | 網址加上 Session ID
+    |--------------------------------------------------------------------------
+    |
+    | 為以 Form Post 導向回商店的網址加上加密過的 Session ID，解決重導向回網站時
+    | 自動登出的問題。開啟時只會在 `return_url` 和 `customer_url` 網址加上。
+    |
+    */
+
+    'with_session_id' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -174,70 +194,117 @@ return [
     |
     */
 
-    'payment_method' => [
+    'payment_methods' => [
 
-        /*
+        /**
          * 信用卡支付 (default: true)
-         *   Enable: 是否啟用信用卡支付
-         *   CreditRed: 是否啟用紅利
-         *   InstFlag: 是否啟用分期
-         *     0: 不啟用
-         *     1: 啟用全部分期
-         *     3: 分 3 期
-         *     6: 分 6 期
-         *     12: 分 12 期
-         *     18: 分 18 期
-         *     24: 分 24 期
-         *     以逗號方式開啟多種分期
+         *   enabled: 是否啟用信用卡支付
+         *   red: 是否啟用紅利
+         *   inst: 分期
+         *     CreditInst::NONE  不啟用
+         *     CreditInst::ALL   啟用全部分期
+         *     CreditInst::P3    分 3 期
+         *     CreditInst::P6    分 6 期
+         *     CreditInst::P12   分 12 期
+         *     CreditInst::P18   分 18 期
+         *     CreditInst::P24   分 24 期
+         *     使用陣列開啟多種分期，例如：[CreditInst::P3, CreditInst::P6]
          */
-        'CREDIT' => [
-            'Enable' => true,
-            'CreditRed' => false,
-            'InstFlag' => 0,
+        'credit' => [
+            'enabled' => true,
+            'red' => false,
+            'inst' => CreditInst::NONE,
         ],
 
-        // Google Pay (default: false)
-        'ANDROIDPAY' => false,
+        /**
+         * 信用卡記憶卡號 (default: false)
+         *   enabled: 是否啟用信用卡記憶卡號
+         *   demand: 指定付款人信用卡快速結帳必填欄位
+         *     CreditInst::EXPIRATION_DATE_AND_CVC  必填信用卡到期日與背面末三碼
+         *     CreditInst::EXPIRATION_DATE                    必填信用卡到期日
+         *     CreditInst::CVC                      必填背面末三碼
+         */
+        'credit_remember' => [
+            'enabled' => false,
+            'demand' => CreditRememberDemand::EXPIRATION_DATE_AND_CVC,
+        ],
 
-        // Samsung Pay (default: false)
-        'SAMSUNGPAY' => false,
+        /** WebATM 支付 (default: false) */
+        'webATM' => false,
 
-        // LINE Pay (default: false)
-        'LINEPAY' => false,
-        // LINE PAY 產品圖檔連結網址
-        //   此連結的圖檔將顯示於 LinePay 付款前的產品圖片區，若無產品圖檔連結網址，會使用藍新系統預設圖檔。
-        //   圖片尺寸建議使用 84*84 像素。
-        // 'ImageUrl' => 'http://example.com/your-image-url',
-
-        // 銀聯卡支付 (default: false)
-        'UNIONPAY' => false,
-
-        // WEBATM 支付 (default: false)
-        'WEBATM' => false,
-
-        // ATM 轉帳 (default: false)
+        /** ATM 轉帳 (default: false) */
         'VACC' => false,
 
-        // 超商代碼繳費支付 (default: false)
+        /**
+         * 金融機構
+         *   Bank::BOT        台灣銀行
+         *   Bank::HNCB       華南銀行
+         *   Bank::FirstBank  第一銀行
+         *   使用陣列指定 1 個以上的銀行，例如：[Bank::BOT, Bank::HNCB]
+         *
+         *   此為 WebATM 與 ATM 轉帳 可供付款人選擇轉帳銀行，將顯示於 MPG 頁上。為共用此參數值，無法個別分開指定。
+         *
+         *   每日的 00:00:00-01:00:00 為第一銀行例行
+         *   維護時間，在此時間區間內，將不會顯示［第一銀行］的選項，若商店在此時間區間僅
+         *   指定第一銀行一家銀行，將會回應［MPG01027］的錯誤代碼
+         */
+        'bank' => Bank::ALL,
+
+        /**
+         * 信用卡 國民旅遊卡 (default: false)
+         *   enabled: 是否啟用 國民旅遊卡 交易
+         *   locate: 旅遊地區，可使用地區請參考 \Ycs77\NewebPay\Enums\NTCBLocate 類別
+         *   start_date: 國民旅遊卡起始日期
+         *   end_date: 國民旅遊卡結束日期
+         */
+        'NTCB' => [
+            'enabled' => false,
+            'locate' => NTCBLocate::TaipeiCity,
+            'start_date' => '2015-01-01',
+            'end_date' => '2015-01-01',
+        ],
+
+        /** Google Pay (default: false) */
+        'googlePay' => false,
+
+        /** Samsung Pay (default: false) */
+        'samsungPay' => false,
+
+        /**
+         * LINE Pay (default: false)
+         *   enabled: 是否啟用 LINE Pay 支付
+         *   產品圖檔連結網址
+         *     此連結的圖檔將顯示於 LINE Pay 付款前的產品圖片區，若無產品圖檔連結網址，會使用藍新系統預設圖檔。
+         *     圖片尺寸建議使用 84*84 像素。
+         */
+        'linePay' => [
+            'enabled' => false,
+            // 'image_url' => 'http://example.com/your-image-url',
+        ],
+
+        /** 銀聯卡支付 (default: false) */
+        'unionPay' => false,
+
+        /** 玉山 Walle (default: false) */
+        'esunWallet' => false,
+
+        /** 台灣 Pay (default: false) */
+        'taiwanPay' => false,
+
+        /** 簡單付電子錢包 (default: false) */
+        'ezPay' => false,
+
+        /** 簡單付微信支付 (default: false) */
+        'ezpWeChat' => false,
+
+        /** 簡單付支付寶 (default: false) */
+        'ezpAlipay' => false,
+
+        /** 超商代碼繳費支付 (default: false) */
         'CVS' => false,
 
-        // 條碼繳費支付 (default: false)
-        'BARCODE' => false,
-
-        // 玉山 Walle (default: false)
-        'ESUNWALLET' => false,
-
-        // 台灣 Pay (default: false)
-        'TAIWANPAY' => false,
-
-        // 簡單付電子錢包 (default: false)
-        'EZPAY' => false,
-
-        // 簡單付微信支付 (default: false)
-        'EZPWECHAT' => false,
-
-        // 簡單付支付寶 (default: false)
-        'EZPALIPAY' => false,
+        /** 條碼繳費支付 (default: false) */
+        'barcode' => false,
     ],
 
     /*
@@ -245,23 +312,23 @@ return [
     | 物流搭配付款方式
     |--------------------------------------------------------------------------
     |
-    | 1: 啟用超商取貨不付款
-    | 2: 啟用超商取貨付款
-    | 3: 啟用超商取貨不付款及超商取貨付款
-    | null: 不開啟
+    | CVSCOM::NOT_PAY          啟用超商取貨不付款
+    | CVSCOM::PAY              啟用超商取貨付款
+    | CVSCOM::NOT_PAY_AND_PAY  啟用超商取貨不付款 及 超商取貨付款
+    | CVSCOM::NONE             不開啟
     |
     */
 
-    'CVSCOM' => null,
+    'CVSCOM' => CVSCOM::NONE,
 
     /*
     |--------------------------------------------------------------------------
     | 物流型態
     |--------------------------------------------------------------------------
     |
-    | B2C: 超商大宗寄倉(目前僅支援統㇐超商)
-    | C2C: 超商店到店(目前僅支援全家)
-    | null: 預設
+    | LgsType::B2C      超商大宗寄倉(目前僅支援統㇐超商)
+    | LgsType::C2C      超商店到店(目前僅支援全家)
+    | LgsType::DEFAULT  預設
     |
     | 預設值情況說明：
     | 1. 系統優先啟用［B2C 大宗寄倉］。
@@ -270,6 +337,6 @@ return [
     |
     */
 
-    'lgs_type' => null,
+    'lgs_type' => LgsType::DEFAULT,
 
 ];

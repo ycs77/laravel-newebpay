@@ -2,21 +2,23 @@
 
 namespace Ycs77\NewebPay;
 
+use Ycs77\NewebPay\Enums\RespondType;
+
 class NewebPayClose extends BaseNewebPay
 {
     /**
      * The newebpay trade data.
      */
-    protected array $TradeData = [];
+    protected array $tradeData = [];
 
     /**
      * The newebpay boot hook.
      */
     public function boot(): void
     {
-        $this->TradeData['TimeStamp'] = $this->timestamp;
+        $this->tradeData['TimeStamp'] = $this->timestamp;
 
-        $this->setApiPath('API/CreditCard/Close');
+        $this->setApiPath('/API/CreditCard/Close');
         $this->setAsyncSender();
 
         $this->setVersion();
@@ -29,7 +31,7 @@ class NewebPayClose extends BaseNewebPay
      */
     public function setVersion(string $version = null)
     {
-        $this->TradeData['Version'] = $version ?? $this->config->get('newebpay.version');
+        $this->tradeData['Version'] = $version ?? $this->config->get('newebpay.version');
 
         return $this;
     }
@@ -37,11 +39,13 @@ class NewebPayClose extends BaseNewebPay
     /**
      * 回傳格式
      *
-     * 回傳格式可設定 "JSON" 或 "String"。
+     * 回傳格式可設定 JSON 或 String。
      */
-    public function setRespondType(string $type = null)
+    public function setRespondType(RespondType $type = null)
     {
-        $this->TradeData['RespondType'] = $type ?? $this->config->get('newebpay.respond_type');
+        $this->tradeData['RespondType'] = $type
+            ? $type->value
+            : $this->config->get('newebpay.respond_type')->value;
 
         return $this;
     }
@@ -54,7 +58,7 @@ class NewebPayClose extends BaseNewebPay
      */
     public function setNotifyURL(string $url = null)
     {
-        $this->TradeData['NotifyURL'] = $url ?? $this->config->get('newebpay.notify_url');
+        $this->tradeData['NotifyURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.notify_url'));
 
         return $this;
     }
@@ -71,14 +75,14 @@ class NewebPayClose extends BaseNewebPay
     public function setCloseOrder(string $no, int $amt, string $type = 'order')
     {
         if ($type === 'order') {
-            $this->TradeData['MerchantOrderNo'] = $no;
-            $this->TradeData['IndexType'] = 1;
+            $this->tradeData['MerchantOrderNo'] = $no;
+            $this->tradeData['IndexType'] = 1;
         } elseif ($type === 'trade') {
-            $this->TradeData['TradeNo'] = $no;
-            $this->TradeData['IndexType'] = 2;
+            $this->tradeData['TradeNo'] = $no;
+            $this->tradeData['IndexType'] = 2;
         }
 
-        $this->TradeData['Amt'] = $amt;
+        $this->tradeData['Amt'] = $amt;
 
         return $this;
     }
@@ -93,9 +97,9 @@ class NewebPayClose extends BaseNewebPay
     public function setCloseType(string $type = 'pay')
     {
         if ($type === 'pay') {
-            $this->TradeData['CloseType'] = 1;
+            $this->tradeData['CloseType'] = 1;
         } elseif ($type === 'refund') {
-            $this->TradeData['CloseType'] = 2;
+            $this->tradeData['CloseType'] = 2;
         }
 
         return $this;
@@ -103,7 +107,7 @@ class NewebPayClose extends BaseNewebPay
 
     public function setCancel(bool $isCancel = false)
     {
-        $this->TradeData['Cancel'] = $isCancel;
+        $this->tradeData['Cancel'] = $isCancel;
 
         return $this;
     }
@@ -113,7 +117,7 @@ class NewebPayClose extends BaseNewebPay
      */
     public function getRequestData(): array
     {
-        $postData = $this->encryptDataByAES($this->TradeData, $this->hashKey, $this->hashIV);
+        $postData = $this->encryptDataByAES($this->tradeData, $this->hashKey, $this->hashIV);
 
         return [
             'MerchantID_' => $this->merchantID,

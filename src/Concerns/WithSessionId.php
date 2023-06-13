@@ -6,21 +6,22 @@ use Illuminate\Support\Facades\Crypt;
 use Ycs77\LaravelRecoverSession\Support\Base64Url;
 
 /**
- * @property array $TradeData
+ * @property array $tradeData
  * @property \Illuminate\Contracts\Session\Session $session
  */
 trait WithSessionId
 {
+    protected bool $withSessionId = true;
     protected string $urlSessionIdKey = 'sid';
 
     public function withSessionId(string $urlType, string $sessionId = null)
     {
-        if (is_string($this->TradeData[$urlType])) {
+        if (is_string($this->tradeData[$urlType])) {
             $sessionId = Crypt::encryptString($sessionId ?? $this->session->getId());
 
-            $delimiter = str_contains($this->TradeData[$urlType], '?') ? '&' : '?';
+            $delimiter = str_contains($this->tradeData[$urlType], '?') ? '&' : '?';
 
-            $this->TradeData[$urlType] = $this->TradeData[$urlType].$delimiter.$this->urlSessionIdKey.'='.Base64Url::encode($sessionId);
+            $this->tradeData[$urlType] = $this->tradeData[$urlType].$delimiter.$this->urlSessionIdKey.'='.Base64Url::encode($sessionId);
         }
 
         return $this;

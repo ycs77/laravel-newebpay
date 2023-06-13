@@ -36,12 +36,12 @@ abstract class BaseNewebPay
     /**
      * The newebpay production base URL.
      */
-    protected string $productionUrl = 'https://core.newebpay.com/';
+    protected string $productionUrl = 'https://core.newebpay.com';
 
     /**
      * The newebpay test base URL.
      */
-    protected string $testUrl = 'https://ccore.newebpay.com/';
+    protected string $testUrl = 'https://ccore.newebpay.com';
 
     /**
      * Now timestamp.
