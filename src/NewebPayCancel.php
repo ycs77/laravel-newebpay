@@ -5,14 +5,58 @@ namespace Ycs77\NewebPay;
 class NewebPayCancel extends BaseNewebPay
 {
     /**
+     * The newebpay trade data.
+     */
+    protected array $TradeData = [];
+
+    /**
      * The newebpay boot hook.
      */
     public function boot(): void
     {
+        $this->TradeData['TimeStamp'] = $this->timestamp;
+
         $this->setApiPath('API/CreditCard/Cancel');
         $this->setAsyncSender();
 
+        $this->setVersion();
+        $this->setRespondType();
         $this->setNotifyURL();
+    }
+
+    /**
+     * 串接版本
+     */
+    public function setVersion(string $version = null)
+    {
+        $this->TradeData['Version'] = $version ?? $this->config->get('newebpay.version');
+
+        return $this;
+    }
+
+    /**
+     * 回傳格式
+     *
+     * 回傳格式可設定 "JSON" 或 "String"。
+     */
+    public function setRespondType(string $type = null)
+    {
+        $this->TradeData['RespondType'] = $type ?? $this->config->get('newebpay.respond_type');
+
+        return $this;
+    }
+
+    /**
+     * 付款完成後的通知連結
+     *
+     * 以幕後方式回傳給商店相關支付結果資料
+     * 僅接受 port 80 或 443。
+     */
+    public function setNotifyURL(string $url = null)
+    {
+        $this->TradeData['NotifyURL'] = $url ?? $this->config->get('newebpay.notify_url');
+
+        return $this;
     }
 
     /**
@@ -44,10 +88,10 @@ class NewebPayCancel extends BaseNewebPay
      */
     public function getRequestData(): array
     {
-        $postData = $this->encryptDataByAES($this->TradeData, $this->HashKey, $this->HashIV);
+        $postData = $this->encryptDataByAES($this->TradeData, $this->hashKey, $this->hashIV);
 
         return [
-            'MerchantID_' => $this->MerchantID,
+            'MerchantID_' => $this->merchantID,
             'PostData_' => $postData,
         ];
     }

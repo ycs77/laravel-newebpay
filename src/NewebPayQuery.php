@@ -4,7 +4,14 @@ namespace Ycs77\NewebPay;
 
 class NewebPayQuery extends BaseNewebPay
 {
-    protected array $checkValues;
+    /**
+     * The newebpay check values data.
+     */
+    protected array $checkValues = [];
+
+    /**
+     * The newebpay gateway data.
+     */
     protected ?string $gateway = null;
 
     /**
@@ -15,7 +22,7 @@ class NewebPayQuery extends BaseNewebPay
         $this->setApiPath('API/QueryTradeInfo');
         $this->setAsyncSender();
 
-        $this->checkValues['MerchantID'] = $this->MerchantID;
+        $this->checkValues['MerchantID'] = $this->merchantID;
     }
 
     /**
@@ -52,10 +59,10 @@ class NewebPayQuery extends BaseNewebPay
      */
     public function getRequestData(): array
     {
-        $CheckValue = $this->queryCheckValue($this->checkValues, $this->HashKey, $this->HashIV);
+        $CheckValue = $this->queryCheckValue($this->checkValues, $this->hashKey, $this->hashIV);
 
         return [
-            'MerchantID' => $this->MerchantID,
+            'MerchantID' => $this->merchantID,
             'Version' => $this->config->get('newebpay.version'),
             'RespondType' => $this->config->get('newebpay.respond_type'),
             'CheckValue' => $CheckValue,

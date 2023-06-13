@@ -24,8 +24,8 @@ class Factory
     ) {
         $this->config = $config;
         $this->session = $session;
-        $this->HashKey = $this->config->get('newebpay.hash_key');
-        $this->HashIV = $this->config->get('newebpay.hash_iv');
+        $this->hashKey = $this->config->get('newebpay.hash_key');
+        $this->hashIV = $this->config->get('newebpay.hash_iv');
     }
 
     /**
@@ -159,7 +159,7 @@ class Factory
     public function decode(string $encryptString): mixed
     {
         try {
-            $decryptString = $this->decryptDataByAES($encryptString, $this->HashKey, $this->HashIV);
+            $decryptString = $this->decryptDataByAES($encryptString, $this->hashKey, $this->hashIV);
 
             return json_decode($decryptString, true);
         } catch (Throwable $e) {

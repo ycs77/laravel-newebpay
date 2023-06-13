@@ -5,14 +5,45 @@ namespace Ycs77\NewebPay;
 class NewebPayCreditCard extends BaseNewebPay
 {
     /**
+     * The newebpay trade data.
+     */
+    protected array $TradeData = [];
+
+    /**
      * The newebpay boot hook.
      */
     public function boot(): void
     {
+        $this->TradeData['TimeStamp'] = $this->timestamp;
+
         $this->setApiPath('API/CreditCard');
         $this->setAsyncSender();
 
-        $this->setP3D(false);
+        $this->setVersion();
+        $this->setRespondType();
+        $this->setP3D();
+    }
+
+    /**
+     * 串接版本
+     */
+    public function setVersion(string $version = null)
+    {
+        $this->TradeData['Version'] = $version ?? $this->config->get('newebpay.version');
+
+        return $this;
+    }
+
+    /**
+     * 回傳格式
+     *
+     * 回傳格式可設定 "JSON" 或 "String"。
+     */
+    public function setRespondType(string $type = null)
+    {
+        $this->TradeData['RespondType'] = $type ?? $this->config->get('newebpay.respond_type');
+
+        return $this;
     }
 
     /**
@@ -67,10 +98,10 @@ class NewebPayCreditCard extends BaseNewebPay
      */
     public function getRequestData(): array
     {
-        $tradeInfo = $this->encryptDataByAES($this->TradeData, $this->HashKey, $this->HashIV);
+        $tradeInfo = $this->encryptDataByAES($this->TradeData, $this->hashKey, $this->hashIV);
 
         return [
-            'MerchantID_' => $this->MerchantID,
+            'MerchantID_' => $this->merchantID,
             'PostData_' => $tradeInfo,
             'Pos_' => $this->config->get('newebpay.respond_type'),
         ];

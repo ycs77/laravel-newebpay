@@ -12,23 +12,21 @@ abstract class BaseNewebPay
 {
     use Concerns\HasEncryption;
     use Concerns\HasSender;
-    use Concerns\WithSessionId;
-    use Concerns\TradeData;
 
     /**
      * The newebpay MerchantID.
      */
-    protected string $MerchantID;
+    protected string $merchantID;
 
     /**
      * The newebpay HashKey.
      */
-    protected string $HashKey;
+    protected string $hashKey;
 
     /**
      * The newebpay HashIV.
      */
-    protected string $HashIV;
+    protected string $hashIV;
 
     /**
      * The newebpay URL.
@@ -58,12 +56,11 @@ abstract class BaseNewebPay
         protected Session $session,
         protected UserSource $userSource
     ) {
-        $this->MerchantID = $this->config->get('newebpay.merchant_id');
-        $this->HashKey = $this->config->get('newebpay.hash_key');
-        $this->HashIV = $this->config->get('newebpay.hash_iv');
+        $this->merchantID = $this->config->get('newebpay.merchant_id');
+        $this->hashKey = $this->config->get('newebpay.hash_key');
+        $this->hashIV = $this->config->get('newebpay.hash_iv');
 
         $this->setTimestamp();
-        $this->tradeDataBoot();
         $this->boot();
     }
 
@@ -114,10 +111,7 @@ abstract class BaseNewebPay
     /**
      * Get request data.
      */
-    public function getRequestData(): array
-    {
-        return [];
-    }
+    abstract public function getRequestData(): array;
 
     /**
      * Submit data to newebpay API.
