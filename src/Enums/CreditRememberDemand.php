@@ -2,7 +2,8 @@
 
 namespace Ycs77\NewebPay\Enums;
 
-enum CreditRememberDemand: int {
+enum CreditRememberDemand: int
+{
     /** 必填信用卡到期日與背面末三碼 */
     case EXPIRATION_DATE_AND_CVC = 1;
     /** 必填信用卡到期日 */

@@ -45,7 +45,7 @@ test('NewebPay MPG default TradeData', function () {
         'LoginType' => 0,
         'OrderComment' => null,
         'CREDIT' => 1,
-      ]);
+    ]);
 });
 
 test('NewebPay MPG credit', function () {

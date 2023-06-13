@@ -2,7 +2,8 @@
 
 namespace Ycs77\NewebPay\Enums;
 
-enum Bank: string {
+enum Bank: string
+{
     /** 支援所有指定銀行 */
     case ALL = 'all';
     /** 台灣銀行 */

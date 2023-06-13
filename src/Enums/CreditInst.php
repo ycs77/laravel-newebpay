@@ -2,7 +2,8 @@
 
 namespace Ycs77\NewebPay\Enums;
 
-enum CreditInst: int {
+enum CreditInst: int
+{
     /** 不啟用分期 */
     case NONE = 0;
     /** 啟用全部分期 */

@@ -2,7 +2,8 @@
 
 namespace Ycs77\NewebPay\Enums;
 
-enum CVSCOM: int {
+enum CVSCOM: int
+{
     /** 不開啟 */
     case NONE = 0;
     /** 啟用超商取貨不付款 */

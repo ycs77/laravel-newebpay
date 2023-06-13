@@ -2,7 +2,8 @@
 
 namespace Ycs77\NewebPay\Enums;
 
-enum RespondType: string {
+enum RespondType: string
+{
     case JSON = 'JSON';
     case String = 'String';
 }

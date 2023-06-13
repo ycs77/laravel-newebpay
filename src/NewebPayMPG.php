@@ -228,7 +228,9 @@ class NewebPayMPG extends BaseNewebPay
         if ($paymentMethods['credit']['enabled']) {
             $this->tradeData['CREDIT'] = 1;
 
-            if ($paymentMethods['credit']['red']) $this->tradeData['CreditRed'] = 1;
+            if ($paymentMethods['credit']['red']) {
+                $this->tradeData['CreditRed'] = 1;
+            }
 
             if ($paymentMethods['credit']['inst'] instanceof CreditInst &&
                 $paymentMethods['credit']['inst'] !== CreditInst::NONE ||
@@ -241,8 +243,12 @@ class NewebPayMPG extends BaseNewebPay
                 $this->tradeData['InstFlag'] = $paymentMethods['credit']['inst'];
             }
         }
-        if ($paymentMethods['webATM']) $this->tradeData['WEBATM'] = 1;
-        if ($paymentMethods['VACC']) $this->tradeData['VACC'] = 1;
+        if ($paymentMethods['webATM']) {
+            $this->tradeData['WEBATM'] = 1;
+        }
+        if ($paymentMethods['VACC']) {
+            $this->tradeData['VACC'] = 1;
+        }
         if ($paymentMethods['bank'] instanceof Bank &&
             $paymentMethods['bank'] !== Bank::ALL ||
             is_array($paymentMethods['bank'])
@@ -261,8 +267,12 @@ class NewebPayMPG extends BaseNewebPay
             $this->tradeData['NTCBEndDate'] = $paymentMethods['NTCB']['end_date'];
         }
 
-        if ($paymentMethods['googlePay']) $this->tradeData['ANDROIDPAY'] = 1;
-        if ($paymentMethods['samsungPay']) $this->tradeData['SAMSUNGPAY'] = 1;
+        if ($paymentMethods['googlePay']) {
+            $this->tradeData['ANDROIDPAY'] = 1;
+        }
+        if ($paymentMethods['samsungPay']) {
+            $this->tradeData['SAMSUNGPAY'] = 1;
+        }
         if (is_array($paymentMethods['linePay']) && $paymentMethods['linePay']['enabled'] ||
             $paymentMethods['linePay'] === true
         ) {
@@ -271,15 +281,31 @@ class NewebPayMPG extends BaseNewebPay
                 $this->tradeData['ImageUrl'] = $paymentMethods['linePay']['image_url'];
             }
         }
-        if ($paymentMethods['unionPay']) $this->tradeData['UNIONPAY'] = 1;
-        if ($paymentMethods['esunWallet']) $this->tradeData['ESUNWALLET'] = 1;
-        if ($paymentMethods['taiwanPay']) $this->tradeData['TAIWANPAY'] = 1;
-        if ($paymentMethods['ezPay']) $this->tradeData['EZPAY'] = 1;
-        if ($paymentMethods['ezpWeChat']) $this->tradeData['EZPWECHAT'] = 1;
-        if ($paymentMethods['ezpAlipay']) $this->tradeData['EZPALIPAY'] = 1;
+        if ($paymentMethods['unionPay']) {
+            $this->tradeData['UNIONPAY'] = 1;
+        }
+        if ($paymentMethods['esunWallet']) {
+            $this->tradeData['ESUNWALLET'] = 1;
+        }
+        if ($paymentMethods['taiwanPay']) {
+            $this->tradeData['TAIWANPAY'] = 1;
+        }
+        if ($paymentMethods['ezPay']) {
+            $this->tradeData['EZPAY'] = 1;
+        }
+        if ($paymentMethods['ezpWeChat']) {
+            $this->tradeData['EZPWECHAT'] = 1;
+        }
+        if ($paymentMethods['ezpAlipay']) {
+            $this->tradeData['EZPALIPAY'] = 1;
+        }
 
-        if ($paymentMethods['CVS']) $this->tradeData['CVS'] = 1;
-        if ($paymentMethods['barcode']) $this->tradeData['BARCODE'] = 1;
+        if ($paymentMethods['CVS']) {
+            $this->tradeData['CVS'] = 1;
+        }
+        if ($paymentMethods['barcode']) {
+            $this->tradeData['BARCODE'] = 1;
+        }
 
         return $this;
     }
@@ -291,7 +317,6 @@ class NewebPayMPG extends BaseNewebPay
      * * 可對應付款人之資料，用於綁定付款人與信用卡卡號時使用
      * * 例：會員編號、Email。
      * * 限英、數字，「.」、「_」、「@」、「-」格式。
-     *
      * @param \Ycs77\NewebPay\Enums\CreditRememberDemand $demand 指定付款人信用卡快速結帳必填欄位
      * * **CreditInst::EXPIRATION_DATE_AND_CVC**  必填信用卡到期日與背面末三碼
      * * **CreditInst::EXPIRATION_DATE**                    必填信用卡到期日

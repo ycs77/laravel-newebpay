@@ -2,7 +2,8 @@
 
 namespace Ycs77\NewebPay\Enums;
 
-enum LgsType: string {
+enum LgsType: string
+{
     /**
      * 預設
      *

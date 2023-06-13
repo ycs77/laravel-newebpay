@@ -2,7 +2,8 @@
 
 namespace Ycs77\NewebPay\Enums;
 
-enum NTCBLocate: string {
+enum NTCBLocate: string
+{
     /** 台北市 */
     case TaipeiCity = '001';
     /** 基隆市 */
