@@ -112,46 +112,6 @@ class Factory
     }
 
     /**
-     * 信用卡授權 - 首次交易
-     *
-     * @param  array  $data
-     *                       $data['no'] => 訂單編號
-     *                       $data['email'] => 購買者 email
-     *                       $data['cardNo'] => 信用卡號
-     *                       $data['exp'] => 到期日 格式: 2021/01 -> 2101
-     *                       $data['cvc'] => 信用卡驗證碼 格式: 3碼
-     *                       $data['desc] => 商品描述
-     *                       $data['amt'] => 綁定支付金額
-     *                       $data['tokenTerm'] => 約定信用卡付款之付款人綁定資料
-     */
-    public function creditcardFirstTrade(array $data): NewebPayCreditCard
-    {
-        $newebPay = new NewebPayCreditCard($this->config, $this->session, $this->userSource);
-        $newebPay->firstTrade($data);
-
-        return $newebPay;
-    }
-
-    /**
-     * 信用卡授權 - 使用已綁定信用卡進行交易
-     *
-     * @param  array  $data
-     *                       $data['no'] => 訂單編號
-     *                       $data['amt'] => 訂單金額
-     *                       $data['desc'] => 商品描述
-     *                       $data['email'] => 購買者 email
-     *                       $data['tokenValue'] => 綁定後取回的 token 值
-     *                       $data['tokenTerm'] => 約定信用卡付款之付款人綁定資料 要與第一次綁定時一樣
-     */
-    public function creditcardTradeWithToken(array $data): NewebPayCreditCard
-    {
-        $newebPay = new NewebPayCreditCard($this->config, $this->session, $this->userSource);
-        $newebPay->tradeWithToken($data);
-
-        return $newebPay;
-    }
-
-    /**
      * 解碼加密字串
      *
      * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
