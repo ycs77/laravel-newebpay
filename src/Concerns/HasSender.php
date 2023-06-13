@@ -5,6 +5,7 @@ namespace Ycs77\NewebPay\Concerns;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use Ycs77\NewebPay\Contracts\HasHttp;
 use Ycs77\NewebPay\Contracts\Sender;
 use Ycs77\NewebPay\Senders\BackgroundSender;
@@ -40,11 +41,11 @@ trait HasSender
         return $this;
     }
 
-    public function setMockHttp(MockHandler|array $mockResponse)
+    public function setMockHttp(MockHandler|Response $mockResponse)
     {
         if ($this->sender instanceof HasHttp) {
-            if (! $mockResponse instanceof MockHandler) {
-                $mockHandler = new MockHandler($mockResponse);
+            if ($mockResponse instanceof Response) {
+                $mockHandler = new MockHandler([$mockResponse]);
             }
 
             $this->sender->setHttp($this->createHttp($mockHandler));
