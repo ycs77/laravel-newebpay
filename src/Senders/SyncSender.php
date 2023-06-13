@@ -11,13 +11,13 @@ class SyncSender implements Sender
      */
     public function send(array $request, string $url): mixed
     {
-        $result = '<form id="order-form" method="post" action="'.$url.'">';
+        $result = '<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><form id="order-form" method="post" action="'.$url.'">';
 
         foreach ($request as $key => $value) {
             $result .= '<input type="hidden" name="'.$key.'" value="'.$value.'">';
         }
 
-        $result .= '</form><script type="text/javascript">document.getElementById(\'order-form\').submit();</script>';
+        $result .= '</form><script>document.getElementById("order-form").submit();</script></body></html>';
 
         return $result;
     }
