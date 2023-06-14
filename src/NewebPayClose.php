@@ -16,14 +16,14 @@ class NewebPayClose extends BaseNewebPay
      */
     public function boot(): void
     {
+        $this->setBackgroundSender();
+
         $this->tradeData['TimeStamp'] = $this->timestamp;
         $this->tradeData['Version'] = $this->config->get('newebpay.credit_close_version');
 
-        $this->setApiPath('/API/CreditCard/Close');
-        $this->setBackgroundSender();
-
-        $this->setRespondType();
-        $this->setNotifyURL();
+        $this->apiPath('/API/CreditCard/Close');
+        $this->respondType();
+        $this->notifyURL();
     }
 
     /**
@@ -31,7 +31,7 @@ class NewebPayClose extends BaseNewebPay
      *
      * 回傳格式可設定 JSON 或 String。
      */
-    public function setRespondType(RespondType $type = null)
+    public function respondType(RespondType $type = null)
     {
         $this->respondType = $type
             ? $type->value
@@ -48,7 +48,7 @@ class NewebPayClose extends BaseNewebPay
      * 以幕後方式回傳給商店相關支付結果資料
      * 僅接受 port 80 或 443。
      */
-    public function setNotifyURL(string $url = null)
+    public function notifyURL(string $url = null)
     {
         $this->tradeData['NotifyURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.notify_url'));
 
@@ -64,7 +64,7 @@ class NewebPayClose extends BaseNewebPay
      *                        'order' => 使用商店訂單編號追蹤
      *                        'trade' => 使用藍新金流交易序號追蹤
      */
-    public function setCloseOrder(string $no, int $amt, string $type = 'order')
+    public function closeOrder(string $no, int $amt, string $type = 'order')
     {
         if ($type === 'order') {
             $this->tradeData['MerchantOrderNo'] = $no;
@@ -86,7 +86,7 @@ class NewebPayClose extends BaseNewebPay
      *                        'pay': 請款
      *                        'refund': 退款
      */
-    public function setCloseType(string $type = 'pay')
+    public function closeType(string $type = 'pay')
     {
         if ($type === 'pay') {
             $this->tradeData['CloseType'] = 1;
@@ -97,7 +97,7 @@ class NewebPayClose extends BaseNewebPay
         return $this;
     }
 
-    public function setCancel(bool $isCancel = false)
+    public function cancel(bool $isCancel = false)
     {
         $this->tradeData['Cancel'] = $isCancel;
 
@@ -107,7 +107,7 @@ class NewebPayClose extends BaseNewebPay
     /**
      * Get request data.
      */
-    public function getRequestData(): array
+    public function requestData(): array
     {
         $postData = $this->encryptDataByAES($this->tradeData, $this->hashKey, $this->hashIV);
 

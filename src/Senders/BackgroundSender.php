@@ -56,7 +56,7 @@ class BackgroundSender implements Sender, HasHttp, HasRespondType
     /**
      * Respond type can setting "JSON" or "String".
      */
-    public function setRespondType(string $type)
+    public function respondType(string $type)
     {
         $this->respondType = $type;
 

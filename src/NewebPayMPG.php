@@ -24,27 +24,27 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function boot(): void
     {
+        $this->setFrontendSender();
+
         $this->tradeData['MerchantID'] = $this->merchantID;
         $this->tradeData['TimeStamp'] = $this->timestamp;
         $this->tradeData['Version'] = $this->config->get('newebpay.mpg_version');
 
-        $this->setApiPath('/MPG/mpg_gateway');
-        $this->setFrontendSender();
-
-        $this->setRespondType();
-        $this->setLangType();
-        $this->setTradeLimit();
-        $this->setExpireDate();
-        $this->setReturnURL();
-        $this->setNotifyURL();
-        $this->setCustomerURL();
-        $this->setClientBackURL();
-        $this->setEmailModify();
-        $this->setLoginType();
-        $this->setOrderComment();
-        $this->setPaymentMethods();
-        $this->setCVSCOM();
-        $this->setLgsType();
+        $this->apiPath('/MPG/mpg_gateway');
+        $this->respondType();
+        $this->langType();
+        $this->tradeLimit();
+        $this->expireDate();
+        $this->returnURL();
+        $this->notifyURL();
+        $this->customerURL();
+        $this->clientBackURL();
+        $this->emailModify();
+        $this->loginType();
+        $this->orderComment();
+        $this->paymentMethods();
+        $this->CVSCOM();
+        $this->lgsType();
     }
 
     public function getTradeData(): array
@@ -57,7 +57,7 @@ class NewebPayMPG extends BaseNewebPay
      *
      * 回傳格式可設定 JSON 或 String。
      */
-    public function setRespondType(RespondType $type = null)
+    public function respondType(RespondType $type = null)
     {
         $this->respondType = $type
             ? $type->value
@@ -73,7 +73,7 @@ class NewebPayMPG extends BaseNewebPay
      *
      * 語系可設定 "zh-tw", "en", "jp"。
      */
-    public function setLangType(string $lang = null)
+    public function langType(string $lang = null)
     {
         $this->tradeData['LangType'] = $lang ?? $this->config->get('newebpay.lang_type');
 
@@ -87,7 +87,7 @@ class NewebPayMPG extends BaseNewebPay
      * * 秒數下限為 60 秒，當秒數介於 1~59 秒時，會以 60 秒計算。
      * * 秒數上限為 900 秒，當超過 900 秒時，會 以 900 秒計算。
      */
-    public function setTradeLimit(int $limit = null)
+    public function tradeLimit(int $limit = null)
     {
         $this->tradeData['TradeLimit'] = $limit !== null
             ? $limit
@@ -101,7 +101,7 @@ class NewebPayMPG extends BaseNewebPay
      *
      * 預設值為 7 天，上限為 180 天。
      */
-    public function setExpireDate(int $day = null)
+    public function expireDate(int $day = null)
     {
         $day = $day !== null ? $day : $this->config->get('newebpay.expire_date');
 
@@ -115,7 +115,7 @@ class NewebPayMPG extends BaseNewebPay
      *
      * 僅接受 port 80 或 443。
      */
-    public function setReturnURL(string $url = null)
+    public function returnURL(string $url = null)
     {
         $this->tradeData['ReturnURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.return_url'));
 
@@ -132,7 +132,7 @@ class NewebPayMPG extends BaseNewebPay
      * 1. 以幕後方式回傳給商店相關支付結果資料
      * 2. 僅接受 port 80 或 443。
      */
-    public function setNotifyURL(string $url = null)
+    public function notifyURL(string $url = null)
     {
         $this->tradeData['NotifyURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.notify_url'));
 
@@ -144,7 +144,7 @@ class NewebPayMPG extends BaseNewebPay
      *
      * 如果設定為 null，則會顯示取號結果在藍新金流頁面。
      */
-    public function setCustomerURL(string $url = null)
+    public function customerURL(string $url = null)
     {
         $this->tradeData['CustomerURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.customer_url'));
 
@@ -160,7 +160,7 @@ class NewebPayMPG extends BaseNewebPay
      *
      * 當交易取消時，平台會出現返回鈕，使消費者依以此參數網址返回商店指定的頁面。
      */
-    public function setClientBackURL(string $url = null)
+    public function clientBackURL(string $url = null)
     {
         $this->tradeData['ClientBackURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.client_back_url'));
 
@@ -170,7 +170,7 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * 付款人電子信箱是否開放修改
      */
-    public function setEmailModify(bool $isModify = null)
+    public function emailModify(bool $isModify = null)
     {
         $this->tradeData['EmailModify'] = (
             $isModify !== null
@@ -184,7 +184,7 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * 是否需要登入藍新金流會員
      */
-    public function setLoginType(bool $isLogin = false)
+    public function loginType(bool $isLogin = false)
     {
         $this->tradeData['LoginType'] = (
             $isLogin !== null
@@ -201,7 +201,7 @@ class NewebPayMPG extends BaseNewebPay
      * 1. 商店備註限制長度為 300 字。
      * 2. 若有輸入此參數，將會於 MPG 頁面呈現商店備註內容。
      */
-    public function setOrderComment(string $comment = null)
+    public function orderComment(string $comment = null)
     {
         $this->tradeData['OrderComment'] = $comment !== null
             ? $comment
@@ -213,7 +213,7 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * 設定商店需要使用的支付方式
      */
-    public function setPaymentMethods(array $paymentMethods = [])
+    public function paymentMethods(array $paymentMethods = [])
     {
         $paymentMethods = array_merge($this->config->get('newebpay.payment_methods'), $paymentMethods);
 
@@ -337,7 +337,7 @@ class NewebPayMPG extends BaseNewebPay
      * * **CVSCOM::NOT_PAY_AND_PAY**  啟用超商取貨不付款 及 超商取貨付款
      * * **CVSCOM::NONE**             不開啟
      */
-    public function setCVSCOM(CVSCOM $cvscom = null)
+    public function CVSCOM(CVSCOM $cvscom = null)
     {
         $cvscom = $cvscom ?? $this->config->get('newebpay.CVSCOM');
 
@@ -361,7 +361,7 @@ class NewebPayMPG extends BaseNewebPay
      * 2. 若商店設定中未啟用［B2C 大宗寄倉］，則系統將會啟用［C2C 店到店］。
      * 3. 若商店設定中，［B2C 大宗寄倉］與［C2C 店到店］皆未啟用，則支付頁面中將不會出現物流選項。
      */
-    public function setLgsType(LgsType $lgsType = null)
+    public function lgsType(LgsType $lgsType = null)
     {
         $lgsType = $lgsType ?? $this->config->get('newebpay.lgs_type');
 
@@ -375,7 +375,7 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * Set the order detail data.
      */
-    public function setOrder(string $no, int $amt, string $desc, string $email)
+    public function order(string $no, int $amt, string $desc, string $email)
     {
         $this->tradeData['MerchantOrderNo'] = $no;
         $this->tradeData['Amt'] = $amt;
@@ -388,7 +388,7 @@ class NewebPayMPG extends BaseNewebPay
     /**
      * Get request data.
      */
-    public function getRequestData(): array
+    public function requestData(): array
     {
         $tradeInfo = $this->encryptDataByAES($this->tradeData, $this->hashKey, $this->hashIV);
         $tradeSha = $this->encryptDataBySHA($tradeInfo, $this->hashKey, $this->hashIV);

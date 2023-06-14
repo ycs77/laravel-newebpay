@@ -21,12 +21,12 @@ class NewebPayQuery extends BaseNewebPay
      */
     public function boot(): void
     {
-        $this->checkValues['MerchantID'] = $this->merchantID;
-
-        $this->setApiPath('/API/QueryTradeInfo');
         $this->setBackgroundSender();
 
-        $this->setRespondType();
+        $this->checkValues['MerchantID'] = $this->merchantID;
+
+        $this->apiPath('/API/QueryTradeInfo');
+        $this->respondType();
     }
 
     /**
@@ -34,7 +34,7 @@ class NewebPayQuery extends BaseNewebPay
      *
      * 回傳格式可設定 JSON 或 String。
      */
-    public function setRespondType(RespondType $type = null)
+    public function respondType(RespondType $type = null)
     {
         $this->respondType = $type
             ? $type->value
@@ -49,7 +49,7 @@ class NewebPayQuery extends BaseNewebPay
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
      */
-    public function setQuery(string $no, int $amt)
+    public function query(string $no, int $amt)
     {
         $this->checkValues['MerchantOrderNo'] = $no;
         $this->checkValues['Amt'] = $amt;
@@ -65,7 +65,7 @@ class NewebPayQuery extends BaseNewebPay
      * 若為複合式商店(MS5 開頭)，此欄位為必填，且要固定填入："Composite"。
      * 若沒有帶[Gateway]或是帶入其他參數值，則查詢一般商店代號。
      */
-    public function setGateway(string $gateway = null)
+    public function gateway(string $gateway = null)
     {
         $this->gateway = $gateway;
 
@@ -75,7 +75,7 @@ class NewebPayQuery extends BaseNewebPay
     /**
      * Get request data.
      */
-    public function getRequestData(): array
+    public function requestData(): array
     {
         $CheckValue = $this->queryCheckValue($this->checkValues, $this->hashKey, $this->hashIV);
 

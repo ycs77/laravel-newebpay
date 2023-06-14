@@ -23,8 +23,8 @@ test('NewebPay query can be get request data', function () {
     $newebpay = new NewebPayQuery(app('config'), app('session.store'), app(UserSource::class));
 
     $requestData = $newebpay
-        ->setQuery('TestNo123456', 100)
-        ->getRequestData();
+        ->query('TestNo123456', 100)
+        ->requestData();
 
     expect($requestData['MerchantID'])->toBe('TestMerchantID1234');
     expect($requestData['Version'])->toBe('1.3');
@@ -41,9 +41,9 @@ test('NewebPay query can be set gateway is "Composite"', function () {
     $newebpay = new NewebPayQuery(app('config'), app('session.store'), app(UserSource::class));
 
     $requestData = $newebpay
-        ->setQuery('TestNo123456', 100)
-        ->setGateway('Composite')
-        ->getRequestData();
+        ->query('TestNo123456', 100)
+        ->gateway('Composite')
+        ->requestData();
 
     expect($requestData)->toHaveKey('Gateway', 'Composite');
 });
@@ -54,7 +54,7 @@ test('NewebPay query can be submit', function () {
     $newebpay = new NewebPayQuery(app('config'), app('session.store'), app(UserSource::class));
 
     $result = $newebpay
-        ->setQuery('TestNo123456', 100)
+        ->query('TestNo123456', 100)
         ->setMockHttp(new Response(200, [], '{"Status":"Code001","Message":"Test message.","Result":[]}'))
         ->submit();
 

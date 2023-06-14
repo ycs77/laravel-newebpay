@@ -39,7 +39,7 @@ class Factory
     public function payment(string $no, int $amt, string $desc, string $email): NewebPayMPG
     {
         $newebPay = new NewebPayMPG($this->config, $this->session, $this->userSource);
-        $newebPay->setOrder($no, $amt, $desc, $email);
+        $newebPay->order($no, $amt, $desc, $email);
 
         return $newebPay;
     }
@@ -53,7 +53,7 @@ class Factory
     public function query(string $no, int $amt): NewebPayQuery
     {
         $newebPay = new NewebPayQuery($this->config, $this->session, $this->userSource);
-        $newebPay->setQuery($no, $amt);
+        $newebPay->query($no, $amt);
 
         return $newebPay;
     }
@@ -70,7 +70,7 @@ class Factory
     public function creditCancel(string $no, int $amt, string $type = 'order'): NewebPayCancel
     {
         $newebPay = new NewebPayCancel($this->config, $this->session, $this->userSource);
-        $newebPay->setCancelOrder($no, $amt, $type);
+        $newebPay->cancelOrder($no, $amt, $type);
 
         return $newebPay;
     }
@@ -87,8 +87,8 @@ class Factory
     public function requestPayment(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         $newebPay = new NewebPayClose($this->config, $this->session, $this->userSource);
-        $newebPay->setCloseOrder($no, $amt, $type);
-        $newebPay->setCloseType('pay');
+        $newebPay->closeOrder($no, $amt, $type);
+        $newebPay->closeType('pay');
 
         return $newebPay;
     }
@@ -105,8 +105,8 @@ class Factory
     public function requestRefund(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         $newebPay = new NewebPayClose($this->config, $this->session, $this->userSource);
-        $newebPay->setCloseOrder($no, $amt, $type);
-        $newebPay->setCloseType('refund');
+        $newebPay->closeOrder($no, $amt, $type);
+        $newebPay->closeType('refund');
 
         return $newebPay;
     }

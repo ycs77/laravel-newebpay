@@ -27,7 +27,7 @@ trait WithSessionId
         return $this;
     }
 
-    public function setUrlSessionIdKey(string $key)
+    public function urlSessionIdKey(string $key)
     {
         $this->urlSessionIdKey = $key;
 

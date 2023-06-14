@@ -55,7 +55,7 @@ test('NewebPay MPG credit', function () {
     expect($newebpay->getTradeData())->not->toHaveKey('CreditRed');
     expect($newebpay->getTradeData())->not->toHaveKey('InstFlag');
 
-    $newebpay->setPaymentMethods([
+    $newebpay->paymentMethods([
         'credit' => [
             'enabled' => true,
             'red' => true,
@@ -64,7 +64,7 @@ test('NewebPay MPG credit', function () {
     ]);
     expect($newebpay->getTradeData())->toHaveKey('CreditRed', 1);
 
-    $newebpay->setPaymentMethods([
+    $newebpay->paymentMethods([
         'credit' => [
             'enabled' => true,
             'red' => true,
@@ -73,7 +73,7 @@ test('NewebPay MPG credit', function () {
     ]);
     expect($newebpay->getTradeData())->toHaveKey('InstFlag', '3');
 
-    $newebpay->setPaymentMethods([
+    $newebpay->paymentMethods([
         'credit' => [
             'enabled' => true,
             'red' => true,
@@ -104,7 +104,7 @@ test('NewebPay MPG webATM', function () {
 
     config()->set('newebpay.payment_methods.credit_remember.enabled', true);
 
-    $newebpay->setPaymentMethods(['webATM' => true]);
+    $newebpay->paymentMethods(['webATM' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('WEBATM', 1);
 });
@@ -114,7 +114,7 @@ test('NewebPay MPG ATM transfer (VACC)', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('VACC');
 
-    $newebpay->setPaymentMethods(['VACC' => true]);
+    $newebpay->paymentMethods(['VACC' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('VACC', 1);
 });
@@ -124,11 +124,11 @@ test('NewebPay MPG bank type', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('BankType');
 
-    $newebpay->setPaymentMethods(['bank' => Bank::BOT]);
+    $newebpay->paymentMethods(['bank' => Bank::BOT]);
 
     expect($newebpay->getTradeData())->toHaveKey('BankType', 'BOT');
 
-    $newebpay->setPaymentMethods(['bank' => [Bank::BOT, Bank::HNCB]]);
+    $newebpay->paymentMethods(['bank' => [Bank::BOT, Bank::HNCB]]);
 
     expect($newebpay->getTradeData())->toHaveKey('BankType', 'BOT,HNCB');
 });
@@ -141,7 +141,7 @@ test('NewebPay MPG NTCB', function () {
     expect($newebpay->getTradeData())->not->toHaveKey('NTCBStartDate');
     expect($newebpay->getTradeData())->not->toHaveKey('NTCBEndDate');
 
-    $newebpay->setPaymentMethods([
+    $newebpay->paymentMethods([
         'NTCB' => [
             'enabled' => true,
             'locate' => NTCBLocate::HsinchuCity,
@@ -161,7 +161,7 @@ test('NewebPay MPG Google Pay', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('ANDROIDPAY');
 
-    $newebpay->setPaymentMethods(['googlePay' => true]);
+    $newebpay->paymentMethods(['googlePay' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('ANDROIDPAY', 1);
 });
@@ -171,7 +171,7 @@ test('NewebPay MPG Samsung Pay', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('SAMSUNGPAY');
 
-    $newebpay->setPaymentMethods(['samsungPay' => true]);
+    $newebpay->paymentMethods(['samsungPay' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('SAMSUNGPAY', 1);
 });
@@ -182,7 +182,7 @@ test('NewebPay MPG LINE Pay', function () {
     expect($newebpay->getTradeData())->not->toHaveKey('LINEPAY');
     expect($newebpay->getTradeData())->not->toHaveKey('ImageUrl');
 
-    $newebpay->setPaymentMethods([
+    $newebpay->paymentMethods([
         'linePay' => [
             'enabled' => true,
             'image_url' => 'http://example.com/your-image-url',
@@ -198,7 +198,7 @@ test('NewebPay MPG UnionPay', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('UNIONPAY');
 
-    $newebpay->setPaymentMethods(['unionPay' => true]);
+    $newebpay->paymentMethods(['unionPay' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('UNIONPAY', 1);
 });
@@ -208,7 +208,7 @@ test('NewebPay MPG esunWallet', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('ESUNWALLET');
 
-    $newebpay->setPaymentMethods(['esunWallet' => true]);
+    $newebpay->paymentMethods(['esunWallet' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('ESUNWALLET', 1);
 });
@@ -218,7 +218,7 @@ test('NewebPay MPG TaiwanPay', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('TAIWANPAY');
 
-    $newebpay->setPaymentMethods(['taiwanPay' => true]);
+    $newebpay->paymentMethods(['taiwanPay' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('TAIWANPAY', 1);
 });
@@ -228,7 +228,7 @@ test('NewebPay MPG ezPay', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('EZPAY');
 
-    $newebpay->setPaymentMethods(['ezPay' => true]);
+    $newebpay->paymentMethods(['ezPay' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('EZPAY', 1);
 });
@@ -238,7 +238,7 @@ test('NewebPay MPG ezpWeChat', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('EZPWECHAT');
 
-    $newebpay->setPaymentMethods(['ezpWeChat' => true]);
+    $newebpay->paymentMethods(['ezpWeChat' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('EZPWECHAT', 1);
 });
@@ -248,7 +248,7 @@ test('NewebPay MPG ezpAlipay', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('EZPALIPAY');
 
-    $newebpay->setPaymentMethods(['ezpAlipay' => true]);
+    $newebpay->paymentMethods(['ezpAlipay' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('EZPALIPAY', 1);
 });
@@ -258,7 +258,7 @@ test('NewebPay MPG CVS', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('CVS');
 
-    $newebpay->setPaymentMethods(['CVS' => true]);
+    $newebpay->paymentMethods(['CVS' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('CVS', 1);
 });
@@ -268,7 +268,7 @@ test('NewebPay MPG barcode', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('BARCODE');
 
-    $newebpay->setPaymentMethods(['barcode' => true]);
+    $newebpay->paymentMethods(['barcode' => true]);
 
     expect($newebpay->getTradeData())->toHaveKey('BARCODE', 1);
 });
@@ -278,7 +278,7 @@ test('NewebPay MPG CVSCOM', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('CVSCOM');
 
-    $newebpay->setCVSCOM(CVSCOM::PAY);
+    $newebpay->CVSCOM(CVSCOM::PAY);
 
     expect($newebpay->getTradeData())->toHaveKey('CVSCOM', CVSCOM::PAY->value);
 });
@@ -288,7 +288,7 @@ test('NewebPay MPG LgsType', function () {
 
     expect($newebpay->getTradeData())->not->toHaveKey('LgsType');
 
-    $newebpay->setLgsType(LgsType::B2C);
+    $newebpay->lgsType(LgsType::B2C);
 
     expect($newebpay->getTradeData())->toHaveKey('LgsType', LgsType::B2C->value);
 });
@@ -296,7 +296,7 @@ test('NewebPay MPG LgsType', function () {
 test('NewebPay MPG can be get request data', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'), app(UserSource::class));
 
-    $requestData = $newebpay->getRequestData();
+    $requestData = $newebpay->requestData();
 
     expect($requestData['MerchantID'])->toBe('TestMerchantID1234');
     expect($requestData['TradeInfo'])->toBe('59baba7fcc0fdce1f08910990735fce0f1531156700405540589c4e8cee8329d37876b24661b165bdb0d568f039510aa8c554894a3e52c63538e4d6c5b1d97ba1bd67ed7c219136b745fba38fbff2e5e133c68562c4f95349b62e9692107cafda1adc6a6debfee3d21c43ef39f8b86119f6c600632619f3d5386a2eb2d3d3367dcd2f6b8bc5f400dd480e21977588750b56254eaa72b7a4f934c17316af8f3a5fa78f42692c2254b275051cc241cf1cc015366081d37c1c7eee766e03242194e3277b483247daa46c5ce80d04f5b1f1c3ef820fd671f745962f78c42bafb06439f59db0f5fa83e41bfa8ada59d6c84b27695445b6dd4d8b1278594054c119c7793a94662cc925004aad6404adf13df679f86a7c210b9a723b5e26cfba8e74cfc7bb62622f083a95971b19b8bca913b6af825304389cf5ac833ece4a6879c9930');
@@ -310,7 +310,7 @@ test('NewebPay MPG can be submit', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'), app(UserSource::class));
 
     $result = $newebpay
-        ->setOrder('TestNo123456', 100, '測試商品', 'test@email.com')
+        ->order('TestNo123456', 100, '測試商品', 'test@email.com')
         ->submit();
 
     expect($result)->toBe('<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><form id="order-form" method="post" action="https://ccore.newebpay.com/MPG/mpg_gateway"><input type="hidden" name="MerchantID" value="TestMerchantID1234"><input type="hidden" name="TradeInfo" value="59baba7fcc0fdce1f08910990735fce0f1531156700405540589c4e8cee8329d37876b24661b165bdb0d568f039510aa8c554894a3e52c63538e4d6c5b1d97ba1bd67ed7c219136b745fba38fbff2e5e133c68562c4f95349b62e9692107cafda1adc6a6debfee3d21c43ef39f8b86119f6c600632619f3d5386a2eb2d3d3367dcd2f6b8bc5f400dd480e21977588750b56254eaa72b7a4f934c17316af8f3a5fa78f42692c2254b275051cc241cf1cc015366081d37c1c7eee766e03242194e3277b483247daa46c5ce80d04f5b1f1c3ef820fd671f745962f78c42bafb06439f59db0f5fa83e41bfa8ada59d6c84b27695445b6dd4d8b1278594054c119c7793a94662cc925004aad6404adf13df679f86a7c210b9a723b5e26cfba8e74cfc615ac11d9e7990746613ae35b3386778f80f50ec7b1b38458c51fcf7a5c0bb26a48406b9093b18d01f0cd311272794d5553adee40ce16acc75a29444014adb37a7087f62d9676a951f1308dd05ab9003a6367d9207b235916586ee9ae85cc13447f1d21c56e6f75a9effd62fcf74870c55506679fabf725c7f29a8fb8e82d9ce"><input type="hidden" name="TradeSha" value="93E301B57B0DEE6E42D1BB3A4C24088ACAA0F28FAFFC88B3ABA058D052C61A4E"><input type="hidden" name="Version" value="2.0"></form><script>document.getElementById("order-form").submit();</script></body></html>');

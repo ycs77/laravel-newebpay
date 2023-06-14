@@ -97,7 +97,7 @@ abstract class BaseNewebPay
     /**
      * Set the newebpay API path.
      */
-    public function setApiPath(string $path)
+    public function apiPath(string $path)
     {
         $this->url = $this->generateUrl($path);
 
@@ -117,7 +117,7 @@ abstract class BaseNewebPay
     /**
      * Get request data.
      */
-    abstract public function getRequestData(): array;
+    abstract public function requestData(): array;
 
     /**
      * Submit data to newebpay API.
@@ -127,9 +127,9 @@ abstract class BaseNewebPay
         $this->userSource->preserve(Request::instance());
 
         if ($this->sender instanceof HasRespondType && $this->respondType) {
-            $this->sender->setRespondType($this->respondType);
+            $this->sender->respondType($this->respondType);
         }
 
-        return $this->sender->send($this->getRequestData(), $this->url);
+        return $this->sender->send($this->requestData(), $this->url);
     }
 }
