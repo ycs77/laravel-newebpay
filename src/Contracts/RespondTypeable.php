@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Contracts;
 
-interface HasRespondType
+interface RespondTypeable
 {
     /**
      * Respond type can setting "JSON" or "String".

@@ -1,18 +1,17 @@
 <?php
 
 use GuzzleHttp\Psr7\Response;
-use Ycs77\LaravelRecoverSession\UserSource;
 use Ycs77\NewebPay\NewebPayClose;
 use Ycs77\NewebPay\Senders\BackgroundSender;
 
 test('NewebPay close can be get url', function () {
-    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayClose(app('config'), app('session.store'));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/CreditCard/Close');
 });
 
 test('NewebPay close sender is background', function () {
-    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayClose(app('config'), app('session.store'));
 
     expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);
 });
@@ -20,7 +19,7 @@ test('NewebPay close sender is background', function () {
 test('NewebPay close post data for request pay', function () {
     setTestNow();
 
-    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayClose(app('config'), app('session.store'));
 
     $newebpay
         ->closeOrder('TestNo123456', 100, 'order')
@@ -36,7 +35,7 @@ test('NewebPay close post data for request pay', function () {
 test('NewebPay close post data for request refund', function () {
     setTestNow();
 
-    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayClose(app('config'), app('session.store'));
 
     $newebpay
         ->closeOrder('TestNo123456', 100, 'order')
@@ -52,7 +51,7 @@ test('NewebPay close post data for request refund', function () {
 test('NewebPay close post data for cancel request pay', function () {
     setTestNow();
 
-    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayClose(app('config'), app('session.store'));
 
     $newebpay
         ->closeOrder('TestNo123456', 100, 'order')
@@ -69,7 +68,7 @@ test('NewebPay close post data for cancel request pay', function () {
 test('NewebPay close post data for cancel request refund', function () {
     setTestNow();
 
-    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayClose(app('config'), app('session.store'));
 
     $newebpay
         ->closeOrder('TestNo123456', 100, 'order')
@@ -86,7 +85,7 @@ test('NewebPay close post data for cancel request refund', function () {
 test('NewebPay close can be get request data', function () {
     setTestNow();
 
-    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayClose(app('config'), app('session.store'));
 
     $requestData = $newebpay->requestData();
 
@@ -97,7 +96,7 @@ test('NewebPay close can be get request data', function () {
 test('NewebPay close can be submit', function () {
     setTestNow();
 
-    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayClose(app('config'), app('session.store'));
 
     $result = $newebpay
         ->closeOrder('TestNo123456', 100, 'order')

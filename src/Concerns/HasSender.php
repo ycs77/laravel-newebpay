@@ -6,8 +6,10 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Ycs77\NewebPay\Contracts\HasHttp;
+use Ycs77\LaravelRecoverSession\UserSource;
+use Ycs77\NewebPay\Contracts\Httpable;
 use Ycs77\NewebPay\Contracts\Sender;
+use Ycs77\NewebPay\Contracts\UserSourceable;
 use Ycs77\NewebPay\Senders\BackgroundSender;
 use Ycs77\NewebPay\Senders\FrontendSender;
 
@@ -29,7 +31,16 @@ trait HasSender
 
     public function setFrontendSender()
     {
-        $this->setSender(new FrontendSender());
+        $this->setSender(new FrontendSender(app()->make(UserSource::class)));
+
+        return $this;
+    }
+
+    public function setUserSource(UserSource $userSource)
+    {
+        if ($this->sender instanceof UserSourceable) {
+            $this->sender->setUserSource($userSource);
+        }
 
         return $this;
     }
@@ -43,7 +54,7 @@ trait HasSender
 
     public function setMockHttp(MockHandler|Response $mockResponse)
     {
-        if ($this->sender instanceof HasHttp) {
+        if ($this->sender instanceof Httpable) {
             if ($mockResponse instanceof Response) {
                 $mockHandler = new MockHandler([$mockResponse]);
             }

@@ -4,7 +4,7 @@ namespace Ycs77\NewebPay\Contracts;
 
 use GuzzleHttp\Client;
 
-interface HasHttp
+interface Httpable
 {
     /**
      * Set the http client instance.

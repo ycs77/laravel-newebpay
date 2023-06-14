@@ -7,7 +7,6 @@ use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Request;
 use Throwable;
-use Ycs77\LaravelRecoverSession\UserSource;
 use Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException;
 
 class Factory
@@ -19,8 +18,7 @@ class Factory
      */
     public function __construct(
         protected Config $config,
-        protected Session $session,
-        protected UserSource $userSource
+        protected Session $session
     ) {
         $this->config = $config;
         $this->session = $session;

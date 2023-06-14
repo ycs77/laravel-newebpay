@@ -4,10 +4,11 @@ namespace Ycs77\NewebPay;
 
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Session\Session;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Request;
-use Ycs77\LaravelRecoverSession\UserSource;
-use Ycs77\NewebPay\Contracts\HasRespondType;
+use Ycs77\NewebPay\Contracts\RespondTypeable;
+use Ycs77\NewebPay\Contracts\UserSourceable;
 
 abstract class BaseNewebPay
 {
@@ -59,8 +60,7 @@ abstract class BaseNewebPay
      */
     public function __construct(
         protected Config $config,
-        protected Session $session,
-        protected UserSource $userSource
+        protected Session $session
     ) {
         $this->merchantID = $this->config->get('newebpay.merchant_id');
         $this->hashKey = $this->config->get('newebpay.hash_key');
@@ -122,11 +122,13 @@ abstract class BaseNewebPay
     /**
      * Submit data to newebpay API.
      */
-    public function submit(): mixed
+    public function submit(HttpRequest $request = null): mixed
     {
-        $this->userSource->preserve(Request::instance());
+        if ($this->sender instanceof UserSourceable) {
+            $this->sender->preserveUserSource($request ?? Request::instance());
+        }
 
-        if ($this->sender instanceof HasRespondType && $this->respondType) {
+        if ($this->sender instanceof RespondTypeable && $this->respondType) {
             $this->sender->respondType($this->respondType);
         }
 

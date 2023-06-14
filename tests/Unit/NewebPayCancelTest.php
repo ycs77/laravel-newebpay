@@ -1,18 +1,17 @@
 <?php
 
 use GuzzleHttp\Psr7\Response;
-use Ycs77\LaravelRecoverSession\UserSource;
 use Ycs77\NewebPay\NewebPayCancel;
 use Ycs77\NewebPay\Senders\BackgroundSender;
 
 test('NewebPay cancel can be get url', function () {
-    $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/CreditCard/Cancel');
 });
 
 test('NewebPay cancel sender is background', function () {
-    $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);
 });
@@ -20,7 +19,7 @@ test('NewebPay cancel sender is background', function () {
 test('NewebPay cancel default post data', function () {
     setTestNow();
 
-    $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     $postData = $newebpay->postData();
 
@@ -35,7 +34,7 @@ test('NewebPay cancel default post data', function () {
 test('NewebPay cancel order post data with "MerchantOrderNo"', function () {
     setTestNow();
 
-    $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     $postData = $newebpay
         ->cancelOrder('TestNo123456', 100, 'order')
@@ -55,7 +54,7 @@ test('NewebPay cancel order post data with "MerchantOrderNo"', function () {
 test('NewebPay cancel order post data with "TradeNo"', function () {
     setTestNow();
 
-    $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     $postData = $newebpay
         ->cancelOrder('TestNo123456', 100, 'trade')
@@ -75,7 +74,7 @@ test('NewebPay cancel order post data with "TradeNo"', function () {
 test('NewebPay cancel can be get request data', function () {
     setTestNow();
 
-    $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     $requestData = $newebpay->requestData();
 
@@ -86,7 +85,7 @@ test('NewebPay cancel can be get request data', function () {
 test('NewebPay cancel can be submit', function () {
     setTestNow();
 
-    $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     $result = $newebpay
         ->cancelOrder('TestNo123456', 100, 'order')

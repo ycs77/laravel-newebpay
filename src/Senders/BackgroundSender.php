@@ -3,26 +3,20 @@
 namespace Ycs77\NewebPay\Senders;
 
 use GuzzleHttp\Client;
-use Ycs77\NewebPay\Contracts\HasHttp;
-use Ycs77\NewebPay\Contracts\HasRespondType;
+use Ycs77\NewebPay\Contracts\Httpable;
+use Ycs77\NewebPay\Contracts\RespondTypeable;
 use Ycs77\NewebPay\Contracts\Sender;
 
-class BackgroundSender implements Sender, HasHttp, HasRespondType
+class BackgroundSender implements Sender, Httpable, RespondTypeable
 {
-    /**
-     * The guzzle http client instance.
-     */
-    protected Client $http;
-
     /**
      * The API respond type.
      */
     protected string $respondType;
 
-    public function __construct(Client $client)
-    {
-        $this->http = $client;
-    }
+    public function __construct(
+        protected Client $client
+    ) {}
 
     /**
      * Send the data to API.
