@@ -6,7 +6,6 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\NTCBLocate;
-use Ycs77\NewebPay\Enums\RespondType;
 
 return [
 
@@ -33,17 +32,6 @@ return [
     'merchant_id' => env('NEWEBPAY_STORE_ID'),
     'hash_key' => env('NEWEBPAY_STORE_HASH_KEY'),
     'hash_iv' => env('NEWEBPAY_STORE_HASH_IV'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | 回傳格式
-    |--------------------------------------------------------------------------
-    |
-    | 回傳格式可設定 JSON 或 String。
-    |
-    */
-
-    'respond_type' => RespondType::JSON,
 
     /*
     |--------------------------------------------------------------------------

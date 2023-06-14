@@ -7,7 +7,6 @@ use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Request;
-use Ycs77\NewebPay\Contracts\RespondTypeable;
 use Ycs77\NewebPay\Contracts\UserSourceable;
 
 abstract class BaseNewebPay
@@ -49,11 +48,6 @@ abstract class BaseNewebPay
      * Now timestamp.
      */
     protected int $timestamp;
-
-    /**
-     * The newebpay respond type.
-     */
-    protected string $respondType;
 
     /**
      * Create a new base newebpay instance.
@@ -126,10 +120,6 @@ abstract class BaseNewebPay
     {
         if ($this->sender instanceof UserSourceable) {
             $this->sender->preserveUserSource($request ?? Request::instance());
-        }
-
-        if ($this->sender instanceof RespondTypeable && $this->respondType) {
-            $this->sender->respondType($this->respondType);
         }
 
         return $this->sender->send($this->requestData(), $this->url);

@@ -10,7 +10,6 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\NTCBLocate;
-use Ycs77\NewebPay\Enums\RespondType;
 
 class TestCase extends BaseTestCase
 {
@@ -33,7 +32,6 @@ class TestCase extends BaseTestCase
             $config->set('newebpay.query_version', '1.3');
             $config->set('newebpay.credit_cancel_version', '1.0');
             $config->set('newebpay.credit_close_version', '1.1');
-            $config->set('newebpay.respond_type', RespondType::JSON);
             $config->set('newebpay.lang_type', 'zh-tw');
             $config->set('newebpay.trade_limit', 0);
             $config->set('newebpay.expire_date', 7);

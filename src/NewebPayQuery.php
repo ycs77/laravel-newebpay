@@ -2,8 +2,6 @@
 
 namespace Ycs77\NewebPay;
 
-use Ycs77\NewebPay\Enums\RespondType;
-
 class NewebPayQuery extends BaseNewebPay
 {
     /**
@@ -26,21 +24,6 @@ class NewebPayQuery extends BaseNewebPay
         $this->checkValues['MerchantID'] = $this->merchantID;
 
         $this->apiPath('/API/QueryTradeInfo');
-        $this->respondType();
-    }
-
-    /**
-     * 回傳格式
-     *
-     * 回傳格式可設定 JSON 或 String。
-     */
-    public function respondType(RespondType $type = null)
-    {
-        $this->respondType = $type
-            ? $type->value
-            : $this->config->get('newebpay.respond_type')->value;
-
-        return $this;
     }
 
     /**
@@ -82,7 +65,7 @@ class NewebPayQuery extends BaseNewebPay
         return [
             'MerchantID' => $this->merchantID,
             'Version' => $this->config->get('newebpay.query_version'),
-            'RespondType' => $this->respondType,
+            'RespondType' => 'JSON',
             'CheckValue' => $CheckValue,
             'TimeStamp' => $this->timestamp,
             'MerchantOrderNo' => $this->checkValues['MerchantOrderNo'],

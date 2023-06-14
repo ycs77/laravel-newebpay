@@ -2,8 +2,6 @@
 
 namespace Ycs77\NewebPay;
 
-use Ycs77\NewebPay\Enums\RespondType;
-
 class NewebPayClose extends BaseNewebPay
 {
     /**
@@ -20,25 +18,9 @@ class NewebPayClose extends BaseNewebPay
 
         $this->postData['TimeStamp'] = $this->timestamp;
         $this->postData['Version'] = $this->config->get('newebpay.credit_close_version');
+        $this->postData['RespondType'] = 'JSON';
 
         $this->apiPath('/API/CreditCard/Close');
-        $this->respondType();
-    }
-
-    /**
-     * 回傳格式
-     *
-     * 回傳格式可設定 JSON 或 String。
-     */
-    public function respondType(RespondType $type = null)
-    {
-        $this->respondType = $type
-            ? $type->value
-            : $this->config->get('newebpay.respond_type')->value;
-
-        $this->postData['RespondType'] = $this->respondType;
-
-        return $this;
     }
 
     /**

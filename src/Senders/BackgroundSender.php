@@ -4,16 +4,10 @@ namespace Ycs77\NewebPay\Senders;
 
 use GuzzleHttp\Client;
 use Ycs77\NewebPay\Contracts\Httpable;
-use Ycs77\NewebPay\Contracts\RespondTypeable;
 use Ycs77\NewebPay\Contracts\Sender;
 
-class BackgroundSender implements Sender, Httpable, RespondTypeable
+class BackgroundSender implements Sender, Httpable
 {
-    /**
-     * The API respond type.
-     */
-    protected string $respondType;
-
     public function __construct(
         protected Client $client
     ) {
@@ -29,11 +23,7 @@ class BackgroundSender implements Sender, Httpable, RespondTypeable
             'verify' => false,
         ];
 
-        $result = $this->http->post($url, $parameter)->getBody();
-
-        if ($this->respondType === 'JSON') {
-            $result = json_decode($result, true);
-        }
+        $result = json_decode($this->http->post($url, $parameter)->getBody(), true);
 
         return $result;
     }
@@ -44,16 +34,6 @@ class BackgroundSender implements Sender, Httpable, RespondTypeable
     public function setHttp(Client $client)
     {
         $this->http = $client;
-
-        return $this;
-    }
-
-    /**
-     * Respond type can setting "JSON" or "String".
-     */
-    public function respondType(string $type)
-    {
-        $this->respondType = $type;
 
         return $this;
     }

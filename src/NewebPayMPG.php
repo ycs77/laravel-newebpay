@@ -8,7 +8,6 @@ use Ycs77\NewebPay\Enums\CreditInst;
 use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LgsType;
-use Ycs77\NewebPay\Enums\RespondType;
 
 class NewebPayMPG extends BaseNewebPay
 {
@@ -29,9 +28,9 @@ class NewebPayMPG extends BaseNewebPay
         $this->tradeData['MerchantID'] = $this->merchantID;
         $this->tradeData['TimeStamp'] = $this->timestamp;
         $this->tradeData['Version'] = $this->config->get('newebpay.mpg_version');
+        $this->tradeData['RespondType'] = 'JSON';
 
         $this->apiPath('/MPG/mpg_gateway');
-        $this->respondType();
         $this->langType();
         $this->tradeLimit();
         $this->expireDate();
@@ -45,22 +44,6 @@ class NewebPayMPG extends BaseNewebPay
         $this->paymentMethods();
         $this->CVSCOM();
         $this->lgsType();
-    }
-
-    /**
-     * 回傳格式
-     *
-     * 回傳格式可設定 JSON 或 String。
-     */
-    public function respondType(RespondType $type = null)
-    {
-        $this->respondType = $type
-            ? $type->value
-            : $this->config->get('newebpay.respond_type')->value;
-
-        $this->tradeData['RespondType'] = $this->respondType;
-
-        return $this;
     }
 
     /**
