@@ -17,6 +17,61 @@ test('NewebPay cancel sender is background', function () {
     expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);
 });
 
+test('NewebPay cancel default post data', function () {
+    setTestNow();
+
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
+
+    $postData = $newebpay->postData();
+
+    expect($postData)->toBe([
+        'TimeStamp' => 1577836800,
+        'Version' => '1.0',
+        'RespondType' => 'JSON',
+        'NotifyURL' => 'http://localhost',
+    ]);
+});
+
+test('NewebPay cancel order post data with "MerchantOrderNo"', function () {
+    setTestNow();
+
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
+
+    $postData = $newebpay
+        ->cancelOrder('TestNo123456', 100, 'order')
+        ->postData();
+
+    expect($postData)->toBe([
+        'TimeStamp' => 1577836800,
+        'Version' => '1.0',
+        'RespondType' => 'JSON',
+        'NotifyURL' => 'http://localhost',
+        'MerchantOrderNo' => 'TestNo123456',
+        'IndexType' => 1,
+        'Amt' => 100,
+    ]);
+});
+
+test('NewebPay cancel order post data with "TradeNo"', function () {
+    setTestNow();
+
+    $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
+
+    $postData = $newebpay
+        ->cancelOrder('TestNo123456', 100, 'trade')
+        ->postData();
+
+    expect($postData)->toBe([
+        'TimeStamp' => 1577836800,
+        'Version' => '1.0',
+        'RespondType' => 'JSON',
+        'NotifyURL' => 'http://localhost',
+        'TradeNo' => 'TestNo123456',
+        'IndexType' => 2,
+        'Amt' => 100,
+    ]);
+});
+
 test('NewebPay cancel can be get request data', function () {
     setTestNow();
 

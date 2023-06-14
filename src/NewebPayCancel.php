@@ -7,9 +7,9 @@ use Ycs77\NewebPay\Enums\RespondType;
 class NewebPayCancel extends BaseNewebPay
 {
     /**
-     * The newebpay trade data.
+     * The newebpay post data.
      */
-    protected array $tradeData = [];
+    protected array $postData = [];
 
     /**
      * The newebpay boot hook.
@@ -18,8 +18,8 @@ class NewebPayCancel extends BaseNewebPay
     {
         $this->setBackgroundSender();
 
-        $this->tradeData['TimeStamp'] = $this->timestamp;
-        $this->tradeData['Version'] = $this->config->get('newebpay.credit_cancel_version');
+        $this->postData['TimeStamp'] = $this->timestamp;
+        $this->postData['Version'] = $this->config->get('newebpay.credit_cancel_version');
 
         $this->apiPath('/API/CreditCard/Cancel');
         $this->respondType();
@@ -37,7 +37,7 @@ class NewebPayCancel extends BaseNewebPay
             ? $type->value
             : $this->config->get('newebpay.respond_type')->value;
 
-        $this->tradeData['RespondType'] = $this->respondType;
+        $this->postData['RespondType'] = $this->respondType;
 
         return $this;
     }
@@ -50,7 +50,7 @@ class NewebPayCancel extends BaseNewebPay
      */
     public function notifyURL(string $url = null)
     {
-        $this->tradeData['NotifyURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.notify_url'));
+        $this->postData['NotifyURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.notify_url'));
 
         return $this;
     }
@@ -61,22 +61,30 @@ class NewebPayCancel extends BaseNewebPay
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
      * @param  string  $type  編號類型
-     *                        'order' => 使用商店訂單編號追蹤
-     *                        'trade' => 使用藍新金流交易序號追蹤
+     *                        * 'order' => 使用商店訂單編號追蹤
+     *                        * 'trade' => 使用藍新金流交易序號追蹤
      */
     public function cancelOrder(string $no, int $amt, string $type = 'order')
     {
         if ($type === 'order') {
-            $this->tradeData['MerchantOrderNo'] = $no;
-            $this->tradeData['IndexType'] = 1;
+            $this->postData['MerchantOrderNo'] = $no;
+            $this->postData['IndexType'] = 1;
         } elseif ($type === 'trade') {
-            $this->tradeData['TradeNo'] = $no;
-            $this->tradeData['IndexType'] = 2;
+            $this->postData['TradeNo'] = $no;
+            $this->postData['IndexType'] = 2;
         }
 
-        $this->tradeData['Amt'] = $amt;
+        $this->postData['Amt'] = $amt;
 
         return $this;
+    }
+
+    /**
+     * Get the newebpay post data.
+     */
+    public function postData(): array
+    {
+        return $this->postData;
     }
 
     /**
@@ -84,7 +92,7 @@ class NewebPayCancel extends BaseNewebPay
      */
     public function requestData(): array
     {
-        $postData = $this->encryptDataByAES($this->tradeData, $this->hashKey, $this->hashIV);
+        $postData = $this->encryptDataByAES($this->postData, $this->hashKey, $this->hashIV);
 
         return [
             'MerchantID_' => $this->merchantID,

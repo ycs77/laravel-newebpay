@@ -47,11 +47,6 @@ class NewebPayMPG extends BaseNewebPay
         $this->lgsType();
     }
 
-    public function getTradeData(): array
-    {
-        return $this->tradeData;
-    }
-
     /**
      * 回傳格式
      *
@@ -383,6 +378,14 @@ class NewebPayMPG extends BaseNewebPay
         $this->tradeData['Email'] = $email;
 
         return $this;
+    }
+
+    /**
+     * Get the newebpay trade data.
+     */
+    public function tradeData(): array
+    {
+        return $this->tradeData;
     }
 
     /**
