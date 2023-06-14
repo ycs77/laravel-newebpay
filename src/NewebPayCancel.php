@@ -23,7 +23,6 @@ class NewebPayCancel extends BaseNewebPay
 
         $this->apiPath('/API/CreditCard/Cancel');
         $this->respondType();
-        $this->notifyURL();
     }
 
     /**
@@ -38,19 +37,6 @@ class NewebPayCancel extends BaseNewebPay
             : $this->config->get('newebpay.respond_type')->value;
 
         $this->postData['RespondType'] = $this->respondType;
-
-        return $this;
-    }
-
-    /**
-     * 付款完成後的通知連結
-     *
-     * 以幕後方式回傳給商店相關支付結果資料
-     * 僅接受 port 80 或 443。
-     */
-    public function notifyURL(string $url = null)
-    {
-        $this->postData['NotifyURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.notify_url'));
 
         return $this;
     }
