@@ -35,9 +35,9 @@ class TestCase extends BaseTestCase
             $config->set('newebpay.lang_type', 'zh-tw');
             $config->set('newebpay.trade_limit', 0);
             $config->set('newebpay.expire_date', 7);
-            $config->set('newebpay.return_url', null);
-            $config->set('newebpay.notify_url', null);
-            $config->set('newebpay.customer_url', null);
+            $config->set('newebpay.return_url', '/pay/callback');
+            $config->set('newebpay.notify_url', '/pay/notify');
+            $config->set('newebpay.customer_url', '/pay/customer');
             $config->set('newebpay.client_back_url', null);
             $config->set('newebpay.with_session_id', false);
             $config->set('newebpay.email_modify', false);

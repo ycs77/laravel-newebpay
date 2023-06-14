@@ -95,10 +95,12 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function returnURL(string $url = null)
     {
-        $this->tradeData['ReturnURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.return_url'));
+        if ($url = $url ?? $this->config->get('newebpay.return_url')) {
+            $this->tradeData['ReturnURL'] = $this->config->get('app.url').$url;
 
-        if ($this->config->get('newebpay.with_session_id')) {
-            $this->withSessionId('ReturnURL');
+            if ($this->config->get('newebpay.with_session_id')) {
+                $this->withSessionId('ReturnURL');
+            }
         }
 
         return $this;
@@ -112,7 +114,9 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function notifyURL(string $url = null)
     {
-        $this->tradeData['NotifyURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.notify_url'));
+        if ($url = $url ?? $this->config->get('newebpay.notify_url')) {
+            $this->tradeData['NotifyURL'] = $this->config->get('app.url').$url;
+        }
 
         return $this;
     }
@@ -124,10 +128,12 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function customerURL(string $url = null)
     {
-        $this->tradeData['CustomerURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.customer_url'));
+        if ($url = $url ?? $this->config->get('newebpay.customer_url')) {
+            $this->tradeData['CustomerURL'] = $this->config->get('app.url').$url;
 
-        if ($this->config->get('newebpay.with_session_id')) {
-            $this->withSessionId('CustomerURL');
+            if ($this->config->get('newebpay.with_session_id')) {
+                $this->withSessionId('CustomerURL');
+            }
         }
 
         return $this;
@@ -140,7 +146,9 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function clientBackURL(string $url = null)
     {
-        $this->tradeData['ClientBackURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.client_back_url'));
+        if ($url = $url ?? $this->config->get('newebpay.client_back_url')) {
+            $this->tradeData['ClientBackURL'] = $this->config->get('app.url').$url;
+        }
 
         return $this;
     }

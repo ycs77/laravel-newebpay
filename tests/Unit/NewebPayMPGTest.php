@@ -37,10 +37,9 @@ test('NewebPay MPG default TradeData', function () {
         'LangType' => 'zh-tw',
         'TradeLimit' => 0,
         'ExpireDate' => '20200108',
-        'ReturnURL' => 'http://localhost',
-        'NotifyURL' => 'http://localhost',
-        'CustomerURL' => 'http://localhost',
-        'ClientBackURL' => 'http://localhost',
+        'ReturnURL' => 'http://localhost/pay/callback',
+        'NotifyURL' => 'http://localhost/pay/notify',
+        'CustomerURL' => 'http://localhost/pay/customer',
         'EmailModify' => 0,
         'LoginType' => 0,
         'OrderComment' => null,
@@ -299,8 +298,8 @@ test('NewebPay MPG can be get request data', function () {
     $requestData = $newebpay->requestData();
 
     expect($requestData['MerchantID'])->toBe('TestMerchantID1234');
-    expect($requestData['TradeInfo'])->toBe('59baba7fcc0fdce1f08910990735fce0f1531156700405540589c4e8cee8329d37876b24661b165bdb0d568f039510aa8c554894a3e52c63538e4d6c5b1d97ba1bd67ed7c219136b745fba38fbff2e5e133c68562c4f95349b62e9692107cafda1adc6a6debfee3d21c43ef39f8b86119f6c600632619f3d5386a2eb2d3d3367dcd2f6b8bc5f400dd480e21977588750b56254eaa72b7a4f934c17316af8f3a5fa78f42692c2254b275051cc241cf1cc015366081d37c1c7eee766e03242194e3277b483247daa46c5ce80d04f5b1f1c3ef820fd671f745962f78c42bafb06439f59db0f5fa83e41bfa8ada59d6c84b27695445b6dd4d8b1278594054c119c7793a94662cc925004aad6404adf13df679f86a7c210b9a723b5e26cfba8e74cfc7bb62622f083a95971b19b8bca913b6af825304389cf5ac833ece4a6879c9930');
-    expect($requestData['TradeSha'])->toBe('8A38D13011E8F9A1388561F401E5E0D1AACD0A346417F6AF2E634FB27B1D0288');
+    expect($requestData['TradeInfo'])->toBe('59baba7fcc0fdce1f08910990735fce0f1531156700405540589c4e8cee8329d37876b24661b165bdb0d568f039510aa8c554894a3e52c63538e4d6c5b1d97ba1bd67ed7c219136b745fba38fbff2e5e133c68562c4f95349b62e9692107cafda1adc6a6debfee3d21c43ef39f8b86119f6c600632619f3d5386a2eb2d3d3367dcd2f6b8bc5f400dd480e21977588750b56254eaa72b7a4f934c17316af8f3a554f7558f87d1b4f087fdcb6c55175c83bfb9525bf2f0689a06c451e480d66689b0e058a137d7c837af2bfb59925b603b68beedf7d6ed1bac4775350f43ee8205504062dd88987473aca1a941cb9cbf8f2c82224eec9ed5a933abbe527d2a616440b8dfaf091917768023aa0d1f5aef0a50e722bb3906358987c19cb2ffc058eb11fba7b46e096a0664c9eb11701df96c50a28800848f7955051f41353e1e6df2');
+    expect($requestData['TradeSha'])->toBe('C0B415098C8CFD21AADA1AD50D5AAFAC26A9CEEA4DB0BC072FB4E0BE482B268B');
     expect($requestData['Version'])->toBe('2.0');
 });
 
@@ -319,5 +318,5 @@ test('NewebPay MPG can be submit', function () {
         ->setSender($sender)
         ->submit();
 
-    expect($result)->toBe('<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><form id="order-form" method="post" action="https://ccore.newebpay.com/MPG/mpg_gateway"><input type="hidden" name="MerchantID" value="TestMerchantID1234"><input type="hidden" name="TradeInfo" value="59baba7fcc0fdce1f08910990735fce0f1531156700405540589c4e8cee8329d37876b24661b165bdb0d568f039510aa8c554894a3e52c63538e4d6c5b1d97ba1bd67ed7c219136b745fba38fbff2e5e133c68562c4f95349b62e9692107cafda1adc6a6debfee3d21c43ef39f8b86119f6c600632619f3d5386a2eb2d3d3367dcd2f6b8bc5f400dd480e21977588750b56254eaa72b7a4f934c17316af8f3a5fa78f42692c2254b275051cc241cf1cc015366081d37c1c7eee766e03242194e3277b483247daa46c5ce80d04f5b1f1c3ef820fd671f745962f78c42bafb06439f59db0f5fa83e41bfa8ada59d6c84b27695445b6dd4d8b1278594054c119c7793a94662cc925004aad6404adf13df679f86a7c210b9a723b5e26cfba8e74cfc615ac11d9e7990746613ae35b3386778f80f50ec7b1b38458c51fcf7a5c0bb26a48406b9093b18d01f0cd311272794d5553adee40ce16acc75a29444014adb37a7087f62d9676a951f1308dd05ab9003a6367d9207b235916586ee9ae85cc13447f1d21c56e6f75a9effd62fcf74870c55506679fabf725c7f29a8fb8e82d9ce"><input type="hidden" name="TradeSha" value="93E301B57B0DEE6E42D1BB3A4C24088ACAA0F28FAFFC88B3ABA058D052C61A4E"><input type="hidden" name="Version" value="2.0"></form><script>document.getElementById("order-form").submit();</script></body></html>');
+    expect($result)->toBe('<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><form id="order-form" method="post" action="https://ccore.newebpay.com/MPG/mpg_gateway"><input type="hidden" name="MerchantID" value="TestMerchantID1234"><input type="hidden" name="TradeInfo" value="59baba7fcc0fdce1f08910990735fce0f1531156700405540589c4e8cee8329d37876b24661b165bdb0d568f039510aa8c554894a3e52c63538e4d6c5b1d97ba1bd67ed7c219136b745fba38fbff2e5e133c68562c4f95349b62e9692107cafda1adc6a6debfee3d21c43ef39f8b86119f6c600632619f3d5386a2eb2d3d3367dcd2f6b8bc5f400dd480e21977588750b56254eaa72b7a4f934c17316af8f3a554f7558f87d1b4f087fdcb6c55175c83bfb9525bf2f0689a06c451e480d66689b0e058a137d7c837af2bfb59925b603b68beedf7d6ed1bac4775350f43ee8205504062dd88987473aca1a941cb9cbf8f2c82224eec9ed5a933abbe527d2a616440b8dfaf091917768023aa0d1f5aef0a50e722bb3906358987c19cb2ffc058eb11fba7b46e096a0664c9eb11701df96c38f41dfb6ee2714eaa5d5db73b729a1dbed0f1594e0fdb35deda27a8e9394a045c01557a01ab1f085002454e39d25abedea5565e3c44ee384db3ec6cde7e3588b1f2c183b2fa3cf152851b775a473b8af2fef09b3b59444540356e3041effb52104f2650afcc58ebf7f362b11f6166e864ce3a27bcf6635af5eeeb9ee0480898cde35b5e60b05afca577f5ee76c524e1"><input type="hidden" name="TradeSha" value="DB9965052554FAAB09E042D8252708D85FC35D71A74BF848E75D20FBBD1209C0"><input type="hidden" name="Version" value="2.0"></form><script>document.getElementById("order-form").submit();</script></body></html>');
 });
