@@ -16,7 +16,8 @@ class BackgroundSender implements Sender, Httpable, RespondTypeable
 
     public function __construct(
         protected Client $client
-    ) {}
+    ) {
+    }
 
     /**
      * Send the data to API.

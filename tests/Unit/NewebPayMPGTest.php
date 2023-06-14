@@ -1,7 +1,6 @@
 <?php
 
 use Mockery as m;
-use Ycs77\LaravelRecoverSession\UserSource;
 use Ycs77\NewebPay\Enums\Bank;
 use Ycs77\NewebPay\Enums\CreditInst;
 use Ycs77\NewebPay\Enums\CreditRememberDemand;

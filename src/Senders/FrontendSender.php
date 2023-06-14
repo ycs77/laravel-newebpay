@@ -11,7 +11,8 @@ class FrontendSender implements Sender, UserSourceable
 {
     public function __construct(
         protected UserSource $userSource
-    ) {}
+    ) {
+    }
 
     /**
      * Preserve the user information into session.
