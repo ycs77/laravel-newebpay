@@ -305,9 +305,9 @@ class NewebPayMPG extends BaseNewebPay
      * * 例：會員編號、Email。
      * * 限英、數字，「.」、「_」、「@」、「-」格式。
      * @param \Ycs77\NewebPay\Enums\CreditRememberDemand $demand 指定付款人信用卡快速結帳必填欄位
-     * * **CreditInst::EXPIRATION_DATE_AND_CVC**  必填信用卡到期日與背面末三碼
-     * * **CreditInst::EXPIRATION_DATE**                    必填信用卡到期日
-     * * **CreditInst::CVC**                      必填背面末三碼
+     * * **CreditRememberDemand::EXPIRATION_DATE_AND_CVC**  必填信用卡到期日與背面末三碼
+     * * **CreditRememberDemand::EXPIRATION_DATE**          必填信用卡到期日
+     * * **CreditRememberDemand::CVC**                      必填背面末三碼
      */
     public function creditRemember(string $identifier, CreditRememberDemand $demand = null)
     {
