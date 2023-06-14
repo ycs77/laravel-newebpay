@@ -17,23 +17,13 @@ class NewebPayCancel extends BaseNewebPay
     public function boot(): void
     {
         $this->tradeData['TimeStamp'] = $this->timestamp;
+        $this->tradeData['Version'] = $this->config->get('newebpay.credit_cancel_version');
 
         $this->setApiPath('/API/CreditCard/Cancel');
         $this->setBackgroundSender();
 
-        $this->setVersion();
         $this->setRespondType();
         $this->setNotifyURL();
-    }
-
-    /**
-     * 串接版本
-     */
-    public function setVersion(string $version = null)
-    {
-        $this->tradeData['Version'] = $version ?? $this->config->get('newebpay.version');
-
-        return $this;
     }
 
     /**

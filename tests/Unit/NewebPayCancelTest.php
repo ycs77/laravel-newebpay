@@ -25,7 +25,7 @@ test('NewebPay cancel can be get request data', function () {
     $requestData = $newebpay->getRequestData();
 
     expect($requestData['MerchantID_'])->toBe('TestMerchantID1234');
-    expect($requestData['PostData_'])->toBe('e88e33cc07d106bcba1c1bd02d5d421f9c4dc994fdb1a0acb2c79d95ee134b224e2d30fda9b31515d49d15c31b82cc10fdf973050257254be056f55b71c290876bf945b919aa697d0834872ada92e3fe58d1b25c1e6ae75cc821cedac1bc11dd');
+    expect($requestData['PostData_'])->toBe('e88e33cc07d106bcba1c1bd02d5d421f3f0bcd99f286b2bf5de5c492d9a35effa2f9bfa4444860e8cdca7356a5e80ef9bf12a2bfc495dc80815c851e7107f0b7714c4624aa129262e4bbb0a5cb02e3371ea1d7b5525e971be952b1d1a6368ab6');
 });
 
 test('NewebPay cancel can be submit', function () {

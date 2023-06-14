@@ -25,7 +25,7 @@ test('NewebPay close can be get request data', function () {
     $requestData = $newebpay->getRequestData();
 
     expect($requestData['MerchantID_'])->toBe('TestMerchantID1234');
-    expect($requestData['PostData_'])->toBe('e88e33cc07d106bcba1c1bd02d5d421f9c4dc994fdb1a0acb2c79d95ee134b224e2d30fda9b31515d49d15c31b82cc10fdf973050257254be056f55b71c290876bf945b919aa697d0834872ada92e3fe58d1b25c1e6ae75cc821cedac1bc11dd');
+    expect($requestData['PostData_'])->toBe('e88e33cc07d106bcba1c1bd02d5d421fe388e2693f8650b343563c222b888351c8621daeed9525d76478c3dc00f4054f1f29d08ddacef23d54447502d4bea5d44ef78d32986b84fa283e2d98194249e5ee0be935b573ec85f5ea51b0f9c95a24');
 });
 
 test('NewebPay close can be submit', function () {

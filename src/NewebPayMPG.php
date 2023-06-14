@@ -26,11 +26,11 @@ class NewebPayMPG extends BaseNewebPay
     {
         $this->tradeData['MerchantID'] = $this->merchantID;
         $this->tradeData['TimeStamp'] = $this->timestamp;
+        $this->tradeData['Version'] = $this->config->get('newebpay.mpg_version');
 
         $this->setApiPath('/MPG/mpg_gateway');
         $this->setFrontendSender();
 
-        $this->setVersion();
         $this->setRespondType();
         $this->setLangType();
         $this->setTradeLimit();
@@ -50,16 +50,6 @@ class NewebPayMPG extends BaseNewebPay
     public function getTradeData(): array
     {
         return $this->tradeData;
-    }
-
-    /**
-     * 串接版本
-     */
-    public function setVersion(string $version = null)
-    {
-        $this->tradeData['Version'] = $version ?? $this->config->get('newebpay.version');
-
-        return $this;
     }
 
     /**
