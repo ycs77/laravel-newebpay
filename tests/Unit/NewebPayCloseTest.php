@@ -11,7 +11,7 @@ test('NewebPay close can be get url', function () {
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/CreditCard/Close');
 });
 
-test('NewebPay close sender is sync', function () {
+test('NewebPay close sender is background', function () {
     $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
 
     expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);

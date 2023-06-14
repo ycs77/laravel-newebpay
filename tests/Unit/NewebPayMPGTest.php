@@ -20,7 +20,7 @@ test('NewebPay MPG can be get url', function () {
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/MPG/mpg_gateway');
 });
 
-test('NewebPay MPG sender is sync', function () {
+test('NewebPay MPG sender is frontend', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'), app(UserSource::class));
 
     expect($newebpay->getSender())->toBeInstanceOf(FrontendSender::class);

@@ -11,7 +11,7 @@ test('NewebPay query can be get url', function () {
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/QueryTradeInfo');
 });
 
-test('NewebPay query sender is sync', function () {
+test('NewebPay query sender is background', function () {
     $newebpay = new NewebPayQuery(app('config'), app('session.store'), app(UserSource::class));
 
     expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);

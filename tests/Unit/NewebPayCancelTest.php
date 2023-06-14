@@ -11,7 +11,7 @@ test('NewebPay cancel can be get url', function () {
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/CreditCard/Cancel');
 });
 
-test('NewebPay cancel sender is sync', function () {
+test('NewebPay cancel sender is background', function () {
     $newebpay = new NewebPayCancel(app('config'), app('session.store'), app(UserSource::class));
 
     expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);
