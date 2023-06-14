@@ -7,5 +7,5 @@ interface Sender
     /**
      * Send the data to API.
      */
-    public function send(array $request, string $url): mixed;
+    public function send(array $data, string $url): mixed;
 }

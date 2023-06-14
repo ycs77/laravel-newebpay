@@ -7,6 +7,7 @@ use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Request;
 use Ycs77\LaravelRecoverSession\UserSource;
+use Ycs77\NewebPay\Contracts\HasRespondType;
 
 abstract class BaseNewebPay
 {
@@ -47,6 +48,11 @@ abstract class BaseNewebPay
      * Now timestamp.
      */
     protected int $timestamp;
+
+    /**
+     * The newebpay respond type.
+     */
+    protected string $respondType;
 
     /**
      * Create a new base newebpay instance.
@@ -119,6 +125,10 @@ abstract class BaseNewebPay
     public function submit(): mixed
     {
         $this->userSource->preserve(Request::instance());
+
+        if ($this->sender instanceof HasRespondType && $this->respondType) {
+            $this->sender->setRespondType($this->respondType);
+        }
 
         return $this->sender->send($this->getRequestData(), $this->url);
     }

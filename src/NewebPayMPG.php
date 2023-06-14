@@ -69,9 +69,11 @@ class NewebPayMPG extends BaseNewebPay
      */
     public function setRespondType(RespondType $type = null)
     {
-        $this->tradeData['RespondType'] = $type
+        $this->respondType = $type
             ? $type->value
             : $this->config->get('newebpay.respond_type')->value;
+
+        $this->tradeData['RespondType'] = $this->respondType;
 
         return $this;
     }

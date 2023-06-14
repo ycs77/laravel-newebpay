@@ -6,5 +6,8 @@ use GuzzleHttp\Client;
 
 interface HasHttp
 {
+    /**
+     * Set the http client instance.
+     */
     public function setHttp(Client $client);
 }

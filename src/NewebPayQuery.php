@@ -12,11 +12,6 @@ class NewebPayQuery extends BaseNewebPay
     protected array $checkValues = [];
 
     /**
-     * The newebpay respond type.
-     */
-    protected string $respondType;
-
-    /**
      * The newebpay gateway data.
      */
     protected ?string $gateway = null;
