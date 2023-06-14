@@ -17,6 +17,72 @@ test('NewebPay close sender is background', function () {
     expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);
 });
 
+test('NewebPay close post data for request pay', function () {
+    setTestNow();
+
+    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+
+    $newebpay
+        ->closeOrder('TestNo123456', 100, 'order')
+        ->pay();
+
+    expect($newebpay->postData())->toHaveKey('MerchantOrderNo', 'TestNo123456');
+    expect($newebpay->postData())->toHaveKey('IndexType', 1);
+    expect($newebpay->postData())->toHaveKey('Amt', 100);
+    expect($newebpay->postData())->toHaveKey('CloseType', 1);
+    expect($newebpay->postData())->not->toHaveKey('Cancel');
+});
+
+test('NewebPay close post data for request refund', function () {
+    setTestNow();
+
+    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+
+    $newebpay
+        ->closeOrder('TestNo123456', 100, 'order')
+        ->refund();
+
+    expect($newebpay->postData())->toHaveKey('MerchantOrderNo', 'TestNo123456');
+    expect($newebpay->postData())->toHaveKey('IndexType', 1);
+    expect($newebpay->postData())->toHaveKey('Amt', 100);
+    expect($newebpay->postData())->toHaveKey('CloseType', 2);
+    expect($newebpay->postData())->not->toHaveKey('Cancel');
+});
+
+test('NewebPay close post data for cancel request pay', function () {
+    setTestNow();
+
+    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+
+    $newebpay
+        ->closeOrder('TestNo123456', 100, 'order')
+        ->pay()
+        ->cancel();
+
+    expect($newebpay->postData())->toHaveKey('MerchantOrderNo', 'TestNo123456');
+    expect($newebpay->postData())->toHaveKey('IndexType', 1);
+    expect($newebpay->postData())->toHaveKey('Amt', 100);
+    expect($newebpay->postData())->toHaveKey('CloseType', 1);
+    expect($newebpay->postData())->toHaveKey('Cancel', 1);
+});
+
+test('NewebPay close post data for cancel request refund', function () {
+    setTestNow();
+
+    $newebpay = new NewebPayClose(app('config'), app('session.store'), app(UserSource::class));
+
+    $newebpay
+        ->closeOrder('TestNo123456', 100, 'order')
+        ->refund()
+        ->cancel();
+
+    expect($newebpay->postData())->toHaveKey('MerchantOrderNo', 'TestNo123456');
+    expect($newebpay->postData())->toHaveKey('IndexType', 1);
+    expect($newebpay->postData())->toHaveKey('Amt', 100);
+    expect($newebpay->postData())->toHaveKey('CloseType', 2);
+    expect($newebpay->postData())->toHaveKey('Cancel', 1);
+});
+
 test('NewebPay close can be get request data', function () {
     setTestNow();
 

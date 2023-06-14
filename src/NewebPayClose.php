@@ -7,9 +7,9 @@ use Ycs77\NewebPay\Enums\RespondType;
 class NewebPayClose extends BaseNewebPay
 {
     /**
-     * The newebpay trade data.
+     * The newebpay post data.
      */
-    protected array $tradeData = [];
+    protected array $postData = [];
 
     /**
      * The newebpay boot hook.
@@ -18,8 +18,8 @@ class NewebPayClose extends BaseNewebPay
     {
         $this->setBackgroundSender();
 
-        $this->tradeData['TimeStamp'] = $this->timestamp;
-        $this->tradeData['Version'] = $this->config->get('newebpay.credit_close_version');
+        $this->postData['TimeStamp'] = $this->timestamp;
+        $this->postData['Version'] = $this->config->get('newebpay.credit_close_version');
 
         $this->apiPath('/API/CreditCard/Close');
         $this->respondType();
@@ -37,7 +37,7 @@ class NewebPayClose extends BaseNewebPay
             ? $type->value
             : $this->config->get('newebpay.respond_type')->value;
 
-        $this->tradeData['RespondType'] = $this->respondType;
+        $this->postData['RespondType'] = $this->respondType;
 
         return $this;
     }
@@ -50,33 +50,49 @@ class NewebPayClose extends BaseNewebPay
      */
     public function notifyURL(string $url = null)
     {
-        $this->tradeData['NotifyURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.notify_url'));
+        $this->postData['NotifyURL'] = $this->config->get('app.url').($url ?? $this->config->get('newebpay.notify_url'));
 
         return $this;
     }
 
     /**
-     * 設定請退款的模式
+     * 設定請退款的訂單內容
      *
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
      * @param  string  $type  編號類型
-     *                        'order' => 使用商店訂單編號追蹤
-     *                        'trade' => 使用藍新金流交易序號追蹤
+     *                        * 'order' => 使用商店訂單編號追蹤
+     *                        * 'trade' => 使用藍新金流交易序號追蹤
      */
     public function closeOrder(string $no, int $amt, string $type = 'order')
     {
         if ($type === 'order') {
-            $this->tradeData['MerchantOrderNo'] = $no;
-            $this->tradeData['IndexType'] = 1;
+            $this->postData['MerchantOrderNo'] = $no;
+            $this->postData['IndexType'] = 1;
         } elseif ($type === 'trade') {
-            $this->tradeData['TradeNo'] = $no;
-            $this->tradeData['IndexType'] = 2;
+            $this->postData['TradeNo'] = $no;
+            $this->postData['IndexType'] = 2;
         }
 
-        $this->tradeData['Amt'] = $amt;
+        $this->postData['Amt'] = $amt;
 
         return $this;
+    }
+
+    /**
+     * 設定請款
+     */
+    public function pay()
+    {
+        return $this->closeType('pay');
+    }
+
+    /**
+     * 設定退款
+     */
+    public function refund()
+    {
+        return $this->closeType('refund');
     }
 
     /**
@@ -86,22 +102,35 @@ class NewebPayClose extends BaseNewebPay
      *                        'pay': 請款
      *                        'refund': 退款
      */
-    public function closeType(string $type = 'pay')
+    public function closeType(string $type)
     {
         if ($type === 'pay') {
-            $this->tradeData['CloseType'] = 1;
+            $this->postData['CloseType'] = 1;
         } elseif ($type === 'refund') {
-            $this->tradeData['CloseType'] = 2;
+            $this->postData['CloseType'] = 2;
         }
 
         return $this;
     }
 
-    public function cancel(bool $isCancel = false)
+    /**
+     * 取消請款或退款
+     */
+    public function cancel(bool $isCancel = true)
     {
-        $this->tradeData['Cancel'] = $isCancel;
+        if ($isCancel) {
+            $this->postData['Cancel'] = 1;
+        }
 
         return $this;
+    }
+
+    /**
+     * Get the newebpay post data.
+     */
+    public function postData(): array
+    {
+        return $this->postData;
     }
 
     /**
@@ -109,7 +138,7 @@ class NewebPayClose extends BaseNewebPay
      */
     public function requestData(): array
     {
-        $postData = $this->encryptDataByAES($this->tradeData, $this->hashKey, $this->hashIV);
+        $postData = $this->encryptDataByAES($this->postData, $this->hashKey, $this->hashIV);
 
         return [
             'MerchantID_' => $this->merchantID,

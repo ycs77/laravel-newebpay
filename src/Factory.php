@@ -81,14 +81,15 @@ class Factory
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
      * @param  string  $type  編號類型
-     *                        'order' => 使用商店訂單編號追蹤
-     *                        'trade' => 使用藍新金流交易序號追蹤
+     *                        * 'order' => 使用商店訂單編號追蹤
+     *                        * 'trade' => 使用藍新金流交易序號追蹤
      */
     public function requestPayment(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         $newebPay = new NewebPayClose($this->config, $this->session, $this->userSource);
-        $newebPay->closeOrder($no, $amt, $type);
-        $newebPay->closeType('pay');
+        $newebPay
+            ->closeOrder($no, $amt, $type)
+            ->pay();
 
         return $newebPay;
     }
@@ -99,14 +100,15 @@ class Factory
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
      * @param  string  $type  編號類型
-     *                        'order' => 使用商店訂單編號追蹤
-     *                        'trade' => 使用藍新金流交易序號追蹤
+     *                        * 'order' => 使用商店訂單編號追蹤
+     *                        * 'trade' => 使用藍新金流交易序號追蹤
      */
     public function requestRefund(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         $newebPay = new NewebPayClose($this->config, $this->session, $this->userSource);
-        $newebPay->closeOrder($no, $amt, $type);
-        $newebPay->closeType('refund');
+        $newebPay
+            ->closeOrder($no, $amt, $type)
+            ->refund();
 
         return $newebPay;
     }
