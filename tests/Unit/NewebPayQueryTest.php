@@ -35,6 +35,19 @@ test('NewebPay query can be get request data', function () {
     expect($requestData['Amt'])->toBe(100);
 });
 
+test('NewebPay query can be set gateway is "Composite"', function () {
+    setTestNow();
+
+    $newebpay = new NewebPayQuery(app('config'), app('session.store'), app(UserSource::class));
+
+    $requestData = $newebpay
+        ->setQuery('TestNo123456', 100)
+        ->setGateway('Composite')
+        ->getRequestData();
+
+    expect($requestData)->toHaveKey('Gateway', 'Composite');
+});
+
 test('NewebPay query can be submit', function () {
     setTestNow();
 

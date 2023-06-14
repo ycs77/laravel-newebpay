@@ -21,12 +21,12 @@ class NewebPayQuery extends BaseNewebPay
      */
     public function boot(): void
     {
+        $this->checkValues['MerchantID'] = $this->merchantID;
+
         $this->setApiPath('/API/QueryTradeInfo');
         $this->setBackgroundSender();
 
         $this->setRespondType();
-
-        $this->checkValues['MerchantID'] = $this->merchantID;
     }
 
     /**
