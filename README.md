@@ -167,6 +167,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/pay/callback',
         '/pay/notify',
+        '/pay/customer',
     ];
 }
 ```
@@ -205,8 +206,15 @@ class Kernel extends HttpKernel
 然後可以為 API 的 callback 路由加上 `RecoverSession` 中間件，會自動從 callback 網址中讀取加密過的 session id 並設定回原本的 session 狀態：
 
 ```php
+use Ycs77\LaravelRecoverSession\Middleware\RecoverSession;
+
 Route::post('/pay/callback', [PaymentController::class, 'callback'])
-    ->middleware(\Ycs77\LaravelRecoverSession\Middleware\RecoverSession::class);
+    ->middleware([RecoverSession::class, 'auth']);
+
+Route::post('/pay/notify', [PaymentController::class, 'notify']);
+
+Route::any('/pay/customer', [PaymentController::class, 'customer'])
+    ->middleware([RecoverSession::class]);
 ```
 
 > 詳細跟 SameSite 相關可參考: https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure

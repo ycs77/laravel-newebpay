@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay;
 
-class NewebPayClose extends BaseNewebPay
+class NewebPayClose extends NewebPayRequest
 {
     /**
      * The newebpay post data.

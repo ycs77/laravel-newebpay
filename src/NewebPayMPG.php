@@ -9,7 +9,7 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LgsType;
 
-class NewebPayMPG extends BaseNewebPay
+class NewebPayMPG extends NewebPayRequest
 {
     use Concerns\WithSessionId;
 

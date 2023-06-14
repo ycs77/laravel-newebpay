@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay;
 
-class NewebPayQuery extends BaseNewebPay
+class NewebPayQuery extends NewebPayRequest
 {
     /**
      * The newebpay check values data.

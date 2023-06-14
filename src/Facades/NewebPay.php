@@ -3,15 +3,16 @@
 namespace Ycs77\NewebPay\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Ycs77\NewebPay\Testing\EncryptTradeDataTesting;
 
 /**
  * @method static \Ycs77\NewebPay\NewebPayMPG payment(string $no, int $amt, string $desc, string $email)
+ * @method static \Ycs77\NewebPay\Results\MPGResult result(\Illuminate\Http\Request $request)
+ * @method static \Ycs77\NewebPay\Results\CustomerResult customer(\Illuminate\Http\Request $request)
  * @method static \Ycs77\NewebPay\NewebPayQuery query(string $no, int $amt)
  * @method static \Ycs77\NewebPay\NewebPayCancel creditCancel(string $no, int $amt, string $type = 'order')
  * @method static \Ycs77\NewebPay\NewebPayClose requestPayment(string $no, int $amt, string $type = 'order')
  * @method static \Ycs77\NewebPay\NewebPayClose requestRefund(string $no, int $amt, string $type = 'order')
- * @method static mixed decode(string $encryptString)
- * @method static mixed decodeFromRequest()
  *
  * @see \Ycs77\NewebPay\Factory
  */
@@ -25,5 +26,20 @@ class NewebPay extends Facade
     protected static function getFacadeAccessor()
     {
         return \Ycs77\NewebPay\Factory::class;
+    }
+
+    /**
+     * Encryption the fake trade data for testing.
+     */
+    public static function encryptTradeDataForTesting(array $tradeData): array
+    {
+        $response = new EncryptTradeDataTesting(
+            static::$app->make('config'),
+            static::$app->make('session.store')
+        );
+
+        $response->setTradeData($tradeData);
+
+        return $response->encryptData();
     }
 }

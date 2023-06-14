@@ -2,11 +2,16 @@
 
 namespace Ycs77\NewebPay\Concerns;
 
+use Throwable;
+use Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException;
+
 trait HasEncryption
 {
-    protected function encryptDataByAES(array $parameter, string $hashKey, string $hashIV): string
+    protected function encryptDataByAES(array $parameter, string $hashKey, string $hashIV, string $type = 'String'): string
     {
-        $postDataStr = http_build_query($parameter);
+        $postDataStr = $type === 'JSON'
+            ? json_encode($parameter)
+            : http_build_query($parameter);
 
         return trim(bin2hex(openssl_encrypt($this->addPadding($postDataStr), 'AES-256-CBC', $hashKey, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $hashIV)));
     }
@@ -53,5 +58,21 @@ trait HasEncryption
         }
 
         return false;
+    }
+
+    /**
+     * 解碼加密字串
+     *
+     * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
+     */
+    protected function decode(string $encryptString): mixed
+    {
+        try {
+            $decryptString = $this->decryptDataByAES($encryptString, $this->hashKey, $this->hashIV);
+
+            return json_decode($decryptString, true);
+        } catch (Throwable $e) {
+            throw new NewebpayDecodeFailException($e, $encryptString);
+        }
     }
 }

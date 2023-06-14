@@ -4,15 +4,12 @@ namespace Ycs77\NewebPay;
 
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Session\Session;
-use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Facades\Request;
-use Throwable;
-use Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException;
+use Illuminate\Http\Request;
+use Ycs77\NewebPay\Results\CustomerResult;
+use Ycs77\NewebPay\Results\MPGResult;
 
 class Factory
 {
-    use Concerns\HasEncryption;
-
     /**
      * Create a new newebpay factory instance.
      */
@@ -20,10 +17,6 @@ class Factory
         protected Config $config,
         protected Session $session
     ) {
-        $this->config = $config;
-        $this->session = $session;
-        $this->hashKey = $this->config->get('newebpay.hash_key');
-        $this->hashIV = $this->config->get('newebpay.hash_iv');
     }
 
     /**
@@ -40,6 +33,28 @@ class Factory
         $newebPay->order($no, $amt, $desc, $email);
 
         return $newebPay;
+    }
+
+    /**
+     * MPG 交易回應結果
+     */
+    public function result(Request $request): MPGResult
+    {
+        $result = new NewebPayResult($this->config, $this->session);
+
+        return $result->result($request);
+    }
+
+    /**
+     * MPG 付款取號
+     *
+     * 適用交易類別：超商代碼、超商條碼、超商取貨付款、ATM
+     */
+    public function customer(Request $request): CustomerResult
+    {
+        $result = new NewebPayCustomer($this->config, $this->session);
+
+        return $result->result($request);
     }
 
     /**
@@ -109,33 +124,5 @@ class Factory
             ->refund();
 
         return $newebPay;
-    }
-
-    /**
-     * 解碼加密字串
-     *
-     * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
-     */
-    public function decode(string $encryptString): mixed
-    {
-        try {
-            $decryptString = $this->decryptDataByAES($encryptString, $this->hashKey, $this->hashIV);
-
-            return json_decode($decryptString, true);
-        } catch (Throwable $e) {
-            throw new NewebpayDecodeFailException($e, $encryptString);
-        }
-    }
-
-    /**
-     * 從 request 取得解碼加密字串
-     *
-     * @throws \Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException
-     */
-    public function decodeFromRequest(HttpRequest $request = null): mixed
-    {
-        $request = $request ?? Request::instance();
-
-        return $this->decode($request->input('TradeInfo'));
     }
 }
