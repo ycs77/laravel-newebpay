@@ -32,17 +32,33 @@ php artisan vendor:publish --provider="Ycs77\NewebPay\NewebPayServiceProvider"
 
 首先先到藍新金流的網站上註冊帳號 (測試時需註冊測試帳號)，和建立商店。然後在「商店資料設定」中啟用需要使用的金流功能 (測試時可以盡量全部啟用)，並複製商店串接 API 的商店代號、`HashKey` 和 `HashIV`。
 
-設定 `.env` 檔，更多設定需開啟 `config/newebpay.php` 修改：
+設定 `.env` 的商店代號和 HashKey 等：
 
 ```
 NEWEBPAY_STORE_ID=...        # 貼上 商店代號 (Ex: MS3311...)
 NEWEBPAY_STORE_HASH_KEY=...  # 貼上 HashKey
 NEWEBPAY_STORE_HASH_IV=...   # 貼上 HashIV
 NEWEBPAY_DEBUG=true          # debug 模式
+```
 
-NEWEBPAY_RETURN_URL=...      # 付款完成後，前端重導向回來的網址 (Ex: /pay/callback)
-NEWEBPAY_NOTIFY_URL=...      # 付款完成後，後端自動響應的網址   (Ex: /pay/notify)
-NEWEBPAY_CLIENT_BACK_URL=... # 取消付款時，返回的網址          (Ex: /pay/cancel)
+更多設定需開啟 `config/newebpay.php` 修改，比如導向頁面的網址等：
+
+```php
+return [
+
+    // 付款完成後導向頁面
+    'return_url' => '/pay/callback',
+
+    // 付款完成後的通知連結
+    'notify_url' => '/pay/notify',
+
+    // 商店取號網址
+    'customer_url' => '/pay/customer',
+
+    // 付款取消時返回商店網址
+    'client_back_url' => '/cart',
+
+]
 ```
 
 首先先建立一個頁面，和一個「付款」按鈕：
