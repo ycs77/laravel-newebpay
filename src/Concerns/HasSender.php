@@ -67,13 +67,11 @@ trait HasSender
 
     protected function createHttp(MockHandler $mockHttpHandler = null): Client
     {
-        $attributes = [
-            'handler' => $mockHttpHandler ? HandlerStack::create($mockHttpHandler) : null,
-        ];
+        $attributes = [];
 
-        $attributes = array_filter($attributes, function ($value) {
-            return $value !== null;
-        });
+        if ($mockHttpHandler) {
+            $attributes['handler'] = HandlerStack::create($mockHttpHandler);
+        }
 
         return new Client($attributes);
     }
