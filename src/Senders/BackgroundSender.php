@@ -9,7 +9,7 @@ use Ycs77\NewebPay\Contracts\Sender;
 class BackgroundSender implements Sender, Httpable
 {
     public function __construct(
-        protected Client $client
+        protected Client $http
     ) {
     }
 
