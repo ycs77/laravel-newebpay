@@ -5,6 +5,18 @@ namespace Ycs77\NewebPay\Results;
 class MPGCreditResult extends Result
 {
     /**
+     * 交易類別中英文名稱對照
+     */
+    protected $paymentMethods = [
+        'CREDIT' => '台灣發卡機構核發之信用卡',
+        'FOREIGN' => '國外發卡機構核發之卡',
+        'UNIONPAY' => '銀聯卡',
+        'GOOGLEPAY' => 'GooglePay',
+        'SAMSUNGPAY' => 'SamsungPay',
+        'DCC' => '動態貨幣轉換',
+    ];
+
+    /**
      * 收單金融機構中英文名稱對照
      */
     protected $authBanks = [
@@ -22,6 +34,17 @@ class MPGCreditResult extends Result
 
     /**
      * 收單金融機構
+     *
+     * * **Esun**: 玉山銀行
+     * * **Taishin**: 台新銀行
+     * * **CTBC**: 中國信託銀行
+     * * **NCCC**: 聯合信用卡中心
+     * * **CathayBK**: 國泰世華銀行
+     * * **Citibank**: 花旗銀行
+     * * **UBOT**: 聯邦銀行
+     * * **SKBank**: 新光銀行
+     * * **Fubon**: 富邦銀行
+     * * **FirstBank**: 第一銀行
      */
     public function authBank(): string
     {
@@ -31,7 +54,7 @@ class MPGCreditResult extends Result
     /**
      * 收單金融機構中文名稱
      */
-    public function authBankText(): string
+    public function authBankName(): string
     {
         return $this->authBanks[$this->data['AuthBank']] ?? $this->data['AuthBank'];
     }
@@ -140,12 +163,19 @@ class MPGCreditResult extends Result
      * * **UNIONPAY**: 銀聯卡
      * * **GOOGLEPAY**: GooglePay
      * * **SAMSUNGPAY**: SamsungPay
-     * * **DCC**: 動態貨幣轉換
-     * * 註：僅支援台新銀行一次付清之代收商店。
+     * * **DCC**: 動態貨幣轉換 (註：僅支援台新銀行一次付清之代收商店。)
      */
     public function paymentMethod(): string
     {
         return $this->data['PaymentMethod'];
+    }
+
+    /**
+     * 收單金融機構中文名稱
+     */
+    public function paymentMethodName(): string
+    {
+        return $this->paymentMethods[$this->data['PaymentMethod']] ?? $this->data['PaymentMethod'];
     }
 
     /**

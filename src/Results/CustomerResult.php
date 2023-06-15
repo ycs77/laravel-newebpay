@@ -12,7 +12,7 @@ class CustomerResult extends Result
      */
     public function status(): string
     {
-        return $this->data['TradeInfo']['Status'];
+        return $this->data['Status'];
     }
 
     /**
@@ -81,6 +81,11 @@ class CustomerResult extends Result
 
     /**
      * 支付方式
+     *
+     * * **VACC**: 銀行 ATM 轉帳付款
+     * * **BARCODE**: 超商條碼繳費
+     * * **CVS**: 超商代碼繳費
+     * * **CVSCOM**: 超商取貨付款
      */
     public function paymentType(): string
     {

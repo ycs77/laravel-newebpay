@@ -31,7 +31,7 @@ test('can be get result data on callback request', function () {
             'Inst' => 0,
             'ECI' => '',
             'PaymentMethod' => 'CREDIT',
-            'AuthBank' => 'KGI',
+            'AuthBank' => 'CTBC',
         ],
     ];
 
@@ -84,7 +84,7 @@ test('can be get result data for all payment methods', function () {
             'Inst' => 0,
             'ECI' => '',
             'PaymentMethod' => 'CREDIT',
-            'AuthBank' => 'KGI',
+            'AuthBank' => 'CTBC',
         ],
     ];
 
@@ -138,7 +138,7 @@ test('can be get result data for credit', function () {
             'Inst' => 0,
             'ECI' => '',
             'PaymentMethod' => 'CREDIT',
-            'AuthBank' => 'KGI',
+            'AuthBank' => 'CTBC',
         ],
     ];
 
@@ -151,8 +151,8 @@ test('can be get result data for credit', function () {
     ]);
 
     $credit = $result->credit();
-    expect($credit->authBank())->toBe('KGI');
-    expect($credit->authBankText())->toBe('KGI');
+    expect($credit->authBank())->toBe('CTBC');
+    expect($credit->authBankName())->toBe('中國信託銀行');
     expect($credit->respondCode())->toBe('00');
     expect($credit->auth())->toBe('222111');
     expect($credit->card6No())->toBe('400022');

@@ -2,6 +2,9 @@
 
 namespace Ycs77\NewebPay;
 
+use Illuminate\Http\Request;
+use Ycs77\NewebPay\Results\QueryResult;
+
 class NewebPayQuery extends NewebPayRequest
 {
     /**
@@ -72,5 +75,13 @@ class NewebPayQuery extends NewebPayRequest
             'Amt' => $this->checkValues['Amt'],
             'Gateway' => $this->gateway,
         ];
+    }
+
+    /**
+     * Submit data to newebpay API.
+     */
+    public function submit(Request $request = null): QueryResult
+    {
+        return new QueryResult(parent::submit($request), $this->hashKey, $this->hashIV);
     }
 }

@@ -81,6 +81,16 @@ class MPGResult extends Result
 
     /**
      * 支付方式
+     *
+     * * **CREDIT**: 信用卡付款
+     * * **VACC**: 銀行 ATM 轉帳付款
+     * * **WEBATM**: 網路銀行轉帳付款
+     * * **BARCODE**: 超商條碼繳費
+     * * **CVS**: 超商代碼繳費
+     * * **LINEPAY**: LINE Paya 付款
+     * * **ESUNWALLET**: 玉山 Wallet
+     * * **TAIWANPAY**: 台灣 Pay
+     * * **CVSCOM**: 超商取貨付款
      */
     public function paymentType(): string
     {

@@ -100,11 +100,11 @@ test('close can be submit', function () {
 
     $result = $newebpay
         ->closeOrder('TestNo123456', 100, 'order')
-        ->setMockHttp(new Response(200, [], '{"Status":"Code001","Message":"Test message.","Result":[]}'))
+        ->setMockHttp(new Response(200, [], '{"Status":"SUCCESS","Message":"Test message.","Result":[]}'))
         ->submit();
 
     expect($result)->toBe([
-        'Status' => 'Code001',
+        'Status' => 'SUCCESS',
         'Message' => 'Test message.',
         'Result' => [],
     ]);
