@@ -41,8 +41,8 @@ class CustomerLgsResult extends Result
     /**
      * 取件交易方式
      *
-     * * 1: 取貨付款
-     * * 3: 取貨不付款
+     * * **1**: 取貨付款
+     * * **3**: 取貨不付款
      */
     public function tradeType(): int
     {

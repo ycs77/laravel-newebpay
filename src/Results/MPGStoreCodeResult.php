@@ -15,10 +15,10 @@ class MPGStoreCodeResult extends Result
     /**
      * 繳費門市類別
      *
-     * * 1: 7-11 統一超商
-     * * 2: 全家便利商店
-     * * 3: OK 便利商店
-     * * 4: 萊爾富便利商店
+     * * **1**: 7-11 統一超商
+     * * **2**: 全家便利商店
+     * * **3**: OK 便利商店
+     * * **4**: 萊爾富便利商店
      */
     public function storeType(): int
     {

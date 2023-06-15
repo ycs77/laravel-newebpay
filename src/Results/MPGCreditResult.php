@@ -105,10 +105,10 @@ class MPGCreditResult extends Result
     /**
      * 信用卡快速結帳使用狀態
      *
-     * * 0: 該筆交易為非使用信用卡快速結帳功能。
-     * * 1: 該筆交易為首次設定信用卡快速結帳功能。
-     * * 2: 該筆交易為使用信用卡快速結帳功能。
-     * * 9: 該筆交易為取消信用卡快速結帳功能功能。
+     * * **0**: 該筆交易為非使用信用卡快速結帳功能。
+     * * **1**: 該筆交易為首次設定信用卡快速結帳功能。
+     * * **2**: 該筆交易為使用信用卡快速結帳功能。
+     * * **9**: 該筆交易為取消信用卡快速結帳功能功能。
      */
     public function tokenUseStatus(): int
     {
@@ -135,12 +135,12 @@ class MPGCreditResult extends Result
     /**
      * 交易類別
      *
-     * * CREDIT: 台灣發卡機構核發之信用卡
-     * * FOREIGN: 國外發卡機構核發之卡
-     * * UNIONPAY: 銀聯卡
-     * * GOOGLEPAY: GooglePay
-     * * SAMSUNGPAY: SamsungPay
-     * * DCC: 動態貨幣轉換
+     * * **CREDIT**: 台灣發卡機構核發之信用卡
+     * * **FOREIGN**: 國外發卡機構核發之卡
+     * * **UNIONPAY**: 銀聯卡
+     * * **GOOGLEPAY**: GooglePay
+     * * **SAMSUNGPAY**: SamsungPay
+     * * **DCC**: 動態貨幣轉換
      * * 註：僅支援台新銀行一次付清之代收商店。
      */
     public function paymentMethod(): string
