@@ -2,26 +2,10 @@
 
 namespace Ycs77\NewebPay\Senders;
 
-use Illuminate\Http\Request;
-use Ycs77\LaravelRecoverSession\UserSource;
 use Ycs77\NewebPay\Contracts\Sender;
-use Ycs77\NewebPay\Contracts\UserSourceable;
 
-class FrontendSender implements Sender, UserSourceable
+class FrontendSender implements Sender
 {
-    public function __construct(
-        protected UserSource $userSource
-    ) {
-    }
-
-    /**
-     * Preserve the user information into session.
-     */
-    public function preserveUserSource(Request $request): void
-    {
-        $this->userSource->preserve($request);
-    }
-
     /**
      * Send the data to API.
      */
@@ -36,15 +20,5 @@ class FrontendSender implements Sender, UserSourceable
         $result .= '</form><script>document.getElementById("order-form").submit();</script></body></html>';
 
         return $result;
-    }
-
-    /**
-     * Set the user source instance.
-     */
-    public function setUserSource(UserSource $userSource)
-    {
-        $this->userSource = $userSource;
-
-        return $this;
     }
 }

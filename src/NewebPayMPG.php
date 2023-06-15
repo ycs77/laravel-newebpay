@@ -11,7 +11,7 @@ use Ycs77\NewebPay\Enums\LgsType;
 
 class NewebPayMPG extends NewebPayRequest
 {
-    use Concerns\WithSessionId;
+    use Concerns\WithSessionIdKey;
 
     /**
      * The newebpay trade data.
@@ -98,9 +98,7 @@ class NewebPayMPG extends NewebPayRequest
         if ($url = $url ?? $this->config->get('newebpay.return_url')) {
             $this->tradeData['ReturnURL'] = $this->config->get('app.url').$url;
 
-            if ($this->config->get('newebpay.with_session_id')) {
-                $this->withSessionId('ReturnURL');
-            }
+            $this->WithSessionIdKey('ReturnURL');
         }
 
         return $this;
@@ -131,9 +129,7 @@ class NewebPayMPG extends NewebPayRequest
         if ($url = $url ?? $this->config->get('newebpay.customer_url')) {
             $this->tradeData['CustomerURL'] = $this->config->get('app.url').$url;
 
-            if ($this->config->get('newebpay.with_session_id')) {
-                $this->withSessionId('CustomerURL');
-            }
+            $this->WithSessionIdKey('CustomerURL');
         }
 
         return $this;

@@ -2,10 +2,6 @@
 
 namespace Ycs77\NewebPay;
 
-use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Facades\Request;
-use Ycs77\NewebPay\Contracts\UserSourceable;
-
 abstract class NewebPayRequest extends NewebPay
 {
     use Concerns\HasSender;
@@ -59,12 +55,8 @@ abstract class NewebPayRequest extends NewebPay
     /**
      * Submit data to newebpay API.
      */
-    public function submit(HttpRequest $request = null): mixed
+    public function submit(): mixed
     {
-        if ($this->sender instanceof UserSourceable) {
-            $this->sender->preserveUserSource($request ?? Request::instance());
-        }
-
         return $this->sender->send($this->requestData(), $this->url);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Ycs77\NewebPay;
 
-use Illuminate\Http\Request;
 use Ycs77\NewebPay\Results\QueryResult;
 
 class NewebPayQuery extends NewebPayRequest
@@ -80,8 +79,8 @@ class NewebPayQuery extends NewebPayRequest
     /**
      * Submit data to newebpay API.
      */
-    public function submit(Request $request = null): QueryResult
+    public function submit(): QueryResult
     {
-        return new QueryResult(parent::submit($request), $this->hashKey, $this->hashIV);
+        return new QueryResult(parent::submit(), $this->hashKey, $this->hashIV);
     }
 }

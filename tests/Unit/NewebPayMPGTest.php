@@ -1,6 +1,6 @@
 <?php
 
-use Mockery as m;
+use Ycs77\LaravelRecoverSession\Facades\RecoverSession;
 use Ycs77\NewebPay\Enums\Bank;
 use Ycs77\NewebPay\Enums\CreditInst;
 use Ycs77\NewebPay\Enums\CreditRememberDemand;
@@ -45,6 +45,18 @@ test('MPG default TradeData', function () {
         'OrderComment' => null,
         'CREDIT' => 1,
     ]);
+});
+
+test('MPG callback session key with key', function () {
+    config()->set('newebpay.with_session_id', true);
+
+    RecoverSession::shouldReceive('preserve')->andReturn('sessionkey0000000000');
+
+    $newebpay = new NewebPayMPG(app('config'), app('session.store'));
+
+    expect($newebpay->tradeData())->toHaveKey('ReturnURL', 'http://localhost/pay/callback?sid=sessionkey0000000000');
+    expect($newebpay->tradeData())->toHaveKey('NotifyURL', 'http://localhost/pay/notify');
+    expect($newebpay->tradeData())->toHaveKey('CustomerURL', 'http://localhost/pay/customer?sid=sessionkey0000000000');
 });
 
 test('MPG credit', function () {
@@ -306,10 +318,8 @@ test('MPG can be get request data', function () {
 test('MPG can be submit', function () {
     setTestNow();
 
-    /** @var \Ycs77\NewebPay\Senders\FrontendSender|\Mockery\MockInterface|\Mockery\LegacyMockInterface */
-    $sender = m::mock(FrontendSender::class);
-    $sender->makePartial();
-    $sender->shouldReceive('preserveUserSource');
+    /** @var \Ycs77\NewebPay\Senders\FrontendSender */
+    $sender = app(FrontendSender::class);
 
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
