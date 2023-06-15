@@ -5,6 +5,16 @@ namespace Ycs77\NewebPay\Results;
 class MPGStoreBarcodeResult extends Result
 {
     /**
+     * 繳費超商中英文名稱對照
+     */
+    protected $payStores = [
+        'SEVEN' => '7-11',
+        'FAMILY' => '全家',
+        'OK' => 'OK',
+        'HILIFE' => '萊爾富',
+    ];
+
+    /**
      * 繳費條碼第一段條碼
      */
     public function barcode1(): string
@@ -39,15 +49,23 @@ class MPGStoreBarcodeResult extends Result
     /**
      * 繳費超商
      *
-     * 收款超商的代碼，
+     * 收款超商的代碼
      * * **SEVEN**: 7-11
      * * **FAMILY**: 全家
-     * * **OK**: OK 超商
+     * * **OK**: OK
      * * **HILIFE**: 萊爾富
      */
     public function payStore(): string
     {
         return $this->data['PayStore'];
+    }
+
+    /**
+     * 繳費超商中文名稱
+     */
+    public function payStoreName(): string
+    {
+        return $this->payStores[$this->data['PayStore']] ?? $this->data['PayStore'];
     }
 
     /**

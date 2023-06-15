@@ -87,7 +87,7 @@ class MPGResult extends Result
      * * **WEBATM**: 網路銀行轉帳付款
      * * **BARCODE**: 超商條碼繳費
      * * **CVS**: 超商代碼繳費
-     * * **LINEPAY**: LINE Paya 付款
+     * * **LINEPAY**: LINE Pay 付款
      * * **ESUNWALLET**: 玉山 Wallet
      * * **TAIWANPAY**: 台灣 Pay
      * * **CVSCOM**: 超商取貨付款

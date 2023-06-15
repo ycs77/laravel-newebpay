@@ -5,6 +5,16 @@ namespace Ycs77\NewebPay\Results;
 class MPGStoreCodeResult extends Result
 {
     /**
+     * 繳費超商中英文名稱對照
+     */
+    protected $storeTypes = [
+        1 => '7-11',
+        2 => '全家',
+        3 => 'OK',
+        4 => '萊爾富',
+    ];
+
+    /**
      * 繳費代碼
      */
     public function codeNo(): string
@@ -15,14 +25,22 @@ class MPGStoreCodeResult extends Result
     /**
      * 繳費門市類別
      *
-     * * **1**: 7-11 統一超商
-     * * **2**: 全家便利商店
-     * * **3**: OK 便利商店
-     * * **4**: 萊爾富便利商店
+     * * **1**: 7-11
+     * * **2**: 全家
+     * * **3**: OK
+     * * **4**: 萊爾富
      */
     public function storeType(): int
     {
         return $this->data['StoreType'];
+    }
+
+    /**
+     * 繳費超商中文名稱
+     */
+    public function storeTypeName(): string
+    {
+        return $this->storeTypes[$this->data['StoreType']] ?? $this->data['StoreType'];
     }
 
     /**

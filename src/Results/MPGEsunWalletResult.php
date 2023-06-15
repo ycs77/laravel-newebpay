@@ -15,9 +15,9 @@ class MPGEsunWalletResult extends Result
     /**
      * 紅利折抵金額
      */
-    public function redDisAmt(): int
+    public function redDisAmt(): ?int
     {
-        return $this->data['RedDisAmt'];
+        return $this->data['RedDisAmt'] ?? null;
     }
 
     /**

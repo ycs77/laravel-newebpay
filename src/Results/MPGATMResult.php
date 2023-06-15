@@ -7,9 +7,9 @@ class MPGATMResult extends Result
     /**
      * 付款人金融機構代碼
      */
-    public function payBankCode(): string
+    public function payBankCode(): ?string
     {
-        return $this->data['PayBankCode'];
+        return $this->data['PayBankCode'] ?? null;
     }
 
     /**
