@@ -4,19 +4,19 @@ use GuzzleHttp\Psr7\Response;
 use Ycs77\NewebPay\NewebPayCancel;
 use Ycs77\NewebPay\Senders\BackgroundSender;
 
-test('NewebPay cancel can be get url', function () {
+test('cancel can be get url', function () {
     $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/CreditCard/Cancel');
 });
 
-test('NewebPay cancel sender is background', function () {
+test('cancel sender is background', function () {
     $newebpay = new NewebPayCancel(app('config'), app('session.store'));
 
     expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);
 });
 
-test('NewebPay cancel default post data', function () {
+test('cancel default post data', function () {
     setTestNow();
 
     $newebpay = new NewebPayCancel(app('config'), app('session.store'));
@@ -30,7 +30,7 @@ test('NewebPay cancel default post data', function () {
     ]);
 });
 
-test('NewebPay cancel order post data with "MerchantOrderNo"', function () {
+test('cancel order post data with "MerchantOrderNo"', function () {
     setTestNow();
 
     $newebpay = new NewebPayCancel(app('config'), app('session.store'));
@@ -49,7 +49,7 @@ test('NewebPay cancel order post data with "MerchantOrderNo"', function () {
     ]);
 });
 
-test('NewebPay cancel order post data with "TradeNo"', function () {
+test('cancel order post data with "TradeNo"', function () {
     setTestNow();
 
     $newebpay = new NewebPayCancel(app('config'), app('session.store'));
@@ -68,7 +68,7 @@ test('NewebPay cancel order post data with "TradeNo"', function () {
     ]);
 });
 
-test('NewebPay cancel can be get request data', function () {
+test('cancel can be get request data', function () {
     setTestNow();
 
     $newebpay = new NewebPayCancel(app('config'), app('session.store'));
@@ -79,7 +79,7 @@ test('NewebPay cancel can be get request data', function () {
     expect($requestData['PostData_'])->toBe('e88e33cc07d106bcba1c1bd02d5d421f3f0bcd99f286b2bf5de5c492d9a35effa2f9bfa4444860e8cdca7356a5e80ef9c445f92e77a2229e1f04d1a7e9386120');
 });
 
-test('NewebPay cancel can be submit', function () {
+test('cancel can be submit', function () {
     setTestNow();
 
     $newebpay = new NewebPayCancel(app('config'), app('session.store'));

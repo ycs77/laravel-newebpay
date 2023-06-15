@@ -4,19 +4,19 @@ use GuzzleHttp\Psr7\Response;
 use Ycs77\NewebPay\NewebPayClose;
 use Ycs77\NewebPay\Senders\BackgroundSender;
 
-test('NewebPay close can be get url', function () {
+test('close can be get url', function () {
     $newebpay = new NewebPayClose(app('config'), app('session.store'));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/CreditCard/Close');
 });
 
-test('NewebPay close sender is background', function () {
+test('close sender is background', function () {
     $newebpay = new NewebPayClose(app('config'), app('session.store'));
 
     expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);
 });
 
-test('NewebPay close post data for request pay', function () {
+test('close post data for request pay', function () {
     setTestNow();
 
     $newebpay = new NewebPayClose(app('config'), app('session.store'));
@@ -32,7 +32,7 @@ test('NewebPay close post data for request pay', function () {
     expect($newebpay->postData())->not->toHaveKey('Cancel');
 });
 
-test('NewebPay close post data for request refund', function () {
+test('close post data for request refund', function () {
     setTestNow();
 
     $newebpay = new NewebPayClose(app('config'), app('session.store'));
@@ -48,7 +48,7 @@ test('NewebPay close post data for request refund', function () {
     expect($newebpay->postData())->not->toHaveKey('Cancel');
 });
 
-test('NewebPay close post data for cancel request pay', function () {
+test('close post data for cancel request pay', function () {
     setTestNow();
 
     $newebpay = new NewebPayClose(app('config'), app('session.store'));
@@ -65,7 +65,7 @@ test('NewebPay close post data for cancel request pay', function () {
     expect($newebpay->postData())->toHaveKey('Cancel', 1);
 });
 
-test('NewebPay close post data for cancel request refund', function () {
+test('close post data for cancel request refund', function () {
     setTestNow();
 
     $newebpay = new NewebPayClose(app('config'), app('session.store'));
@@ -82,7 +82,7 @@ test('NewebPay close post data for cancel request refund', function () {
     expect($newebpay->postData())->toHaveKey('Cancel', 1);
 });
 
-test('NewebPay close can be get request data', function () {
+test('close can be get request data', function () {
     setTestNow();
 
     $newebpay = new NewebPayClose(app('config'), app('session.store'));
@@ -93,7 +93,7 @@ test('NewebPay close can be get request data', function () {
     expect($requestData['PostData_'])->toBe('e88e33cc07d106bcba1c1bd02d5d421fe388e2693f8650b343563c222b888351c8621daeed9525d76478c3dc00f4054ff41101f81d0eed0cd1474bd8ebd1da37');
 });
 
-test('NewebPay close can be submit', function () {
+test('close can be submit', function () {
     setTestNow();
 
     $newebpay = new NewebPayClose(app('config'), app('session.store'));

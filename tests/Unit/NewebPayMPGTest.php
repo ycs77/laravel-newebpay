@@ -14,19 +14,19 @@ beforeEach(function () {
     setTestNow();
 });
 
-test('NewebPay MPG can be get url', function () {
+test('MPG can be get url', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/MPG/mpg_gateway');
 });
 
-test('NewebPay MPG sender is frontend', function () {
+test('MPG sender is frontend', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->getSender())->toBeInstanceOf(FrontendSender::class);
 });
 
-test('NewebPay MPG default TradeData', function () {
+test('MPG default TradeData', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->toBe([
@@ -47,7 +47,7 @@ test('NewebPay MPG default TradeData', function () {
     ]);
 });
 
-test('NewebPay MPG credit', function () {
+test('MPG credit', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->toHaveKey('CREDIT', 1);
@@ -82,7 +82,7 @@ test('NewebPay MPG credit', function () {
     expect($newebpay->tradeData())->toHaveKey('InstFlag', '3,6,12');
 });
 
-test('NewebPay MPG credit remember', function () {
+test('MPG credit remember', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('TokenTerm');
@@ -96,7 +96,7 @@ test('NewebPay MPG credit remember', function () {
     expect($newebpay->tradeData())->toHaveKey('TokenTermDemand', 1);
 });
 
-test('NewebPay MPG webATM', function () {
+test('MPG webATM', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('WEBATM');
@@ -108,7 +108,7 @@ test('NewebPay MPG webATM', function () {
     expect($newebpay->tradeData())->toHaveKey('WEBATM', 1);
 });
 
-test('NewebPay MPG ATM transfer (VACC)', function () {
+test('MPG ATM transfer (VACC)', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('VACC');
@@ -118,7 +118,7 @@ test('NewebPay MPG ATM transfer (VACC)', function () {
     expect($newebpay->tradeData())->toHaveKey('VACC', 1);
 });
 
-test('NewebPay MPG bank type', function () {
+test('MPG bank type', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('BankType');
@@ -132,7 +132,7 @@ test('NewebPay MPG bank type', function () {
     expect($newebpay->tradeData())->toHaveKey('BankType', 'BOT,HNCB');
 });
 
-test('NewebPay MPG NTCB', function () {
+test('MPG NTCB', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('NTCB');
@@ -155,7 +155,7 @@ test('NewebPay MPG NTCB', function () {
     expect($newebpay->tradeData())->toHaveKey('NTCBEndDate', '2020-01-01');
 });
 
-test('NewebPay MPG Google Pay', function () {
+test('MPG Google Pay', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('ANDROIDPAY');
@@ -165,7 +165,7 @@ test('NewebPay MPG Google Pay', function () {
     expect($newebpay->tradeData())->toHaveKey('ANDROIDPAY', 1);
 });
 
-test('NewebPay MPG Samsung Pay', function () {
+test('MPG Samsung Pay', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('SAMSUNGPAY');
@@ -175,7 +175,7 @@ test('NewebPay MPG Samsung Pay', function () {
     expect($newebpay->tradeData())->toHaveKey('SAMSUNGPAY', 1);
 });
 
-test('NewebPay MPG LINE Pay', function () {
+test('MPG LINE Pay', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('LINEPAY');
@@ -192,7 +192,7 @@ test('NewebPay MPG LINE Pay', function () {
     expect($newebpay->tradeData())->toHaveKey('ImageUrl', 'http://example.com/your-image-url');
 });
 
-test('NewebPay MPG UnionPay', function () {
+test('MPG UnionPay', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('UNIONPAY');
@@ -202,7 +202,7 @@ test('NewebPay MPG UnionPay', function () {
     expect($newebpay->tradeData())->toHaveKey('UNIONPAY', 1);
 });
 
-test('NewebPay MPG esunWallet', function () {
+test('MPG esunWallet', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('ESUNWALLET');
@@ -212,7 +212,7 @@ test('NewebPay MPG esunWallet', function () {
     expect($newebpay->tradeData())->toHaveKey('ESUNWALLET', 1);
 });
 
-test('NewebPay MPG TaiwanPay', function () {
+test('MPG TaiwanPay', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('TAIWANPAY');
@@ -222,7 +222,7 @@ test('NewebPay MPG TaiwanPay', function () {
     expect($newebpay->tradeData())->toHaveKey('TAIWANPAY', 1);
 });
 
-test('NewebPay MPG ezPay', function () {
+test('MPG ezPay', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('EZPAY');
@@ -232,7 +232,7 @@ test('NewebPay MPG ezPay', function () {
     expect($newebpay->tradeData())->toHaveKey('EZPAY', 1);
 });
 
-test('NewebPay MPG ezpWeChat', function () {
+test('MPG ezpWeChat', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('EZPWECHAT');
@@ -242,7 +242,7 @@ test('NewebPay MPG ezpWeChat', function () {
     expect($newebpay->tradeData())->toHaveKey('EZPWECHAT', 1);
 });
 
-test('NewebPay MPG ezpAlipay', function () {
+test('MPG ezpAlipay', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('EZPALIPAY');
@@ -252,7 +252,7 @@ test('NewebPay MPG ezpAlipay', function () {
     expect($newebpay->tradeData())->toHaveKey('EZPALIPAY', 1);
 });
 
-test('NewebPay MPG CVS', function () {
+test('MPG CVS', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('CVS');
@@ -262,7 +262,7 @@ test('NewebPay MPG CVS', function () {
     expect($newebpay->tradeData())->toHaveKey('CVS', 1);
 });
 
-test('NewebPay MPG barcode', function () {
+test('MPG barcode', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('BARCODE');
@@ -272,7 +272,7 @@ test('NewebPay MPG barcode', function () {
     expect($newebpay->tradeData())->toHaveKey('BARCODE', 1);
 });
 
-test('NewebPay MPG CVSCOM', function () {
+test('MPG CVSCOM', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('CVSCOM');
@@ -282,7 +282,7 @@ test('NewebPay MPG CVSCOM', function () {
     expect($newebpay->tradeData())->toHaveKey('CVSCOM', CVSCOM::PAY->value);
 });
 
-test('NewebPay MPG LgsType', function () {
+test('MPG LgsType', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     expect($newebpay->tradeData())->not->toHaveKey('LgsType');
@@ -292,7 +292,7 @@ test('NewebPay MPG LgsType', function () {
     expect($newebpay->tradeData())->toHaveKey('LgsType', LgsType::B2C->value);
 });
 
-test('NewebPay MPG can be get request data', function () {
+test('MPG can be get request data', function () {
     $newebpay = new NewebPayMPG(app('config'), app('session.store'));
 
     $requestData = $newebpay->requestData();
@@ -303,7 +303,7 @@ test('NewebPay MPG can be get request data', function () {
     expect($requestData['Version'])->toBe('2.0');
 });
 
-test('NewebPay MPG can be submit', function () {
+test('MPG can be submit', function () {
     setTestNow();
 
     /** @var \Ycs77\NewebPay\Senders\FrontendSender|\Mockery\MockInterface|\Mockery\LegacyMockInterface */

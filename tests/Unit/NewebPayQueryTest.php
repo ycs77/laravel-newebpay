@@ -4,19 +4,19 @@ use GuzzleHttp\Psr7\Response;
 use Ycs77\NewebPay\NewebPayQuery;
 use Ycs77\NewebPay\Senders\BackgroundSender;
 
-test('NewebPay query can be get url', function () {
+test('query can be get url', function () {
     $newebpay = new NewebPayQuery(app('config'), app('session.store'));
 
     expect($newebpay->getUrl())->toBe('https://ccore.newebpay.com/API/QueryTradeInfo');
 });
 
-test('NewebPay query sender is background', function () {
+test('query sender is background', function () {
     $newebpay = new NewebPayQuery(app('config'), app('session.store'));
 
     expect($newebpay->getSender())->toBeInstanceOf(BackgroundSender::class);
 });
 
-test('NewebPay query can be get request data', function () {
+test('query can be get request data', function () {
     setTestNow();
 
     $newebpay = new NewebPayQuery(app('config'), app('session.store'));
@@ -34,7 +34,7 @@ test('NewebPay query can be get request data', function () {
     expect($requestData['Amt'])->toBe(100);
 });
 
-test('NewebPay query can be set gateway is "Composite"', function () {
+test('query can be set gateway is "Composite"', function () {
     setTestNow();
 
     $newebpay = new NewebPayQuery(app('config'), app('session.store'));
@@ -47,7 +47,7 @@ test('NewebPay query can be set gateway is "Composite"', function () {
     expect($requestData)->toHaveKey('Gateway', 'Composite');
 });
 
-test('NewebPay query can be submit', function () {
+test('query can be submit', function () {
     setTestNow();
 
     $newebpay = new NewebPayQuery(app('config'), app('session.store'));
