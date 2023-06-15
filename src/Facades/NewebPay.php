@@ -10,9 +10,9 @@ use Ycs77\NewebPay\Testing\EncryptTradeDataTesting;
  * @method static \Ycs77\NewebPay\Results\MPGResult result(\Illuminate\Http\Request $request)
  * @method static \Ycs77\NewebPay\Results\CustomerResult customer(\Illuminate\Http\Request $request)
  * @method static \Ycs77\NewebPay\NewebPayQuery query(string $no, int $amt)
- * @method static \Ycs77\NewebPay\NewebPayCancel creditCancel(string $no, int $amt, string $type = 'order')
- * @method static \Ycs77\NewebPay\NewebPayClose requestPayment(string $no, int $amt, string $type = 'order')
- * @method static \Ycs77\NewebPay\NewebPayClose requestRefund(string $no, int $amt, string $type = 'order')
+ * @method static \Ycs77\NewebPay\NewebPayCancel creditCancel(string $no, int $amt, string $type)
+ * @method static \Ycs77\NewebPay\NewebPayClose requestPayment(string $no, int $amt, string $type)
+ * @method static \Ycs77\NewebPay\NewebPayClose requestRefund(string $no, int $amt, string $type)
  *
  * @see \Ycs77\NewebPay\Factory
  */
