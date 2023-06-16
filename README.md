@@ -485,7 +485,7 @@ use Ycs77\NewebPay\Facades\NewebPay;
 /**
  * 信用卡請款
  */
-function requestPayment()
+function request()
 {
     $no = $request->input('no'); // 該筆交易的訂單編號
     $amt = $request->input('amt'); // 該筆交易的金額
@@ -503,7 +503,7 @@ function requestPayment()
 /**
  * 信用卡取消請款
  */
-function requestPayment()
+function cancelRequest()
 {
     $no = $request->input('no'); // 該筆交易的訂單編號
     $amt = $request->input('amt'); // 該筆交易的金額
@@ -539,7 +539,7 @@ function refund()
 /**
  * 信用卡取消退款
  */
-function refund()
+function cancelRefund()
 {
     $no = $request->input('no'); // 該筆交易的訂單編號
     $amt = $request->input('amt'); // 該筆交易的金額

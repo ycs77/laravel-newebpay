@@ -163,7 +163,7 @@ class Factory
      *                        * **order**: 使用商店訂單編號追蹤
      *                        * **trade**: 使用藍新金流交易序號追蹤
      */
-    public function cancelRequesRefund(string $no, int $amt, string $type = 'order'): NewebPayClose
+    public function cancelRefund(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         return $this
             ->close($no, $amt, $type)
