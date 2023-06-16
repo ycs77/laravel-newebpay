@@ -179,9 +179,9 @@ class MPGResult extends Result
     /**
      * 跨境支付回傳 (包含簡單付電子錢包、簡單付微信支付、簡單付支付寶)
      */
-    public function crossBorder(): MPGCrossBorderResult
+    public function ezPay(): MPGEzPayResult
     {
-        return new MPGCrossBorderResult($this->result());
+        return new MPGEzPayResult($this->result());
     }
 
     /**

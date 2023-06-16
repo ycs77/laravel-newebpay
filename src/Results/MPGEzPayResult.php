@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class MPGCrossBorderResult extends Result
+class MPGEzPayResult extends Result
 {
     /**
      * 跨境通路中英文名稱對照
@@ -19,9 +19,9 @@ class MPGCrossBorderResult extends Result
     ];
 
     /**
-     * 確認這筆交易是跨境通路
+     * 確認這筆交易是來自 ezPay 的交易
      */
-    public function isCrossBorder()
+    public function isEzPay()
     {
         return is_string($this->channelId()) && in_array($this->channelId(), array_keys($this->channels));
     }

@@ -353,7 +353,7 @@ test('can be get result data for lgs', function () {
     expect($lgs->lgsType())->toBe('C2C');
 });
 
-test('can be get result data for cross border', function () {
+test('can be get result data for ezPay', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '訂單資料建立成功',
@@ -378,11 +378,11 @@ test('can be get result data for cross border', function () {
         'Version' => '2.0',
     ]);
 
-    $crossBorder = $result->crossBorder();
-    expect($crossBorder->isCrossBorder())->toBeTrue();
-    expect($crossBorder->channelId())->toBe('ALIPAY');
-    expect($crossBorder->channelName())->toBe('支付寶');
-    expect($crossBorder->channelNo())->toBe('NO0000000001');
+    $ezPay = $result->ezPay();
+    expect($ezPay->isEzPay())->toBeTrue();
+    expect($ezPay->channelId())->toBe('ALIPAY');
+    expect($ezPay->channelName())->toBe('支付寶');
+    expect($ezPay->channelNo())->toBe('NO0000000001');
 });
 
 test('can be get result data for EsunWallet', function () {

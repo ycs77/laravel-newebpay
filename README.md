@@ -246,9 +246,9 @@ if ($result->paymentType() === 'CVSCOM') {
 }
 
 // 跨境支付回傳 (包含簡單付電子錢包、簡單付微信支付、簡單付支付寶)
-if ($crossBorder->isCrossBorder()) {
-    $crossBorder = $result->crossBorder();
-    // 參考：\Ycs77\NewebPay\Results\MPGCrossBorderResult
+$ezPay = $result->ezPay();
+if ($ezPay->isEzPay()) {
+    // 參考：\Ycs77\NewebPay\Results\MPGEzPayResult
 }
 
 // 玉山 Wallet 回傳
