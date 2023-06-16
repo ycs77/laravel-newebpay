@@ -72,7 +72,7 @@ class Factory
     }
 
     /**
-     * 取消授權
+     * 取消信用卡授權
      *
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
@@ -80,7 +80,7 @@ class Factory
      *                        * **order**: 使用商店訂單編號追蹤
      *                        * **trade**: 使用藍新金流交易序號追蹤
      */
-    public function creditCancel(string $no, int $amt, string $type = 'order'): NewebPayCancel
+    public function cancel(string $no, int $amt, string $type = 'order'): NewebPayCancel
     {
         $newebPay = new NewebPayCancel($this->config, $this->session);
         $newebPay->cancelOrder($no, $amt, $type);
@@ -89,7 +89,7 @@ class Factory
     }
 
     /**
-     * 請款
+     * 信用卡請款
      *
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
@@ -97,18 +97,17 @@ class Factory
      *                        * **order**: 使用商店訂單編號追蹤
      *                        * **trade**: 使用藍新金流交易序號追蹤
      */
-    public function requestPayment(string $no, int $amt, string $type = 'order'): NewebPayClose
+    public function request(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         $newebPay = new NewebPayClose($this->config, $this->session);
-        $newebPay
+
+        return $newebPay
             ->closeOrder($no, $amt, $type)
             ->pay();
-
-        return $newebPay;
     }
 
     /**
-     * 退款
+     * 取消信用卡請款
      *
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
@@ -116,13 +115,44 @@ class Factory
      *                        * **order**: 使用商店訂單編號追蹤
      *                        * **trade**: 使用藍新金流交易序號追蹤
      */
-    public function requestRefund(string $no, int $amt, string $type = 'order'): NewebPayClose
+    public function cancelRequest(string $no, int $amt, string $type = 'order'): NewebPayClose
+    {
+        return $this
+            ->request($no, $amt, $type)
+            ->cancel();
+    }
+
+    /**
+     * 信用卡退款
+     *
+     * @param  string  $no  訂單編號
+     * @param  int  $amt  訂單金額
+     * @param  string  $type  編號類型
+     *                        * **order**: 使用商店訂單編號追蹤
+     *                        * **trade**: 使用藍新金流交易序號追蹤
+     */
+    public function refund(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         $newebPay = new NewebPayClose($this->config, $this->session);
-        $newebPay
+
+        return $newebPay
             ->closeOrder($no, $amt, $type)
             ->refund();
+    }
 
-        return $newebPay;
+    /**
+     * 取消信用卡退款
+     *
+     * @param  string  $no  訂單編號
+     * @param  int  $amt  訂單金額
+     * @param  string  $type  編號類型
+     *                        * **order**: 使用商店訂單編號追蹤
+     *                        * **trade**: 使用藍新金流交易序號追蹤
+     */
+    public function cancelRequesRefund(string $no, int $amt, string $type = 'order'): NewebPayClose
+    {
+        return $this
+            ->refund($no, $amt, $type)
+            ->cancel();
     }
 }
