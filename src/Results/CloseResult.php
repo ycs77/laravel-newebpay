@@ -16,7 +16,7 @@ class CloseResult extends Result
     }
 
     /**
-     * 交易成功
+     * 交易是否成功
      */
     public function isSuccess(): bool
     {
@@ -24,7 +24,7 @@ class CloseResult extends Result
     }
 
     /**
-     * 交易失敗
+     * 交易是否失敗
      */
     public function isFail(): bool
     {

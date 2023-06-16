@@ -16,7 +16,7 @@ class CustomerResult extends Result
     }
 
     /**
-     * 取號成功
+     * 取號是否成功
      */
     public function isSuccess(): bool
     {
@@ -24,7 +24,7 @@ class CustomerResult extends Result
     }
 
     /**
-     * 取號失敗
+     * 取號是否失敗
      */
     public function isFail(): bool
     {

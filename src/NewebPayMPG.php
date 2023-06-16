@@ -34,15 +34,15 @@ class NewebPayMPG extends NewebPayRequest
         $this->langType();
         $this->tradeLimit();
         $this->expireDate();
-        $this->returnURL();
-        $this->notifyURL();
-        $this->customerURL();
-        $this->clientBackURL();
+        $this->returnUrl();
+        $this->notifyUrl();
+        $this->customerUrl();
+        $this->clientBackUrl();
         $this->emailModify();
         $this->loginType();
         $this->orderComment();
         $this->paymentMethods();
-        $this->CVSCOM();
+        $this->cvscom();
         $this->lgsType();
     }
 
@@ -93,7 +93,7 @@ class NewebPayMPG extends NewebPayRequest
      *
      * 僅接受 port 80 或 443。
      */
-    public function returnURL(string $url = null)
+    public function returnUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.return_url')) {
             $this->tradeData['ReturnURL'] = $this->config->get('app.url').$url;
@@ -110,7 +110,7 @@ class NewebPayMPG extends NewebPayRequest
      * 1. 以幕後方式回傳給商店相關支付結果資料
      * 2. 僅接受 port 80 或 443。
      */
-    public function notifyURL(string $url = null)
+    public function notifyUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.notify_url')) {
             $this->tradeData['NotifyURL'] = $this->config->get('app.url').$url;
@@ -124,7 +124,7 @@ class NewebPayMPG extends NewebPayRequest
      *
      * 如果設定為 null，則會顯示取號結果在藍新金流頁面。
      */
-    public function customerURL(string $url = null)
+    public function customerUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.customer_url')) {
             $this->tradeData['CustomerURL'] = $this->config->get('app.url').$url;
@@ -136,11 +136,11 @@ class NewebPayMPG extends NewebPayRequest
     }
 
     /**
-     * 付款取消時返回商店網址
+     * 付款時點擊「返回按鈕」的網址
      *
-     * 當交易取消時，平台會出現返回鈕，使消費者依以此參數網址返回商店指定的頁面。
+     * 當交易中平台會出現返回鈕，使消費者依以此參數網址返回商店指定的頁面。
      */
-    public function clientBackURL(string $url = null)
+    public function clientBackUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.client_back_url')) {
             $this->tradeData['ClientBackURL'] = $this->config->get('app.url').$url;
@@ -319,7 +319,7 @@ class NewebPayMPG extends NewebPayRequest
      * * **CVSCOM::NOT_PAY_AND_PAY**  啟用超商取貨不付款 及 超商取貨付款
      * * **CVSCOM::NONE**             不開啟
      */
-    public function CVSCOM(CVSCOM $cvscom = null)
+    public function cvscom(CVSCOM $cvscom = null)
     {
         $cvscom = $cvscom ?? $this->config->get('newebpay.CVSCOM');
 

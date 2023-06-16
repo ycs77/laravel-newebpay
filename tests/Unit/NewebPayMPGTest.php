@@ -289,7 +289,7 @@ test('MPG CVSCOM', function () {
 
     expect($newebpay->tradeData())->not->toHaveKey('CVSCOM');
 
-    $newebpay->CVSCOM(CVSCOM::PAY);
+    $newebpay->cvscom(CVSCOM::PAY);
 
     expect($newebpay->tradeData())->toHaveKey('CVSCOM', CVSCOM::PAY->value);
 });

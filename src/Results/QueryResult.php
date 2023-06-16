@@ -35,7 +35,7 @@ class QueryResult extends Result
     }
 
     /**
-     * 查詢成功
+     * 查詢是否成功
      */
     public function isSuccess(): bool
     {
@@ -43,7 +43,7 @@ class QueryResult extends Result
     }
 
     /**
-     * 查詢失敗
+     * 查詢是否失敗
      */
     public function isFail(): bool
     {
