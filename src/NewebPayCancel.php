@@ -29,8 +29,8 @@ class NewebPayCancel extends NewebPayRequest
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
      * @param  string  $type  編號類型
-     *                        * 'order' => 使用商店訂單編號追蹤
-     *                        * 'trade' => 使用藍新金流交易序號追蹤
+     *                        * **order**: 使用商店訂單編號追蹤
+     *                        * **trade**: 使用藍新金流交易序號追蹤
      */
     public function cancelOrder(string $no, int $amt, string $type = 'order')
     {

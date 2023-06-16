@@ -29,8 +29,8 @@ class NewebPayClose extends NewebPayRequest
      * @param  string  $no  訂單編號
      * @param  int  $amt  訂單金額
      * @param  string  $type  編號類型
-     *                        * 'order' => 使用商店訂單編號追蹤
-     *                        * 'trade' => 使用藍新金流交易序號追蹤
+     *                        * **order**: 使用商店訂單編號追蹤
+     *                        * **trade**: 使用藍新金流交易序號追蹤
      */
     public function closeOrder(string $no, int $amt, string $type = 'order')
     {
@@ -67,8 +67,8 @@ class NewebPayClose extends NewebPayRequest
      * 設定請款或退款
      *
      * @param  string  $type  類型
-     *                        'pay': 請款
-     *                        'refund': 退款
+     *                        * **pay**: 請款
+     *                        * **refund**: 退款
      */
     public function closeType(string $type)
     {
