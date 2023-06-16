@@ -24,10 +24,10 @@ class QueryResult extends Result
     }
 
     /**
-     * 交易狀態
+     * 查詢狀態
      *
-     * 1. 若交易付款成功，則回傳 SUCCESS。
-     * 2. 若交易付款失敗，則回傳錯誤代碼。
+     * 1. 若查詢成功，則回傳 SUCCESS。
+     * 2. 若查詢失敗，則回傳錯誤代碼。
      */
     public function status(): string
     {
@@ -35,7 +35,7 @@ class QueryResult extends Result
     }
 
     /**
-     * 交易成功
+     * 查詢成功
      */
     public function isSuccess(): bool
     {
@@ -43,7 +43,7 @@ class QueryResult extends Result
     }
 
     /**
-     * 交易失敗
+     * 查詢失敗
      */
     public function isFail(): bool
     {
@@ -51,7 +51,7 @@ class QueryResult extends Result
     }
 
     /**
-     * 敘述此次交易狀態
+     * 敘述此次查詢狀態
      */
     public function message(): string
     {

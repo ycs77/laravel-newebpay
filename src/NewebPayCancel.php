@@ -2,6 +2,8 @@
 
 namespace Ycs77\NewebPay;
 
+use Ycs77\NewebPay\Results\CancelResult;
+
 class NewebPayCancel extends NewebPayRequest
 {
     /**
@@ -66,5 +68,13 @@ class NewebPayCancel extends NewebPayRequest
             'MerchantID_' => $this->merchantID,
             'PostData_' => $postData,
         ];
+    }
+
+    /**
+     * Submit data to newebpay API.
+     */
+    public function submit(): CancelResult
+    {
+        return new CancelResult(parent::submit(), $this->hashKey, $this->hashIV);
     }
 }
