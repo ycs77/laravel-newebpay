@@ -89,6 +89,23 @@ class Factory
     }
 
     /**
+     * 信用卡請/退款
+     *
+     * @param  string  $no  訂單編號
+     * @param  int  $amt  訂單金額
+     * @param  string  $type  編號類型
+     *                        * **order**: 使用商店訂單編號追蹤
+     *                        * **trade**: 使用藍新金流交易序號追蹤
+     */
+    public function close(string $no, int $amt, string $type = 'order'): NewebPayClose
+    {
+        $newebPay = new NewebPayClose($this->config, $this->session);
+
+        return $newebPay
+            ->closeOrder($no, $amt, $type);
+    }
+
+    /**
      * 信用卡請款
      *
      * @param  string  $no  訂單編號
@@ -99,10 +116,8 @@ class Factory
      */
     public function request(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
-        $newebPay = new NewebPayClose($this->config, $this->session);
-
-        return $newebPay
-            ->closeOrder($no, $amt, $type)
+        return $this
+            ->close($no, $amt, $type)
             ->pay();
     }
 
@@ -118,7 +133,8 @@ class Factory
     public function cancelRequest(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         return $this
-            ->request($no, $amt, $type)
+            ->close($no, $amt, $type)
+            ->pay()
             ->cancel();
     }
 
@@ -133,10 +149,8 @@ class Factory
      */
     public function refund(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
-        $newebPay = new NewebPayClose($this->config, $this->session);
-
-        return $newebPay
-            ->closeOrder($no, $amt, $type)
+        return $this
+            ->close($no, $amt, $type)
             ->refund();
     }
 
@@ -152,7 +166,8 @@ class Factory
     public function cancelRequesRefund(string $no, int $amt, string $type = 'order'): NewebPayClose
     {
         return $this
-            ->refund($no, $amt, $type)
+            ->close($no, $amt, $type)
+            ->refund()
             ->cancel();
     }
 }

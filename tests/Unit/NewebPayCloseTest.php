@@ -103,7 +103,7 @@ test('close can be submit', function () {
         ->setMockHttp(new Response(200, [], '{"Status":"SUCCESS","Message":"Test message.","Result":[]}'))
         ->submit();
 
-    expect($result)->toBe([
+    expect($result->data())->toBe([
         'Status' => 'SUCCESS',
         'Message' => 'Test message.',
         'Result' => [],

@@ -2,6 +2,8 @@
 
 namespace Ycs77\NewebPay;
 
+use Ycs77\NewebPay\Results\CloseResult;
+
 class NewebPayClose extends NewebPayRequest
 {
     /**
@@ -112,5 +114,13 @@ class NewebPayClose extends NewebPayRequest
             'MerchantID_' => $this->merchantID,
             'PostData_' => $postData,
         ];
+    }
+
+    /**
+     * Submit data to newebpay API.
+     */
+    public function submit(): CloseResult
+    {
+        return new CloseResult(parent::submit());
     }
 }
