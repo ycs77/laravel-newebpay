@@ -3,7 +3,6 @@
 namespace Ycs77\NewebPay\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Ycs77\NewebPay\Testing\EncryptTradeDataTesting;
 
 /**
  * @method static \Ycs77\NewebPay\NewebPayMPG payment(string $no, int $amt, string $desc, string $email)
@@ -28,20 +27,5 @@ class NewebPay extends Facade
     protected static function getFacadeAccessor()
     {
         return \Ycs77\NewebPay\Factory::class;
-    }
-
-    /**
-     * Encryption the fake trade data for testing.
-     */
-    public static function encryptTradeDataForTesting(array $tradeData): array
-    {
-        $response = new EncryptTradeDataTesting(
-            static::$app->make('config'),
-            static::$app->make('session.store')
-        );
-
-        $response->setTradeData($tradeData);
-
-        return $response->encryptData();
     }
 }

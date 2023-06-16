@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use Ycs77\NewebPay\Facades\NewebPay;
 use Ycs77\NewebPay\NewebPayResult;
 use Ycs77\NewebPay\Results\MPGResult;
 
@@ -35,7 +34,7 @@ test('can be get result data on callback request', function () {
         ],
     ];
 
-    $data = NewebPay::encryptTradeDataForTesting($tradeData);
+    $data = encryptTradeData($tradeData);
 
     $request = Request::create('/callback', 'POST', [
         'Status' => 'SUCCESS',

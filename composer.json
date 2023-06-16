@@ -35,7 +35,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Ycs77\\NewebPay\\Tests\\": "tests"
+            "Ycs77\\NewebPay\\Tests\\": "tests/"
         }
     },
     "scripts": {

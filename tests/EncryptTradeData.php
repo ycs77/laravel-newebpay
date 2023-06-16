@@ -1,10 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Testing;
+namespace Ycs77\NewebPay\Tests;
 
 use Ycs77\NewebPay\NewebPay;
 
-class EncryptTradeDataTesting extends NewebPay
+class EncryptTradeData extends NewebPay
 {
     /**
      * The newebpay trade data.

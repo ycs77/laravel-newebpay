@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use Ycs77\NewebPay\Facades\NewebPay;
 use Ycs77\NewebPay\NewebPayCustomer;
 use Ycs77\NewebPay\Results\CustomerResult;
 
@@ -24,7 +23,7 @@ test('can be get customer result data', function () {
         ],
     ];
 
-    $data = NewebPay::encryptTradeDataForTesting($tradeData);
+    $data = encryptTradeData($tradeData);
 
     $request = Request::create('/customer', 'POST', [
         'Status' => 'SUCCESS',
