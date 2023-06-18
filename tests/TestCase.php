@@ -28,11 +28,11 @@ class TestCase extends BaseTestCase
             $config->set('newebpay.merchant_id', 'TestMerchantID1234');
             $config->set('newebpay.hash_key', 'TestHashKey123456789');
             $config->set('newebpay.hash_iv', '17ef14e533ed1c18'); // Generate with `bin2hex(openssl_random_pseudo_bytes(8));`
-            $config->set('newebpay.mpg_version', '2.0');
-            $config->set('newebpay.query_version', '1.3');
-            $config->set('newebpay.credit_cancel_version', '1.0');
-            $config->set('newebpay.credit_close_version', '1.1');
-            $config->set('newebpay.lang_type', 'zh-tw');
+            $config->set('newebpay.version.mpg', '2.0');
+            $config->set('newebpay.version.query', '1.3');
+            $config->set('newebpay.version.credit_cancel', '1.0');
+            $config->set('newebpay.version.credit_close', '1.1');
+            $config->set('newebpay.lang', 'zh-tw');
             $config->set('newebpay.trade_limit', 0);
             $config->set('newebpay.expire_date', 7);
             $config->set('newebpay.return_url', '/pay/callback');

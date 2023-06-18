@@ -128,7 +128,7 @@ class PaymentController
 use Ycs77\NewebPay\Facades\NewebPay;
 
 return NewebPay::payment(...)
-    ->langType() // 語言設定
+    ->lang() // 語言設定
     ->tradeLimit() // 交易秒數限制
     ->expireDate() // 交易截止日
     ->returnUrl() // 由藍新回傳後前景畫面要接收資料顯示的網址

@@ -27,11 +27,11 @@ class NewebPayMPG extends NewebPayRequest
 
         $this->tradeData['MerchantID'] = $this->merchantID;
         $this->tradeData['TimeStamp'] = $this->timestamp;
-        $this->tradeData['Version'] = $this->config->get('newebpay.mpg_version');
+        $this->tradeData['Version'] = $this->config->get('newebpay.version.mpg');
         $this->tradeData['RespondType'] = 'JSON';
 
         $this->apiPath('/MPG/mpg_gateway');
-        $this->langType();
+        $this->lang();
         $this->tradeLimit();
         $this->expireDate();
         $this->returnUrl();
@@ -51,9 +51,9 @@ class NewebPayMPG extends NewebPayRequest
      *
      * 語系可設定 "zh-tw", "en", "jp"。
      */
-    public function langType(string $lang = null)
+    public function lang(string $lang = null)
     {
-        $this->tradeData['LangType'] = $lang ?? $this->config->get('newebpay.lang_type');
+        $this->tradeData['LangType'] = $lang ?? $this->config->get('newebpay.lang');
 
         return $this;
     }

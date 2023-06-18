@@ -19,7 +19,7 @@ class NewebPayCancel extends NewebPayRequest
         $this->setBackgroundSender();
 
         $this->postData['TimeStamp'] = $this->timestamp;
-        $this->postData['Version'] = $this->config->get('newebpay.credit_cancel_version');
+        $this->postData['Version'] = $this->config->get('newebpay.version.credit_cancel');
         $this->postData['RespondType'] = 'JSON';
 
         $this->apiPath('/API/CreditCard/Cancel');

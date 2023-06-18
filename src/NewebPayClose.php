@@ -19,7 +19,7 @@ class NewebPayClose extends NewebPayRequest
         $this->setBackgroundSender();
 
         $this->postData['TimeStamp'] = $this->timestamp;
-        $this->postData['Version'] = $this->config->get('newebpay.credit_close_version');
+        $this->postData['Version'] = $this->config->get('newebpay.version.credit_close');
         $this->postData['RespondType'] = 'JSON';
 
         $this->apiPath('/API/CreditCard/Close');

@@ -66,7 +66,7 @@ class NewebPayQuery extends NewebPayRequest
 
         return [
             'MerchantID' => $this->merchantID,
-            'Version' => $this->config->get('newebpay.query_version'),
+            'Version' => $this->config->get('newebpay.version.query'),
             'RespondType' => 'JSON',
             'CheckValue' => $CheckValue,
             'TimeStamp' => $this->timestamp,
