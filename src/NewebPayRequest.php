@@ -22,14 +22,6 @@ abstract class NewebPayRequest extends NewebPay
     protected string $testUrl = 'https://ccore.newebpay.com';
 
     /**
-     * Generate the newebpay full URL.
-     */
-    public function generateUrl(string $path): string
-    {
-        return ($this->config->get('newebpay.debug') ? $this->testUrl : $this->productionUrl).$path;
-    }
-
-    /**
      * Get the newebpay full URL.
      */
     public function getUrl(): string
@@ -42,7 +34,7 @@ abstract class NewebPayRequest extends NewebPay
      */
     public function apiPath(string $path)
     {
-        $this->url = $this->generateUrl($path);
+        $this->url = ($this->config->get('newebpay.debug') ? $this->testUrl : $this->productionUrl).$path;
 
         return $this;
     }
