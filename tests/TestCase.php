@@ -90,4 +90,18 @@ class TestCase extends BaseTestCase
             $config->set('newebpay.period.back_url', null);
         });
     }
+
+    /**
+     * Get package providers.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     * @return array<int, class-string>
+     */
+    protected function getPackageProviders($app)
+    {
+        return [
+            'Ycs77\LaravelRecoverSession\RecoverSessionServiceProvider',
+            'Ycs77\NewebPay\NewebPayServiceProvider',
+        ];
+    }
 }

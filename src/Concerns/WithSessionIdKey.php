@@ -10,28 +10,20 @@ use Ycs77\LaravelRecoverSession\Facades\RecoverSession;
  */
 trait WithSessionIdKey
 {
-    protected string $urlSessionIdKey = 'sid';
-
     public function withSessionIdKey(string $urlType)
     {
         if ($this->config->get('newebpay.with_session_id') &&
             is_string($this->dataForWithSessionId()[$urlType])
         ) {
+            $urlSessionIdKey = $this->config->get('recover-session.session_id_key');
             $data = $this->dataForWithSessionId();
             $key = RecoverSession::preserve(Request::instance());
             $delimiter = str_contains($data[$urlType], '?') ? '&' : '?';
 
-            $data[$urlType] = $data[$urlType].$delimiter.$this->urlSessionIdKey.'='.$key;
+            $data[$urlType] = $data[$urlType].$delimiter.$urlSessionIdKey.'='.$key;
 
             $this->dataForWithSessionId($data);
         }
-
-        return $this;
-    }
-
-    public function urlSessionIdKey(string $key)
-    {
-        $this->urlSessionIdKey = $key;
 
         return $this;
     }
