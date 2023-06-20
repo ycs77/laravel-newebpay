@@ -7,7 +7,6 @@ use Ycs77\LaravelRecoverSession\Facades\RecoverSession;
 
 /**
  * @property \Illuminate\Contracts\Config\Repository $config
- * @property array $tradeData
  */
 trait WithSessionIdKey
 {
@@ -16,13 +15,15 @@ trait WithSessionIdKey
     public function withSessionIdKey(string $urlType)
     {
         if ($this->config->get('newebpay.with_session_id') &&
-            is_string($this->tradeData[$urlType])
+            is_string($this->dataForWithSessionId()[$urlType])
         ) {
+            $data = $this->dataForWithSessionId();
             $key = RecoverSession::preserve(Request::instance());
+            $delimiter = str_contains($data[$urlType], '?') ? '&' : '?';
 
-            $delimiter = str_contains($this->tradeData[$urlType], '?') ? '&' : '?';
+            $data[$urlType] = $data[$urlType].$delimiter.$this->urlSessionIdKey.'='.$key;
 
-            $this->tradeData[$urlType] = $this->tradeData[$urlType].$delimiter.$this->urlSessionIdKey.'='.$key;
+            $this->dataForWithSessionId($data);
         }
 
         return $this;
@@ -33,5 +34,14 @@ trait WithSessionIdKey
         $this->urlSessionIdKey = $key;
 
         return $this;
+    }
+
+    protected function dataForWithSessionId(array $data = null): array
+    {
+        if ($data) {
+            $this->tradeData = $data;
+        }
+
+        return $this->tradeData;
     }
 }

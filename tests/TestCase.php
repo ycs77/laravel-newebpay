@@ -10,6 +10,7 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\NTCBLocate;
+use Ycs77\NewebPay\Enums\PeriodStartType;
 
 class TestCase extends BaseTestCase
 {
@@ -32,6 +33,9 @@ class TestCase extends BaseTestCase
             $config->set('newebpay.version.query', '1.3');
             $config->set('newebpay.version.credit_cancel', '1.0');
             $config->set('newebpay.version.credit_close', '1.1');
+            $config->set('newebpay.version.period', '1.5');
+            $config->set('newebpay.version.period_status', '1.0');
+            $config->set('newebpay.version.period_amt', '1.1');
             $config->set('newebpay.lang', 'zh-tw');
             $config->set('newebpay.trade_limit', 0);
             $config->set('newebpay.expire_date', 7);
@@ -78,6 +82,12 @@ class TestCase extends BaseTestCase
             ]);
             $config->set('newebpay.CVSCOM', CVSCOM::NONE);
             $config->set('newebpay.lgs_type', LgsType::DEFAULT);
+            $config->set('newebpay.period.start_type', PeriodStartType::AUTHORIZE_NOW);
+            $config->set('newebpay.period.payment_info', false);
+            $config->set('newebpay.period.order_info', false);
+            $config->set('newebpay.period.return_url', null);
+            $config->set('newebpay.period.notify_url', null);
+            $config->set('newebpay.period.back_url', null);
         });
     }
 }

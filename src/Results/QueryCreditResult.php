@@ -155,7 +155,7 @@ class QueryCreditResult extends Result
     }
 
     /**
-     * 收單金融機構中文名稱
+     * 交易類別中文名稱
      */
     public function paymentMethodName(): string
     {

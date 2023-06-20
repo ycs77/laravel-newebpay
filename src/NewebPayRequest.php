@@ -39,6 +39,15 @@ abstract class NewebPayRequest extends NewebPay
         return $this;
     }
 
+    protected function formatCallbackUrl(string $path)
+    {
+        if (! filter_var($path, FILTER_VALIDATE_URL)) {
+            $path = $this->config->get('app.url').$path;
+        }
+
+        return $path;
+    }
+
     /**
      * Get request data.
      */

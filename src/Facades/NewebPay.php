@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Ycs77\NewebPay\NewebPayClose cancelRequest(string $no, int $amt, string $type = 'order')
  * @method static \Ycs77\NewebPay\NewebPayClose refund(string $no, int $amt, string $type = 'order')
  * @method static \Ycs77\NewebPay\NewebPayClose cancelRefund(string $no, int $amt, string $type = 'order')
+ * @method static \Ycs77\NewebPay\NewebPayPeriod period(string $no, int $amt, string $desc, string $email)
+ * @method static \Ycs77\NewebPay\Results\PeriodResult periodResult(\Illuminate\Http\Request $request)
+ * @method static \Ycs77\NewebPay\Results\PeriodNotifyResult periodNotify(\Illuminate\Http\Request $request)
+ * @method static \Ycs77\NewebPay\NewebPayPeriodStatus periodStatus(string $no, string $periodNo, \Ycs77\NewebPay\Enums\PeriodStatus $status)
+ * @method static \Ycs77\NewebPay\NewebPayPeriodAmt periodAmt(string $no, string $periodNo, int $amt)
  *
  * @see \Ycs77\NewebPay\Factory
  */

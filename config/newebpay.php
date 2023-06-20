@@ -6,6 +6,7 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\NTCBLocate;
+use Ycs77\NewebPay\Enums\PeriodStartType;
 
 return [
 
@@ -46,10 +47,12 @@ return [
         'mpg' => '2.0',
 
         'query' => '1.3',
-
         'credit_cancel' => '1.0',
-
         'credit_close' => '1.1',
+
+        'period' => '1.5',
+        'period_status' => '1.0',
+        'period_amt' => '1.1',
     ],
 
     /*
@@ -337,5 +340,59 @@ return [
     */
 
     'lgs_type' => LgsType::DEFAULT,
+
+    /*
+    |--------------------------------------------------------------------------
+    | 信用卡定期定額委託
+    |--------------------------------------------------------------------------
+    |
+    | 和信用卡定期定額委託相關的設定。
+    |
+    */
+
+    'period' => [
+
+        /**
+         * 交易模式
+         *   委託成立後，是否立即進行信用卡授權交易，作為檢查信用卡之有效性
+         *   PeriodStartType::TEN_DOLLARS_NOW  立即執行十元授權
+         *   PeriodStartType::AUTHORIZE_NOW    立即執行委託金額授權
+         *   PeriodStartType::NO_AUTHORIZE     不檢查信用卡資訊，不授權
+         */
+        'start_type' => PeriodStartType::AUTHORIZE_NOW,
+
+        /**
+         * 是否開啟付款人資訊
+         *   於付款人填寫此委託時，是否需顯示付款人資訊填寫欄位。
+         *   付款人資訊填寫欄位包含付款人姓名、付款人電話、付款人手機。
+         */
+        'payment_info' => false,
+
+        /**
+         * 是否開啟收件人資訊
+         *   於付款人填寫此委託時，是否需顯示收件人資訊填寫欄位。
+         *   收件人資訊填寫欄位包含收件人姓名、收件人電話、收件人手機、收件人地址。
+         */
+        'order_info' => false,
+
+        /**
+         * 返回商店網址
+         *   1. 當付款人首次執行信用卡授權交易完成後，以 Form Post 方式導回商店頁。
+         *   2. 若此欄位為空值，交易完成後，付款人將停留在藍新金流交易完成頁面。
+         */
+        'return_url' => null,
+
+        /**
+         * 每期授權結果通知
+         *   1. 當付款人每期執行信用卡授權交易完成後，以幕後 Post 方式通知商店授權結果。
+         *   2. 若此欄位為空值，則不通知商店授權結果。
+         */
+        'notify_url' => null,
+
+        /**
+         * 取消交易時返回商店的網址
+         */
+        'back_url' => null,
+    ],
 
 ];

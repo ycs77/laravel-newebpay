@@ -96,7 +96,7 @@ class NewebPayMPG extends NewebPayRequest
     public function returnUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.return_url')) {
-            $this->tradeData['ReturnURL'] = $this->config->get('app.url').$url;
+            $this->tradeData['ReturnURL'] = $this->formatCallbackUrl($url);
 
             $this->WithSessionIdKey('ReturnURL');
         }
@@ -113,7 +113,7 @@ class NewebPayMPG extends NewebPayRequest
     public function notifyUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.notify_url')) {
-            $this->tradeData['NotifyURL'] = $this->config->get('app.url').$url;
+            $this->tradeData['NotifyURL'] = $this->formatCallbackUrl($url);
         }
 
         return $this;
@@ -127,7 +127,7 @@ class NewebPayMPG extends NewebPayRequest
     public function customerUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.customer_url')) {
-            $this->tradeData['CustomerURL'] = $this->config->get('app.url').$url;
+            $this->tradeData['CustomerURL'] = $this->formatCallbackUrl($url);
 
             $this->WithSessionIdKey('CustomerURL');
         }
@@ -143,7 +143,7 @@ class NewebPayMPG extends NewebPayRequest
     public function clientBackUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.client_back_url')) {
-            $this->tradeData['ClientBackURL'] = $this->config->get('app.url').$url;
+            $this->tradeData['ClientBackURL'] = $this->formatCallbackUrl($url);
         }
 
         return $this;
@@ -154,11 +154,9 @@ class NewebPayMPG extends NewebPayRequest
      */
     public function emailModify(bool $isModify = null)
     {
-        $this->tradeData['EmailModify'] = (
-            $isModify !== null
-                ? $isModify
-                : $this->config->get('newebpay.email_modify')
-        ) ? 1 : 0;
+        if (! ($isModify ?? $this->config->get('newebpay.email_modify'))) {
+            $this->tradeData['EmailModify'] = 0;
+        }
 
         return $this;
     }
@@ -168,11 +166,9 @@ class NewebPayMPG extends NewebPayRequest
      */
     public function loginType(bool $isLogin = false)
     {
-        $this->tradeData['LoginType'] = (
-            $isLogin !== null
-                ? $isLogin
-                : $this->config->get('newebpay.login_type')
-        ) ? 1 : 0;
+        if ($isLogin ?? $this->config->get('newebpay.login_type')) {
+            $this->tradeData['LoginType'] = 1;
+        }
 
         return $this;
     }
