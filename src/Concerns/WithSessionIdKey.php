@@ -10,30 +10,18 @@ use Ycs77\LaravelRecoverSession\Facades\RecoverSession;
  */
 trait WithSessionIdKey
 {
-    public function withSessionIdKey(string $urlType)
+    public function withSessionIdKey(?string $url)
     {
-        if ($this->config->get('newebpay.with_session_id') &&
-            is_string($this->dataForWithSessionId()[$urlType])
-        ) {
+        if ($this->config->get('newebpay.with_session_id') && $url) {
             $urlSessionIdKey = $this->config->get('recover-session.session_id_key');
-            $data = $this->dataForWithSessionId();
+
             $key = RecoverSession::preserve(Request::instance());
-            $delimiter = str_contains($data[$urlType], '?') ? '&' : '?';
 
-            $data[$urlType] = $data[$urlType].$delimiter.$urlSessionIdKey.'='.$key;
+            $delimiter = str_contains($url, '?') ? '&' : '?';
 
-            $this->dataForWithSessionId($data);
+            return $url.$delimiter.$urlSessionIdKey.'='.$key;
         }
 
-        return $this;
-    }
-
-    protected function dataForWithSessionId(array $data = null): array
-    {
-        if ($data) {
-            $this->tradeData = $data;
-        }
-
-        return $this->tradeData;
+        return $url;
     }
 }

@@ -96,9 +96,9 @@ class NewebPayMPG extends NewebPayRequest
     public function returnUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.return_url')) {
-            $this->tradeData['ReturnURL'] = $this->formatCallbackUrl($url);
-
-            $this->WithSessionIdKey('ReturnURL');
+            $this->tradeData['ReturnURL'] = $this->WithSessionIdKey(
+                $this->formatCallbackUrl($url)
+            );
         }
 
         return $this;
@@ -127,9 +127,9 @@ class NewebPayMPG extends NewebPayRequest
     public function customerUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.customer_url')) {
-            $this->tradeData['CustomerURL'] = $this->formatCallbackUrl($url);
-
-            $this->WithSessionIdKey('CustomerURL');
+            $this->tradeData['CustomerURL'] = $this->WithSessionIdKey(
+                $this->formatCallbackUrl($url)
+            );
         }
 
         return $this;

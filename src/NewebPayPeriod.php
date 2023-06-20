@@ -62,9 +62,9 @@ class NewebPayPeriod extends NewebPayRequest
     public function returnUrl(string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.period.return_url')) {
-            $this->postData['ReturnURL'] = $this->formatCallbackUrl($url);
-
-            $this->WithSessionIdKey('ReturnURL');
+            $this->postData['ReturnURL'] = $this->WithSessionIdKey(
+                $this->formatCallbackUrl($url)
+            );
         }
 
         return $this;
@@ -296,15 +296,6 @@ class NewebPayPeriod extends NewebPayRequest
      */
     public function postData(): array
     {
-        return $this->postData;
-    }
-
-    protected function dataForWithSessionId(array $data = null): array
-    {
-        if ($data) {
-            $this->postData = $data;
-        }
-
         return $this->postData;
     }
 
