@@ -307,60 +307,11 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
-### 解決自動登出問題
-
-因為現在 Laravel 的 Cookie SameSite 預設值是 `Lax`，使用 form post 傳到其他網域的網站時不會帶上 Cookie，導致在付款完成後導向回原網站時，會因為讀取不到原本登入的 Cookie 而出現自動登出的問題。
-
-首先先要調整中間件的順序，把 `RecoverSession` 的順序放在 `StartSession` 的下面。預設 Laravel 的 `Kernel` 是不會有 `$middlewarePriority` 屬性，可以在 Laravel Framework 中找到，或直接複製下方到 `app/Http/Kernel.php` 中：
-
-```php
-class Kernel extends HttpKernel
-{
-    /**
-     * The priority-sorted list of middleware.
-     *
-     * Forces non-global middleware to always be in the given order.
-     *
-     * @var string[]
-     */
-    protected $middlewarePriority = [
-        \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
-        \Illuminate\Cookie\Middleware\EncryptCookies::class,
-        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-        \Illuminate\Session\Middleware\StartSession::class,
-        \Ycs77\LaravelRecoverSession\Middleware\RecoverSession::class, // 必須要將 `RecoverSession` 放在 `StartSession` 的下面
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
-        \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
-        \Illuminate\Contracts\Session\Middleware\AuthenticatesSessions::class,
-        \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        \Illuminate\Auth\Middleware\Authorize::class,
-    ];
-}
-```
-
-然後為 callback 路由加上 `RecoverSession` 中間件，會自動從 callback 網址中讀取暫存的 Key 並從快取中取回原本的 Session ID，設定回原本的 Session 狀態：
-
-```php
-use Ycs77\LaravelRecoverSession\Middleware\RecoverSession;
-
-Route::post('/pay/callback', ...)
-    ->middleware([RecoverSession::class, 'auth']);
-
-Route::post('/pay/notify', ...);
-```
-
-> 詳細跟 SameSite 相關可參考: https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure
-
 ## ATM/超商條碼/超商代碼取號
 
-預設會直接導向到藍新金流的取號頁面，沒有特別需求不需要自己做。
-
-但如果要自訂取號頁面的話，也是可以自己客製調整。還有要加上 `RecoverSession` 中間件：
+預設會直接導向到藍新金流的取號頁面，沒有特別需求不需要自己做。但如果要自訂取號頁面的話，也是可以自己客製調整：
 
 ```php
-use Ycs77\LaravelRecoverSession\Middleware\RecoverSession;
 use Ycs77\NewebPay\Facades\NewebPay;
 
 Route::post('/pay/customer', function (Request $request) {
@@ -374,7 +325,7 @@ Route::post('/pay/customer', function (Request $request) {
     $result = $result->result();
 
     // 自訂取號結果頁面...
-})->middleware([RecoverSession::class]);
+});
 ```
 
 在 `config/newebpay.php` 裡設定網址：
