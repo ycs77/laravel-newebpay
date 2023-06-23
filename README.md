@@ -84,7 +84,9 @@ Inertia.js 可以參考以下：
 *routes/web.php*
 ```php
 Route::get('/pay', function () {
-    return Inertia::render('Pay', ['csrf_token' => csrf_token()]);
+    return Inertia::render('Pay', [
+        'csrf_token' => csrf_token(),
+    ]);
 });
 ```
 
@@ -107,22 +109,16 @@ defineProps({
 然後建立送出付款的路由：
 
 ```php
-Route::post('/pay', 'PaymentController@payment');
-
 use Ycs77\NewebPay\Facades\NewebPay;
 
-class PaymentController
-{
-    public function payment()
-    {
-        $no = 'Vanespl_ec_'.time();  // 訂單編號
-        $amt = 120;                  // 交易金額
-        $desc = '我的商品';           // 商品名稱
-        $email = 'test@example.com'; // 付款人信箱
+Route::post('/pay', function () {
+    $no = 'Vanespl_ec_'.time();  // 訂單編號
+    $amt = 120;                  // 交易金額
+    $desc = '我的商品';           // 商品名稱
+    $email = 'test@example.com'; // 付款人信箱
 
-        return NewebPay::payment($no, $amt, $desc, $email)->submit();
-    }
-}
+    return NewebPay::payment($no, $amt, $desc, $email)->submit();
+});
 ```
 
 基本上一般交易可直接在 `config/newebpay.php` 做設定，裡面有詳細的解說，但若遇到特殊情況，可依據個別交易設定：
@@ -152,51 +148,39 @@ return NewebPay::payment(...)
 送出付款之後當然是要建立回傳的路由，如果是信用卡之類的付款方式，可以付款後直接跳轉回本網站的，可以只設定 callback：
 
 ```php
-Route::post('/pay/callback', 'PaymentController@callback');
-
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Facades\NewebPay;
 
-class PaymentController
-{
-    public function callback(Request $request)
-    {
-        $result = NewebPay::result($request);
+Route::post('/pay/callback', function (Request $request) {
+    $result = NewebPay::result($request);
 
-        if ($result->isFail()) {
-            return redirect()->to('/pay')->with('error', $result->message());
-        }
-
-        // 訂單付款成功，處裡訂單邏輯...
-
-        return redirect()->to('/pay')->with('success', '付款成功');
+    if ($result->isFail()) {
+        return redirect()->to('/pay')->with('error', $result->message());
     }
-}
+
+    // 訂單付款成功，處裡訂單邏輯...
+
+    return redirect()->to('/pay')->with('success', '付款成功');
+});
 ```
 
 如果是 ATM 的付款方式，需要透過幕後回傳的，可以只設定 notify：
 
 ```php
-Route::post('/pay/notify', 'PaymentController@notify');
-
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Facades\NewebPay;
 
-class PaymentController
-{
-    public function notify(Request $request)
-    {
-        $result = NewebPay::result($request);
+Route::post('/pay/notify', function (Request $request) {
+    $result = NewebPay::result($request);
 
-        if ($result->isFail()) {
-            return;
-        }
-
-        logger('藍新金流 交易資訊 notify', ['result' => $result->data()]);
-
-        // 訂單付款成功，處裡訂單邏輯...
+    if ($result->isFail()) {
+        return;
     }
-}
+
+    logger('藍新金流 交易資訊 notify', ['result' => $result->data()]);
+
+    // 訂單付款成功，處裡訂單邏輯...
+});
 ```
 
 回傳結果可以使用各個方法來取得需要的資料：
@@ -270,38 +254,30 @@ if ($result->paymentType() === 'TAIWANPAY') {
 但如果兩個同時設定的話，進行部分交易時兩個 API 都會發送訊息，這時就要各司其職，callback 只設定返回給用戶的訊息，而 notify 只負責處理交易的邏輯：
 
 ```php
-Route::post('/pay/callback', 'PaymentController@callback');
-Route::post('/pay/notify', 'PaymentController@notify');
-
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Facades\NewebPay;
 
-class PaymentController
-{
-    public function callback(Request $request)
-    {
-        $result = NewebPay::result($request);
+Route::post('/pay/callback', function (Request $request) {
+    $result = NewebPay::result($request);
 
-        if ($result->isFail()) {
-            return redirect()->to('/pay')->with('error', $result->message());
-        }
-
-        return redirect()->to('/pay')->with('success', '付款成功');
+    if ($result->isFail()) {
+        return redirect()->to('/pay')->with('error', $result->message());
     }
 
-    public function notify(Request $request)
-    {
-        $result = NewebPay::result($request);
+    return redirect()->to('/pay')->with('success', '付款成功');
+});
 
-        if ($result->isFail()) {
-            return;
-        }
+Route::post('/pay/notify', function (Request $request) {
+    $result = NewebPay::result($request);
 
-        logger('藍新金流 交易資訊 notify', ['result' => $result->data()]);
-
-        // 訂單付款成功，處裡訂單邏輯...
+    if ($result->isFail()) {
+        return;
     }
-}
+
+    logger('藍新金流 交易資訊 notify', ['result' => $result->data()]);
+
+    // 訂單付款成功，處裡訂單邏輯...
+});
 ```
 
 設定好之後可以在 `config/newebpay.php` 裡設定網址：
@@ -369,23 +345,25 @@ class Kernel extends HttpKernel
 ```php
 use Ycs77\LaravelRecoverSession\Middleware\RecoverSession;
 
-Route::post('/pay/callback', [PaymentController::class, 'callback'])
+Route::post('/pay/callback', ...)
     ->middleware([RecoverSession::class, 'auth']);
 
-Route::post('/pay/notify', [PaymentController::class, 'notify']);
+Route::post('/pay/notify', ...);
 ```
 
 > 詳細跟 SameSite 相關可參考: https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure
 
 ## ATM/超商條碼/超商代碼取號
 
-預設會直接導向到藍新金流的取號頁面。但如果要自訂取號頁面的話，也是可以自己客製調整：
+預設會直接導向到藍新金流的取號頁面，沒有特別需求不需要自己做。
+
+但如果要自訂取號頁面的話，也是可以自己客製調整。還有要加上 `RecoverSession` 中間件：
 
 ```php
+use Ycs77\LaravelRecoverSession\Middleware\RecoverSession;
 use Ycs77\NewebPay\Facades\NewebPay;
 
-public function customer(Request $request)
-{
+Route::post('/pay/customer', function (Request $request) {
     $result = NewebPay::customer($request);
 
     if ($result->isFail()) {
@@ -393,8 +371,10 @@ public function customer(Request $request)
         return;
     }
 
-    $result = $result->result(); // 顯示取號結果...
-}
+    $result = $result->result();
+
+    // 自訂取號結果頁面...
+})->middleware([RecoverSession::class]);
 ```
 
 在 `config/newebpay.php` 裡設定網址：
@@ -419,15 +399,6 @@ class VerifyCsrfToken extends Middleware
         '/pay/customer',
     ];
 }
-```
-
-最後註冊路由，並且要加上 `RecoverSession` 中間件：
-
-```php
-use Ycs77\LaravelRecoverSession\Middleware\RecoverSession;
-
-Route::any('/pay/customer', [PaymentController::class, 'customer'])
-    ->middleware([RecoverSession::class]);
 ```
 
 ## 單筆交易查詢
@@ -713,6 +684,7 @@ return [
 class VerifyCsrfToken extends Middleware
 {
     protected $except = [
+        ...
         '/pay/period/callback',
         '/pay/period/notify',
     ];
