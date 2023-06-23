@@ -16,6 +16,9 @@ Laravel NewebPay 為針對 Laravel 所寫的藍新金流（智付通）金流串
 * NewebPay Query - 單筆交易查詢
 * NewebPay Cancel - 信用卡取消授權
 * NewebPay Close - 信用卡請退款
+* NewebPay Period - 信用卡定期定額委託
+* NewebPay Period Alter Status - 修改委託狀態
+* NewebPay Period Alter Amt - 修改委託內容
 
 ## 安裝
 
@@ -580,6 +583,274 @@ function close()
 
     return response()->json(['message' => $result->message()]);
 }
+```
+
+## 信用卡定期定額委託
+
+### 發送建立委託請求頁面
+
+首先先建立一個頁面，和一個「訂閱」按鈕：
+
+*routes/web.php*
+```php
+Route::get('/subscribe', function () {
+    return view('subscribe');
+});
+```
+
+*resources/views/subscribe.blade.php*
+```html
+<form action="/subscribe" method="POST">
+    @csrf
+    <button>訂閱</button>
+</form>
+```
+
+Inertia.js 可以參考以下：
+
+*routes/web.php*
+```php
+Route::get('/subscribe', function () {
+    return Inertia::render('Subscribe', [
+        'csrf_token' => csrf_token(),
+    ]);
+});
+```
+
+*resources/js/pages/Subscribe.vue*
+```vue
+<template>
+  <form action="/subscribe" method="POST">
+    <input type="hidden" name="_token" :value="csrf_token">
+    <button>訂閱</button>
+  </form>
+</template>
+
+<script setup>
+defineProps({
+  csrf_token: String,
+})
+</script>
+```
+
+然後建立送出付款的路由：
+
+```php
+use Ycs77\NewebPay\Facades\NewebPay;
+
+Route::post('/subscribe', function () {
+    $no = now()->timestamp;      // 訂單編號
+    $amt = 120;                  // 交易金額
+    $desc = '我的訂閱制商品';     // 商品名稱
+    $email = 'test@example.com'; // 付款人信箱
+
+    return NewebPay::period($no, $amt, $desc, $email)
+        ->everyFewDays(2)
+        ->times(3)
+        ->submit();
+});
+```
+
+### 建立委託請求回傳結果
+
+設定建立委託完成後，將頁面導向回原本的網站頁面：
+
+```php
+use Illuminate\Http\Request;
+use Ycs77\NewebPay\Facades\NewebPay;
+
+Route::post('/pay/period/callback', function (Request $request) {
+    $result = NewebPay::periodResult($request);
+
+    if ($result->isFail()) {
+        return redirect()->to('/pay')->with('error', $result->message());
+    }
+
+    return redirect()->to('/pay')->with('success', '付款成功');
+});
+```
+
+以及設定每期委託授權結果通知：
+
+```php
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Ycs77\NewebPay\Facades\NewebPay;
+
+Route::post('/pay/period/notify', function (Request $request) {
+    $result = NewebPay::periodNotify($request);
+
+    if ($result->isFail()) {
+        Log::error('藍新金流 定期定額 定期交易錯誤', $result->data());
+
+        return;
+    }
+
+    // 委託授權成功，處裡訂單邏輯...
+});
+```
+
+設定好之後可以在 `config/newebpay.php` 裡設定網址：
+
+```php
+return [
+
+    'period' => [
+        // 建立委託完成後導向頁面
+        'return_url' => '/pay/period/callback',
+
+        // 每期委託授權結果通知：
+        'notify_url' => '/pay/period/notify',
+    ],
+
+]
+```
+
+記得要把這些路徑排除 CSRF 檢查：
+
+*app/Http/Middleware/VerifyCsrfToken.php*
+```php
+class VerifyCsrfToken extends Middleware
+{
+    protected $except = [
+        '/pay/period/callback',
+        '/pay/period/notify',
+    ];
+}
+```
+
+### 授權週期
+
+若於週期內需授權多次，請以建立多次委託方式執行。
+
+設定此委託於固定天期制授權，輸入數字為間隔天數 2~999。以授權日期隔日起算，以下為每隔 40 天授權一次：
+
+```php
+NewebPay::period($no, $amt, $desc, $email)
+    ->everyFewDays(40)
+    ->times(1)
+    ->submit();
+```
+
+設定此委託於每週授權，輸入數字為 1~7，代表每週一至週日。以下為每週日授權一次：
+
+```php
+NewebPay::period($no, $amt, $desc, $email)
+    ->weekly(7)
+    ->times(1)
+    ->submit();
+```
+
+設定此委託於每月授權，輸入數字為 1~31，每月的第幾天執行委託，若當月沒該日期則由該月的最後一天做為扣款日。以下為每月 20 日授權一次：
+
+```php
+NewebPay::period($no, $amt, $desc, $email)
+    ->monthly(20)
+    ->times(1)
+    ->submit();
+```
+
+設定此委託於每年授權，輸入每年的幾月幾日執行委託。以下為每年 3 月 4 日授權一次：
+
+```php
+NewebPay::period($no, $amt, $desc, $email)
+    ->yearly(3, 4)
+    ->times(1)
+    ->submit();
+```
+
+### 授權期數
+
+設定授權委託的期數。以下為每月 4 日授權，共授權 6 次，為期 6 個月：
+
+```php
+NewebPay::period($no, $amt, $desc, $email)
+    ->monthly(4)
+    ->times(6)
+    ->submit();
+```
+
+### 立即執行十元授權
+
+設定立即執行十元授權，以驗證信用卡：
+
+```php
+'period' => [
+    'start_type' => PeriodStartType::TEN_DOLLARS_NOW,
+],
+```
+
+### 立即執行委託金額授權
+
+設定立即執行委託金額授權：
+
+```php
+'period' => [
+    'start_type' => PeriodStartType::AUTHORIZE_NOW,
+],
+```
+
+### 不檢查信用卡資訊，不授權
+
+設定刷卡完之後，不檢查信用卡資訊，也不執行授權：
+
+```php
+'period' => [
+    'start_type' => PeriodStartType::NO_AUTHORIZE,
+],
+```
+
+但需要設定首期授權日：
+
+```php
+NewebPay::period($no, $amt, $desc, $email)
+    ->everyFewDays(2)
+    ->times(3)
+    ->firstdate(2023, 3, 1)
+    ->submit();
+```
+
+## 修改委託狀態
+
+修改委託狀態需要傳入訂單編號、委託單號和委託狀態：
+
+```php
+use Illuminate\Http\Request;
+use Ycs77\NewebPay\Enums\PeriodStatus;
+use Ycs77\NewebPay\Facades\NewebPay;
+
+Route::post('/pay/period/status', function (Request $request) {
+    $result = NewebPay::periodStatus($request->input('no'), $request->input('periodNo'), PeriodStatus::TERMINATE)
+        ->submit();
+
+    return $result->isSuccess()
+        ? back()->with('success', '修改委託狀態成功')
+        : back()->withErrors(['no' => $result->message()]);
+});
+```
+
+委託狀態可以修改成 `PeriodStatus::SUSPEND` (暫停) 和 `PeriodStatus::TERMINATE` (終止) 兩種狀態，設定成暫停之後還可以改成 `PeriodStatus::RESTART` (啟用)，但只要終止委託後就無法再次啟用了。
+
+暫停後再次啟用的委託將於最近一期開始授權。委託暫停後再啟用總期數不變，扣款時間將向後展延至期數滿期。
+
+## 修改委託內容
+
+修改委託內容需要傳入訂單編號、委託單號，和設定要修改成的委託觸發週期和授權次數：
+
+```php
+use Illuminate\Http\Request;
+use Ycs77\NewebPay\Facades\NewebPay;
+
+Route::post('/pay/period/amt', function (Request $request) {
+    $result = NewebPay::periodAmt($request->input('no'), $request->input('periodNo'), $request->input('amt'))
+        ->everyFewDays(3)
+        ->times(10)
+        ->submit();
+
+    return $result->isSuccess()
+        ? back()->with('success', '修改委託內容成功')
+        : back()->withErrors(['no' => $result->message()]);
+});
 ```
 
 ## 參考
