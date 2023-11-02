@@ -787,7 +787,7 @@ Route::post('/pay/period/amt', function (Request $request) {
 
 ## 贊助
 
-如果我製作的套件有幫助到你，可以考慮[贊助我](https://www.patreon.com/ycs77)~ 我會很感謝你~ 而且還可以顯示您的大頭貼在我的主要專案中。
+如果我維護的套件有幫助到你，可以考慮[贊助我](https://www.patreon.com/ycs77)~ 我會很感謝你~ 而且還可以顯示您的大頭貼在我的主要專案中。
 
 <p align="center">
   <a href="https://www.patreon.com/ycs77">
