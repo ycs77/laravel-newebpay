@@ -142,9 +142,3 @@ test('can be get result data for credit', function () {
     expect($credit->authBank())->toBe('CTBC');
     expect($credit->authBankName())->toBe('中國信託銀行');
 });
-
-test('can be get result data for payment status')->todo();
-
-test('can be get result data for lgs')->todo();
-
-test('can be get result data for digital wallet')->todo();
