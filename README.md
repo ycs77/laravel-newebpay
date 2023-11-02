@@ -20,6 +20,11 @@ Laravel NewebPay 為針對 Laravel 所寫的藍新金流（智付通）金流串
 * NewebPay Period Alter Status - 修改委託狀態
 * NewebPay Period Alter Amt - 修改委託內容
 
+## 版本需求
+
+* PHP 支援 8.1 以上
+* Laravel 版本 9 以上
+
 ## 安裝
 
 ```
@@ -780,9 +785,23 @@ Route::post('/pay/period/amt', function (Request $request) {
 
 [NewebPay Payment API](https://www.newebpay.com/website/Page/content/download_api#1)
 
+## 贊助
+
+如果我製作的套件有幫助到你，可以考慮[贊助我](https://www.patreon.com/ycs77)~ 我會很感謝你~ 而且還可以顯示您的大頭貼在我的主要專案中。
+
+<p align="center">
+  <a href="https://www.patreon.com/ycs77">
+    <img src="https://cdn.jsdelivr.net/gh/ycs77/static/sponsors.svg"/>
+  </a>
+</p>
+
+<a href="https://www.patreon.com/ycs77">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patron" />
+</a>
+
 ## License
 
-[MIT](./LICENSE)
+Under the [MIT LICENSE](LICENSE)
 
 [ico-version]: https://img.shields.io/packagist/v/ycs77/laravel-newebpay?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
