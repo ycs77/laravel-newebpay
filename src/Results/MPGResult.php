@@ -36,7 +36,7 @@ class MPGResult extends Result
      */
     public function message(): string
     {
-        return $this->data['TradeInfo']['Message'];
+        return $this->data['TradeInfo']['Message'] ?? '';
     }
 
     /**

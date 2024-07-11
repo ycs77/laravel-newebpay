@@ -8,14 +8,14 @@ class MPGEzPayResult extends Result
      * 跨境通路中英文名稱對照
      */
     protected $channels = [
-        'ALIPAY' =>  '支付寶',
-        'WECHATPAY' =>  '微信支付',
-        'ACCLINK' =>  '約定連結帳戶',
-        'CREDIT' =>  '信用卡',
-        'CVS' =>  '超商代碼',
-        'P2GEACC' =>  '簡單付電子帳戶轉帳',
-        'VACC' =>  'ATM 轉帳',
-        'WEBATM' =>  'WebATM 轉帳',
+        'ALIPAY' => '支付寶',
+        'WECHATPAY' => '微信支付',
+        'ACCLINK' => '約定連結帳戶',
+        'CREDIT' => '信用卡',
+        'CVS' => '超商代碼',
+        'P2GEACC' => '簡單付電子帳戶轉帳',
+        'VACC' => 'ATM 轉帳',
+        'WEBATM' => 'WebATM 轉帳',
     ];
 
     /**
