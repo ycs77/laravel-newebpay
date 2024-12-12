@@ -21,7 +21,7 @@
         "illuminate/contracts": ">=9.0",
         "illuminate/log": ">=9.0",
         "illuminate/support": ">=9.0",
-        "ycs77/laravel-recover-session": "^1.1"
+        "ycs77/laravel-recover-session": "^1.2"
     },
     "require-dev": {
         "mockery/mockery": "^1.4",
