@@ -5,7 +5,6 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE)
 [![GitHub Tests Action Status][ico-github-action]][link-github-action]
-[![Style CI Build Status][ico-style-ci]][link-style-ci]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 Laravel NewebPay 為針對 Laravel 所寫的藍新金流（智付通）金流串接套件。
@@ -806,7 +805,6 @@ Under the [MIT LICENSE](LICENSE)
 [ico-version]: https://img.shields.io/packagist/v/ycs77/laravel-newebpay?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
 [ico-github-action]: https://img.shields.io/github/actions/workflow/status/ycs77/laravel-newebpay/tests.yml?branch=1.x&label=tests&style=flat-square
-[ico-style-ci]: https://github.styleci.io/repos/262404477/shield?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/ycs77/laravel-newebpay?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/ycs77/laravel-newebpay

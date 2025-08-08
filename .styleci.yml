@@ -1,5 +1,0 @@
-preset: laravel
-
-disabled:
-  - laravel_phpdoc_alignment
-  - phpdoc_summary
