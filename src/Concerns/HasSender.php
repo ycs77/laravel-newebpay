@@ -54,7 +54,7 @@ trait HasSender
         return $this;
     }
 
-    protected function createHttp(MockHandler $mockHttpHandler = null): Client
+    protected function createHttp(?MockHandler $mockHttpHandler = null): Client
     {
         $attributes = [];
 

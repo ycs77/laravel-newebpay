@@ -51,7 +51,7 @@ class NewebPayMPG extends NewebPayRequest
      *
      * 語系可設定 "zh-tw", "en", "jp"。
      */
-    public function lang(string $lang = null)
+    public function lang(?string $lang = null)
     {
         $this->tradeData['LangType'] = $lang ?? $this->config->get('newebpay.lang');
 
@@ -65,7 +65,7 @@ class NewebPayMPG extends NewebPayRequest
      * * 秒數下限為 60 秒，當秒數介於 1~59 秒時，會以 60 秒計算。
      * * 秒數上限為 900 秒，當超過 900 秒時，會 以 900 秒計算。
      */
-    public function tradeLimit(int $limit = null)
+    public function tradeLimit(?int $limit = null)
     {
         $this->tradeData['TradeLimit'] = $limit !== null
             ? $limit
@@ -79,7 +79,7 @@ class NewebPayMPG extends NewebPayRequest
      *
      * 預設值為 7 天，上限為 180 天。
      */
-    public function expireDate(int $day = null)
+    public function expireDate(?int $day = null)
     {
         $day = $day !== null ? $day : $this->config->get('newebpay.expire_date');
 
@@ -93,7 +93,7 @@ class NewebPayMPG extends NewebPayRequest
      *
      * 僅接受 port 80 或 443。
      */
-    public function returnUrl(string $url = null)
+    public function returnUrl(?string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.return_url')) {
             $this->tradeData['ReturnURL'] = $this->WithSessionIdKey(
@@ -110,7 +110,7 @@ class NewebPayMPG extends NewebPayRequest
      * 1. 以幕後方式回傳給商店相關支付結果資料
      * 2. 僅接受 port 80 或 443。
      */
-    public function notifyUrl(string $url = null)
+    public function notifyUrl(?string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.notify_url')) {
             $this->tradeData['NotifyURL'] = $this->formatCallbackUrl($url);
@@ -124,7 +124,7 @@ class NewebPayMPG extends NewebPayRequest
      *
      * 如果設定為 null，則會顯示取號結果在藍新金流頁面。
      */
-    public function customerUrl(string $url = null)
+    public function customerUrl(?string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.customer_url')) {
             $this->tradeData['CustomerURL'] = $this->WithSessionIdKey(
@@ -140,7 +140,7 @@ class NewebPayMPG extends NewebPayRequest
      *
      * 當交易中平台會出現返回鈕，使消費者依以此參數網址返回商店指定的頁面。
      */
-    public function clientBackUrl(string $url = null)
+    public function clientBackUrl(?string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.client_back_url')) {
             $this->tradeData['ClientBackURL'] = $this->formatCallbackUrl($url);
@@ -152,7 +152,7 @@ class NewebPayMPG extends NewebPayRequest
     /**
      * 付款人電子信箱是否開放修改
      */
-    public function emailModify(bool $isModify = null)
+    public function emailModify(?bool $isModify = null)
     {
         if (! ($isModify ?? $this->config->get('newebpay.email_modify'))) {
             $this->tradeData['EmailModify'] = 0;
@@ -179,7 +179,7 @@ class NewebPayMPG extends NewebPayRequest
      * 1. 商店備註限制長度為 300 字。
      * 2. 若有輸入此參數，將會於 MPG 頁面呈現商店備註內容。
      */
-    public function orderComment(string $comment = null)
+    public function orderComment(?string $comment = null)
     {
         $this->tradeData['OrderComment'] = $comment !== null
             ? $comment
@@ -292,7 +292,7 @@ class NewebPayMPG extends NewebPayRequest
      * * **CreditRememberDemand::EXPIRATION_DATE**          必填信用卡到期日
      * * **CreditRememberDemand::CVC**                      必填背面末三碼
      */
-    public function creditRemember(string $identifier, CreditRememberDemand $demand = null)
+    public function creditRemember(string $identifier, ?CreditRememberDemand $demand = null)
     {
         $creditRemember = $this->config->get('newebpay.payment_methods.credit_remember');
 
@@ -315,7 +315,7 @@ class NewebPayMPG extends NewebPayRequest
      * * **CVSCOM::NOT_PAY_AND_PAY**  啟用超商取貨不付款 及 超商取貨付款
      * * **CVSCOM::NONE**             不開啟
      */
-    public function cvscom(CVSCOM $cvscom = null)
+    public function cvscom(?CVSCOM $cvscom = null)
     {
         $cvscom = $cvscom ?? $this->config->get('newebpay.CVSCOM') ?? CVSCOM::NONE;
 
@@ -339,7 +339,7 @@ class NewebPayMPG extends NewebPayRequest
      * 2. 若商店設定中未啟用［B2C 大宗寄倉］，則系統將會啟用［C2C 店到店］。
      * 3. 若商店設定中，［B2C 大宗寄倉］與［C2C 店到店］皆未啟用，則支付頁面中將不會出現物流選項。
      */
-    public function lgsType(LgsType $lgsType = null)
+    public function lgsType(?LgsType $lgsType = null)
     {
         $lgsType = $lgsType ?? $this->config->get('newebpay.lgs_type');
 

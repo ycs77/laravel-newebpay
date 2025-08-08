@@ -50,7 +50,7 @@ class NewebPayQuery extends NewebPayRequest
      * 若為複合式商店(MS5 開頭)，此欄位為必填，且要固定填入："Composite"。
      * 若沒有帶[Gateway]或是帶入其他參數值，則查詢一般商店代號。
      */
-    public function gateway(string $gateway = null)
+    public function gateway(?string $gateway = null)
     {
         $this->gateway = $gateway;
 

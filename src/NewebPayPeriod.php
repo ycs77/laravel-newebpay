@@ -42,7 +42,7 @@ class NewebPayPeriod extends NewebPayRequest
      *
      * 語系可設定 "zh-Tw", "en"。
      */
-    public function lang(string $lang = null)
+    public function lang(?string $lang = null)
     {
         $lang = $lang ?? $this->config->get('newebpay.lang');
 
@@ -59,7 +59,7 @@ class NewebPayPeriod extends NewebPayRequest
      * 1. 當付款人首次執行信用卡授權交易完成後，以 Form Post 方式導回商店頁。
      * 2. 若此欄位為空值，交易完成後，付款人將停留在藍新金流交易完成頁面。
      */
-    public function returnUrl(string $url = null)
+    public function returnUrl(?string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.period.return_url')) {
             $this->postData['ReturnURL'] = $this->WithSessionIdKey(
@@ -76,7 +76,7 @@ class NewebPayPeriod extends NewebPayRequest
      * 1. 當付款人每期執行信用卡授權交易完成後，以幕後 Post 方式通知商店授權結果。
      * 2. 若此欄位為空值，則不通知商店授權結果。
      */
-    public function notifyUrl(string $url = null)
+    public function notifyUrl(?string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.period.notify_url')) {
             $this->postData['NotifyURL'] = $this->formatCallbackUrl($url);
@@ -88,7 +88,7 @@ class NewebPayPeriod extends NewebPayRequest
     /**
      * 取消交易時返回商店的網址
      */
-    public function backUrl(string $url = null)
+    public function backUrl(?string $url = null)
     {
         if ($url = $url ?? $this->config->get('newebpay.period.back_url')) {
             $this->postData['BackURL'] = $this->formatCallbackUrl($url);
@@ -100,7 +100,7 @@ class NewebPayPeriod extends NewebPayRequest
     /**
      * 付款人電子信箱是否開放修改
      */
-    public function emailModify(bool $isModify = null)
+    public function emailModify(?bool $isModify = null)
     {
         if (! ($isModify ?? $this->config->get('newebpay.email_modify'))) {
             $this->postData['EmailModify'] = 0;
@@ -115,7 +115,7 @@ class NewebPayPeriod extends NewebPayRequest
      * * 於付款人填寫此委託時，是否需顯示付款人資訊填寫欄位。
      * * 付款人資訊填寫欄位包含付款人姓名、付款人電話、付款人手機。
      */
-    public function paymentInfo(bool $show = null)
+    public function paymentInfo(?bool $show = null)
     {
         if (! ($show ?? $this->config->get('newebpay.period.payment_info'))) {
             $this->postData['PaymentInfo'] = 'N';
@@ -130,7 +130,7 @@ class NewebPayPeriod extends NewebPayRequest
      * * 於付款人填寫此委託時，是否需顯示收件人資訊填寫欄位。
      * * 收件人資訊填寫欄位包含收件人姓名、收件人電話、收件人手機、收件人地址。
      */
-    public function orderInfo(bool $show = null)
+    public function orderInfo(?bool $show = null)
     {
         if (! ($show ?? $this->config->get('newebpay.period.order_info'))) {
             $this->postData['OrderInfo'] = 'N';
@@ -144,7 +144,7 @@ class NewebPayPeriod extends NewebPayRequest
      *
      * * 銀聯卡僅支援幕後非 3D 交易
      */
-    public function unionPay(bool $enabled = null)
+    public function unionPay(?bool $enabled = null)
     {
         if ($enabled) {
             $this->postData['UNIONPAY'] = 1;
@@ -260,7 +260,7 @@ class NewebPayPeriod extends NewebPayRequest
      * * PeriodStartType::AUTHORIZE_NOW    立即執行委託金額授權
      * * PeriodStartType::NO_AUTHORIZE     不檢查信用卡資訊，不授權
      */
-    public function periodStartType(PeriodStartType $startType = null)
+    public function periodStartType(?PeriodStartType $startType = null)
     {
         $startType = $startType ?? $this->config->get('newebpay.period.start_type');
 
