@@ -225,8 +225,8 @@ class NewebPayMPG extends NewebPayRequest
             is_array($paymentMethods['bank'])
         ) {
             $this->tradeData['BankType'] = collect($paymentMethods['bank'])
-                    ->map(fn (Bank $inst) => $inst->value)
-                    ->join(',');
+                ->map(fn (Bank $inst) => $inst->value)
+                ->join(',');
         } elseif (is_string($paymentMethods['bank'])) {
             $this->tradeData['BankType'] = $paymentMethods['bank'];
         }

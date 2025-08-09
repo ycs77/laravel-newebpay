@@ -2,9 +2,9 @@
 
 namespace Ycs77\NewebPay\Senders;
 
-use Ycs77\NewebPay\Contracts\HttpSender as HttpSenderContract;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\Response as ClientResponse;
+use Ycs77\NewebPay\Contracts\HttpSender as HttpSenderContract;
 
 class HttpSender implements HttpSenderContract
 {

@@ -21,6 +21,7 @@ class FactoryV1
         protected Config $config,
         protected Session $session
     ) {
+        //
     }
 
     /**

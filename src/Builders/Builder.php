@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay\Builders;
 
+use Illuminate\Http\Response;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
 use Ycs77\NewebPay\Contracts\FormPostSender;
@@ -10,7 +11,6 @@ use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Options;
-use Illuminate\Http\Response;
 
 abstract class Builder
 {

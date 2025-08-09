@@ -30,7 +30,7 @@ trait HasSender
 
     public function setFrontendSender()
     {
-        $this->setSender(new FrontendSender());
+        $this->setSender(new FrontendSender);
 
         return $this;
     }

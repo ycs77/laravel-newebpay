@@ -7,7 +7,6 @@ use Illuminate\Support\ServiceProvider;
 use Ycs77\NewebPay\Contracts\FormPostSender as FormPostSenderContract;
 use Ycs77\NewebPay\Contracts\HttpSender as HttpSenderContract;
 use Ycs77\NewebPay\Crypto\Crypto;
-use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Senders\FormPostSender;
 use Ycs77\NewebPay\Senders\HttpSender;
 

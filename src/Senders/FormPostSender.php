@@ -2,8 +2,8 @@
 
 namespace Ycs77\NewebPay\Senders;
 
-use Ycs77\NewebPay\Contracts\FormPostSender as FormPostSenderContract;
 use Illuminate\Http\Response;
+use Ycs77\NewebPay\Contracts\FormPostSender as FormPostSenderContract;
 
 class FormPostSender implements FormPostSenderContract
 {

@@ -7,11 +7,12 @@ use Ycs77\NewebPay\Contracts\Httpable;
 use Ycs77\NewebPay\Contracts\SenderV1;
 
 /** @deprecated */
-class BackgroundSender implements SenderV1, Httpable
+class BackgroundSender implements Httpable, SenderV1
 {
     public function __construct(
         protected Client $http
     ) {
+        //
     }
 
     /**
