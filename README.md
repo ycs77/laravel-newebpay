@@ -21,8 +21,10 @@ Laravel NewebPay 為針對 Laravel 所寫的藍新金流（智付通）金流串
 
 ## 版本需求
 
-* PHP 支援 8.1 以上
-* Laravel 版本 9 以上
+| 版本 | PHP 版本 | Laravel 版本 |
+| --- | --- | --- |
+| 1.x | >=8.1 | >=9.x |
+| 2.x | >=8.1 | >=9.x |
 
 ## 安裝
 
@@ -804,10 +806,9 @@ Under the [MIT LICENSE](LICENSE)
 
 [ico-version]: https://img.shields.io/packagist/v/ycs77/laravel-newebpay?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
-[ico-github-action]: https://img.shields.io/github/actions/workflow/status/ycs77/laravel-newebpay/tests.yml?branch=1.x&label=tests&style=flat-square
+[ico-github-action]: https://img.shields.io/github/actions/workflow/status/ycs77/laravel-newebpay/tests.yml?branch=2.x&label=tests&style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/ycs77/laravel-newebpay?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/ycs77/laravel-newebpay
-[link-github-action]: https://github.com/ycs77/laravel-newebpay/actions/workflows/tests.yml?query=branch%3A1.x
-[link-style-ci]: https://github.styleci.io/repos/262404477
+[link-github-action]: https://github.com/ycs77/laravel-newebpay/actions/workflows/tests.yml?query=branch%3A2.x
 [link-downloads]: https://packagist.org/packages/ycs77/laravel-newebpay
