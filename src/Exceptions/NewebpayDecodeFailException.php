@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
+/** @deprecated */
 class NewebpayDecodeFailException extends Exception
 {
     public function __construct(Throwable $previous, mixed $errorData)

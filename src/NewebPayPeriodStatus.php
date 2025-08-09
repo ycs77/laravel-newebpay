@@ -5,6 +5,7 @@ namespace Ycs77\NewebPay;
 use Ycs77\NewebPay\Enums\PeriodStatus;
 use Ycs77\NewebPay\Results\PeriodStatusResult;
 
+/** @deprecated */
 class NewebPayPeriodStatus extends NewebPayRequest
 {
     /**

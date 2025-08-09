@@ -6,6 +6,7 @@ use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Carbon;
 
+/** @deprecated */
 abstract class NewebPay
 {
     use Concerns\HasEncryption;

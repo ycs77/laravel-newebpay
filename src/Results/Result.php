@@ -11,7 +11,7 @@ abstract class Result
 
     public function __construct(array $data)
     {
-        $this->data = $this->transformData($data);
+        $this->data = $data;
     }
 
     /**

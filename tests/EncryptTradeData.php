@@ -4,6 +4,7 @@ namespace Ycs77\NewebPay\Tests;
 
 use Ycs77\NewebPay\NewebPay;
 
+/** @deprecated */
 class EncryptTradeData extends NewebPay
 {
     /**

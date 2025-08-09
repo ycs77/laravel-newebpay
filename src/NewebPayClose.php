@@ -4,6 +4,7 @@ namespace Ycs77\NewebPay;
 
 use Ycs77\NewebPay\Results\CloseResult;
 
+/** @deprecated */
 class NewebPayClose extends NewebPayRequest
 {
     /**

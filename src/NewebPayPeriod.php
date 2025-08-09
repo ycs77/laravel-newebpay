@@ -5,9 +5,10 @@ namespace Ycs77\NewebPay;
 use Ycs77\NewebPay\Enums\PeriodStartType;
 use Ycs77\NewebPay\Enums\PeriodType;
 
+/** @deprecated */
 class NewebPayPeriod extends NewebPayRequest
 {
-    use Concerns\WithSessionIdKey;
+    use Builders\Concerns\WithSessionIdKey;
 
     /**
      * The newebpay post data.

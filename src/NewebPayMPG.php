@@ -9,9 +9,10 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LgsType;
 
+/** @deprecated */
 class NewebPayMPG extends NewebPayRequest
 {
-    use Concerns\WithSessionIdKey;
+    use Builders\Concerns\WithSessionIdKey;
 
     /**
      * The newebpay trade data.

@@ -5,6 +5,7 @@ namespace Ycs77\NewebPay\Concerns;
 use Throwable;
 use Ycs77\NewebPay\Exceptions\NewebpayDecodeFailException;
 
+/** @deprecated */
 trait HasEncryption
 {
     protected function encryptDataByAES(array $parameter, string $hashKey, string $hashIV, string $type = 'String'): string

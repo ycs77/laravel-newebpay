@@ -7,22 +7,23 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Ycs77\NewebPay\Contracts\Httpable;
-use Ycs77\NewebPay\Contracts\Sender;
+use Ycs77\NewebPay\Contracts\SenderV1;
 use Ycs77\NewebPay\Senders\BackgroundSender;
 use Ycs77\NewebPay\Senders\FrontendSender;
 
+/** @deprecated */
 trait HasSender
 {
-    protected Sender $sender;
+    protected SenderV1 $sender;
 
-    public function setSender(Sender $sender)
+    public function setSender(SenderV1 $sender)
     {
         $this->sender = $sender;
 
         return $this;
     }
 
-    public function getSender(): Sender
+    public function getSender(): SenderV1
     {
         return $this->sender;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Concerns;
+namespace Ycs77\NewebPay\Builders\Concerns;
 
 use Illuminate\Support\Facades\Request;
 use Ycs77\LaravelRecoverSession\Facades\RecoverSession;

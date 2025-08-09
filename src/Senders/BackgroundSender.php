@@ -4,9 +4,10 @@ namespace Ycs77\NewebPay\Senders;
 
 use GuzzleHttp\Client;
 use Ycs77\NewebPay\Contracts\Httpable;
-use Ycs77\NewebPay\Contracts\Sender;
+use Ycs77\NewebPay\Contracts\SenderV1;
 
-class BackgroundSender implements Sender, Httpable
+/** @deprecated */
+class BackgroundSender implements SenderV1, Httpable
 {
     public function __construct(
         protected Client $http

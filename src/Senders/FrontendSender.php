@@ -2,9 +2,10 @@
 
 namespace Ycs77\NewebPay\Senders;
 
-use Ycs77\NewebPay\Contracts\Sender;
+use Ycs77\NewebPay\Contracts\SenderV1;
 
-class FrontendSender implements Sender
+/** @deprecated */
+class FrontendSender implements SenderV1
 {
     /**
      * Send the data to API.

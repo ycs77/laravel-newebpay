@@ -4,6 +4,7 @@ namespace Ycs77\NewebPay\Contracts;
 
 use GuzzleHttp\Client;
 
+/** @deprecated */
 interface Httpable
 {
     /**

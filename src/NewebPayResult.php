@@ -5,6 +5,7 @@ namespace Ycs77\NewebPay;
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Results\MPGResult;
 
+/** @deprecated */
 class NewebPayResult extends NewebPay
 {
     /**

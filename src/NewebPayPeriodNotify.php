@@ -5,6 +5,7 @@ namespace Ycs77\NewebPay;
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Results\PeriodNotifyResult;
 
+/** @deprecated */
 class NewebPayPeriodNotify extends NewebPay
 {
     /**

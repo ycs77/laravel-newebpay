@@ -5,6 +5,7 @@ namespace Ycs77\NewebPay;
 use Ycs77\NewebPay\Enums\PeriodType;
 use Ycs77\NewebPay\Results\PeriodAmtResult;
 
+/** @deprecated */
 class NewebPayPeriodAmt extends NewebPayRequest
 {
     /**

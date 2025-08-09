@@ -28,7 +28,7 @@ class MPGResult extends Result
      */
     public function isFail(): bool
     {
-        return $this->status() !== 'SUCCESS';
+        return ! $this->isSuccess();
     }
 
     /**

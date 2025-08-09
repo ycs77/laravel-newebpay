@@ -4,6 +4,7 @@ namespace Ycs77\NewebPay;
 
 use Ycs77\NewebPay\Results\CancelResult;
 
+/** @deprecated */
 class NewebPayCancel extends NewebPayRequest
 {
     /**

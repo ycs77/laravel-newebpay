@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay;
 
+/** @deprecated */
 abstract class NewebPayRequest extends NewebPay
 {
     use Concerns\HasSender;
