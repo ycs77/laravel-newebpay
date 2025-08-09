@@ -9,15 +9,15 @@
 
 Laravel NewebPay 為針對 Laravel 所寫的藍新金流（智付通）金流串接套件。
 
-主要實作項目：
+## 實作功能
 
-* NewebPay MPG - 多功能收款
-* NewebPay Query - 單筆交易查詢
-* NewebPay Cancel - 信用卡取消授權
-* NewebPay Close - 信用卡請退款
-* NewebPay Period - 信用卡定期定額委託
-* NewebPay Period Alter Status - 修改委託狀態
-* NewebPay Period Alter Amt - 修改委託內容
+* MPG 多功能收款 API
+* 交易查詢 API
+* 信用卡取消授權 API
+* 信用卡請退款 API
+* 信用卡定期定額委託 API
+* 修改定期定額委託狀態 API
+* 修改定期定額委託內容 API
 
 ## 版本需求
 
