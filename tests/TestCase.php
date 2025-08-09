@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay\Tests;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository as Config;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Ycs77\NewebPay\Enums\Bank;
@@ -14,6 +15,20 @@ use Ycs77\NewebPay\Enums\PeriodStartType;
 
 class TestCase extends BaseTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Carbon::setTestNow('2020-01-01 00:00:00');
+    }
+
+    protected function tearDown(): void
+    {
+        Carbon::setTestNow();
+
+        parent::tearDown();
+    }
+
     /**
      * Define environment setup.
      *

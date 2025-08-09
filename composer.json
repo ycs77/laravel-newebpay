@@ -21,12 +21,15 @@
         "illuminate/contracts": ">=9.0",
         "illuminate/log": ">=9.0",
         "illuminate/support": ">=9.0",
+        "nesbot/carbon": "^2.67 || ^3.0",
         "ycs77/laravel-recover-session": "^1.2"
     },
     "require-dev": {
+        "laravel/pint": "^1.20",
         "mockery/mockery": "^1.4",
         "orchestra/testbench": ">=7.0",
-        "pestphp/pest": "^1.23 || ^2.36.0 || ^3.8.2"
+        "pestphp/pest": "^1.23 || ^2.36.0 || ^3.8.2",
+        "pestphp/pest-plugin-laravel": "^1.0 || ^2.0 || ^3.0"
     },
     "autoload": {
         "psr-4": {
