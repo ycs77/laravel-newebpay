@@ -31,11 +31,11 @@ return [
     |
     */
 
-    'merchant_id' => env('NEWEBPAY_STORE_ID'),
+    'merchant_id' => env('NEWEBPAY_MERCHANT_ID'),
 
-    'hash_key' => env('NEWEBPAY_STORE_HASH_KEY'),
+    'hash_key' => env('NEWEBPAY_MERCHANT_HASH_KEY'),
 
-    'hash_iv' => env('NEWEBPAY_STORE_HASH_IV'),
+    'hash_iv' => env('NEWEBPAY_MERCHANT_HASH_IV'),
 
     /*
     |--------------------------------------------------------------------------
