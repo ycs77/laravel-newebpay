@@ -257,13 +257,12 @@ class PaymentBuilder extends Builder
     /**
      * 信用卡記憶卡號
      *
-     * @param  string  $identifier  付款人綁定資料，用於綁定付款人與信用卡卡號時使用。
-     * - 例：會員編號、Email。
-     * - 限英、數字，「.」、「_」、「@」、「-」格式。
-     * @param  \Ycs77\NewebPay\Enums\CreditRememberDemand  $demand  指定付款人信用卡快速結帳必填欄位
-     * - **CreditRememberDemand::EXPIRATION_DATE_AND_CVC**  必填信用卡到期日與背面末三碼 (預設值)
-     * - **CreditRememberDemand::EXPIRATION_DATE**          必填信用卡到期日
-     * - **CreditRememberDemand::CVC**                      必填背面末三碼
+     * - 必填信用卡到期日與背面末三碼: **CreditRememberDemand::EXPIRATION_DATE_AND_CVC** (預設值)
+     * - 必填信用卡到期日: **CreditRememberDemand::EXPIRATION_DATE**
+     * - 必填背面末三碼: **CreditRememberDemand::CVC**
+     *
+     * @param  string  $identifier  付款人綁定資料，用於綁定付款人與信用卡卡號時使用。例：會員編號、Email。格式限英、數字，「.」、「_」、「@」、「-」。
+     * @param  \Ycs77\NewebPay\Enums\CreditRememberDemand  $demand  指定付款人信用卡快速結帳必填欄位設定
      */
     public function withCreditRemember(string $identifier, ?CreditRememberDemand $demand = null): self
     {
@@ -276,11 +275,10 @@ class PaymentBuilder extends Builder
     /**
      * 物流搭配付款方式
      *
-     * @param \Ycs77\NewebPay\Enums\CVSCOM $cvscom
-     * - **CVSCOM::NOT_PAY**          啟用超商取貨不付款
-     * - **CVSCOM::PAY**              啟用超商取貨付款
-     * - **CVSCOM::NOT_PAY_AND_PAY**  啟用超商取貨不付款 及 超商取貨付款
-     * - **CVSCOM::NONE**             不開啟
+     * - 啟用超商取貨不付款: **CVSCOM::NOT_PAY**
+     * - 啟用超商取貨付款: **CVSCOM::PAY**
+     * - 啟用超商取貨不付款 及 超商取貨付款: **CVSCOM::NOT_PAY_AND_PAY**
+     * - 不開啟: **CVSCOM::NONE**
      */
     public function withLogisticsPayment(CVSCOM $cvscom)
     {
@@ -292,7 +290,6 @@ class PaymentBuilder extends Builder
     /**
      * 物流型態
      *
-     * @param \Ycs77\NewebPay\Enums\LgsType $lgsType
      * - **LgsType::DEFAULT**  預設
      * - **LgsType::B2C**      超商大宗寄倉(目前僅支援統㇐超商)
      * - **LgsType::C2C**      超商店到店(目前僅支援全家)
