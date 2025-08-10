@@ -5,7 +5,7 @@ namespace Ycs77\NewebPay\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Ycs77\NewebPay\Builders\PaymentBuilder payment()
+ * @method static \Ycs77\NewebPay\Builders\Payment\PaymentBuilder payment()
  *
  * @see \Ycs77\NewebPay\Factory
  */

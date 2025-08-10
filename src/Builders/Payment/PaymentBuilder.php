@@ -1,15 +1,16 @@
 <?php
 
-namespace Ycs77\NewebPay\Builders;
+namespace Ycs77\NewebPay\Builders\Payment;
 
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Response;
+use Ycs77\NewebPay\Builders\Builder;
 use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
-use Ycs77\NewebPay\Options\PaymentOptions;
+use Ycs77\NewebPay\Options\Payment\PaymentOptions;
 use Ycs77\NewebPay\Url\UrlFormat;
 
 class PaymentBuilder extends Builder

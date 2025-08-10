@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Options;
+namespace Ycs77\NewebPay\Options\Payment;
 
 use Carbon\Carbon;
 use Ycs77\NewebPay\Enums\Bank;
@@ -9,6 +9,7 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
+use Ycs77\NewebPay\Options\Options;
 
 class PaymentOptions extends Options
 {

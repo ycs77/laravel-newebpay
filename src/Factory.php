@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay;
 
-use Ycs77\NewebPay\Builders\PaymentBuilder;
+use Ycs77\NewebPay\Builders\Payment\PaymentBuilder;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
