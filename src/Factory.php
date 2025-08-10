@@ -3,8 +3,8 @@
 namespace Ycs77\NewebPay;
 
 use Ycs77\NewebPay\Builders\PaymentBuilder;
-use Ycs77\NewebPay\Contracts\FormPostSender;
-use Ycs77\NewebPay\Contracts\HttpSender;
+use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
+use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
 
 class Factory
@@ -21,8 +21,8 @@ class Factory
 
     public function __construct(
         protected Crypto $crypto,
-        protected FormPostSender $formPostSender,
-        protected HttpSender $httpSender,
+        protected FormRedirectTransporter $formRedirectTransporter,
+        protected HttpTransporter $httpTransporter,
         protected array $config
     ) {
         //
@@ -31,7 +31,7 @@ class Factory
     public function payment(): PaymentBuilder
     {
         return new PaymentBuilder(
-            $this, $this->crypto, $this->formPostSender, $this->httpSender
+            $this, $this->crypto, $this->formRedirectTransporter, $this->httpTransporter
         );
     }
 

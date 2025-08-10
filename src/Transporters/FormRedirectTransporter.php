@@ -1,11 +1,11 @@
 <?php
 
-namespace Ycs77\NewebPay\Senders;
+namespace Ycs77\NewebPay\Transporters;
 
 use Illuminate\Http\Response;
-use Ycs77\NewebPay\Contracts\FormPostSender as FormPostSenderContract;
+use Ycs77\NewebPay\Contracts\FormRedirectTransporter as FormRedirectTransporterContract;
 
-class FormPostSender implements FormPostSenderContract
+class FormRedirectTransporter implements FormRedirectTransporterContract
 {
     public function send(string $url, array $data): Response
     {

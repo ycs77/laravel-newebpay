@@ -5,8 +5,8 @@ namespace Ycs77\NewebPay\Builders;
 use Illuminate\Http\Response;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
-use Ycs77\NewebPay\Contracts\FormPostSender;
-use Ycs77\NewebPay\Contracts\HttpSender;
+use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
+use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Factory;
@@ -23,8 +23,8 @@ abstract class Builder
     public function __construct(
         protected Factory $factory,
         protected Crypto $crypto,
-        protected FormPostSender $formPostSender,
-        protected HttpSender $httpSender
+        protected FormRedirectTransporter $formRedirectTransporter,
+        protected HttpTransporter $httpTransporter
     ) {
         $this->boot();
     }
@@ -67,7 +67,7 @@ abstract class Builder
     {
         $requestData = $this->toRequestData();
 
-        return $this->formPostSender->send(
+        return $this->formRedirectTransporter->send(
             $requestData['url'],
             $requestData['formData']
         );
@@ -82,7 +82,7 @@ abstract class Builder
     {
         $requestData = $this->toRequestData();
 
-        $response = $this->httpSender->send(
+        $response = $this->httpTransporter->send(
             $requestData['url'],
             $requestData['formData']
         );

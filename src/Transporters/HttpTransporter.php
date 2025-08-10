@@ -1,12 +1,12 @@
 <?php
 
-namespace Ycs77\NewebPay\Senders;
+namespace Ycs77\NewebPay\Transporters;
 
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\Response as ClientResponse;
-use Ycs77\NewebPay\Contracts\HttpSender as HttpSenderContract;
+use Ycs77\NewebPay\Contracts\HttpTransporter as HttpTransporterContract;
 
-class HttpSender implements HttpSenderContract
+class HttpTransporter implements HttpTransporterContract
 {
     public function __construct(
         protected Factory $client
