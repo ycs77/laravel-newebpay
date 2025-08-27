@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class MPGATMResult extends Result
+class MPGATMResult extends ResultV1
 {
     /**
      * 付款人金融機構代碼

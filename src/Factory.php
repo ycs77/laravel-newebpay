@@ -2,10 +2,13 @@
 
 namespace Ycs77\NewebPay;
 
+use Illuminate\Http\Request;
 use Ycs77\NewebPay\Builders\Payment\PaymentBuilder;
+use Ycs77\NewebPay\Callback\PaymentCallbackResult;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
+use Ycs77\NewebPay\Results\Payment\PaymentResult;
 
 class Factory
 {
@@ -33,6 +36,18 @@ class Factory
         return new PaymentBuilder(
             $this, $this->crypto, $this->formRedirectTransporter, $this->httpTransporter
         );
+    }
+
+    /**
+     * 解析並回傳交易結果。
+     *
+     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     */
+    public function result(Request $request): PaymentResult
+    {
+        return (new PaymentCallbackResult(
+            $this->crypto
+        ))->result($request);
     }
 
     public function baseUrl(): string

@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class MPGTaiwanPayResult extends Result
+class MPGTaiwanPayResult extends ResultV1
 {
     /**
      * 實際付款金額

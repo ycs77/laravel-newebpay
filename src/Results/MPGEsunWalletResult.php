@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class MPGEsunWalletResult extends Result
+class MPGEsunWalletResult extends ResultV1
 {
     /**
      * 實際付款金額

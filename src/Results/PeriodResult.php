@@ -4,7 +4,7 @@ namespace Ycs77\NewebPay\Results;
 
 use Ycs77\NewebPay\Enums\PeriodType;
 
-class PeriodResult extends Result
+class PeriodResult extends ResultV1
 {
     /**
      * 交易類別中英文名稱對照

@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class CustomerStoreBarcodeResult extends Result
+class CustomerStoreBarcodeResult extends ResultV1
 {
     /**
      * 繳費條碼第一段條碼

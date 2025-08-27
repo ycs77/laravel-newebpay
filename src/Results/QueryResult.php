@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class QueryResult extends Result
+class QueryResult extends ResultV1
 {
     use Concerns\HasVerifyCheckCode;
 

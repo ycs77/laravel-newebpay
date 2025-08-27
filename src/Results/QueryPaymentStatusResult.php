@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class QueryPaymentStatusResult extends Result
+class QueryPaymentStatusResult extends ResultV1
 {
     /**
      * 付款資訊

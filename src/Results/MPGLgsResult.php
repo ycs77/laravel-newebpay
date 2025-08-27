@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class MPGLgsResult extends Result
+class MPGLgsResult extends ResultV1
 {
     /**
      * 超商門市編號

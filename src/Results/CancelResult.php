@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class CancelResult extends Result
+class CancelResult extends ResultV1
 {
     use Concerns\HasVerifyCheckCode;
 

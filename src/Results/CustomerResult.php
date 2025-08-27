@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class CustomerResult extends Result
+class CustomerResult extends ResultV1
 {
     /**
      * 取號狀態

@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class QueryLgsResult extends Result
+class QueryLgsResult extends ResultV1
 {
     /**
      * 超商門市編號

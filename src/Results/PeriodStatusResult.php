@@ -4,7 +4,7 @@ namespace Ycs77\NewebPay\Results;
 
 use Ycs77\NewebPay\Enums\PeriodStatus;
 
-class PeriodStatusResult extends Result
+class PeriodStatusResult extends ResultV1
 {
     /**
      * 交易狀態

@@ -13,9 +13,7 @@ class FormRedirectTransporter implements FormRedirectTransporterContract
 
         foreach ($data as $key => $value) {
             $inputFields .= sprintf(
-                '<input type="hidden" name="%s" value="%s">',
-                htmlspecialchars($key, ENT_QUOTES, 'UTF-8'),
-                htmlspecialchars($value, ENT_QUOTES, 'UTF-8')
+                '<input type="hidden" name="%s" value="%s">', e($key), e($value)
             );
         }
 

@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class MPGEzPayResult extends Result
+class MPGEzPayResult extends ResultV1
 {
     /**
      * 跨境通路中英文名稱對照

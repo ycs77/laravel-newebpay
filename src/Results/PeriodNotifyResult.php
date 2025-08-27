@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class PeriodNotifyResult extends Result
+class PeriodNotifyResult extends ResultV1
 {
     /**
      * 收單金融機構中英文名稱對照

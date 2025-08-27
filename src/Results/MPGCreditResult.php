@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class MPGCreditResult extends Result
+class MPGCreditResult extends ResultV1
 {
     /**
      * 交易類別中英文名稱對照

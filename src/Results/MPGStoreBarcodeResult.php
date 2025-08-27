@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class MPGStoreBarcodeResult extends Result
+class MPGStoreBarcodeResult extends ResultV1
 {
     /**
      * 繳費超商中英文名稱對照

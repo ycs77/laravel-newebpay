@@ -1,8 +1,20 @@
 <?php
 
-namespace Ycs77\NewebPay\Results;
+namespace Ycs77\NewebPay\Results\Payment;
 
-class MPGResult extends ResultV1
+use Carbon\Carbon;
+use Ycs77\NewebPay\Enums\PaymentType;
+use Ycs77\NewebPay\Results\MPGATMResult;
+use Ycs77\NewebPay\Results\MPGCreditResult;
+use Ycs77\NewebPay\Results\MPGEsunWalletResult;
+use Ycs77\NewebPay\Results\MPGEzPayResult;
+use Ycs77\NewebPay\Results\MPGLgsResult;
+use Ycs77\NewebPay\Results\MPGStoreBarcodeResult;
+use Ycs77\NewebPay\Results\MPGStoreCodeResult;
+use Ycs77\NewebPay\Results\MPGTaiwanPayResult;
+use Ycs77\NewebPay\Results\Result;
+
+class PaymentResult extends Result
 {
     /**
      * 交易狀態
@@ -58,7 +70,7 @@ class MPGResult extends ResultV1
     /**
      * 交易金額
      */
-    public function amt(): int
+    public function amount(): int
     {
         return $this->result()['Amt'];
     }
@@ -74,7 +86,7 @@ class MPGResult extends ResultV1
     /**
      * 商店訂單編號
      */
-    public function merchantOrderNo(): string
+    public function orderNo(): string
     {
         return $this->result()['MerchantOrderNo'];
     }
@@ -92,29 +104,25 @@ class MPGResult extends ResultV1
      * * **TAIWANPAY**: 台灣 Pay
      * * **CVSCOM**: 超商取貨付款
      */
-    public function paymentType(): string
+    public function paymentType(): PaymentType
     {
-        return $this->result()['PaymentType'];
-    }
-
-    /**
-     * 回傳格式
-     *
-     * JSON 格式
-     */
-    public function respondType(): string
-    {
-        return $this->result()['RespondType'];
+        return PaymentType::from($this->result()['PaymentType']);
     }
 
     /**
      * 支付完成時間
      *
      * 當使用超商取貨服務時，本欄位的值會以空值回傳
+     *
+     * @throws \Carbon\Exceptions\InvalidFormatException
      */
-    public function payTime(): ?string
+    public function payTime(): ?Carbon
     {
-        return $this->result()['PayTime'] ?? null;
+        if ($payTime = $this->result()['PayTime']) {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $payTime);
+        }
+
+        return null;
     }
 
     /**
@@ -133,7 +141,7 @@ class MPGResult extends ResultV1
      */
     public function escrowBank(): ?string
     {
-        return $this->result()['EscrowBank'] ?? null;
+        return $this->result()['EscrowBank'];
     }
 
     /**

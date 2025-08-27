@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class QueryCreditResult extends Result
+class QueryCreditResult extends ResultV1
 {
     /**
      * 交易類別中英文名稱對照

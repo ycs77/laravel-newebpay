@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Results;
 
-class CloseResult extends Result
+class CloseResult extends ResultV1
 {
     /**
      * 交易狀態
