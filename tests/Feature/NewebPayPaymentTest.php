@@ -96,10 +96,8 @@ test('可以成功呼叫 MPG 金流的更多功能', function () {
         ->withCreditRemember('John Doe')
         ->withLogisticsPayment(CVSCOM::NOT_PAY_AND_PAY)
         ->withLogisticsType(LgsType::C2C)
-        ->transformOptions(function (Options $options) use ($expectedTradeData) {
+        ->onPreparedOptions(function (Options $options) use ($expectedTradeData) {
             expect($options->toArray()['TradeInfo'])->toBe($expectedTradeData);
-
-            return $options;
         })
         ->send();
 

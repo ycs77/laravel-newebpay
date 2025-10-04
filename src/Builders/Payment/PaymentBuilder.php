@@ -52,7 +52,7 @@ class PaymentBuilder extends Builder
         }
     }
 
-    public function getOptions(): PaymentOptions
+    public function options(): PaymentOptions
     {
         return $this->options;
     }
@@ -306,23 +306,8 @@ class PaymentBuilder extends Builder
         return $this;
     }
 
-    public function toRequestData(): array
-    {
-        $data = parent::toRequestData();
-
-        $data['formData']['TradeInfo'] = $this->crypto->encryptByAES(
-            $data['formData']['TradeInfo']
-        );
-
-        $data['formData']['TradeSha'] = $this->crypto->hashBySHA(
-            $data['formData']['TradeInfo']
-        );
-
-        return $data;
-    }
-
     public function send(): Response
     {
-        return $this->sendFormPostRequest();
+        return $this->sendFormRedirectRequest();
     }
 }

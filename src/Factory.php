@@ -33,9 +33,9 @@ class Factory
 
     public function payment(): PaymentBuilder
     {
-        return new PaymentBuilder(
-            $this, $this->crypto, $this->formRedirectTransporter, $this->httpTransporter
-        );
+        return (new PaymentBuilder(
+            $this, $this->crypto, $this->httpTransporter
+        ))->setFormRedirectTransporter($this->formRedirectTransporter);
     }
 
     /**
