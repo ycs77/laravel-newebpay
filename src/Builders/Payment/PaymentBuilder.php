@@ -306,7 +306,7 @@ class PaymentBuilder extends Builder
         return $this;
     }
 
-    public function send(): Response
+    public function submit(): Response
     {
         return $this->sendFormRedirectRequest();
     }

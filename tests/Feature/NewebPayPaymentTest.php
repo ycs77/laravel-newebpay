@@ -25,7 +25,7 @@ test('可以成功呼叫 MPG 金流基本功能', function () {
         ->withAmount(1050)
         ->withItemDescription('測試商品')
         ->withEmail('customer@example.com')
-        ->send();
+        ->submit();
 
     expect($response)->toBeInstanceOf(Response::class)
         ->content()->toContain('action="https://ccore.newebpay.com/MPG/mpg_gateway"')
@@ -99,7 +99,7 @@ test('可以成功呼叫 MPG 金流的更多功能', function () {
         ->onPreparedOptions(function (Options $options) use ($expectedTradeData) {
             expect($options->toArray()['TradeInfo'])->toBe($expectedTradeData);
         })
-        ->send();
+        ->submit();
 
     expect($response)->toBeInstanceOf(Response::class);
 });
