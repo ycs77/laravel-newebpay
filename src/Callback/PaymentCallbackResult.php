@@ -4,14 +4,17 @@ namespace Ycs77\NewebPay\Callback;
 
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Crypto\Crypto;
+use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Results\Payment\PaymentResult;
 
 class PaymentCallbackResult
 {
     public function __construct(
+        protected Factory $factory,
         protected Crypto $crypto
     ) {
-        //
+        $this->crypto->setHashKey($this->factory->config('hash_key'));
+        $this->crypto->setHashIv($this->factory->config('hash_iv'));
     }
 
     /**

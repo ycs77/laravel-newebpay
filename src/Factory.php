@@ -46,7 +46,7 @@ class Factory
     public function result(Request $request): PaymentResult
     {
         return (new PaymentCallbackResult(
-            $this->crypto
+            $this, $this->crypto
         ))->result($request);
     }
 
