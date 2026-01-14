@@ -2,7 +2,7 @@
 
 namespace Ycs77\NewebPay\Contracts;
 
-interface Sender
+interface Transporter
 {
     public function send(string $url, array $data): mixed;
 }
