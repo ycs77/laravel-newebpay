@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Request;
 use Ycs77\LaravelRecoverSession\Facades\RecoverSession;
 
 /**
+ * @deprecated
  * @property \Illuminate\Contracts\Config\Repository $config
  */
 trait WithSessionIdKey
