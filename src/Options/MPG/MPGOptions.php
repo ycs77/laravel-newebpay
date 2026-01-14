@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Options\Payment;
+namespace Ycs77\NewebPay\Options\MPG;
 
 use Carbon\Carbon;
 use Ycs77\NewebPay\Enums\Bank;
@@ -11,7 +11,7 @@ use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Options\Options;
 
-class PaymentOptions extends Options
+class MPGOptions extends Options
 {
     public string $merchantId = '';
 

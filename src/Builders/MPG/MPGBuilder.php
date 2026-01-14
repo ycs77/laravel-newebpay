@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Builders\Payment;
+namespace Ycs77\NewebPay\Builders\MPG;
 
 use Carbon\Carbon;
 use DateTime;
@@ -10,19 +10,19 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
-use Ycs77\NewebPay\Options\Payment\PaymentOptions;
+use Ycs77\NewebPay\Options\MPG\MPGOptions;
 use Ycs77\NewebPay\Url\UrlFormat;
 
-class PaymentBuilder extends Builder
+class MPGBuilder extends Builder
 {
-    protected PaymentOptions $options;
+    protected MPGOptions $options;
 
     protected function boot(): void
     {
         $this->crypto->setHashKey($this->factory->config('hash_key'));
         $this->crypto->setHashIv($this->factory->config('hash_iv'));
 
-        $this->options = new PaymentOptions;
+        $this->options = new MPGOptions;
         $this->options->merchantId = $this->factory->config('merchant_id');
 
         $this->endpoint = '/MPG/mpg_gateway';
@@ -52,7 +52,7 @@ class PaymentBuilder extends Builder
         }
     }
 
-    public function options(): PaymentOptions
+    public function options(): MPGOptions
     {
         return $this->options;
     }

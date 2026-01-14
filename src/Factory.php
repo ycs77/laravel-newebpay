@@ -3,7 +3,7 @@
 namespace Ycs77\NewebPay;
 
 use Illuminate\Http\Request;
-use Ycs77\NewebPay\Builders\Payment\PaymentBuilder;
+use Ycs77\NewebPay\Builders\MPG\MPGBuilder;
 use Ycs77\NewebPay\Callback\PaymentCallbackResult;
 use Ycs77\NewebPay\Callback\PaymentCustomerResult;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
@@ -33,9 +33,13 @@ class Factory
         //
     }
 
-    public function payment(): PaymentBuilder
+    /**
+     * MPG (多功能收款) - 處理一次性支付交易
+     * 支援信用卡、ATM、超商代碼等多種支付方式
+     */
+    public function payment(): MPGBuilder
     {
-        return (new PaymentBuilder(
+        return (new MPGBuilder(
             $this, $this->crypto, $this->httpTransporter
         ))->setFormRedirectTransporter($this->formRedirectTransporter);
     }
