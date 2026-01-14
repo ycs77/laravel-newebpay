@@ -45,7 +45,7 @@ test('可以成功呼叫 MPG 金流基本功能', function () {
         'CREDIT' => 1,
     ];
 
-    (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -55,4 +55,6 @@ test('可以成功呼叫 MPG 金流基本功能', function () {
             expect($options->toArray()['TradeInfo'])->toBe($expectedTradeInfoData);
         })
         ->submit();
+
+    expect($response)->toBeInstanceOf(Response::class);
 });
