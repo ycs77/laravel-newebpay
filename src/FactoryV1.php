@@ -25,21 +25,6 @@ class FactoryV1
     }
 
     /**
-     * MPG 交易
-     *
-     * @param  string  $no  訂單編號
-     * @param  int  $amt  訂單金額
-     * @param  string  $desc  商品描述
-     * @param  string  $email  聯絡信箱
-     */
-    public function payment(string $no, int $amt, string $desc, string $email): NewebPayMPG
-    {
-        $newebPay = new NewebPayMPG($this->config, $this->session);
-
-        return $newebPay->order($no, $amt, $desc, $email);
-    }
-
-    /**
      * MPG 交易回應結果
      */
     public function result(Request $request): MPGResult
