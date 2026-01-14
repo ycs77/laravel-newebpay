@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static \Ycs77\NewebPay\Builders\Payment\PaymentBuilder payment()
- * @method static \Ycs77\NewebPay\Results\Payment\PaymentResult result(\Illuminate\Http\Request $request)
- * @method static \Ycs77\NewebPay\Results\Payment\CustomerResult customer(\Illuminate\Http\Request $request)
+ * @method static \Ycs77\NewebPay\Results\MPG\PaymentResult result(\Illuminate\Http\Request $request)
+ * @method static \Ycs77\NewebPay\Results\MPG\CustomerResult customer(\Illuminate\Http\Request $request)
  *
  * @see \Ycs77\NewebPay\Factory
  */

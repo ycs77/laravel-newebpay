@@ -9,8 +9,8 @@ use Ycs77\NewebPay\Callback\PaymentCustomerResult;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
-use Ycs77\NewebPay\Results\Payment\CustomerResult;
-use Ycs77\NewebPay\Results\Payment\PaymentResult;
+use Ycs77\NewebPay\Results\MPG\CustomerResult;
+use Ycs77\NewebPay\Results\MPG\PaymentResult;
 
 class Factory
 {
