@@ -5,9 +5,11 @@ namespace Ycs77\NewebPay;
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Builders\Payment\PaymentBuilder;
 use Ycs77\NewebPay\Callback\PaymentCallbackResult;
+use Ycs77\NewebPay\Callback\PaymentCustomerResult;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
+use Ycs77\NewebPay\Results\Payment\CustomerResult;
 use Ycs77\NewebPay\Results\Payment\PaymentResult;
 
 class Factory
@@ -46,6 +48,18 @@ class Factory
     public function result(Request $request): PaymentResult
     {
         return (new PaymentCallbackResult(
+            $this, $this->crypto
+        ))->result($request);
+    }
+
+    /**
+     * 解析並回傳付款取號結果。
+     *
+     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     */
+    public function customer(Request $request): CustomerResult
+    {
+        return (new PaymentCustomerResult(
             $this, $this->crypto
         ))->result($request);
     }
