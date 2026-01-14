@@ -75,7 +75,7 @@ class MPGOptions extends Options
             'OrderComment' => $this->orderComment,
             'TokenTerm' => $this->creditRememberIdentifier,
             'TokenTermDemand' => $this->creditRememberDemand?->value,
-            'CVSCom' => $this->cvscom?->value,
+            'CVSCOM' => $this->cvscom?->value,
             'LgsType' => $this->lgsType?->value,
         ];
 

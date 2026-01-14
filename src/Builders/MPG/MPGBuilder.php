@@ -264,7 +264,7 @@ class MPGBuilder extends Builder
      * @param  string  $identifier  付款人綁定資料，用於綁定付款人與信用卡卡號時使用。例：會員編號、Email。格式限英、數字，「.」、「_」、「@」、「-」。
      * @param  \Ycs77\NewebPay\Enums\CreditRememberDemand  $demand  指定付款人信用卡快速結帳必填欄位設定
      */
-    public function withCreditRemember(string $identifier, ?CreditRememberDemand $demand = null): self
+    public function withCreditRemember(string $identifier, ?CreditRememberDemand $demand = CreditRememberDemand::EXPIRATION_DATE_AND_CVC): self
     {
         $this->options->creditRememberIdentifier = $identifier;
         $this->options->creditRememberDemand = $demand;
