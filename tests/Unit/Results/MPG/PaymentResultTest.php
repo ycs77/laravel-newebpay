@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
-use Ycs77\NewebPay\NewebPayResult;
-use Ycs77\NewebPay\Results\MPGResult;
+use Ycs77\NewebPay\Enums\PaymentType;
+use Ycs77\NewebPay\Results\MPG\PaymentResult;
 
-test('can be get result data on callback request', function () {
+test('可以解析付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '授權成功',
@@ -34,60 +33,7 @@ test('can be get result data on callback request', function () {
         ],
     ];
 
-    $data = encryptTradeData($tradeData);
-
-    $request = Request::create('/callback', 'POST', [
-        'Status' => 'SUCCESS',
-        'MerchantID' => 'TestMerchantID1234',
-        'TradeInfo' => $data['TradeInfo'],
-        'TradeSha' => $data['TradeSha'],
-        'Version' => '2.0',
-    ]);
-
-    $newebpayResult = new NewebPayResult(app('config'), app('session.store'));
-
-    $result = $newebpayResult->result($request);
-
-    expect($result->data())->toBe([
-        'Status' => 'SUCCESS',
-        'MerchantID' => 'TestMerchantID1234',
-        'TradeInfo' => $tradeData,
-        'TradeSha' => $data['TradeSha'],
-        'Version' => '2.0',
-    ]);
-});
-
-test('can be get result data for all payment methods', function () {
-    $tradeData = [
-        'Status' => 'SUCCESS',
-        'Message' => '授權成功',
-        'Result' => [
-            'MerchantID' => 'TestMerchantID1234',
-            'Amt' => 120,
-            'TradeNo' => '23061500000000000',
-            'MerchantOrderNo' => '1686759318',
-            'RespondType' => 'JSON',
-            'IP' => '127.0.0.1',
-            'EscrowBank' => 'HNCB',
-            'ItemDesc' => '我的商品',
-            'PaymentType' => 'CREDIT',
-            'PayTime' => '2023-01-01 00:00:00',
-            'RespondCode' => '00',
-            'Auth' => '222111',
-            'Card6No' => '400022',
-            'Card4No' => '1111',
-            'Exp' => '6405',
-            'TokenUseStatus' => 0,
-            'InstFirst' => 0,
-            'InstEach' => 0,
-            'Inst' => 0,
-            'ECI' => '',
-            'PaymentMethod' => 'CREDIT',
-            'AuthBank' => 'CTBC',
-        ],
-    ];
-
-    $result = new MPGResult([
+    $result = new PaymentResult([
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
@@ -101,17 +47,16 @@ test('can be get result data for all payment methods', function () {
     expect($result->message())->toBe('授權成功');
     expect($result->result())->toBe($tradeData['Result']);
     expect($result->merchantId())->toBe('TestMerchantID1234');
-    expect($result->amt())->toBe(120);
+    expect($result->amount())->toBe(120);
     expect($result->tradeNo())->toBe('23061500000000000');
-    expect($result->merchantOrderNo())->toBe('1686759318');
-    expect($result->paymentType())->toBe('CREDIT');
-    expect($result->respondType())->toBe('JSON');
-    expect($result->payTime())->toBe('2023-01-01 00:00:00');
+    expect($result->orderNo())->toBe('1686759318');
+    expect($result->paymentType())->toBe(PaymentType::CREDIT);
+    expect($result->payTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 00:00:00');
     expect($result->ip())->toBe('127.0.0.1');
     expect($result->escrowBank())->toBe('HNCB');
 });
 
-test('can be get result data for credit', function () {
+test('可以解析信用卡付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '授權成功',
@@ -141,7 +86,7 @@ test('can be get result data for credit', function () {
         ],
     ];
 
-    $result = new MPGResult([
+    $result = new PaymentResult([
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
@@ -150,7 +95,7 @@ test('can be get result data for credit', function () {
     ]);
 
     $credit = $result->credit();
-    expect($result->paymentType())->toBe('CREDIT');
+    expect($result->paymentType())->toBe(PaymentType::CREDIT);
     expect($credit->authBank())->toBe('CTBC');
     expect($credit->authBankName())->toBe('中國信託銀行');
     expect($credit->respondCode())->toBe('00');
@@ -165,7 +110,7 @@ test('can be get result data for credit', function () {
     expect($credit->paymentMethod())->toBe('CREDIT');
 });
 
-test('can be get result data for ATM', function () {
+test('可以解析 ATM 付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '取號成功',
@@ -184,7 +129,7 @@ test('can be get result data for ATM', function () {
         ],
     ];
 
-    $result = new MPGResult([
+    $result = new PaymentResult([
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
@@ -193,12 +138,12 @@ test('can be get result data for ATM', function () {
     ]);
 
     $atm = $result->atm();
-    expect($result->paymentType())->toBe('VACC');
+    expect($result->paymentType())->toBe(PaymentType::VACC);
     expect($atm->payBankCode())->toBe(null);
     expect($atm->payerAccount5Code())->toBe('12345');
 });
 
-test('can be get result data for WebATM', function () {
+test('可以解析 WebATM 付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '付款完成',
@@ -217,7 +162,7 @@ test('can be get result data for WebATM', function () {
         ],
     ];
 
-    $result = new MPGResult([
+    $result = new PaymentResult([
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
@@ -226,12 +171,12 @@ test('can be get result data for WebATM', function () {
     ]);
 
     $atm = $result->atm();
-    expect($result->paymentType())->toBe('WEBATM');
+    expect($result->paymentType())->toBe(PaymentType::WEBATM);
     expect($atm->payBankCode())->toBe('809');
     expect($atm->payerAccount5Code())->toBe('12345');
 });
 
-test('can be get result data for store code', function () {
+test('可以解析超商代碼付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '模擬付款成功',
@@ -251,7 +196,7 @@ test('can be get result data for store code', function () {
         ],
     ];
 
-    $result = new MPGResult([
+    $result = new PaymentResult([
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
@@ -260,14 +205,14 @@ test('can be get result data for store code', function () {
     ]);
 
     $storeCode = $result->storeCode();
-    expect($result->paymentType())->toBe('CVS');
+    expect($result->paymentType())->toBe(PaymentType::CVS);
     expect($storeCode->codeNo())->toBe('TEST1234567890');
     expect($storeCode->storeType())->toBe(4);
     expect($storeCode->storeTypeName())->toBe('萊爾富');
     expect($storeCode->storeId())->toBe('S9999');
 });
 
-test('can be get result data for store barcode', function () {
+test('可以解析超商條碼付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '模擬銷帳成功',
@@ -289,7 +234,7 @@ test('can be get result data for store barcode', function () {
         ],
     ];
 
-    $result = new MPGResult([
+    $result = new PaymentResult([
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
@@ -298,7 +243,7 @@ test('can be get result data for store barcode', function () {
     ]);
 
     $storeBarcode = $result->storeBarcode();
-    expect($result->paymentType())->toBe('BARCODE');
+    expect($result->paymentType())->toBe(PaymentType::BARCODE);
     expect($storeBarcode->barcode1())->toBe('TEST1');
     expect($storeBarcode->barcode2())->toBe('TEST2');
     expect($storeBarcode->barcode3())->toBe('TEST3');
@@ -307,7 +252,7 @@ test('can be get result data for store barcode', function () {
     expect($storeBarcode->payStoreName())->toBe('7-11');
 });
 
-test('can be get result data for lgs', function () {
+test('可以解析物流付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '訂單資料建立成功',
@@ -332,7 +277,7 @@ test('can be get result data for lgs', function () {
         ],
     ];
 
-    $result = new MPGResult([
+    $result = new PaymentResult([
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
@@ -341,7 +286,7 @@ test('can be get result data for lgs', function () {
     ]);
 
     $lgs = $result->lgs();
-    expect($result->paymentType())->toBe('CVSCOM');
+    expect($result->paymentType())->toBe(PaymentType::CVSCOM);
     expect($lgs->storeCode())->toBe('019666');
     expect($lgs->storeName())->toBe('全家台灣大道店');
     expect($lgs->storeType())->toBe('全家');
@@ -353,7 +298,7 @@ test('can be get result data for lgs', function () {
     expect($lgs->lgsType())->toBe('C2C');
 });
 
-test('can be get result data for ezPay', function () {
+test('可以解析 ezPay 付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '訂單資料建立成功',
@@ -370,7 +315,7 @@ test('can be get result data for ezPay', function () {
         ],
     ];
 
-    $result = new MPGResult([
+    $result = new PaymentResult([
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
@@ -385,7 +330,7 @@ test('can be get result data for ezPay', function () {
     expect($ezPay->channelNo())->toBe('NO0000000001');
 });
 
-test('can be get result data for EsunWallet', function () {
+test('可以解析玉山 Wallet 付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '訂單資料建立成功',
@@ -403,7 +348,7 @@ test('can be get result data for EsunWallet', function () {
         ],
     ];
 
-    $result = new MPGResult([
+    $result = new PaymentResult([
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
@@ -412,12 +357,12 @@ test('can be get result data for EsunWallet', function () {
     ]);
 
     $esunWallet = $result->esunWallet();
-    expect($result->paymentType())->toBe('ESUNWALLET');
+    expect($result->paymentType())->toBe(PaymentType::ESUNWALLET);
     expect($esunWallet->payAmt())->toBe(120);
     expect($esunWallet->redDisAmt())->toBe(0);
 });
 
-test('can be get result data for TaiwanPay', function () {
+test('可以解析台灣 Pay 付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '訂單資料建立成功',
@@ -434,7 +379,7 @@ test('can be get result data for TaiwanPay', function () {
         ],
     ];
 
-    $result = new MPGResult([
+    $result = new PaymentResult([
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
@@ -443,6 +388,6 @@ test('can be get result data for TaiwanPay', function () {
     ]);
 
     $taiwanPay = $result->taiwanPay();
-    expect($result->paymentType())->toBe('TAIWANPAY');
+    expect($result->paymentType())->toBe(PaymentType::TAIWANPAY);
     expect($taiwanPay->payAmt())->toBe(120);
 });
