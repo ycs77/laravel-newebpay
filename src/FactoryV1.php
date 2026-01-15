@@ -6,8 +6,6 @@ use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Enums\PeriodStatus;
-use Ycs77\NewebPay\Results\CustomerResult;
-use Ycs77\NewebPay\Results\MPGResult;
 use Ycs77\NewebPay\Results\PeriodNotifyResult;
 use Ycs77\NewebPay\Results\PeriodResult;
 
@@ -22,28 +20,6 @@ class FactoryV1
         protected Session $session
     ) {
         //
-    }
-
-    /**
-     * MPG 交易回應結果
-     */
-    public function result(Request $request): MPGResult
-    {
-        $result = new NewebPayResult($this->config, $this->session);
-
-        return $result->result($request);
-    }
-
-    /**
-     * MPG 付款取號
-     *
-     * 適用交易類別：超商代碼、超商條碼、超商取貨付款、ATM
-     */
-    public function customer(Request $request): CustomerResult
-    {
-        $result = new NewebPayCustomer($this->config, $this->session);
-
-        return $result->result($request);
     }
 
     /**
