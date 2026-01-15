@@ -32,7 +32,7 @@ class CustomerResult extends Result
      */
     public function isFail(): bool
     {
-        return $this->status() !== 'SUCCESS';
+        return ! $this->isSuccess();
     }
 
     /**
@@ -62,7 +62,7 @@ class CustomerResult extends Result
     /**
      * 交易金額
      */
-    public function amt(): int
+    public function amount(): int
     {
         return $this->result()['Amt'];
     }
@@ -78,7 +78,7 @@ class CustomerResult extends Result
     /**
      * 商店訂單編號
      */
-    public function merchantOrderNo(): string
+    public function orderNo(): string
     {
         return $this->result()['MerchantOrderNo'];
     }

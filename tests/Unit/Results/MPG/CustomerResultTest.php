@@ -36,9 +36,9 @@ test('可以解析取號結果', function () {
         ->and($result->message())->toBe('條碼取號成功')
         ->and($result->result())->toBe($tradeData['Result'])
         ->and($result->merchantId())->toBe('TestMerchantID1234')
-        ->and($result->amt())->toBe(120)
+        ->and($result->amount())->toBe(120)
         ->and($result->tradeNo())->toBe('23061500000000000')
-        ->and($result->merchantOrderNo())->toBe('1686763446')
+        ->and($result->orderNo())->toBe('1686763446')
         ->and($result->paymentType())->toBe(PaymentType::BARCODE)
         ->and($result->expireTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 23:59:59');
 });
