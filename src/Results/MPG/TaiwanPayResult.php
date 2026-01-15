@@ -1,8 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Results;
+namespace Ycs77\NewebPay\Results\MPG;
 
-class MPGTaiwanPayResult extends ResultV1
+use Ycs77\NewebPay\Results\Result;
+
+class TaiwanPayResult extends Result
 {
     /**
      * 實際付款金額
@@ -13,9 +15,9 @@ class MPGTaiwanPayResult extends ResultV1
     }
 
     /**
-     * Define the data keys.
+     * Define the allowed data keys.
      */
-    protected function dataKeys(): array
+    protected function allowedDataKeys(): array
     {
         return [
             'PayAmt',

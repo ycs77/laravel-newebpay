@@ -4,14 +4,6 @@ namespace Ycs77\NewebPay\Results\MPG;
 
 use Carbon\Carbon;
 use Ycs77\NewebPay\Enums\PaymentType;
-use Ycs77\NewebPay\Results\MPGATMResult;
-use Ycs77\NewebPay\Results\MPGCreditResult;
-use Ycs77\NewebPay\Results\MPGEsunWalletResult;
-use Ycs77\NewebPay\Results\MPGEzPayResult;
-use Ycs77\NewebPay\Results\MPGLgsResult;
-use Ycs77\NewebPay\Results\MPGStoreBarcodeResult;
-use Ycs77\NewebPay\Results\MPGStoreCodeResult;
-use Ycs77\NewebPay\Results\MPGTaiwanPayResult;
 use Ycs77\NewebPay\Results\Result;
 
 class PaymentResult extends Result
@@ -147,64 +139,64 @@ class PaymentResult extends Result
     /**
      * 信用卡支付回傳（一次付清、Google Pay、Samaung Pay、國民旅遊卡、銀聯）
      */
-    public function credit(): MPGCreditResult
+    public function credit(): CreditResult
     {
-        return new MPGCreditResult($this->result());
+        return new CreditResult($this->result());
     }
 
     /**
      * WEBATM、ATM 繳費回傳
      */
-    public function atm(): MPGATMResult
+    public function atm(): ATMResult
     {
-        return new MPGATMResult($this->result());
+        return new ATMResult($this->result());
     }
 
     /**
      * 超商代碼繳費回傳
      */
-    public function storeCode(): MPGStoreCodeResult
+    public function storeCode(): StoreCodeResult
     {
-        return new MPGStoreCodeResult($this->result());
+        return new StoreCodeResult($this->result());
     }
 
     /**
      * 超商條碼繳費回傳
      */
-    public function storeBarcode(): MPGStoreBarcodeResult
+    public function storeBarcode(): StoreBarcodeResult
     {
-        return new MPGStoreBarcodeResult($this->result());
+        return new StoreBarcodeResult($this->result());
     }
 
     /**
      * 超商物流回傳
      */
-    public function lgs(): MPGLgsResult
+    public function lgs(): LgsResult
     {
-        return new MPGLgsResult($this->result());
+        return new LgsResult($this->result());
     }
 
     /**
      * 跨境支付回傳 (包含簡單付電子錢包、簡單付微信支付、簡單付支付寶)
      */
-    public function ezPay(): MPGEzPayResult
+    public function ezPay(): EzPayResult
     {
-        return new MPGEzPayResult($this->result());
+        return new EzPayResult($this->result());
     }
 
     /**
      * 玉山 Wallet 回傳
      */
-    public function esunWallet(): MPGEsunWalletResult
+    public function esunWallet(): EsunWalletResult
     {
-        return new MPGEsunWalletResult($this->result());
+        return new EsunWalletResult($this->result());
     }
 
     /**
      * 台灣 Pay 回傳
      */
-    public function taiwanPay(): MPGTaiwanPayResult
+    public function taiwanPay(): TaiwanPayResult
     {
-        return new MPGTaiwanPayResult($this->result());
+        return new TaiwanPayResult($this->result());
     }
 }

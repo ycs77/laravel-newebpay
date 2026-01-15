@@ -1,8 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Results;
+namespace Ycs77\NewebPay\Results\MPG;
 
-class MPGEzPayResult extends ResultV1
+use Ycs77\NewebPay\Results\Result;
+
+class EzPayResult extends Result
 {
     /**
      * 跨境通路中英文名稱對照
@@ -62,9 +64,9 @@ class MPGEzPayResult extends ResultV1
     }
 
     /**
-     * Define the data keys.
+     * Define the allowed data keys.
      */
-    protected function dataKeys(): array
+    protected function allowedDataKeys(): array
     {
         return [
             'ChannelID',
