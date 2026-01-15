@@ -25,10 +25,11 @@ test('可以成功呼叫 MPG 金流基本功能', function () {
         ->submit();
 
     expect($response)->toBeInstanceOf(Response::class)
-        ->content()->toContain('action="https://ccore.newebpay.com/MPG/mpg_gateway"')
-        ->content()->toContain('name="MerchantID" value="TestMerchantID1234"')
-        ->content()->toContain('name="TradeInfo" value="encrypted_trade_data"')
-        ->content()->toContain('name="TradeSha" value="encrypted_sha_data"');
+        ->and($response->content())->toContain('action="https://ccore.newebpay.com/MPG/mpg_gateway"')
+        ->and($response->content())->toContain('action="https://ccore.newebpay.com/MPG/mpg_gateway"')
+        ->and($response->content())->toContain('name="MerchantID" value="TestMerchantID1234"')
+        ->and($response->content())->toContain('name="TradeInfo" value="encrypted_trade_data"')
+        ->and($response->content())->toContain('name="TradeSha" value="encrypted_sha_data"');
 });
 
 test('可以成功呼叫 MPG 金流的更多功能', function () {

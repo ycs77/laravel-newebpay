@@ -30,17 +30,17 @@ test('可以解析取號結果', function () {
         'Version' => '2.0',
     ]);
 
-    expect($result->status())->toBe('SUCCESS');
-    expect($result->isSuccess())->toBeTrue();
-    expect($result->isFail())->toBeFalse();
-    expect($result->message())->toBe('條碼取號成功');
-    expect($result->result())->toBe($tradeData['Result']);
-    expect($result->merchantId())->toBe('TestMerchantID1234');
-    expect($result->amt())->toBe(120);
-    expect($result->tradeNo())->toBe('23061500000000000');
-    expect($result->merchantOrderNo())->toBe('1686763446');
-    expect($result->paymentType())->toBe(PaymentType::BARCODE);
-    expect($result->expireTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 23:59:59');
+    expect($result->status())->toBe('SUCCESS')
+        ->and($result->isSuccess())->toBeTrue()
+        ->and($result->isFail())->toBeFalse()
+        ->and($result->message())->toBe('條碼取號成功')
+        ->and($result->result())->toBe($tradeData['Result'])
+        ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->amt())->toBe(120)
+        ->and($result->tradeNo())->toBe('23061500000000000')
+        ->and($result->merchantOrderNo())->toBe('1686763446')
+        ->and($result->paymentType())->toBe(PaymentType::BARCODE)
+        ->and($result->expireTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 23:59:59');
 });
 
 test('可以解析 ATM 取號結果', function () {
@@ -70,9 +70,10 @@ test('可以解析 ATM 取號結果', function () {
     ]);
 
     $storeBarcode = $result->atm();
+
     expect($result->paymentType())->toBe(PaymentType::VACC);
-    expect($storeBarcode->bankCode())->toBe('007');
-    expect($storeBarcode->codeNo())->toBe('TestAccount12345');
+    expect($storeBarcode->bankCode())->toBe('007')
+        ->and($storeBarcode->codeNo())->toBe('TestAccount12345');
 });
 
 test('可以解析代碼取號結果', function () {
@@ -101,6 +102,7 @@ test('可以解析代碼取號結果', function () {
     ]);
 
     $storeCode = $result->storeCode();
+
     expect($result->paymentType())->toBe(PaymentType::CVS);
     expect($storeCode->codeNo())->toBe('TEST1234567890');
 });
@@ -133,10 +135,11 @@ test('可以解析條碼取號結果', function () {
     ]);
 
     $storeBarcode = $result->storeBarcode();
+
     expect($result->paymentType())->toBe(PaymentType::BARCODE);
-    expect($storeBarcode->barcode1())->toBe('TEST1');
-    expect($storeBarcode->barcode2())->toBe('TEST2');
-    expect($storeBarcode->barcode3())->toBe('TEST3');
+    expect($storeBarcode->barcode1())->toBe('TEST1')
+        ->and($storeBarcode->barcode2())->toBe('TEST2')
+        ->and($storeBarcode->barcode3())->toBe('TEST3');
 });
 
 test('可以解析物流取號結果', function () {
@@ -171,14 +174,15 @@ test('可以解析物流取號結果', function () {
     ]);
 
     $lgs = $result->lgs();
+
     expect($result->paymentType())->toBe(PaymentType::CVSCOM);
-    expect($lgs->storeCode())->toBe('019666');
-    expect($lgs->storeName())->toBe('全家台灣大道店');
-    expect($lgs->storeType())->toBe('全家');
-    expect($lgs->storeAddr())->toBe('台中市中區台灣大道一段531號');
-    expect($lgs->tradeType())->toBe(1);
-    expect($lgs->cvscomName())->toBe('Lucas Yang');
-    expect($lgs->cvscomPhone())->toBe('0900111222');
-    expect($lgs->lgsNo())->toBe('-');
-    expect($lgs->lgsType())->toBe('C2C');
+    expect($lgs->storeCode())->toBe('019666')
+        ->and($lgs->storeName())->toBe('全家台灣大道店')
+        ->and($lgs->storeType())->toBe('全家')
+        ->and($lgs->storeAddr())->toBe('台中市中區台灣大道一段531號')
+        ->and($lgs->tradeType())->toBe(1)
+        ->and($lgs->cvscomName())->toBe('Lucas Yang')
+        ->and($lgs->cvscomPhone())->toBe('0900111222')
+        ->and($lgs->lgsNo())->toBe('-')
+        ->and($lgs->lgsType())->toBe('C2C');
 });

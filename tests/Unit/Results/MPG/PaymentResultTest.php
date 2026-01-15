@@ -41,19 +41,19 @@ test('可以解析付款結果', function () {
         'Version' => '2.0',
     ]);
 
-    expect($result->status())->toBe('SUCCESS');
-    expect($result->isSuccess())->toBeTrue();
-    expect($result->isFail())->toBeFalse();
-    expect($result->message())->toBe('授權成功');
-    expect($result->result())->toBe($tradeData['Result']);
-    expect($result->merchantId())->toBe('TestMerchantID1234');
-    expect($result->amount())->toBe(120);
-    expect($result->tradeNo())->toBe('23061500000000000');
-    expect($result->orderNo())->toBe('1686759318');
-    expect($result->paymentType())->toBe(PaymentType::CREDIT);
-    expect($result->payTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 00:00:00');
-    expect($result->ip())->toBe('127.0.0.1');
-    expect($result->escrowBank())->toBe('HNCB');
+    expect($result->status())->toBe('SUCCESS')
+        ->and($result->isSuccess())->toBeTrue()
+        ->and($result->isFail())->toBeFalse()
+        ->and($result->message())->toBe('授權成功')
+        ->and($result->result())->toBe($tradeData['Result'])
+        ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->amount())->toBe(120)
+        ->and($result->tradeNo())->toBe('23061500000000000')
+        ->and($result->orderNo())->toBe('1686759318')
+        ->and($result->paymentType())->toBe(PaymentType::CREDIT)
+        ->and($result->payTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 00:00:00')
+        ->and($result->ip())->toBe('127.0.0.1')
+        ->and($result->escrowBank())->toBe('HNCB');
 });
 
 test('可以解析信用卡付款結果', function () {
@@ -95,19 +95,20 @@ test('可以解析信用卡付款結果', function () {
     ]);
 
     $credit = $result->credit();
+
     expect($result->paymentType())->toBe(PaymentType::CREDIT);
-    expect($credit->authBank())->toBe('CTBC');
-    expect($credit->authBankName())->toBe('中國信託銀行');
-    expect($credit->respondCode())->toBe('00');
-    expect($credit->auth())->toBe('222111');
-    expect($credit->card6No())->toBe('400022');
-    expect($credit->card4No())->toBe('1111');
-    expect($credit->inst())->toBe(0);
-    expect($credit->instFirst())->toBe(0);
-    expect($credit->instEach())->toBe(0);
-    expect($credit->ECI())->toBe('');
-    expect($credit->tokenUseStatus())->toBe(0);
-    expect($credit->paymentMethod())->toBe('CREDIT');
+    expect($credit->authBank())->toBe('CTBC')
+        ->and($credit->authBankName())->toBe('中國信託銀行')
+        ->and($credit->respondCode())->toBe('00')
+        ->and($credit->auth())->toBe('222111')
+        ->and($credit->card6No())->toBe('400022')
+        ->and($credit->card4No())->toBe('1111')
+        ->and($credit->inst())->toBe(0)
+        ->and($credit->instFirst())->toBe(0)
+        ->and($credit->instEach())->toBe(0)
+        ->and($credit->ECI())->toBe('')
+        ->and($credit->tokenUseStatus())->toBe(0)
+        ->and($credit->paymentMethod())->toBe('CREDIT');
 });
 
 test('可以解析 ATM 付款結果', function () {
@@ -138,9 +139,10 @@ test('可以解析 ATM 付款結果', function () {
     ]);
 
     $atm = $result->atm();
+
     expect($result->paymentType())->toBe(PaymentType::VACC);
-    expect($atm->payBankCode())->toBe(null);
-    expect($atm->payerAccount5Code())->toBe('12345');
+    expect($atm->payBankCode())->toBe(null)
+        ->and($atm->payerAccount5Code())->toBe('12345');
 });
 
 test('可以解析 WebATM 付款結果', function () {
@@ -171,9 +173,10 @@ test('可以解析 WebATM 付款結果', function () {
     ]);
 
     $atm = $result->atm();
+
     expect($result->paymentType())->toBe(PaymentType::WEBATM);
-    expect($atm->payBankCode())->toBe('809');
-    expect($atm->payerAccount5Code())->toBe('12345');
+    expect($atm->payBankCode())->toBe('809')
+        ->and($atm->payerAccount5Code())->toBe('12345');
 });
 
 test('可以解析超商代碼付款結果', function () {
@@ -205,11 +208,12 @@ test('可以解析超商代碼付款結果', function () {
     ]);
 
     $storeCode = $result->storeCode();
+
     expect($result->paymentType())->toBe(PaymentType::CVS);
-    expect($storeCode->codeNo())->toBe('TEST1234567890');
-    expect($storeCode->storeType())->toBe(4);
-    expect($storeCode->storeTypeName())->toBe('萊爾富');
-    expect($storeCode->storeId())->toBe('S9999');
+    expect($storeCode->codeNo())->toBe('TEST1234567890')
+        ->and($storeCode->storeType())->toBe(4)
+        ->and($storeCode->storeTypeName())->toBe('萊爾富')
+        ->and($storeCode->storeId())->toBe('S9999');
 });
 
 test('可以解析超商條碼付款結果', function () {
@@ -243,13 +247,14 @@ test('可以解析超商條碼付款結果', function () {
     ]);
 
     $storeBarcode = $result->storeBarcode();
+
     expect($result->paymentType())->toBe(PaymentType::BARCODE);
-    expect($storeBarcode->barcode1())->toBe('TEST1');
-    expect($storeBarcode->barcode2())->toBe('TEST2');
-    expect($storeBarcode->barcode3())->toBe('TEST3');
-    expect($storeBarcode->repayTimes())->toBe(0);
-    expect($storeBarcode->payStore())->toBe('SEVEN');
-    expect($storeBarcode->payStoreName())->toBe('7-11');
+    expect($storeBarcode->barcode1())->toBe('TEST1')
+        ->and($storeBarcode->barcode2())->toBe('TEST2')
+        ->and($storeBarcode->barcode3())->toBe('TEST3')
+        ->and($storeBarcode->repayTimes())->toBe(0)
+        ->and($storeBarcode->payStore())->toBe('SEVEN')
+        ->and($storeBarcode->payStoreName())->toBe('7-11');
 });
 
 test('可以解析物流付款結果', function () {
@@ -286,16 +291,17 @@ test('可以解析物流付款結果', function () {
     ]);
 
     $lgs = $result->lgs();
+
     expect($result->paymentType())->toBe(PaymentType::CVSCOM);
-    expect($lgs->storeCode())->toBe('019666');
-    expect($lgs->storeName())->toBe('全家台灣大道店');
-    expect($lgs->storeType())->toBe('全家');
-    expect($lgs->storeAddr())->toBe('台中市中區台灣大道一段531號');
-    expect($lgs->tradeType())->toBe(1);
-    expect($lgs->cvscomName())->toBe('Lucas Yang');
-    expect($lgs->cvscomPhone())->toBe('0900111222');
-    expect($lgs->lgsNo())->toBe('-');
-    expect($lgs->lgsType())->toBe('C2C');
+    expect($lgs->storeCode())->toBe('019666')
+        ->and($lgs->storeType())->toBe('全家')
+        ->and($lgs->storeName())->toBe('全家台灣大道店')
+        ->and($lgs->storeAddr())->toBe('台中市中區台灣大道一段531號')
+        ->and($lgs->tradeType())->toBe(1)
+        ->and($lgs->cvscomName())->toBe('Lucas Yang')
+        ->and($lgs->cvscomPhone())->toBe('0900111222')
+        ->and($lgs->lgsType())->toBe('C2C')
+        ->and($lgs->lgsNo())->toBe('-');
 });
 
 test('可以解析 ezPay 付款結果', function () {
@@ -324,10 +330,11 @@ test('可以解析 ezPay 付款結果', function () {
     ]);
 
     $ezPay = $result->ezPay();
+
     expect($ezPay->isEzPay())->toBeTrue();
-    expect($ezPay->channelId())->toBe('ALIPAY');
-    expect($ezPay->channelName())->toBe('支付寶');
-    expect($ezPay->channelNo())->toBe('NO0000000001');
+    expect($ezPay->channelId())->toBe('ALIPAY')
+        ->and($ezPay->channelName())->toBe('支付寶')
+        ->and($ezPay->channelNo())->toBe('NO0000000001');
 });
 
 test('可以解析玉山 Wallet 付款結果', function () {
@@ -357,9 +364,10 @@ test('可以解析玉山 Wallet 付款結果', function () {
     ]);
 
     $esunWallet = $result->esunWallet();
+
     expect($result->paymentType())->toBe(PaymentType::ESUNWALLET);
-    expect($esunWallet->payAmt())->toBe(120);
-    expect($esunWallet->redDisAmt())->toBe(0);
+    expect($esunWallet->payAmt())->toBe(120)
+        ->and($esunWallet->redDisAmt())->toBe(0);
 });
 
 test('可以解析台灣 Pay 付款結果', function () {
@@ -388,6 +396,7 @@ test('可以解析台灣 Pay 付款結果', function () {
     ]);
 
     $taiwanPay = $result->taiwanPay();
+
     expect($result->paymentType())->toBe(PaymentType::TAIWANPAY);
     expect($taiwanPay->payAmt())->toBe(120);
 });
