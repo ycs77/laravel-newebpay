@@ -4,10 +4,6 @@ namespace Ycs77\NewebPay\Results\MPG;
 
 use Carbon\Carbon;
 use Ycs77\NewebPay\Enums\PaymentType;
-use Ycs77\NewebPay\Results\CustomerATMResult;
-use Ycs77\NewebPay\Results\CustomerLgsResult;
-use Ycs77\NewebPay\Results\CustomerStoreBarcodeResult;
-use Ycs77\NewebPay\Results\CustomerStoreCodeResult;
 use Ycs77\NewebPay\Results\Result;
 
 class CustomerResult extends Result

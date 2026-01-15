@@ -1,8 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Results;
+namespace Ycs77\NewebPay\Results\MPG;
 
-class CustomerLgsResult extends ResultV1
+use Ycs77\NewebPay\Results\Result;
+
+class CustomerLgsResult extends Result
 {
     /**
      * 超商門市編號
@@ -88,9 +90,9 @@ class CustomerLgsResult extends ResultV1
     }
 
     /**
-     * Define the data keys.
+     * Define the allowed data keys.
      */
-    protected function dataKeys(): array
+    protected function allowedDataKeys(): array
     {
         return [
             'StoreCode',

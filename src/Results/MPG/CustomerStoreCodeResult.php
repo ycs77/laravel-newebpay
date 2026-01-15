@@ -1,8 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Results;
+namespace Ycs77\NewebPay\Results\MPG;
 
-class CustomerStoreCodeResult extends ResultV1
+use Ycs77\NewebPay\Results\Result;
+
+class CustomerStoreCodeResult extends Result
 {
     /**
      * 繳費代碼
@@ -13,9 +15,9 @@ class CustomerStoreCodeResult extends ResultV1
     }
 
     /**
-     * Define the data keys.
+     * Define the allowed data keys.
      */
-    protected function dataKeys(): array
+    protected function allowedDataKeys(): array
     {
         return [
             'CodeNo',

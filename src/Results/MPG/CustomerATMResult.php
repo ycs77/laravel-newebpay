@@ -1,8 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Results;
+namespace Ycs77\NewebPay\Results\MPG;
 
-class CustomerATMResult extends ResultV1
+use Ycs77\NewebPay\Results\Result;
+
+class CustomerATMResult extends Result
 {
     /**
      * 金融機構代碼
@@ -21,9 +23,9 @@ class CustomerATMResult extends ResultV1
     }
 
     /**
-     * Define the data keys.
+     * Define the allowed data keys.
      */
-    protected function dataKeys(): array
+    protected function allowedDataKeys(): array
     {
         return [
             'BankCode',
