@@ -13,7 +13,7 @@ use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Options\MPG\MPGOptions;
 use Ycs77\NewebPay\Url\UrlFormat;
 
-class MPGBuilder extends Builder
+final class MPGBuilder extends Builder
 {
     protected MPGOptions $options;
 
