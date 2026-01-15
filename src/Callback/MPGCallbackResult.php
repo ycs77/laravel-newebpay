@@ -7,7 +7,7 @@ use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Results\MPG\PaymentResult;
 
-class PaymentCallbackResult
+class MPGCallbackResult
 {
     public function __construct(
         protected Factory $factory,

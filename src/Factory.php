@@ -4,8 +4,8 @@ namespace Ycs77\NewebPay;
 
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Builders\MPG\MPGBuilder;
-use Ycs77\NewebPay\Callback\PaymentCallbackResult;
-use Ycs77\NewebPay\Callback\PaymentCustomerResult;
+use Ycs77\NewebPay\Callback\MPGCallbackResult;
+use Ycs77\NewebPay\Callback\MPGCustomerResult;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
@@ -51,7 +51,7 @@ class Factory
      */
     public function result(Request $request): PaymentResult
     {
-        return (new PaymentCallbackResult(
+        return (new MPGCallbackResult(
             $this, $this->crypto
         ))->result($request);
     }
@@ -63,7 +63,7 @@ class Factory
      */
     public function customer(Request $request): CustomerResult
     {
-        return (new PaymentCustomerResult(
+        return (new MPGCustomerResult(
             $this, $this->crypto
         ))->result($request);
     }
