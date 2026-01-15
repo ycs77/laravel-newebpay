@@ -3,14 +3,14 @@
 namespace Ycs77\NewebPay;
 
 use Illuminate\Http\Request;
-use Ycs77\NewebPay\Builders\MPG\MPGBuilder;
-use Ycs77\NewebPay\Callback\MPGCallbackResult;
-use Ycs77\NewebPay\Callback\MPGCustomerResult;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
+use Ycs77\NewebPay\Resources\Customer;
+use Ycs77\NewebPay\Resources\Payment;
+use Ycs77\NewebPay\Resources\PaymentResult;
 use Ycs77\NewebPay\Results\MPG\CustomerResult;
-use Ycs77\NewebPay\Results\MPG\PaymentResult;
+use Ycs77\NewebPay\Results\MPG\PaymentResult as MPGPaymentResult;
 
 class Factory
 {
@@ -37,11 +37,11 @@ class Factory
      * MPG (多功能收款) - 處理一次性支付交易
      * 支援信用卡、ATM、超商代碼等多種支付方式
      */
-    public function payment(): MPGBuilder
+    public function payment(): Payment
     {
-        return (new MPGBuilder(
-            $this, $this->crypto, $this->httpTransporter
-        ))->setFormRedirectTransporter($this->formRedirectTransporter);
+        return new Payment(
+            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter
+        );
     }
 
     /**
@@ -49,9 +49,9 @@ class Factory
      *
      * @throws \Ycs77\NewebPay\Exceptions\DecryptException
      */
-    public function result(Request $request): PaymentResult
+    public function result(Request $request): MPGPaymentResult
     {
-        return (new MPGCallbackResult(
+        return (new PaymentResult(
             $this, $this->crypto
         ))->result($request);
     }
@@ -63,9 +63,9 @@ class Factory
      */
     public function customer(Request $request): CustomerResult
     {
-        return (new MPGCustomerResult(
+        return (new Customer(
             $this, $this->crypto
-        ))->result($request);
+        ))->customer($request);
     }
 
     public function baseUrl(): string
