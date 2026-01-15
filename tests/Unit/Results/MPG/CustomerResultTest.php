@@ -1,52 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
-use Ycs77\NewebPay\NewebPayCustomer;
-use Ycs77\NewebPay\Results\CustomerResult;
+use Ycs77\NewebPay\Enums\PaymentType;
+use Ycs77\NewebPay\Results\MPG\CustomerResult;
 
-test('can be get customer result data', function () {
-    $tradeData = [
-        'Status' => 'SUCCESS',
-        'Message' => '條碼取號成功',
-        'Result' => [
-            'MerchantID' => 'TestMerchantID1234',
-            'Amt' => 120,
-            'TradeNo' => '23061500000000000',
-            'MerchantOrderNo' => '1686763446',
-            'PaymentType' => 'BARCODE',
-            'RespondType' => 'JSON',
-            'ExpireDate' => '2023-01-01',
-            'ExpireTime' => '23:59:59',
-            'Barcode_1' => 'TEST1',
-            'Barcode_2' => 'TEST2',
-            'Barcode_3' => 'TEST3',
-        ],
-    ];
-
-    $data = encryptTradeData($tradeData);
-
-    $request = Request::create('/customer', 'POST', [
-        'Status' => 'SUCCESS',
-        'MerchantID' => 'TestMerchantID1234',
-        'TradeInfo' => $data['TradeInfo'],
-        'TradeSha' => $data['TradeSha'],
-        'Version' => '2.0',
-    ]);
-
-    $newebpayResult = new NewebPayCustomer(app('config'), app('session.store'));
-
-    $result = $newebpayResult->result($request);
-
-    expect($result->data())->toBe([
-        'Status' => 'SUCCESS',
-        'MerchantID' => 'TestMerchantID1234',
-        'TradeInfo' => $tradeData,
-        'TradeSha' => $data['TradeSha'],
-        'Version' => '2.0',
-    ]);
-});
-
-test('can be get result data for all payment methods', function () {
+test('可以解析取號結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '條碼取號成功',
@@ -82,12 +39,11 @@ test('can be get result data for all payment methods', function () {
     expect($result->amt())->toBe(120);
     expect($result->tradeNo())->toBe('23061500000000000');
     expect($result->merchantOrderNo())->toBe('1686763446');
-    expect($result->paymentType())->toBe('BARCODE');
-    expect($result->expireDate())->toBe('2023-01-01');
-    expect($result->expireTime())->toBe('23:59:59');
+    expect($result->paymentType())->toBe(PaymentType::BARCODE);
+    expect($result->expireTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 23:59:59');
 });
 
-test('can be get result data for ATM', function () {
+test('可以解析 ATM 取號結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '取號成功',
@@ -114,12 +70,12 @@ test('can be get result data for ATM', function () {
     ]);
 
     $storeBarcode = $result->atm();
-    expect($result->paymentType())->toBe('VACC');
+    expect($result->paymentType())->toBe(PaymentType::VACC);
     expect($storeBarcode->bankCode())->toBe('007');
     expect($storeBarcode->codeNo())->toBe('TestAccount12345');
 });
 
-test('can be get result data for store code', function () {
+test('可以解析代碼取號結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '代碼取號成功',
@@ -145,11 +101,11 @@ test('can be get result data for store code', function () {
     ]);
 
     $storeCode = $result->storeCode();
-    expect($result->paymentType())->toBe('CVS');
+    expect($result->paymentType())->toBe(PaymentType::CVS);
     expect($storeCode->codeNo())->toBe('TEST1234567890');
 });
 
-test('can be get result data for store barcode', function () {
+test('可以解析條碼取號結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '條碼取號成功',
@@ -177,13 +133,13 @@ test('can be get result data for store barcode', function () {
     ]);
 
     $storeBarcode = $result->storeBarcode();
-    expect($result->paymentType())->toBe('BARCODE');
+    expect($result->paymentType())->toBe(PaymentType::BARCODE);
     expect($storeBarcode->barcode1())->toBe('TEST1');
     expect($storeBarcode->barcode2())->toBe('TEST2');
     expect($storeBarcode->barcode3())->toBe('TEST3');
 });
 
-test('can be get result data for lgs', function () {
+test('可以解析物流取號結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '條碼取號成功',
@@ -215,7 +171,7 @@ test('can be get result data for lgs', function () {
     ]);
 
     $lgs = $result->lgs();
-    expect($result->paymentType())->toBe('CVSCOM');
+    expect($result->paymentType())->toBe(PaymentType::CVSCOM);
     expect($lgs->storeCode())->toBe('019666');
     expect($lgs->storeName())->toBe('全家台灣大道店');
     expect($lgs->storeType())->toBe('全家');
