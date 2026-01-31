@@ -13,8 +13,6 @@ use Ycs77\NewebPay\Factory;
  */
 final class Payment
 {
-    use Concerns\PrepareBuilder;
-
     public function __construct(
         private readonly Factory $factory,
         private readonly Crypto $crypto,
@@ -26,9 +24,9 @@ final class Payment
 
     public function payment(): MPGBuilder
     {
-        return $this->prepareBuilder((new MPGBuilder(
+        return (new MPGBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
-        ))->setFormRedirectTransporter($this->formRedirectTransporter));
+        ))->setFormRedirectTransporter($this->formRedirectTransporter);
     }
 
     public function __call(string $method, array $parameters)

@@ -12,8 +12,6 @@ use Ycs77\NewebPay\Factory;
  */
 final class PaymentQuery
 {
-    use Concerns\PrepareBuilder;
-
     public function __construct(
         private readonly Factory $factory,
         private readonly Crypto $crypto,
@@ -24,9 +22,9 @@ final class PaymentQuery
 
     public function query(): QueryBuilder
     {
-        return $this->prepareBuilder((new QueryBuilder(
+        return new QueryBuilder(
             $this->factory, $this->crypto, $this->httpTransporter
-        )));
+        );
     }
 
     public function __call(string $method, array $parameters)
