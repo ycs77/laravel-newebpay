@@ -98,10 +98,13 @@ class Crypto
     /**
      * 生成檢查碼
      */
-    public function encodeCheckValue(string $string): string
+    public function encodeCheckValue(array $data): string
     {
+        ksort($data);
+        $checkStr = http_build_query($data);
+
         return strtoupper(hash(
-            'sha256', 'IV='.$this->hashIV.'&'.$string.'&Key='.$this->hashKey
+            'sha256', 'IV='.$this->hashIV.'&'.$checkStr.'&Key='.$this->hashKey
         ));
     }
 

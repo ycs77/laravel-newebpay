@@ -23,19 +23,6 @@ class FactoryV1
     }
 
     /**
-     * 單筆交易查詢
-     *
-     * @param  string  $no  訂單編號
-     * @param  int  $amt  訂單金額
-     */
-    public function query(string $no, int $amt): NewebPayQuery
-    {
-        $newebPay = new NewebPayQuery($this->config, $this->session);
-
-        return $newebPay->query($no, $amt);
-    }
-
-    /**
      * 取消信用卡授權
      *
      * @param  string  $no  訂單編號

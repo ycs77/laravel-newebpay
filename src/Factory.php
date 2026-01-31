@@ -8,6 +8,7 @@ use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Resources\Customer;
 use Ycs77\NewebPay\Resources\Payment;
+use Ycs77\NewebPay\Resources\PaymentQuery;
 use Ycs77\NewebPay\Resources\PaymentResult;
 use Ycs77\NewebPay\Results\Trade\CustomerResult;
 use Ycs77\NewebPay\Results\Trade\PaymentResult as MPGPaymentResult;
@@ -66,6 +67,16 @@ class Factory
         return (new Customer(
             $this, $this->crypto
         ))->customer($request);
+    }
+
+    /**
+     * 單筆交易查詢
+     */
+    public function query(): PaymentQuery
+    {
+        return new PaymentQuery(
+            $this, $this->crypto, $this->httpTransporter
+        );
     }
 
     public function baseUrl(): string

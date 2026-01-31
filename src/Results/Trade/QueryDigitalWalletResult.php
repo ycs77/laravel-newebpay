@@ -1,8 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Results;
+namespace Ycs77\NewebPay\Results\Trade;
 
-class QueryDigitalWalletResult extends ResultV1
+use Ycs77\NewebPay\Results\Result;
+
+class QueryDigitalWalletResult extends Result
 {
     /**
      * 交易類別中英文名稱對照
@@ -10,7 +12,7 @@ class QueryDigitalWalletResult extends ResultV1
     protected $paymentMethods = [
         'LINEPAY' => 'LINE Pay 付款',
         'ESUNWALLET' => '玉山 Wallet',
-        'TAIWANPAY' => '台灣 Pay ',
+        'TAIWANPAY' => '台灣 Pay',
     ];
 
     /**
@@ -127,9 +129,9 @@ class QueryDigitalWalletResult extends ResultV1
     }
 
     /**
-     * Define the data keys.
+     * Define the allowed data keys.
      */
-    protected function dataKeys(): array
+    protected function allowedDataKeys(): array
     {
         return [
             'RespondCode',

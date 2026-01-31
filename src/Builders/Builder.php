@@ -87,6 +87,13 @@ abstract class Builder
             );
         }
 
+        // 如果有 CheckValue 則進行產生檢查碼
+        if (isset($formData['CheckValue'])) {
+            $formData['CheckValue'] = $this->crypto->encodeCheckValue(
+                $formData['CheckValue']
+            );
+        }
+
         // 如果有 PostData_ 則進行加密
         if (isset($formData['PostData_'])) {
             $formData['PostData_'] = $this->crypto->encryptByAES(

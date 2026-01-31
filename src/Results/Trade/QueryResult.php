@@ -1,27 +1,15 @@
 <?php
 
-namespace Ycs77\NewebPay\Results;
+namespace Ycs77\NewebPay\Results\Trade;
 
-class QueryResult extends ResultV1
+use Carbon\Carbon;
+use Ycs77\NewebPay\Contracts\CheckCodeVerifiable;
+use Ycs77\NewebPay\Results\Concerns\HasVerifyCheckCode;
+use Ycs77\NewebPay\Results\Result;
+
+class QueryResult extends Result implements CheckCodeVerifiable
 {
-    use Concerns\HasVerifyCheckCode;
-
-    /**
-     * The newebpay HashKey.
-     */
-    protected string $hashKey;
-
-    /**
-     * The newebpay HashIV.
-     */
-    protected string $hashIV;
-
-    public function __construct(array $data, string $hashKey, string $hashIV)
-    {
-        $this->data = $this->transformData($data);
-        $this->hashKey = $hashKey;
-        $this->hashIV = $hashIV;
-    }
+    use HasVerifyCheckCode;
 
     /**
      * 查詢狀態
@@ -69,7 +57,7 @@ class QueryResult extends ResultV1
     /**
      * 藍新金流商店代號
      */
-    public function merchantId(): string
+    public function merchantID(): string
     {
         return $this->result()['MerchantID'];
     }
@@ -77,7 +65,7 @@ class QueryResult extends ResultV1
     /**
      * 交易金額
      */
-    public function amt(): int
+    public function amount(): int
     {
         return $this->result()['Amt'];
     }
@@ -93,7 +81,7 @@ class QueryResult extends ResultV1
     /**
      * 商店訂單編號
      */
-    public function merchantOrderNo(): string
+    public function orderNo(): string
     {
         return $this->result()['MerchantOrderNo'];
     }
@@ -132,47 +120,46 @@ class QueryResult extends ResultV1
 
     /**
      * 交易建立時間
+     *
+     * @throws \Carbon\Exceptions\InvalidFormatException
      */
-    public function createTime(): string
+    public function createTime(): Carbon
     {
-        return $this->result()['CreateTime'];
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->result()['CreateTime']);
     }
 
     /**
      * 支付完成時間
+     *
+     * @throws \Carbon\Exceptions\InvalidFormatException
      */
-    public function payTime(): string
+    public function payTime(): ?Carbon
     {
-        return $this->result()['PayTime'];
+        if ($payTime = $this->result()['PayTime']) {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $payTime);
+        }
+
+        return null;
     }
 
     /**
      * 檢核碼
      */
-    public function checkCode()
+    public function checkCode(): string
     {
         return $this->result()['CheckCode'];
     }
 
     /**
-     * 驗證資料有沒有被竄改
-     */
-    public function verify(): bool
-    {
-        return $this->verifyCheckCode($this->checkCode(), [
-            'MerchantID' => $this->merchantId(),
-            'Amt' => $this->amt(),
-            'MerchantOrderNo' => $this->merchantOrderNo(),
-            'TradeNo' => $this->tradeNo(),
-        ], $this->hashKey, $this->hashIV);
-    }
-
-    /**
      * 預計撥款日
      */
-    public function fundTime(): string
+    public function fundTime(): ?Carbon
     {
-        return $this->result()['FundTime'];
+        if ($fundTime = $this->result()['FundTime']) {
+            return Carbon::createFromFormat('Y-m-d', $fundTime);
+        }
+
+        return null;
     }
 
     /**

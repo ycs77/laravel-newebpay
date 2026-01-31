@@ -17,12 +17,12 @@ interface CheckCodeVerifiable
     /**
      * 交易金額
      */
-    public function amount(): int|float;
+    public function amount(): int;
 
     /**
-     * 訂單金額
+     * 藍新金流交易序號
      */
-    public function tradeNo(): int|float;
+    public function tradeNo(): string;
 
     /**
      * 檢查碼

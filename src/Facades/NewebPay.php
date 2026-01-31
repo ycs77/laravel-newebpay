@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Ycs77\NewebPay\Builders\Trade\MPGBuilder payment()
  * @method static \Ycs77\NewebPay\Results\Trade\PaymentResult result(\Illuminate\Http\Request $request)
  * @method static \Ycs77\NewebPay\Results\Trade\CustomerResult customer(\Illuminate\Http\Request $request)
+ * @method static \Ycs77\NewebPay\Builders\Trade\QueryBuilder query()
  *
  * @see \Ycs77\NewebPay\Factory
  */
