@@ -30,12 +30,7 @@ test('可以解析取號結果', function () {
         'Version' => '2.0',
     ]);
 
-    expect($result->status())->toBe('SUCCESS')
-        ->and($result->isSuccess())->toBeTrue()
-        ->and($result->isFail())->toBeFalse()
-        ->and($result->message())->toBe('條碼取號成功')
-        ->and($result->result())->toBe($tradeData['Result'])
-        ->and($result->merchantId())->toBe('TestMerchantID1234')
+    expect($result->merchantId())->toBe('TestMerchantID1234')
         ->and($result->amount())->toBe(120)
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->orderNo())->toBe('1686763446')

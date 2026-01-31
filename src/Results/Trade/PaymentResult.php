@@ -4,36 +4,14 @@ namespace Ycs77\NewebPay\Results\Trade;
 
 use Carbon\Carbon;
 use Ycs77\NewebPay\Enums\PaymentType;
-use Ycs77\NewebPay\Results\Result;
+use Ycs77\NewebPay\Results\BaseResult;
+use Ycs77\NewebPay\Results\Concerns;
 
-class PaymentResult extends Result
+class PaymentResult extends BaseResult
 {
-    /**
-     * 交易狀態
-     *
-     * 1. 若交易付款成功，則回傳 SUCCESS。
-     * 2. 若交易付款失敗，則回傳錯誤代碼。
-     */
-    public function status(): string
-    {
-        return $this->data['Status'];
-    }
-
-    /**
-     * 交易是否成功
-     */
-    public function isSuccess(): bool
-    {
-        return $this->status() === 'SUCCESS';
-    }
-
-    /**
-     * 交易是否失敗
-     */
-    public function isFail(): bool
-    {
-        return ! $this->isSuccess();
-    }
+    use Concerns\HasMerchantID;
+    use Concerns\HasOrderNo;
+    use Concerns\HasTradeNo;
 
     /**
      * 敘述此次交易狀態
@@ -44,43 +22,11 @@ class PaymentResult extends Result
     }
 
     /**
-     * 回傳參數
-     */
-    public function result(): array
-    {
-        return $this->data['TradeInfo']['Result'] ?? [];
-    }
-
-    /**
-     * 藍新金流商店代號
-     */
-    public function merchantId(): string
-    {
-        return $this->result()['MerchantID'];
-    }
-
-    /**
      * 交易金額
      */
     public function amount(): int
     {
-        return $this->result()['Amt'];
-    }
-
-    /**
-     * 藍新金流交易序號
-     */
-    public function tradeNo(): string
-    {
-        return $this->result()['TradeNo'];
-    }
-
-    /**
-     * 商店訂單編號
-     */
-    public function orderNo(): string
-    {
-        return $this->result()['MerchantOrderNo'];
+        return $this->result['Amt'];
     }
 
     /**
@@ -98,7 +44,7 @@ class PaymentResult extends Result
      */
     public function paymentType(): PaymentType
     {
-        return PaymentType::from($this->result()['PaymentType']);
+        return PaymentType::from($this->result['PaymentType']);
     }
 
     /**
@@ -110,7 +56,7 @@ class PaymentResult extends Result
      */
     public function payTime(): ?Carbon
     {
-        if ($payTime = $this->result()['PayTime']) {
+        if ($payTime = $this->result['PayTime']) {
             return Carbon::createFromFormat('Y-m-d H:i:s', $payTime);
         }
 
@@ -122,7 +68,7 @@ class PaymentResult extends Result
      */
     public function ip(): string
     {
-        return $this->result()['IP'];
+        return $this->result['IP'];
     }
 
     /**
@@ -133,7 +79,7 @@ class PaymentResult extends Result
      */
     public function escrowBank(): ?string
     {
-        return $this->result()['EscrowBank'];
+        return $this->result['EscrowBank'];
     }
 
     /**
@@ -141,7 +87,7 @@ class PaymentResult extends Result
      */
     public function credit(): CreditResult
     {
-        return new CreditResult($this->result());
+        return new CreditResult($this->result);
     }
 
     /**
@@ -149,7 +95,7 @@ class PaymentResult extends Result
      */
     public function atm(): ATMResult
     {
-        return new ATMResult($this->result());
+        return new ATMResult($this->result);
     }
 
     /**
@@ -157,7 +103,7 @@ class PaymentResult extends Result
      */
     public function storeCode(): StoreCodeResult
     {
-        return new StoreCodeResult($this->result());
+        return new StoreCodeResult($this->result);
     }
 
     /**
@@ -165,7 +111,7 @@ class PaymentResult extends Result
      */
     public function storeBarcode(): StoreBarcodeResult
     {
-        return new StoreBarcodeResult($this->result());
+        return new StoreBarcodeResult($this->result);
     }
 
     /**
@@ -173,7 +119,7 @@ class PaymentResult extends Result
      */
     public function lgs(): LgsResult
     {
-        return new LgsResult($this->result());
+        return new LgsResult($this->result);
     }
 
     /**
@@ -181,7 +127,7 @@ class PaymentResult extends Result
      */
     public function ezPay(): EzPayResult
     {
-        return new EzPayResult($this->result());
+        return new EzPayResult($this->result);
     }
 
     /**
@@ -189,7 +135,7 @@ class PaymentResult extends Result
      */
     public function esunWallet(): EsunWalletResult
     {
-        return new EsunWalletResult($this->result());
+        return new EsunWalletResult($this->result);
     }
 
     /**
@@ -197,6 +143,14 @@ class PaymentResult extends Result
      */
     public function taiwanPay(): TaiwanPayResult
     {
-        return new TaiwanPayResult($this->result());
+        return new TaiwanPayResult($this->result);
+    }
+
+    /**
+     * Transform the result data.
+     */
+    protected function transformResult(array $data): array
+    {
+        return $data['TradeInfo']['Result'] ?? [];
     }
 }

@@ -40,8 +40,6 @@ test('可以解析付款查詢結果', function () {
     expect($result->status())->toBe('SUCCESS')
         ->and($result->isSuccess())->toBeTrue()
         ->and($result->isFail())->toBeFalse()
-        ->and($result->message())->toBe('查詢成功')
-        ->and($result->result())->toBe($data['Result'])
         ->and($result->merchantId())->toBe('TestMerchantID1234')
         ->and($result->amount())->toBe(120)
         ->and($result->tradeNo())->toBe('23061500000000000')

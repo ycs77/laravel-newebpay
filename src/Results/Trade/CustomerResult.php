@@ -4,36 +4,14 @@ namespace Ycs77\NewebPay\Results\Trade;
 
 use Carbon\Carbon;
 use Ycs77\NewebPay\Enums\PaymentType;
-use Ycs77\NewebPay\Results\Result;
+use Ycs77\NewebPay\Results\BaseResult;
+use Ycs77\NewebPay\Results\Concerns;
 
-class CustomerResult extends Result
+class CustomerResult extends BaseResult
 {
-    /**
-     * 取號狀態
-     *
-     * 1. 若取號付款成功，則回傳 SUCCESS。
-     * 2. 若取號付款失敗，則回傳錯誤代碼。
-     */
-    public function status(): string
-    {
-        return $this->data['Status'];
-    }
-
-    /**
-     * 取號是否成功
-     */
-    public function isSuccess(): bool
-    {
-        return $this->status() === 'SUCCESS';
-    }
-
-    /**
-     * 取號是否失敗
-     */
-    public function isFail(): bool
-    {
-        return ! $this->isSuccess();
-    }
+    use Concerns\HasMerchantID;
+    use Concerns\HasOrderNo;
+    use Concerns\HasTradeNo;
 
     /**
      * 敘述此次交易狀態
@@ -44,43 +22,11 @@ class CustomerResult extends Result
     }
 
     /**
-     * 回傳參數
-     */
-    public function result(): array
-    {
-        return $this->data['TradeInfo']['Result'] ?? [];
-    }
-
-    /**
-     * 藍新金流商店代號
-     */
-    public function merchantId(): string
-    {
-        return $this->result()['MerchantID'];
-    }
-
-    /**
      * 交易金額
      */
     public function amount(): int
     {
-        return $this->result()['Amt'];
-    }
-
-    /**
-     * 藍新金流交易序號
-     */
-    public function tradeNo(): string
-    {
-        return $this->result()['TradeNo'];
-    }
-
-    /**
-     * 商店訂單編號
-     */
-    public function orderNo(): string
-    {
-        return $this->result()['MerchantOrderNo'];
+        return $this->result['Amt'];
     }
 
     /**
@@ -93,7 +39,7 @@ class CustomerResult extends Result
      */
     public function paymentType(): PaymentType
     {
-        return PaymentType::from($this->result()['PaymentType']);
+        return PaymentType::from($this->result['PaymentType']);
     }
 
     /**
@@ -103,8 +49,8 @@ class CustomerResult extends Result
      */
     public function expireTime(): ?Carbon
     {
-        $expireDate = $this->result()['ExpireDate'];
-        $expireTime = $this->result()['ExpireTime'];
+        $expireDate = $this->result['ExpireDate'];
+        $expireTime = $this->result['ExpireTime'];
 
         if ($expireDate && $expireTime) {
             return Carbon::createFromFormat('Y-m-d H:i:s', $expireDate.' '.$expireTime);
@@ -118,7 +64,7 @@ class CustomerResult extends Result
      */
     public function atm(): CustomerATMResult
     {
-        return new CustomerATMResult($this->result());
+        return new CustomerATMResult($this->result);
     }
 
     /**
@@ -126,7 +72,7 @@ class CustomerResult extends Result
      */
     public function storeCode(): CustomerStoreCodeResult
     {
-        return new CustomerStoreCodeResult($this->result());
+        return new CustomerStoreCodeResult($this->result);
     }
 
     /**
@@ -134,7 +80,7 @@ class CustomerResult extends Result
      */
     public function storeBarcode(): CustomerStoreBarcodeResult
     {
-        return new CustomerStoreBarcodeResult($this->result());
+        return new CustomerStoreBarcodeResult($this->result);
     }
 
     /**
@@ -142,6 +88,14 @@ class CustomerResult extends Result
      */
     public function lgs(): CustomerLgsResult
     {
-        return new CustomerLgsResult($this->result());
+        return new CustomerLgsResult($this->result);
+    }
+
+    /**
+     * Transform the result data.
+     */
+    protected function transformResult(array $data): array
+    {
+        return $data['TradeInfo']['Result'] ?? [];
     }
 }

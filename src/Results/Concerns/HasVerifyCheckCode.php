@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay\Results\Concerns;
 
+/** @deprecated */
 trait HasVerifyCheckCode
 {
     protected function verifyCheckCode(string $checkCode, array $parameter, string $hashKey, string $hashIV): bool

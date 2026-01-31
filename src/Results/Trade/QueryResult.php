@@ -4,86 +4,22 @@ namespace Ycs77\NewebPay\Results\Trade;
 
 use Carbon\Carbon;
 use Ycs77\NewebPay\Contracts\CheckCodeVerifiable;
-use Ycs77\NewebPay\Results\Concerns\HasVerifyCheckCode;
-use Ycs77\NewebPay\Results\Result;
+use Ycs77\NewebPay\Results\BaseResult;
+use Ycs77\NewebPay\Results\Concerns;
 
-class QueryResult extends Result implements CheckCodeVerifiable
+class QueryResult extends BaseResult implements CheckCodeVerifiable
 {
-    use HasVerifyCheckCode;
-
-    /**
-     * 查詢狀態
-     *
-     * 1. 若查詢成功，則回傳 SUCCESS。
-     * 2. 若查詢失敗，則回傳錯誤代碼。
-     */
-    public function status(): string
-    {
-        return $this->data['Status'];
-    }
-
-    /**
-     * 查詢是否成功
-     */
-    public function isSuccess(): bool
-    {
-        return $this->status() === 'SUCCESS';
-    }
-
-    /**
-     * 查詢是否失敗
-     */
-    public function isFail(): bool
-    {
-        return $this->status() !== 'SUCCESS';
-    }
-
-    /**
-     * 敘述此次查詢狀態
-     */
-    public function message(): string
-    {
-        return $this->data['Message'];
-    }
-
-    /**
-     * 回傳參數
-     */
-    public function result(): array
-    {
-        return $this->data['Result'] ?? [];
-    }
-
-    /**
-     * 藍新金流商店代號
-     */
-    public function merchantID(): string
-    {
-        return $this->result()['MerchantID'];
-    }
+    use Concerns\HasCheckCode;
+    use Concerns\HasMerchantID;
+    use Concerns\HasOrderNo;
+    use Concerns\HasTradeNo;
 
     /**
      * 交易金額
      */
     public function amount(): int
     {
-        return $this->result()['Amt'];
-    }
-
-    /**
-     * 藍新金流交易序號
-     */
-    public function tradeNo(): string
-    {
-        return $this->result()['TradeNo'];
-    }
-
-    /**
-     * 商店訂單編號
-     */
-    public function orderNo(): string
-    {
-        return $this->result()['MerchantOrderNo'];
+        return $this->result['Amt'];
     }
 
     /**
@@ -97,7 +33,7 @@ class QueryResult extends Result implements CheckCodeVerifiable
      */
     public function tradeStatus(): string
     {
-        return $this->result()['TradeStatus'];
+        return $this->result['TradeStatus'];
     }
 
     /**
@@ -115,7 +51,7 @@ class QueryResult extends Result implements CheckCodeVerifiable
      */
     public function paymentType(): string
     {
-        return $this->result()['PaymentType'];
+        return $this->result['PaymentType'];
     }
 
     /**
@@ -125,7 +61,7 @@ class QueryResult extends Result implements CheckCodeVerifiable
      */
     public function createTime(): Carbon
     {
-        return Carbon::createFromFormat('Y-m-d H:i:s', $this->result()['CreateTime']);
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->result['CreateTime']);
     }
 
     /**
@@ -135,7 +71,7 @@ class QueryResult extends Result implements CheckCodeVerifiable
      */
     public function payTime(): ?Carbon
     {
-        if ($payTime = $this->result()['PayTime']) {
+        if ($payTime = $this->result['PayTime']) {
             return Carbon::createFromFormat('Y-m-d H:i:s', $payTime);
         }
 
@@ -143,19 +79,11 @@ class QueryResult extends Result implements CheckCodeVerifiable
     }
 
     /**
-     * 檢核碼
-     */
-    public function checkCode(): string
-    {
-        return $this->result()['CheckCode'];
-    }
-
-    /**
      * 預計撥款日
      */
     public function fundTime(): ?Carbon
     {
-        if ($fundTime = $this->result()['FundTime']) {
+        if ($fundTime = $this->result['FundTime']) {
             return Carbon::createFromFormat('Y-m-d', $fundTime);
         }
 
@@ -167,7 +95,7 @@ class QueryResult extends Result implements CheckCodeVerifiable
      */
     public function shopMerchantId(): ?string
     {
-        return $this->result()['ShopMerchantID'] ?? null;
+        return $this->result['ShopMerchantID'] ?? null;
     }
 
     /**
@@ -175,7 +103,7 @@ class QueryResult extends Result implements CheckCodeVerifiable
      */
     public function credit(): QueryCreditResult
     {
-        return new QueryCreditResult($this->result());
+        return new QueryCreditResult($this->result);
     }
 
     /**
@@ -183,7 +111,7 @@ class QueryResult extends Result implements CheckCodeVerifiable
      */
     public function paymentStatus(): QueryPaymentStatusResult
     {
-        return new QueryPaymentStatusResult($this->result());
+        return new QueryPaymentStatusResult($this->result);
     }
 
     /**
@@ -191,7 +119,7 @@ class QueryResult extends Result implements CheckCodeVerifiable
      */
     public function lgs(): QueryLgsResult
     {
-        return new QueryLgsResult($this->result());
+        return new QueryLgsResult($this->result);
     }
 
     /**
@@ -199,6 +127,6 @@ class QueryResult extends Result implements CheckCodeVerifiable
      */
     public function digitalWallet(): QueryDigitalWalletResult
     {
-        return new QueryDigitalWalletResult($this->result());
+        return new QueryDigitalWalletResult($this->result);
     }
 }

@@ -5,7 +5,7 @@ namespace Ycs77\NewebPay\Contracts;
 interface CheckCodeVerifiable
 {
     /**
-     * 商店代號
+     * 藍新金流商店代號
      */
     public function merchantID(): string;
 
