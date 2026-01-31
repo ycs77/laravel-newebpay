@@ -211,49 +211,49 @@ $result->escrowBank(); // 款項保管銀行
 // 信用卡支付回傳（一次付清、Google Pay、Samaung Pay、國民旅遊卡、銀聯）
 if ($result->paymentType() === 'CREDIT') {
     $credit = $result->credit();
-    // 參考：\Ycs77\NewebPay\Results\MPGCreditResult
+    // 參考：\Ycs77\NewebPay\Results\Trade\CreditResult
 }
 
 // WEBATM、ATM 繳費回傳
 if ($result->paymentType() === 'VACC' || $result->paymentType() === 'WEBATM') {
     $atm = $result->atm();
-    // 參考：\Ycs77\NewebPay\Results\MPGATMResult
+    // 參考：\Ycs77\NewebPay\Results\Trade\ATMResult
 }
 
 // 超商代碼繳費回傳
 if ($result->paymentType() === 'CVS') {
     $storeCode = $result->storeCode();
-    // 參考：\Ycs77\NewebPay\Results\MPGStoreCodeResult
+    // 參考：\Ycs77\NewebPay\Results\Trade\StoreCodeResult
 }
 
 // 超商條碼繳費回傳
 if ($result->paymentType() === 'BARCODE') {
     $storeBarcode = $result->storeBarcode();
-    // 參考：\Ycs77\NewebPay\Results\MPGStoreBarcodeResult
+    // 參考：\Ycs77\NewebPay\Results\Trade\StoreBarcodeResult
 }
 
 // 超商物流回傳
 if ($result->paymentType() === 'CVSCOM') {
     $lgs = $result->lgs();
-    // 參考：\Ycs77\NewebPay\Results\MPGLgsResult
+    // 參考：\Ycs77\NewebPay\Results\Trade\LgsResult
 }
 
 // 跨境支付回傳 (包含簡單付電子錢包、簡單付微信支付、簡單付支付寶)
 $ezPay = $result->ezPay();
 if ($ezPay->isEzPay()) {
-    // 參考：\Ycs77\NewebPay\Results\MPGEzPayResult
+    // 參考：\Ycs77\NewebPay\Results\Trade\EzPayResult
 }
 
 // 玉山 Wallet 回傳
 if ($result->paymentType() === 'ESUNWALLET') {
     $esunWallet = $result->esunWallet();
-    // 參考：\Ycs77\NewebPay\Results\MPGEsunWalletResult
+    // 參考：\Ycs77\NewebPay\Results\Trade\EsunWalletResult
 }
 
 // 台灣 Pay 回傳
 if ($result->paymentType() === 'TAIWANPAY') {
     $taiwanPay = $result->taiwanPay();
-    // 參考：\Ycs77\NewebPay\Results\MPGTaiwanPayResult
+    // 參考：\Ycs77\NewebPay\Results\Trade\TaiwanPayResult
 }
 ```
 

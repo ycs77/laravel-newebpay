@@ -5,9 +5,9 @@ namespace Ycs77\NewebPay\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Ycs77\NewebPay\Builders\MPG\MPGBuilder payment()
- * @method static \Ycs77\NewebPay\Results\MPG\PaymentResult result(\Illuminate\Http\Request $request)
- * @method static \Ycs77\NewebPay\Results\MPG\CustomerResult customer(\Illuminate\Http\Request $request)
+ * @method static \Ycs77\NewebPay\Builders\Trade\MPGBuilder payment()
+ * @method static \Ycs77\NewebPay\Results\Trade\PaymentResult result(\Illuminate\Http\Request $request)
+ * @method static \Ycs77\NewebPay\Results\Trade\CustomerResult customer(\Illuminate\Http\Request $request)
  *
  * @see \Ycs77\NewebPay\Factory
  */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Builders\MPG;
+namespace Ycs77\NewebPay\Builders\Trade;
 
 use Carbon\Carbon;
 use DateTime;
@@ -10,7 +10,7 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
-use Ycs77\NewebPay\Options\MPG\MPGOptions;
+use Ycs77\NewebPay\Options\Trade\MPGOptions;
 use Ycs77\NewebPay\Url\UrlFormat;
 
 final class MPGBuilder extends Builder

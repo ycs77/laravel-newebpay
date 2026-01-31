@@ -1,10 +1,10 @@
 <?php
 
-namespace Ycs77\NewebPay\Results\MPG;
+namespace Ycs77\NewebPay\Results\Trade;
 
 use Ycs77\NewebPay\Results\Result;
 
-class CustomerLgsResult extends Result
+class LgsResult extends Result
 {
     /**
      * 超商門市編號
@@ -25,10 +25,7 @@ class CustomerLgsResult extends Result
     /**
      * 超商類別名稱
      *
-     * * **全家**
-     * * **7-ELEVEN**
-     * * **萊爾富**
-     * * **OK mart**
+     * [全家]、[7-ELEVEN]、[萊爾富]、[OK mart]
      */
     public function storeType(): string
     {
@@ -81,8 +78,7 @@ class CustomerLgsResult extends Result
     /**
      * 物流型態
      *
-     * * **B2C**: 大宗寄倉
-     * * **C2C**: 店到店
+     * B2C、C2C
      */
     public function lgsType(): string
     {

@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Enums\PaymentType;
 use Ycs77\NewebPay\Facades\NewebPay;
-use Ycs77\NewebPay\Results\MPG\CustomerResult;
+use Ycs77\NewebPay\Results\Trade\CustomerResult;
 
 use function Pest\Laravel\partialMock;
 

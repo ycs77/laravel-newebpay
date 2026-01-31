@@ -9,8 +9,8 @@ use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Resources\Customer;
 use Ycs77\NewebPay\Resources\Payment;
 use Ycs77\NewebPay\Resources\PaymentResult;
-use Ycs77\NewebPay\Results\MPG\CustomerResult;
-use Ycs77\NewebPay\Results\MPG\PaymentResult as MPGPaymentResult;
+use Ycs77\NewebPay\Results\Trade\CustomerResult;
+use Ycs77\NewebPay\Results\Trade\PaymentResult as MPGPaymentResult;
 
 class Factory
 {

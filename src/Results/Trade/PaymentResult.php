@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Results\MPG;
+namespace Ycs77\NewebPay\Results\Trade;
 
 use Carbon\Carbon;
 use Ycs77\NewebPay\Enums\PaymentType;

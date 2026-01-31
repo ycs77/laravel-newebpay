@@ -2,14 +2,14 @@
 
 namespace Ycs77\NewebPay\Resources;
 
-use Ycs77\NewebPay\Builders\MPG\MPGBuilder;
+use Ycs77\NewebPay\Builders\Trade\MPGBuilder;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Factory;
 
 /**
- * @mixin \Ycs77\NewebPay\Builders\MPG\MPGBuilder
+ * @mixin \Ycs77\NewebPay\Builders\Trade\MPGBuilder
  */
 final class Payment
 {

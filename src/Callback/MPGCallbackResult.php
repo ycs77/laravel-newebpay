@@ -5,7 +5,7 @@ namespace Ycs77\NewebPay\Callback;
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Factory;
-use Ycs77\NewebPay\Results\MPG\PaymentResult;
+use Ycs77\NewebPay\Results\Trade\PaymentResult;
 
 class MPGCallbackResult
 {

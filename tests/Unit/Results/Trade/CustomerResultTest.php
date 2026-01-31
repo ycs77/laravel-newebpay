@@ -1,7 +1,7 @@
 <?php
 
 use Ycs77\NewebPay\Enums\PaymentType;
-use Ycs77\NewebPay\Results\MPG\CustomerResult;
+use Ycs77\NewebPay\Results\Trade\CustomerResult;
 
 test('可以解析取號結果', function () {
     $tradeData = [
