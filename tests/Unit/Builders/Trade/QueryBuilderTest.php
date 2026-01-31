@@ -24,6 +24,7 @@ beforeEach(function () {
     $this->crypto->expects('verifyCheckCode');
 
     $this->httpTransporter = mock(HttpTransporter::class);
+    $this->httpTransporter->expects('setTimeout');
     $this->httpTransporter->expects('send')->andReturn($this->response);
 });
 
