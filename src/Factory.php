@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
+use Ycs77\NewebPay\Resources\CreditCard;
 use Ycs77\NewebPay\Resources\Customer;
 use Ycs77\NewebPay\Resources\Payment;
 use Ycs77\NewebPay\Resources\PaymentQuery;
@@ -75,6 +76,16 @@ class Factory
     public function query(): PaymentQuery
     {
         return new PaymentQuery(
+            $this, $this->crypto, $this->httpTransporter
+        );
+    }
+
+    /**
+     * 信用卡相關功能
+     */
+    public function creditCard(): CreditCard
+    {
+        return new CreditCard(
             $this, $this->crypto, $this->httpTransporter
         );
     }
