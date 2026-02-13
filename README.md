@@ -7,6 +7,12 @@
 [![GitHub Tests Action Status][ico-github-action]][link-github-action]
 [![Total Downloads][ico-downloads]][link-downloads]
 
+> [!IMPORTANT]
+>
+> 目前 v2.0 版本正在開發中，將會重新設計成現代化、富有表現力的 API，優化整體開發體驗。需要注意目前 v2.0 版本文件現在還沒有更新，之後開發完成後會再更新文件，目前可以先參考 v1.0 的文件來使用。
+>
+> 若想要查看舊版文件可以切換回 [1.x 分支](https://github.com/ycs77/laravel-newebpay/tree/1.x)。
+
 Laravel NewebPay 為針對 Laravel 所寫的藍新金流（智付通）金流串接套件。
 
 ## 實作功能
