@@ -28,7 +28,7 @@ final class MPGBuilder extends Builder
         $this->endpoint = '/MPG/mpg_gateway';
 
         if ($lang = $this->factory->config('lang')) {
-            $this->withLanguage($lang);
+            $this->withLang($lang);
         }
 
         if ($returnUrl = $this->factory->config('return_url')) {
@@ -66,7 +66,7 @@ final class MPGBuilder extends Builder
      *
      * 預設值為繁體中文。
      */
-    public function withLanguage(LangType $lang): self
+    public function withLang(LangType $lang): self
     {
         $this->options->lang = $lang;
 
@@ -199,18 +199,6 @@ final class MPGBuilder extends Builder
     public function withEmail(string $email): self
     {
         $this->options->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * 付款人電子信箱是否開放修改
-     *
-     * 預設為可修改
-     */
-    public function withEmailModify(bool $isModify): self
-    {
-        $this->options->emailModify = $isModify;
 
         return $this;
     }

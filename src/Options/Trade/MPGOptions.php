@@ -71,7 +71,7 @@ class MPGOptions extends Options
             'CustomerURL' => $this->customerURL,
             'ClientBackURL' => $this->clientBackURL,
             'Email' => $this->email,
-            'emailModify' => ! is_null($this->emailModify) ? (int) $this->emailModify : null,
+            'EmailModify' => $this->emailModify === false ? 0 : null,
             'OrderComment' => $this->orderComment,
             'TokenTerm' => $this->creditRememberIdentifier,
             'TokenTermDemand' => $this->creditRememberDemand?->value,

@@ -49,7 +49,7 @@ test('可以成功呼叫 MPG 金流的更多功能', function () {
         'CustomerURL' => 'https://example.com/customer',
         'ClientBackURL' => 'https://example.com/back',
         'Email' => 'customer@example.com',
-        'emailModify' => 0,
+        'EmailModify' => 0,
         'OrderComment' => '這是訂單備註',
         'TokenTerm' => 'John Doe',
         'TokenTermDemand' => 1,
@@ -68,7 +68,7 @@ test('可以成功呼叫 MPG 金流的更多功能', function () {
     $crypto->expects('hashBySHA')->andReturn('encrypted_sha_data');
 
     $response = NewebPay::payment()
-        ->withLanguage(LangType::EN)
+        ->withLang(LangType::EN)
         ->withOrder('Order001')
         ->withAmount(1050)
         ->withItemDescription('測試商品')
@@ -79,7 +79,7 @@ test('可以成功呼叫 MPG 金流的更多功能', function () {
         ->withCustomerUrl('https://example.com/customer')
         ->withClientBackUrl('https://example.com/back')
         ->withEmail('customer@example.com')
-        ->withEmailModify(false)
+        ->disableEmailModify()
         ->withOrderComment('這是訂單備註')
         ->withPaymentMethods([
             'credit' => [
