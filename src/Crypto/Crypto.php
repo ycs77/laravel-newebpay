@@ -17,7 +17,7 @@ class Crypto
     /**
      * 使用 AES 加密
      *
-     * @throws \Ycs77\NewebPay\Exceptions\EncryptException
+     * @throws EncryptException
      */
     public function encryptByAES(array $data): string
     {
@@ -41,7 +41,7 @@ class Crypto
     /**
      * 使用 AES 解密
      *
-     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     * @throws DecryptException
      */
     public function decryptByAES(string $encryptedData): array
     {
@@ -111,7 +111,7 @@ class Crypto
     /**
      * 驗證檢查碼
      *
-     * @throws \Ycs77\NewebPay\Exceptions\InvalidCheckCodeException
+     * @throws InvalidCheckCodeException
      */
     public function verifyCheckCode(Result $result): void
     {

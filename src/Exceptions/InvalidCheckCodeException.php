@@ -6,12 +6,9 @@ use RuntimeException;
 
 class InvalidCheckCodeException extends RuntimeException
 {
-    protected array $checkCodeData;
-
-    public function __construct(array $checkCodeData)
-    {
-        $this->checkCodeData = $checkCodeData;
-
+    public function __construct(
+        protected array $checkCodeData
+    ) {
         parent::__construct('驗證檢查碼無效');
     }
 

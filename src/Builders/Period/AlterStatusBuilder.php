@@ -10,7 +10,7 @@ use Ycs77\NewebPay\Results\Period\AlterStatusResult;
 
 final class AlterStatusBuilder extends Builder
 {
-    protected AlterStatusOptions $options;
+    private AlterStatusOptions $options;
 
     protected function boot(): void
     {
@@ -91,7 +91,7 @@ final class AlterStatusBuilder extends Builder
     /**
      * 送出修改委託狀態請求
      *
-     * @throws \Ycs77\NewebPay\Exceptions\NewebPayException
+     * @throws NewebPayException
      */
     public function send(): AlterStatusResult
     {

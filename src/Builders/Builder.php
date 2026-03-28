@@ -46,7 +46,7 @@ abstract class Builder
     /**
      * 發送 API 請求到 NewebPay
      *
-     * @throws \Ycs77\NewebPay\Exceptions\NewebPayException
+     * @throws NewebPayException
      */
     protected function sendRequest(array $requestData): array
     {

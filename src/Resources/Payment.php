@@ -10,7 +10,7 @@ use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Url\UrlFormatter;
 
 /**
- * @mixin \Ycs77\NewebPay\Builders\Trade\MPGBuilder
+ * @mixin MPGBuilder
  */
 final class Payment
 {

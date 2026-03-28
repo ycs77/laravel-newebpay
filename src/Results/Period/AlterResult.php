@@ -96,8 +96,8 @@ class AlterResult extends BaseResult
     public function creditExpiredAt(): Carbon
     {
         $date = $this->result['Extday'];
-        $year = '20'.substr($date, 0, 2);
-        $month = substr($date, 2, 2);
+        $year = '20'.substr((string) $date, 0, 2);
+        $month = substr((string) $date, 2, 2);
 
         return Carbon::createFromFormat('Y-m', $year.'-'.$month);
     }

@@ -68,7 +68,7 @@ class CreateResult extends BaseResult
      */
     public function dateArray(): array
     {
-        return explode(',', $this->result['DateArray']);
+        return explode(',', (string) $this->result['DateArray']);
     }
 
     /**

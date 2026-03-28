@@ -3,6 +3,7 @@
 namespace Ycs77\NewebPay\Results\Trade;
 
 use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use Ycs77\NewebPay\Enums\PaymentType;
 use Ycs77\NewebPay\Results\BaseResult;
 use Ycs77\NewebPay\Results\Concerns;
@@ -45,7 +46,7 @@ class CustomerResult extends BaseResult
     /**
      * 繳費截止日期
      *
-     * @throws \Carbon\Exceptions\InvalidFormatException
+     * @throws InvalidFormatException
      */
     public function expireTime(): ?Carbon
     {

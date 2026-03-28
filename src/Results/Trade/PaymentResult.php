@@ -3,6 +3,7 @@
 namespace Ycs77\NewebPay\Results\Trade;
 
 use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use Ycs77\NewebPay\Enums\PaymentType;
 use Ycs77\NewebPay\Results\BaseResult;
 use Ycs77\NewebPay\Results\Concerns;
@@ -52,7 +53,7 @@ class PaymentResult extends BaseResult
      *
      * 當使用超商取貨服務時，本欄位的值會以空值回傳
      *
-     * @throws \Carbon\Exceptions\InvalidFormatException
+     * @throws InvalidFormatException
      */
     public function payTime(): ?Carbon
     {

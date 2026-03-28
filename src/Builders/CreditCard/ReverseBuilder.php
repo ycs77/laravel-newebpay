@@ -4,12 +4,13 @@ namespace Ycs77\NewebPay\Builders\CreditCard;
 
 use InvalidArgumentException;
 use Ycs77\NewebPay\Builders\Builder;
+use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Options\CreditCard\ReverseOptions;
 use Ycs77\NewebPay\Results\CreditCard\ReverseResult;
 
 final class ReverseBuilder extends Builder
 {
-    protected ReverseOptions $options;
+    private ReverseOptions $options;
 
     protected function boot(): void
     {
@@ -74,7 +75,7 @@ final class ReverseBuilder extends Builder
     /**
      * 送出取消信用卡交易請求
      *
-     * @throws \Ycs77\NewebPay\Exceptions\NewebPayException
+     * @throws NewebPayException
      */
     public function send(): ReverseResult
     {

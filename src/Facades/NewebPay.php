@@ -3,6 +3,7 @@
 namespace Ycs77\NewebPay\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Ycs77\NewebPay\Factory;
 
 /**
  * @method static \Ycs77\NewebPay\Resources\Payment payment()
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Ycs77\NewebPay\Results\Period\CreateResult periodResult(\Illuminate\Http\Request $request)
  * @method static \Ycs77\NewebPay\Results\Period\NotifyResult periodNotify(\Illuminate\Http\Request $request)
  *
- * @see \Ycs77\NewebPay\Factory
+ * @see Factory
  */
 class NewebPay extends Facade
 {

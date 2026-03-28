@@ -21,7 +21,7 @@ class CaptureOptions extends Options
 
     public function toArray()
     {
-        return array_filter([
+        return [
             'MerchantID' => $this->merchantId,
             'PostData_' => array_filter([
                 'RespondType' => 'JSON',
@@ -34,6 +34,6 @@ class CaptureOptions extends Options
                 'CloseType' => 1,
                 'Cancel' => $this->reverse ? 1 : null,
             ], fn ($value) => ! is_null($value)),
-        ], fn ($value) => ! is_null($value));
+        ];
     }
 }

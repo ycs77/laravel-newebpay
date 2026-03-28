@@ -9,7 +9,7 @@ trait HasPrepareOptions
     /**
      * @var callable|null
      */
-    protected $onPreparedOptionsCallback = null;
+    protected $onPreparedOptionsCallback;
 
     public function onPreparedOptions(Closure $callback)
     {

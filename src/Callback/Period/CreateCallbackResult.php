@@ -4,6 +4,7 @@ namespace Ycs77\NewebPay\Callback\Period;
 
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Crypto\Crypto;
+use Ycs77\NewebPay\Exceptions\DecryptException;
 use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Results\Period\CreateResult;
 
@@ -20,7 +21,7 @@ class CreateCallbackResult
     /**
      * 解析並回傳定期定額委託結果。
      *
-     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     * @throws DecryptException
      */
     public function result(Request $request): CreateResult
     {

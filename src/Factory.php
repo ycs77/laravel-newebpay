@@ -8,6 +8,7 @@ use Ycs77\NewebPay\Callback\Period\NotifyCallbackResult;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
+use Ycs77\NewebPay\Exceptions\DecryptException;
 use Ycs77\NewebPay\Resources\CreditCard;
 use Ycs77\NewebPay\Resources\Customer;
 use Ycs77\NewebPay\Resources\Payment;
@@ -56,7 +57,7 @@ class Factory
     /**
      * 解析並回傳交易結果。
      *
-     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     * @throws DecryptException
      */
     public function result(Request $request): MPGPaymentResult
     {
@@ -68,7 +69,7 @@ class Factory
     /**
      * 解析並回傳付款取號結果。
      *
-     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     * @throws DecryptException
      */
     public function customer(Request $request): CustomerResult
     {
@@ -110,7 +111,7 @@ class Factory
     /**
      * 解析並回傳定期定額委託結果。
      *
-     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     * @throws DecryptException
      */
     public function periodResult(Request $request): CreateResult
     {
@@ -122,7 +123,7 @@ class Factory
     /**
      * 解析並回傳每期授權通知結果。
      *
-     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     * @throws DecryptException
      */
     public function periodNotify(Request $request): NotifyResult
     {

@@ -15,19 +15,15 @@ use Ycs77\NewebPay\Url\UrlFormatter;
 
 final class CreateBuilder extends Builder
 {
-    protected CreateOptions $options;
-
-    protected UrlFormatter $urlFormatter;
+    private CreateOptions $options;
 
     public function __construct(
         Factory $factory,
         Crypto $crypto,
         HttpTransporter $httpTransporter,
-        UrlFormatter $urlFormatter,
+        private readonly UrlFormatter $urlFormatter,
         array $config
     ) {
-        $this->urlFormatter = $urlFormatter;
-
         parent::__construct($factory, $crypto, $httpTransporter, $config);
     }
 

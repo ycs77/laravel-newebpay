@@ -4,6 +4,7 @@ namespace Ycs77\NewebPay\Callback\Trade;
 
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Crypto\Crypto;
+use Ycs77\NewebPay\Exceptions\DecryptException;
 use Ycs77\NewebPay\Results\Trade\CustomerResult;
 
 class MPGCustomerResult
@@ -19,7 +20,7 @@ class MPGCustomerResult
     /**
      * 解析並回傳付款取號結果。
      *
-     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     * @throws DecryptException
      */
     public function result(Request $request): CustomerResult
     {

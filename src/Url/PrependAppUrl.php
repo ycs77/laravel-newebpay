@@ -15,7 +15,7 @@ class PrependAppUrl
     public function handle(string $url): string
     {
         if (! filter_var($url, FILTER_VALIDATE_URL)) {
-            $url = $this->config->get('app.url').$url;
+            return $this->config->get('app.url').$url;
         }
 
         return $url;

@@ -19,7 +19,7 @@ class ReverseOptions extends Options
 
     public function toArray()
     {
-        return array_filter([
+        return [
             'MerchantID' => $this->merchantId,
             'PostData_' => array_filter([
                 'RespondType' => 'JSON',
@@ -30,6 +30,6 @@ class ReverseOptions extends Options
                 'IndexType' => $this->indexType,
                 'TimeStamp' => Carbon::now()->timestamp,
             ], fn ($value) => ! is_null($value)),
-        ], fn ($value) => ! is_null($value));
+        ];
     }
 }
