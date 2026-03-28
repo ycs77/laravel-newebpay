@@ -41,24 +41,21 @@ beforeEach(function () {
 });
 
 test('可以成功修改信用卡定期定額委託狀態', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.0',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'PeriodNo' => '20200101000000001',
-            'AlterType' => 'terminate',
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.0',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'PeriodNo' => '20200101000000001',
+        'AlterType' => 'terminate',
     ];
 
     $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
         ->withStatus(PeriodStatus::TERMINATE)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->send();
 

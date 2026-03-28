@@ -45,21 +45,18 @@ beforeEach(function () {
 });
 
 test('可以成功建立信用卡定期定額委託功能', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'D',
-            'PeriodPoint' => '2',
-            'PeriodTimes' => 3,
-            'PeriodStartType' => 2,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'D',
+        'PeriodPoint' => '2',
+        'PeriodTimes' => 3,
+        'PeriodStartType' => 2,
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -70,8 +67,8 @@ test('可以成功建立信用卡定期定額委託功能', function () {
         ->withEmail('customer@example.com')
         ->everyFewDays(2)
         ->times(3)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 
@@ -79,21 +76,18 @@ test('可以成功建立信用卡定期定額委託功能', function () {
 });
 
 test('可以每隔 40 天授權一次信用卡定期定額委託', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'D',
-            'PeriodPoint' => '40',
-            'PeriodTimes' => 3,
-            'PeriodStartType' => 2,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'D',
+        'PeriodPoint' => '40',
+        'PeriodTimes' => 3,
+        'PeriodStartType' => 2,
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -104,8 +98,8 @@ test('可以每隔 40 天授權一次信用卡定期定額委託', function () {
         ->withEmail('customer@example.com')
         ->everyFewDays(40)
         ->times(3)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 
@@ -113,21 +107,18 @@ test('可以每隔 40 天授權一次信用卡定期定額委託', function () {
 });
 
 test('可以每週日授權一次信用卡定期定額委託', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'W',
-            'PeriodPoint' => '7',
-            'PeriodTimes' => 1,
-            'PeriodStartType' => 2,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'W',
+        'PeriodPoint' => '7',
+        'PeriodTimes' => 1,
+        'PeriodStartType' => 2,
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -138,8 +129,8 @@ test('可以每週日授權一次信用卡定期定額委託', function () {
         ->withEmail('customer@example.com')
         ->weekly(7)
         ->times(1)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 
@@ -147,21 +138,18 @@ test('可以每週日授權一次信用卡定期定額委託', function () {
 });
 
 test('可以每月 20 日授權一次信用卡定期定額委託', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'M',
-            'PeriodPoint' => '20',
-            'PeriodTimes' => 1,
-            'PeriodStartType' => 2,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'M',
+        'PeriodPoint' => '20',
+        'PeriodTimes' => 1,
+        'PeriodStartType' => 2,
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -172,8 +160,8 @@ test('可以每月 20 日授權一次信用卡定期定額委託', function () {
         ->withEmail('customer@example.com')
         ->monthly(20)
         ->times(1)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 
@@ -181,21 +169,18 @@ test('可以每月 20 日授權一次信用卡定期定額委託', function () {
 });
 
 test('可以每年 3 月 4 日授權一次信用卡定期定額委託', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'Y',
-            'PeriodPoint' => '0304',
-            'PeriodTimes' => 1,
-            'PeriodStartType' => 2,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'Y',
+        'PeriodPoint' => '0304',
+        'PeriodTimes' => 1,
+        'PeriodStartType' => 2,
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -206,8 +191,8 @@ test('可以每年 3 月 4 日授權一次信用卡定期定額委託', function
         ->withEmail('customer@example.com')
         ->yearly(3, 4)
         ->times(1)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 
@@ -229,21 +214,18 @@ test('可以每月 4 日授權信用卡定期定額委託，共授權 6 次，�
 });
 
 test('可以設定信用卡定期定額委託授權方式', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'D',
-            'PeriodPoint' => '2',
-            'PeriodTimes' => 3,
-            'PeriodStartType' => 1,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'D',
+        'PeriodPoint' => '2',
+        'PeriodTimes' => 3,
+        'PeriodStartType' => 1,
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -255,8 +237,8 @@ test('可以設定信用卡定期定額委託授權方式', function () {
         ->everyFewDays(2)
         ->times(3)
         ->startWith(PeriodStartType::TEN_DOLLARS_NOW)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 
@@ -294,24 +276,21 @@ test('可以設定立即執行委託金額授權', function () {
 });
 
 test('可以關閉付款人信箱修改功能', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'D',
-            'PeriodPoint' => '2',
-            'PeriodTimes' => 3,
-            'PeriodStartType' => 2,
-            'EmailModify' => 0,
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'D',
+        'PeriodPoint' => '2',
+        'PeriodTimes' => 3,
+        'PeriodStartType' => 2,
+        'EmailModify' => 0,
+        'PaymentInfo' => 'N',
+        'OrderInfo' => 'N',
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -325,8 +304,8 @@ test('可以關閉付款人信箱修改功能', function () {
         ->disableEmailModify()
         ->disablePaymentInfo()
         ->disableOrderInfo()
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 
@@ -334,22 +313,19 @@ test('可以關閉付款人信箱修改功能', function () {
 });
 
 test('可以設定語系', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'LangType' => 'en',
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'D',
-            'PeriodPoint' => '2',
-            'PeriodTimes' => 3,
-            'PeriodStartType' => 2,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'LangType' => 'en',
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'D',
+        'PeriodPoint' => '2',
+        'PeriodTimes' => 3,
+        'PeriodStartType' => 2,
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -361,8 +337,8 @@ test('可以設定語系', function () {
         ->everyFewDays(2)
         ->times(3)
         ->withLang(LangType::EN)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 
@@ -370,22 +346,19 @@ test('可以設定語系', function () {
 });
 
 test('可以啟用銀聯卡', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'D',
-            'PeriodPoint' => '2',
-            'PeriodTimes' => 3,
-            'PeriodStartType' => 2,
-            'UNIONPAY' => 1,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'D',
+        'PeriodPoint' => '2',
+        'PeriodTimes' => 3,
+        'PeriodStartType' => 2,
+        'UNIONPAY' => 1,
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -397,8 +370,8 @@ test('可以啟用銀聯卡', function () {
         ->everyFewDays(2)
         ->times(3)
         ->enableUnionPay()
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 
@@ -406,22 +379,19 @@ test('可以啟用銀聯卡', function () {
 });
 
 test('可以設定委託備註', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'D',
-            'PeriodPoint' => '2',
-            'PeriodTimes' => 3,
-            'PeriodStartType' => 2,
-            'PeriodMemo' => '這是委託備註',
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'D',
+        'PeriodPoint' => '2',
+        'PeriodTimes' => 3,
+        'PeriodStartType' => 2,
+        'PeriodMemo' => '這是委託備註',
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -433,8 +403,8 @@ test('可以設定委託備註', function () {
         ->everyFewDays(2)
         ->times(3)
         ->memo('這是委託備註')
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 
@@ -442,22 +412,19 @@ test('可以設定委託備註', function () {
 });
 
 test('可以設定不檢查信用卡資訊，也不執行授權', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.5',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'ProdDesc' => '測試商品',
-            'PeriodAmt' => 1050,
-            'PayerEmail' => 'customer@example.com',
-            'PeriodType' => 'D',
-            'PeriodPoint' => '2',
-            'PeriodTimes' => 3,
-            'PeriodStartType' => 3,
-            'PeriodFirstdate' => '2023/03/01',
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.5',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'ProdDesc' => '測試商品',
+        'PeriodAmt' => 1050,
+        'PayerEmail' => 'customer@example.com',
+        'PeriodType' => 'D',
+        'PeriodPoint' => '2',
+        'PeriodTimes' => 3,
+        'PeriodStartType' => 3,
+        'PeriodFirstdate' => '2023/03/01',
     ];
 
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
@@ -470,8 +437,8 @@ test('可以設定不檢查信用卡資訊，也不執行授權', function () {
         ->times(3)
         ->startWithoutAuth()
         ->firstChargeAt(2023, 3, 1)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->submit();
 

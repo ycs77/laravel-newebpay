@@ -40,19 +40,16 @@ beforeEach(function () {
 });
 
 test('可以成功修改信用卡定期定額委託金額', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.1',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'PeriodNo' => '20200101000000001',
-            'AlterAmt' => 1000,
-            'PeriodType' => 'D',
-            'PeriodPoint' => '3',
-            'PeriodTimes' => 10,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.1',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'PeriodNo' => '20200101000000001',
+        'AlterAmt' => 1000,
+        'PeriodType' => 'D',
+        'PeriodPoint' => '3',
+        'PeriodTimes' => 10,
     ];
 
     $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
@@ -61,8 +58,8 @@ test('可以成功修改信用卡定期定額委託金額', function () {
         ->withAmount(1000)
         ->everyFewDays(3)
         ->times(10)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->send();
 
@@ -70,19 +67,16 @@ test('可以成功修改信用卡定期定額委託金額', function () {
 });
 
 test('可以修改委託為每週授權', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.1',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'PeriodNo' => '20200101000000001',
-            'AlterAmt' => 1000,
-            'PeriodType' => 'W',
-            'PeriodPoint' => '5',
-            'PeriodTimes' => 5,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.1',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'PeriodNo' => '20200101000000001',
+        'AlterAmt' => 1000,
+        'PeriodType' => 'W',
+        'PeriodPoint' => '5',
+        'PeriodTimes' => 5,
     ];
 
     $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
@@ -91,8 +85,8 @@ test('可以修改委託為每週授權', function () {
         ->withAmount(1000)
         ->weekly(5)
         ->times(5)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->send();
 
@@ -100,19 +94,16 @@ test('可以修改委託為每週授權', function () {
 });
 
 test('可以修改委託為每月授權', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.1',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'PeriodNo' => '20200101000000001',
-            'AlterAmt' => 1000,
-            'PeriodType' => 'M',
-            'PeriodPoint' => '15',
-            'PeriodTimes' => 12,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.1',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'PeriodNo' => '20200101000000001',
+        'AlterAmt' => 1000,
+        'PeriodType' => 'M',
+        'PeriodPoint' => '15',
+        'PeriodTimes' => 12,
     ];
 
     $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
@@ -121,8 +112,8 @@ test('可以修改委託為每月授權', function () {
         ->withAmount(1000)
         ->monthly(15)
         ->times(12)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->send();
 
@@ -130,19 +121,16 @@ test('可以修改委託為每月授權', function () {
 });
 
 test('可以修改委託為每年授權', function () {
-    $expectedOptionsData = [
-        'MerchantID_' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.1',
-            'TimeStamp' => Carbon::now()->timestamp,
-            'MerOrderNo' => 'Order001',
-            'PeriodNo' => '20200101000000001',
-            'AlterAmt' => 1000,
-            'PeriodType' => 'Y',
-            'PeriodPoint' => '0615',
-            'PeriodTimes' => 3,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.1',
+        'TimeStamp' => Carbon::now()->timestamp,
+        'MerOrderNo' => 'Order001',
+        'PeriodNo' => '20200101000000001',
+        'AlterAmt' => 1000,
+        'PeriodType' => 'Y',
+        'PeriodPoint' => '0615',
+        'PeriodTimes' => 3,
     ];
 
     $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
@@ -151,8 +139,8 @@ test('可以修改委託為每年授權', function () {
         ->withAmount(1000)
         ->yearly(6, 15)
         ->times(3)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->send();
 

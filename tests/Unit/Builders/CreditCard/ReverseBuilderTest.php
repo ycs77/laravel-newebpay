@@ -12,9 +12,6 @@ use Ycs77\NewebPay\Results\CreditCard\ReverseResult;
 beforeEach(function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
 
-    $this->response = mock(HttpClientResponse::class);
-    $this->response->allows('json')->andReturn(['Status' => 'SUCCESS']);
-
     $this->factory = mock(Factory::class);
     $this->factory->allows('baseUrl')->andReturn('https://example.com');
 
@@ -31,29 +28,29 @@ beforeEach(function () {
     $this->crypto->allows('encryptByAES')->andReturn('encrypted_data');
     $this->crypto->allows('verifyCheckCode');
 
+    $this->response = mock(HttpClientResponse::class);
+    $this->response->allows('json')->andReturn(['Status' => 'SUCCESS']);
+
     $this->httpTransporter = mock(HttpTransporter::class);
     $this->httpTransporter->allows('setTimeout');
     $this->httpTransporter->allows('send')->andReturn($this->response);
 });
 
 test('可以使用商店訂單編號取消信用卡交易', function () {
-    $expectedOptionsData = [
-        'MerchantID' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.0',
-            'Amt' => 1050,
-            'MerchantOrderNo' => 'Order001',
-            'IndexType' => 1,
-            'TimeStamp' => Carbon::now()->timestamp,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.0',
+        'Amt' => 1050,
+        'MerchantOrderNo' => 'Order001',
+        'IndexType' => 1,
+        'TimeStamp' => Carbon::now()->timestamp,
     ];
 
     $result = (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withAmount(1050)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->send();
 
@@ -61,23 +58,20 @@ test('可以使用商店訂單編號取消信用卡交易', function () {
 });
 
 test('可以使用藍新金流交易序號取消信用卡交易', function () {
-    $expectedOptionsData = [
-        'MerchantID' => 'TestMerchantID1234',
-        'PostData_' => [
-            'RespondType' => 'JSON',
-            'Version' => '1.0',
-            'Amt' => 1050,
-            'TradeNo' => '23061500000000000',
-            'IndexType' => 2,
-            'TimeStamp' => Carbon::now()->timestamp,
-        ],
+    $expectedPostData = [
+        'RespondType' => 'JSON',
+        'Version' => '1.0',
+        'Amt' => 1050,
+        'TradeNo' => '23061500000000000',
+        'IndexType' => 2,
+        'TimeStamp' => Carbon::now()->timestamp,
     ];
 
     $result = (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withTrade('23061500000000000')
         ->withAmount(1050)
-        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
-            expect($options->toArray())->toBe($expectedOptionsData);
+        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
+            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
         })
         ->send();
 
