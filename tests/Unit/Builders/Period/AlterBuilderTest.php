@@ -10,7 +10,15 @@ use Ycs77\NewebPay\Options\Options;
 use Ycs77\NewebPay\Results\Period\AlterResult;
 
 beforeEach(function () {
-    $this->factory = app(Factory::class);
+    $this->factory = mock(Factory::class);
+    $this->factory->allows('baseUrl')->andReturn('https://example.com');
+
+    $this->config = [
+        'merchant_id' => 'TestMerchantID1234',
+        'hash_key' => 'TestHashKey123456789',
+        'hash_iv' => '17ef14e533ed1c18',
+        'timeout' => 30,
+    ];
 
     $this->crypto = mock(Crypto::class);
     $this->crypto->allows('setHashKey');
@@ -47,7 +55,7 @@ test('可以成功修改信用卡定期定額委託金額', function () {
         ],
     ];
 
-    $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
         ->withAmount(1000)
@@ -77,7 +85,7 @@ test('可以修改委託為每週授權', function () {
         ],
     ];
 
-    $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
         ->withAmount(1000)
@@ -107,7 +115,7 @@ test('可以修改委託為每月授權', function () {
         ],
     ];
 
-    $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
         ->withAmount(1000)
@@ -137,7 +145,7 @@ test('可以修改委託為每年授權', function () {
         ],
     ];
 
-    $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
         ->withAmount(1000)

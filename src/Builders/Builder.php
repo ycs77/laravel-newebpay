@@ -26,14 +26,15 @@ abstract class Builder
     /**
      * 已經設定完成、且可準備送出的的選項
      */
-    private ?Options $preparedOptions = null;
+    protected ?Options $preparedOptions = null;
 
     protected ?FormRedirectTransporter $formRedirectTransporter = null;
 
     public function __construct(
         protected Factory $factory,
         protected Crypto $crypto,
-        protected HttpTransporter $httpTransporter
+        protected HttpTransporter $httpTransporter,
+        protected array $config
     ) {
         $this->boot();
     }
@@ -51,7 +52,7 @@ abstract class Builder
     {
         $requestData = $this->toRequestData();
 
-        $this->httpTransporter->setTimeout($this->factory->config('timeout'));
+        $this->httpTransporter->setTimeout($this->config['timeout']);
 
         $response = $this->httpTransporter->send(
             $requestData['url'],

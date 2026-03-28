@@ -22,21 +22,21 @@ final class CreditCard
     public function reverse(): ReverseBuilder
     {
         return new ReverseBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter
+            $this->factory, $this->crypto, $this->httpTransporter, $this->factory->config()
         );
     }
 
     public function capture(): CaptureBuilder
     {
         return new CaptureBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter
+            $this->factory, $this->crypto, $this->httpTransporter, $this->factory->config()
         );
     }
 
     public function refund(): RefundBuilder
     {
         return new RefundBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter
+            $this->factory, $this->crypto, $this->httpTransporter, $this->factory->config()
         );
     }
 }

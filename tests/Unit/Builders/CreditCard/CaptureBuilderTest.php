@@ -15,7 +15,15 @@ beforeEach(function () {
     $this->response = mock(HttpClientResponse::class);
     $this->response->allows('json')->andReturn(['Status' => 'SUCCESS']);
 
-    $this->factory = app(Factory::class);
+    $this->factory = mock(Factory::class);
+    $this->factory->allows('baseUrl')->andReturn('https://example.com');
+
+    $this->config = [
+        'merchant_id' => 'TestMerchantID1234',
+        'hash_key' => 'TestHashKey123456789',
+        'hash_iv' => '17ef14e533ed1c18',
+        'timeout' => 30,
+    ];
 
     $this->crypto = mock(Crypto::class);
     $this->crypto->allows('setHashKey');
@@ -42,7 +50,7 @@ test('可以使用商店訂單編號請款', function () {
         ],
     ];
 
-    $result = (new CaptureBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new CaptureBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withAmount(1050)
         ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
@@ -68,7 +76,7 @@ test('可以使用藍新金流交易序號請款', function () {
         ],
     ];
 
-    $result = (new CaptureBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new CaptureBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withTrade('23061500000000000')
         ->withAmount(1050)
         ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
@@ -95,7 +103,7 @@ test('可以取消請款', function () {
         ],
     ];
 
-    $result = (new CaptureBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new CaptureBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withAmount(1050)
         ->reverse()
@@ -108,7 +116,7 @@ test('可以取消請款', function () {
 });
 
 test('請款時商店訂單編號與藍新金流交易序號只能擇一填入', function () {
-    (new CaptureBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    (new CaptureBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withTrade('23061500000000000');
 })->throws(InvalidArgumentException::class, '商店訂單編號與藍新金流交易序號只能擇一填入');

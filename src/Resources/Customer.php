@@ -20,7 +20,7 @@ final class Customer
     public function customer(Request $request): CustomerResult
     {
         return (new MPGCustomerResult(
-            $this->factory, $this->crypto
+            $this->crypto, $this->factory->config()
         ))->result($request);
     }
 }

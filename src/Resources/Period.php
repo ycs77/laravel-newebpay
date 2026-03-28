@@ -24,21 +24,21 @@ final class Period
     public function create(): CreateBuilder
     {
         return (new CreateBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter
+            $this->factory, $this->crypto, $this->httpTransporter, $this->factory->config()
         ))->setFormRedirectTransporter($this->formRedirectTransporter);
     }
 
     public function alterStatus(): AlterStatusBuilder
     {
         return new AlterStatusBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter
+            $this->factory, $this->crypto, $this->httpTransporter, $this->factory->config()
         );
     }
 
     public function alter(): AlterBuilder
     {
         return new AlterBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter
+            $this->factory, $this->crypto, $this->httpTransporter, $this->factory->config()
         );
     }
 }

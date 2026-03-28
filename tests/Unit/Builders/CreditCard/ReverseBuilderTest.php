@@ -15,7 +15,15 @@ beforeEach(function () {
     $this->response = mock(HttpClientResponse::class);
     $this->response->allows('json')->andReturn(['Status' => 'SUCCESS']);
 
-    $this->factory = app(Factory::class);
+    $this->factory = mock(Factory::class);
+    $this->factory->allows('baseUrl')->andReturn('https://example.com');
+
+    $this->config = [
+        'merchant_id' => 'TestMerchantID1234',
+        'hash_key' => 'TestHashKey123456789',
+        'hash_iv' => '17ef14e533ed1c18',
+        'timeout' => 30,
+    ];
 
     $this->crypto = mock(Crypto::class);
     $this->crypto->allows('setHashKey');
@@ -41,7 +49,7 @@ test('可以使用商店訂單編號取消信用卡交易', function () {
         ],
     ];
 
-    $result = (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withAmount(1050)
         ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
@@ -65,7 +73,7 @@ test('可以使用藍新金流交易序號取消信用卡交易', function () {
         ],
     ];
 
-    $result = (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withTrade('23061500000000000')
         ->withAmount(1050)
         ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
@@ -77,7 +85,7 @@ test('可以使用藍新金流交易序號取消信用卡交易', function () {
 });
 
 test('取消信用卡交易時，商店訂單編號與藍新金流交易序號只能擇一填入', function () {
-    (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withTrade('23061500000000000');
 })->throws(InvalidArgumentException::class, '商店訂單編號與藍新金流交易序號只能擇一填入');

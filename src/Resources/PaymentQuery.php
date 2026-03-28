@@ -23,7 +23,7 @@ final class PaymentQuery
     public function query(): QueryBuilder
     {
         return new QueryBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter
+            $this->factory, $this->crypto, $this->httpTransporter, $this->factory->config()
         );
     }
 

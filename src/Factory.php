@@ -113,7 +113,7 @@ class Factory
     public function periodResult(Request $request): CreateResult
     {
         return (new CreateCallbackResult(
-            $this, $this->crypto
+            $this->crypto, $this->config
         ))->result($request);
     }
 
@@ -125,7 +125,7 @@ class Factory
     public function periodNotify(Request $request): NotifyResult
     {
         return (new NotifyCallbackResult(
-            $this, $this->crypto
+            $this->crypto, $this->config
         ))->result($request);
     }
 
@@ -136,12 +136,8 @@ class Factory
             : $this->testingBaseUrl;
     }
 
-    public function config(?string $key = null)
+    public function config(): array
     {
-        if (isset($key)) {
-            return $this->config[$key] ?? null;
-        }
-
         return $this->config;
     }
 }

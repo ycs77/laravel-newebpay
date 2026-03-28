@@ -20,7 +20,7 @@ final class PaymentResult
     public function result(Request $request): MPGPaymentResult
     {
         return (new MPGCallbackResult(
-            $this->factory, $this->crypto
+            $this->crypto, $this->factory->config()
         ))->result($request);
     }
 }

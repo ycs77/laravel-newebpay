@@ -25,7 +25,7 @@ final class Payment
     public function payment(): MPGBuilder
     {
         return (new MPGBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter
+            $this->factory, $this->crypto, $this->httpTransporter, $this->factory->config()
         ))->setFormRedirectTransporter($this->formRedirectTransporter);
     }
 

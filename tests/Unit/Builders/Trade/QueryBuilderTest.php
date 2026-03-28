@@ -12,16 +12,24 @@ use Ycs77\NewebPay\Results\Trade\QueryResult;
 beforeEach(function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
 
-    $this->response = mock(HttpClientResponse::class);
-    $this->response->expects('json')->andReturn(['Status' => 'SUCCESS']);
+    $this->factory = mock(Factory::class);
+    $this->factory->allows('baseUrl')->andReturn('https://example.com');
 
-    $this->factory = app(Factory::class);
+    $this->config = [
+        'merchant_id' => 'TestMerchantID1234',
+        'hash_key' => 'TestHashKey123456789',
+        'hash_iv' => '17ef14e533ed1c18',
+        'timeout' => 30,
+    ];
 
     $this->crypto = mock(Crypto::class);
     $this->crypto->expects('setHashKey');
     $this->crypto->expects('setHashIv');
     $this->crypto->expects('encodeCheckValue')->andReturn('encrypted_data');
     $this->crypto->expects('verifyCheckCode');
+
+    $this->response = mock(HttpClientResponse::class);
+    $this->response->expects('json')->andReturn(['Status' => 'SUCCESS']);
 
     $this->httpTransporter = mock(HttpTransporter::class);
     $this->httpTransporter->expects('setTimeout');
@@ -43,7 +51,7 @@ test('可以成功查詢交易結果', function () {
         'Amt' => 1050,
     ];
 
-    $result = (new QueryBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new QueryBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withAmount(1050)
         ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {

@@ -4,17 +4,16 @@ namespace Ycs77\NewebPay\Callback\Trade;
 
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Crypto\Crypto;
-use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Results\Trade\CustomerResult;
 
 class MPGCustomerResult
 {
     public function __construct(
-        protected Factory $factory,
-        protected Crypto $crypto
+        protected Crypto $crypto,
+        protected array $config
     ) {
-        $this->crypto->setHashKey($this->factory->config('hash_key'));
-        $this->crypto->setHashIv($this->factory->config('hash_iv'));
+        $this->crypto->setHashKey($this->config['hash_key']);
+        $this->crypto->setHashIv($this->config['hash_iv']);
     }
 
     /**

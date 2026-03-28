@@ -12,7 +12,21 @@ use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Options;
 
 beforeEach(function () {
-    $this->factory = app(Factory::class);
+    $this->factory = mock(Factory::class);
+    $this->factory->allows('baseUrl')->andReturn('https://example.com');
+
+    $this->config = [
+        'merchant_id' => 'TestMerchantID1234',
+        'hash_key' => 'TestHashKey123456789',
+        'hash_iv' => '17ef14e533ed1c18',
+        'lang' => LangType::ZH_TW,
+        'period' => [
+            'return_url' => null,
+            'notify_url' => null,
+            'back_url' => null,
+        ],
+        'timeout' => 30,
+    ];
 
     $this->crypto = mock(Crypto::class);
     $this->crypto->allows('setHashKey');
@@ -45,7 +59,7 @@ test('可以成功建立信用卡定期定額委託功能', function () {
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -81,7 +95,7 @@ test('可以每隔 40 天授權一次信用卡定期定額委託', function () {
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -117,7 +131,7 @@ test('可以每週日授權一次信用卡定期定額委託', function () {
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -153,7 +167,7 @@ test('可以每月 20 日授權一次信用卡定期定額委託', function () {
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -189,7 +203,7 @@ test('可以每年 3 月 4 日授權一次信用卡定期定額委託', function
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -206,7 +220,7 @@ test('可以每年 3 月 4 日授權一次信用卡定期定額委託', function
 });
 
 test('可以每月 4 日授權信用卡定期定額委託，共授權 6 次，為期 6 個月', function () {
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -239,7 +253,7 @@ test('可以設定信用卡定期定額委託授權方式', function () {
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -257,7 +271,7 @@ test('可以設定信用卡定期定額委託授權方式', function () {
 });
 
 test('可以設定立即執行十元授權', function () {
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -272,7 +286,7 @@ test('可以設定立即執行十元授權', function () {
 });
 
 test('可以設定立即執行委託金額授權', function () {
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -307,7 +321,7 @@ test('可以關閉付款人信箱修改功能', function () {
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -345,7 +359,7 @@ test('可以設定語系', function () {
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -383,7 +397,7 @@ test('可以啟用銀聯卡', function () {
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -421,7 +435,7 @@ test('可以設定委託備註', function () {
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -459,7 +473,7 @@ test('可以設定不檢查信用卡資訊，也不執行授權', function () {
         ],
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)

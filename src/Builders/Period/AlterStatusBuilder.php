@@ -13,11 +13,11 @@ final class AlterStatusBuilder extends Builder
 
     protected function boot(): void
     {
-        $this->crypto->setHashKey($this->factory->config('hash_key'));
-        $this->crypto->setHashIv($this->factory->config('hash_iv'));
+        $this->crypto->setHashKey($this->config['hash_key']);
+        $this->crypto->setHashIv($this->config['hash_iv']);
 
         $this->options = new AlterStatusOptions;
-        $this->options->merchantId = $this->factory->config('merchant_id');
+        $this->options->merchantId = $this->config['merchant_id'];
 
         $this->endpoint = '/MPG/period/AlterStatus';
     }

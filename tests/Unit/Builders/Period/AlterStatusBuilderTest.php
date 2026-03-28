@@ -11,7 +11,15 @@ use Ycs77\NewebPay\Options\Options;
 use Ycs77\NewebPay\Results\Period\AlterStatusResult;
 
 beforeEach(function () {
-    $this->factory = app(Factory::class);
+    $this->factory = mock(Factory::class);
+    $this->factory->allows('baseUrl')->andReturn('https://example.com');
+
+    $this->config = [
+        'merchant_id' => 'TestMerchantID1234',
+        'hash_key' => 'TestHashKey123456789',
+        'hash_iv' => '17ef14e533ed1c18',
+        'timeout' => 30,
+    ];
 
     $this->crypto = mock(Crypto::class);
     $this->crypto->allows('setHashKey');
@@ -45,7 +53,7 @@ test('可以成功修改信用卡定期定額委託狀態', function () {
         ],
     ];
 
-    $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
         ->withStatus(PeriodStatus::TERMINATE)
@@ -58,7 +66,7 @@ test('可以成功修改信用卡定期定額委託狀態', function () {
 });
 
 test('可以暫停信用卡定期定額委託', function () {
-    $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
         ->withStatus(PeriodStatus::SUSPEND)
@@ -71,7 +79,7 @@ test('可以暫停信用卡定期定額委託', function () {
 });
 
 test('可以重啟信用卡定期定額委託', function () {
-    $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
         ->withStatus(PeriodStatus::RESTART)
@@ -84,7 +92,7 @@ test('可以重啟信用卡定期定額委託', function () {
 });
 
 test('可以終止信用卡定期定額委託', function () {
-    $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter))
+    $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
         ->withStatus(PeriodStatus::TERMINATE)

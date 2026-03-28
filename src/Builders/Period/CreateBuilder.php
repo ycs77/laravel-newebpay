@@ -16,30 +16,30 @@ final class CreateBuilder extends Builder
 
     protected function boot(): void
     {
-        $this->crypto->setHashKey($this->factory->config('hash_key'));
-        $this->crypto->setHashIv($this->factory->config('hash_iv'));
+        $this->crypto->setHashKey($this->config['hash_key']);
+        $this->crypto->setHashIv($this->config['hash_iv']);
 
         $this->options = new CreateOptions;
-        $this->options->merchantId = $this->factory->config('merchant_id');
+        $this->options->merchantId = $this->config['merchant_id'];
 
         $this->endpoint = '/MPG/period';
 
-        $this->options->paymentInfo = $this->factory->config('period.payment_info') ?? false;
-        $this->options->orderInfo = $this->factory->config('period.order_info') ?? false;
+        $this->options->paymentInfo = true;
+        $this->options->orderInfo = true;
 
-        if ($lang = $this->factory->config('lang')) {
+        if ($lang = $this->config['lang']) {
             $this->withLang($lang);
         }
 
-        if ($returnUrl = $this->factory->config('period.return_url')) {
+        if ($returnUrl = $this->config['period']['return_url']) {
             $this->withReturnUrl($returnUrl);
         }
 
-        if ($notifyUrl = $this->factory->config('period.notify_url')) {
+        if ($notifyUrl = $this->config['period']['notify_url']) {
             $this->withNotifyUrl($notifyUrl);
         }
 
-        if ($backUrl = $this->factory->config('period.back_url')) {
+        if ($backUrl = $this->config['period']['back_url']) {
             $this->withBackUrl($backUrl);
         }
     }

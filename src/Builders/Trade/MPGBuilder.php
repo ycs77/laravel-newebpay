@@ -19,35 +19,35 @@ final class MPGBuilder extends Builder
 
     protected function boot(): void
     {
-        $this->crypto->setHashKey($this->factory->config('hash_key'));
-        $this->crypto->setHashIv($this->factory->config('hash_iv'));
+        $this->crypto->setHashKey($this->config['hash_key']);
+        $this->crypto->setHashIv($this->config['hash_iv']);
 
         $this->options = new MPGOptions;
-        $this->options->merchantId = $this->factory->config('merchant_id');
+        $this->options->merchantId = $this->config['merchant_id'];
 
         $this->endpoint = '/MPG/mpg_gateway';
 
-        if ($lang = $this->factory->config('lang')) {
+        if ($lang = $this->config['lang']) {
             $this->withLang($lang);
         }
 
-        if ($returnUrl = $this->factory->config('return_url')) {
+        if ($returnUrl = $this->config['return_url']) {
             $this->withReturnUrl($returnUrl);
         }
 
-        if ($notifyUrl = $this->factory->config('notify_url')) {
+        if ($notifyUrl = $this->config['notify_url']) {
             $this->withNotifyUrl($notifyUrl);
         }
 
-        if ($customerUrl = $this->factory->config('customer_url')) {
+        if ($customerUrl = $this->config['customer_url']) {
             $this->withCustomerUrl($customerUrl);
         }
 
-        if ($clientBackUrl = $this->factory->config('client_back_url')) {
+        if ($clientBackUrl = $this->config['client_back_url']) {
             $this->withClientBackUrl($clientBackUrl);
         }
 
-        if ($paymentMethods = $this->factory->config('payment_methods')) {
+        if ($paymentMethods = $this->config['payment_methods']) {
             $this->withPaymentMethods($paymentMethods);
         }
     }
