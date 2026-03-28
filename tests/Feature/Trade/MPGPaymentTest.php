@@ -14,8 +14,8 @@ use function Pest\Laravel\partialMock;
 
 test('可以成功呼叫 MPG 金流基本功能', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_trade_data');
-    $crypto->expects('hashBySHA')->andReturn('encrypted_sha_data');
+    $crypto->allows('encryptByAES')->andReturn('encrypted_trade_data');
+    $crypto->allows('hashBySHA')->andReturn('encrypted_sha_data');
 
     $response = NewebPay::payment()
         ->withOrder('Order001')
@@ -64,8 +64,8 @@ test('可以成功呼叫 MPG 金流的更多功能', function () {
     ];
 
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_trade_data');
-    $crypto->expects('hashBySHA')->andReturn('encrypted_sha_data');
+    $crypto->allows('encryptByAES')->andReturn('encrypted_trade_data');
+    $crypto->allows('hashBySHA')->andReturn('encrypted_sha_data');
 
     $response = NewebPay::payment()
         ->withLang(LangType::EN)

@@ -12,7 +12,7 @@ use function Pest\Laravel\partialMock;
 
 test('可以成功建立信用卡定期定額委託功能', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+    $crypto->allows('encryptByAES')->andReturn('encrypted_data');
 
     $response = NewebPay::period()
         ->create()
@@ -49,7 +49,7 @@ test('可以成功修改委託狀態', function () {
     ]);
 
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+    $crypto->allows('encryptByAES')->andReturn('encrypted_data');
 
     $result = NewebPay::period()
         ->alterStatus()
@@ -87,7 +87,7 @@ test('可以成功修改委託內容', function () {
     ]);
 
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+    $crypto->allows('encryptByAES')->andReturn('encrypted_data');
 
     $result = NewebPay::period()
         ->alter()

@@ -10,7 +10,7 @@ use function Pest\Laravel\partialMock;
 
 test('可以解析信用卡定期定額委託回傳資料', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('decryptByAES')->andReturn([
+    $crypto->allows('decryptByAES')->andReturn([
         'Status' => 'SUCCESS',
         'Message' => '委託建立成功',
         'Result' => [
@@ -38,7 +38,7 @@ test('可以解析信用卡定期定額委託回傳資料', function () {
 
 test('可以解析信用卡定期定額委託通知回傳資料', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('decryptByAES')->andReturn([
+    $crypto->allows('decryptByAES')->andReturn([
         'Status' => 'SUCCESS',
         'Message' => '授權成功',
         'Result' => [

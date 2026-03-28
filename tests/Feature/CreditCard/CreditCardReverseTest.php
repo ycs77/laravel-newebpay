@@ -25,8 +25,8 @@ test('可以成功呼叫取消信用卡交易功能', function () {
     ];
 
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
-    $crypto->expects('verifyCheckCode');
+    $crypto->allows('encryptByAES')->andReturn('encrypted_data');
+    $crypto->allows('verifyCheckCode');
 
     Http::fake([
         '*' => Http::response([

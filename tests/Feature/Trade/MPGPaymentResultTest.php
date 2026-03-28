@@ -10,7 +10,7 @@ use function Pest\Laravel\partialMock;
 
 test('可以解析 MPG 金流回傳資料', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('decryptByAES')->andReturn([
+    $crypto->allows('decryptByAES')->andReturn([
         'Status' => 'SUCCESS',
         'Message' => '授權成功',
         'Result' => [

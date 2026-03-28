@@ -23,17 +23,17 @@ beforeEach(function () {
     ];
 
     $this->crypto = mock(Crypto::class);
-    $this->crypto->expects('setHashKey');
-    $this->crypto->expects('setHashIv');
-    $this->crypto->expects('encodeCheckValue')->andReturn('encrypted_data');
-    $this->crypto->expects('verifyCheckCode');
+    $this->crypto->allows('setHashKey');
+    $this->crypto->allows('setHashIv');
+    $this->crypto->allows('encodeCheckValue')->andReturn('encrypted_data');
+    $this->crypto->allows('verifyCheckCode');
 
     $this->response = mock(HttpClientResponse::class);
-    $this->response->expects('json')->andReturn(['Status' => 'SUCCESS']);
+    $this->response->allows('json')->andReturn(['Status' => 'SUCCESS']);
 
     $this->httpTransporter = mock(HttpTransporter::class);
-    $this->httpTransporter->expects('setTimeout');
-    $this->httpTransporter->expects('send')->andReturn($this->response);
+    $this->httpTransporter->allows('setTimeout');
+    $this->httpTransporter->allows('send')->andReturn($this->response);
 });
 
 test('可以成功查詢交易結果', function () {

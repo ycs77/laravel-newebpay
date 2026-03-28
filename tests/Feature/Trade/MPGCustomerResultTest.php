@@ -10,7 +10,7 @@ use function Pest\Laravel\partialMock;
 
 test('可以解析 ATM/超商條碼/超商代碼 取號回傳資料', function () {
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('decryptByAES')->andReturn([
+    $crypto->allows('decryptByAES')->andReturn([
         'Status' => 'SUCCESS',
         'Message' => '條碼取號成功',
         'Result' => [

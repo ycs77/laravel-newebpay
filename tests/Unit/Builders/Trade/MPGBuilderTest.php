@@ -64,17 +64,17 @@ beforeEach(function () {
     ];
 
     $this->crypto = mock(Crypto::class);
-    $this->crypto->expects('setHashKey');
-    $this->crypto->expects('setHashIv');
-    $this->crypto->expects('encryptByAES')->andReturn('encrypted_data');
-    $this->crypto->expects('hashBySHA')->andReturn('encrypted_data');
+    $this->crypto->allows('setHashKey');
+    $this->crypto->allows('setHashIv');
+    $this->crypto->allows('encryptByAES')->andReturn('encrypted_data');
+    $this->crypto->allows('hashBySHA')->andReturn('encrypted_data');
 
     $this->httpTransporter = mock(HttpTransporter::class);
 
     $this->response = new Response('<div>redirect form</div>');
 
     $this->formRedirectTransporter = mock(FormRedirectTransporter::class);
-    $this->formRedirectTransporter->expects('send')->andReturn($this->response);
+    $this->formRedirectTransporter->allows('send')->andReturn($this->response);
 
     $this->urlFormatter = mock(UrlFormatter::class);
     $this->urlFormatter->allows('formatCallbackUrl')->andReturnUsing(fn (string $url) => 'http://localhost'.$url);

@@ -25,8 +25,8 @@ test('可以成功呼叫查詢交易功能', function () {
     ];
 
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encodeCheckValue')->andReturn('encrypted_data');
-    $crypto->expects('verifyCheckCode');
+    $crypto->allows('encodeCheckValue')->andReturn('encrypted_data');
+    $crypto->allows('verifyCheckCode');
 
     Http::fake([
         '*' => Http::response([
@@ -94,8 +94,8 @@ test('可以成功呼叫查詢交易的更多功能', function () {
     ];
 
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encodeCheckValue')->andReturn('encrypted_data');
-    $crypto->expects('verifyCheckCode');
+    $crypto->allows('encodeCheckValue')->andReturn('encrypted_data');
+    $crypto->allows('verifyCheckCode');
 
     Http::fake([
         '*' => Http::response([

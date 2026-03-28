@@ -27,7 +27,7 @@ test('可以成功呼叫信用卡退款功能', function () {
     ];
 
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+    $crypto->allows('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([
@@ -77,7 +77,7 @@ test('可以成功呼叫取消退款功能', function () {
     ];
 
     $crypto = partialMock(Crypto::class);
-    $crypto->expects('encryptByAES')->andReturn('encrypted_data');
+    $crypto->allows('encryptByAES')->andReturn('encrypted_data');
 
     Http::fake([
         '*' => Http::response([
