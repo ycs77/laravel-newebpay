@@ -7,6 +7,7 @@ use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Factory;
+use Ycs77\NewebPay\Url\UrlFormatter;
 
 /**
  * @mixin \Ycs77\NewebPay\Builders\Trade\MPGBuilder
@@ -17,7 +18,8 @@ final class Payment
         private readonly Factory $factory,
         private readonly Crypto $crypto,
         private readonly HttpTransporter $httpTransporter,
-        private readonly FormRedirectTransporter $formRedirectTransporter
+        private readonly FormRedirectTransporter $formRedirectTransporter,
+        private readonly UrlFormatter $urlFormatter
     ) {
         //
     }
@@ -25,7 +27,7 @@ final class Payment
     public function payment(): MPGBuilder
     {
         return (new MPGBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter, $this->factory->config()
+            $this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->factory->config()
         ))->setFormRedirectTransporter($this->formRedirectTransporter);
     }
 

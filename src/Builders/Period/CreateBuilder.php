@@ -4,15 +4,32 @@ namespace Ycs77\NewebPay\Builders\Period;
 
 use Illuminate\Http\Response;
 use Ycs77\NewebPay\Builders\Builder;
+use Ycs77\NewebPay\Contracts\HttpTransporter;
+use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\PeriodStartType;
 use Ycs77\NewebPay\Enums\PeriodType;
+use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Period\CreateOptions;
-use Ycs77\NewebPay\Url\UrlFormat;
+use Ycs77\NewebPay\Url\UrlFormatter;
 
 final class CreateBuilder extends Builder
 {
     protected CreateOptions $options;
+
+    protected UrlFormatter $urlFormatter;
+
+    public function __construct(
+        Factory $factory,
+        Crypto $crypto,
+        HttpTransporter $httpTransporter,
+        UrlFormatter $urlFormatter,
+        array $config
+    ) {
+        $this->urlFormatter = $urlFormatter;
+
+        parent::__construct($factory, $crypto, $httpTransporter, $config);
+    }
 
     protected function boot(): void
     {
@@ -199,8 +216,8 @@ final class CreateBuilder extends Builder
      */
     public function withReturnUrl(string $url): self
     {
-        $this->options->returnURL = UrlFormat::withSessionIdKey(
-            UrlFormat::formatCallbackUrl($url)
+        $this->options->returnURL = $this->urlFormatter->withSessionIdKey(
+            $this->urlFormatter->formatCallbackUrl($url)
         );
 
         return $this;
@@ -211,7 +228,7 @@ final class CreateBuilder extends Builder
      */
     public function withNotifyUrl(string $url): self
     {
-        $this->options->notifyURL = UrlFormat::formatCallbackUrl($url);
+        $this->options->notifyURL = $this->urlFormatter->formatCallbackUrl($url);
 
         return $this;
     }
@@ -293,7 +310,7 @@ final class CreateBuilder extends Builder
      */
     public function withBackUrl(string $url): self
     {
-        $this->options->backURL = UrlFormat::formatCallbackUrl($url);
+        $this->options->backURL = $this->urlFormatter->formatCallbackUrl($url);
 
         return $this;
     }

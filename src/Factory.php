@@ -18,6 +18,7 @@ use Ycs77\NewebPay\Results\Period\CreateResult;
 use Ycs77\NewebPay\Results\Period\NotifyResult;
 use Ycs77\NewebPay\Results\Trade\CustomerResult;
 use Ycs77\NewebPay\Results\Trade\PaymentResult as MPGPaymentResult;
+use Ycs77\NewebPay\Url\UrlFormatter;
 
 class Factory
 {
@@ -35,6 +36,7 @@ class Factory
         protected Crypto $crypto,
         protected FormRedirectTransporter $formRedirectTransporter,
         protected HttpTransporter $httpTransporter,
+        protected UrlFormatter $urlFormatter,
         protected array $config
     ) {
         //
@@ -47,7 +49,7 @@ class Factory
     public function payment(): Payment
     {
         return new Payment(
-            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter
+            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter, $this->urlFormatter
         );
     }
 
@@ -101,7 +103,7 @@ class Factory
     public function period(): Period
     {
         return new Period(
-            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter
+            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter, $this->urlFormatter
         );
     }
 

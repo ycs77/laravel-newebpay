@@ -6,16 +6,33 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Response;
 use Ycs77\NewebPay\Builders\Builder;
+use Ycs77\NewebPay\Contracts\HttpTransporter;
+use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
+use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Trade\MPGOptions;
-use Ycs77\NewebPay\Url\UrlFormat;
+use Ycs77\NewebPay\Url\UrlFormatter;
 
 final class MPGBuilder extends Builder
 {
     protected MPGOptions $options;
+
+    protected UrlFormatter $urlFormatter;
+
+    public function __construct(
+        Factory $factory,
+        Crypto $crypto,
+        HttpTransporter $httpTransporter,
+        UrlFormatter $urlFormatter,
+        array $config
+    ) {
+        $this->urlFormatter = $urlFormatter;
+
+        parent::__construct($factory, $crypto, $httpTransporter, $config);
+    }
 
     protected function boot(): void
     {
@@ -144,8 +161,8 @@ final class MPGBuilder extends Builder
      */
     public function withReturnUrl(string $url): self
     {
-        $this->options->returnURL = UrlFormat::withSessionIdKey(
-            UrlFormat::formatCallbackUrl($url)
+        $this->options->returnURL = $this->urlFormatter->withSessionIdKey(
+            $this->urlFormatter->formatCallbackUrl($url)
         );
 
         return $this;
@@ -160,7 +177,7 @@ final class MPGBuilder extends Builder
      */
     public function withNotifyUrl(string $url): self
     {
-        $this->options->notifyURL = UrlFormat::formatCallbackUrl($url);
+        $this->options->notifyURL = $this->urlFormatter->formatCallbackUrl($url);
 
         return $this;
     }
@@ -172,8 +189,8 @@ final class MPGBuilder extends Builder
      */
     public function withCustomerUrl(string $url): self
     {
-        $this->options->customerURL = UrlFormat::withSessionIdKey(
-            UrlFormat::formatCallbackUrl($url)
+        $this->options->customerURL = $this->urlFormatter->withSessionIdKey(
+            $this->urlFormatter->formatCallbackUrl($url)
         );
 
         return $this;
@@ -186,7 +203,7 @@ final class MPGBuilder extends Builder
      */
     public function withClientBackUrl(string $url): self
     {
-        $this->options->clientBackURL = UrlFormat::formatCallbackUrl($url);
+        $this->options->clientBackURL = $this->urlFormatter->formatCallbackUrl($url);
 
         return $this;
     }
