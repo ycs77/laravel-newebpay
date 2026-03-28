@@ -51,10 +51,10 @@ php artisan vendor:publish --tag=newebpay-config
 設定 `.env` 的商店代號和 HashKey 等：
 
 ```
-NEWEBPAY_STORE_ID=...        # 貼上 商店代號 (Ex: MS3311...)
-NEWEBPAY_STORE_HASH_KEY=...  # 貼上 HashKey
-NEWEBPAY_STORE_HASH_IV=...   # 貼上 HashIV
-NEWEBPAY_DEBUG=true          # 測試模式
+NEWEBPAY_ENV=...                # 設定 API 運行環境 (production 或 staging)
+NEWEBPAY_MERCHANT_ID=...        # 貼上 商店代號 (Ex: MS3311...)
+NEWEBPAY_MERCHANT_HASH_KEY=...  # 貼上 HashKey
+NEWEBPAY_MERCHANT_HASH_IV=...   # 貼上 HashIV
 ```
 
 更多設定需開啟 `config/newebpay.php` 修改。
