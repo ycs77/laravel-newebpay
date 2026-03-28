@@ -54,8 +54,6 @@ test('可以成功建立信用卡定期定額委託功能', function () {
             'PeriodPoint' => '2',
             'PeriodTimes' => 3,
             'PeriodStartType' => 2,
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
         ],
     ];
 
@@ -90,8 +88,6 @@ test('可以每隔 40 天授權一次信用卡定期定額委託', function () {
             'PeriodPoint' => '40',
             'PeriodTimes' => 3,
             'PeriodStartType' => 2,
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
         ],
     ];
 
@@ -126,8 +122,6 @@ test('可以每週日授權一次信用卡定期定額委託', function () {
             'PeriodPoint' => '7',
             'PeriodTimes' => 1,
             'PeriodStartType' => 2,
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
         ],
     ];
 
@@ -162,8 +156,6 @@ test('可以每月 20 日授權一次信用卡定期定額委託', function () {
             'PeriodPoint' => '20',
             'PeriodTimes' => 1,
             'PeriodStartType' => 2,
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
         ],
     ];
 
@@ -198,8 +190,6 @@ test('可以每年 3 月 4 日授權一次信用卡定期定額委託', function
             'PeriodPoint' => '0304',
             'PeriodTimes' => 1,
             'PeriodStartType' => 2,
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
         ],
     ];
 
@@ -248,8 +238,6 @@ test('可以設定信用卡定期定額委託授權方式', function () {
             'PeriodPoint' => '2',
             'PeriodTimes' => 3,
             'PeriodStartType' => 1,
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
         ],
     ];
 
@@ -330,6 +318,8 @@ test('可以關閉付款人信箱修改功能', function () {
         ->everyFewDays(2)
         ->times(3)
         ->disableEmailModify()
+        ->disablePaymentInfo()
+        ->disableOrderInfo()
         ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
             expect($options->toArray())->toBe($expectedOptionsData);
         })
@@ -354,8 +344,6 @@ test('可以設定語系', function () {
             'PeriodPoint' => '2',
             'PeriodTimes' => 3,
             'PeriodStartType' => 2,
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
         ],
     ];
 
@@ -391,8 +379,6 @@ test('可以啟用銀聯卡', function () {
             'PeriodPoint' => '2',
             'PeriodTimes' => 3,
             'PeriodStartType' => 2,
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
             'UNIONPAY' => 1,
         ],
     ];
@@ -429,8 +415,6 @@ test('可以設定委託備註', function () {
             'PeriodPoint' => '2',
             'PeriodTimes' => 3,
             'PeriodStartType' => 2,
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
             'PeriodMemo' => '這是委託備註',
         ],
     ];
@@ -468,8 +452,6 @@ test('可以設定不檢查信用卡資訊，也不執行授權', function () {
             'PeriodTimes' => 3,
             'PeriodStartType' => 3,
             'PeriodFirstdate' => '2023/03/01',
-            'PaymentInfo' => 'N',
-            'OrderInfo' => 'N',
         ],
     ];
 

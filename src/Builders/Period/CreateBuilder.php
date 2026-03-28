@@ -24,9 +24,6 @@ final class CreateBuilder extends Builder
 
         $this->endpoint = '/MPG/period';
 
-        $this->options->paymentInfo = true;
-        $this->options->orderInfo = true;
-
         if ($lang = $this->config['lang']) {
             $this->withLang($lang);
         }
@@ -241,6 +238,32 @@ final class CreateBuilder extends Builder
     public function disableEmailModify(): self
     {
         $this->options->emailModify = false;
+
+        return $this;
+    }
+
+    /**
+     * 關閉付款人資訊
+     *
+     * 於付款人填寫此委託時，是否需顯示付款人資訊填寫欄位。
+     * 付款人資訊填寫欄位包含付款人姓名、付款人電話、付款人手機。
+     */
+    public function disablePaymentInfo(): self
+    {
+        $this->options->paymentInfo = false;
+
+        return $this;
+    }
+
+    /**
+     * 關閉收件人資訊
+     *
+     * 於付款人填寫此委託時，是否需顯示收件人資訊填寫欄位。
+     * 收件人資訊填寫欄位包含收件人姓名、收件人電話、收件人手機、收件人地址。
+     */
+    public function disableOrderInfo(): self
+    {
+        $this->options->orderInfo = false;
 
         return $this;
     }

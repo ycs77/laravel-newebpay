@@ -38,9 +38,9 @@ class CreateOptions extends Options
 
     public ?bool $emailModify = null;
 
-    public bool $paymentInfo = false;
+    public bool $paymentInfo = true;
 
-    public bool $orderInfo = false;
+    public bool $orderInfo = true;
 
     public ?LangType $lang = null;
 
