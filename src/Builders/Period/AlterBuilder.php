@@ -4,6 +4,7 @@ namespace Ycs77\NewebPay\Builders\Period;
 
 use Ycs77\NewebPay\Builders\Builder;
 use Ycs77\NewebPay\Enums\PeriodType;
+use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Options\Period\AlterOptions;
 use Ycs77\NewebPay\Results\Period\AlterResult;
 
@@ -138,6 +139,20 @@ final class AlterBuilder extends Builder
      */
     public function send(): AlterResult
     {
-        return new AlterResult($this->sendRequest());
+        $requestData = $this->toRequestData();
+
+        $data = $this->sendRequest($requestData);
+        $data['Period'] = $this->crypto->decryptByAES($data['Period']);
+
+        $status = $data['Period']['Status'];
+        $message = $data['Period']['Message'];
+
+        if ($status !== 'SUCCESS') {
+            throw new NewebPayException(
+                $status, $message, $requestData['url'], $requestData['formData']
+            );
+        }
+
+        return new AlterResult($data);
     }
 }

@@ -33,23 +33,22 @@ test('可以成功建立信用卡定期定額委託功能', function () {
 test('可以成功修改委託狀態', function () {
     Http::fake([
         '*' => Http::response([
-            // TODO: 暫時 pass 測試，之後要重構
-            'Status' => 'SUCCESS',
-            'period' => [
-                'Status' => 'SUCCESS',
-                'Message' => '修改成功',
-                'Result' => [
-                    'MerOrderNo' => 'Order001',
-                    'PeriodNo' => '20200101000000001',
-                    'AlterType' => 'terminate',
-                    'NewNextTime' => '2020-02-01',
-                ],
-            ],
+            'period' => 'encrypted_period_data',
         ], 200),
     ]);
 
     $crypto = partialMock(Crypto::class);
     $crypto->allows('encryptByAES')->andReturn('encrypted_data');
+    $crypto->allows('decryptByAES')->andReturn([
+        'Status' => 'SUCCESS',
+        'Message' => '修改成功',
+        'Result' => [
+            'MerOrderNo' => 'Order001',
+            'PeriodNo' => '20200101000000001',
+            'AlterType' => 'terminate',
+            'NewNextTime' => '2020-02-01',
+        ],
+    ]);
 
     $result = NewebPay::period()
         ->alterStatus()
@@ -66,28 +65,27 @@ test('可以成功修改委託狀態', function () {
 test('可以成功修改委託內容', function () {
     Http::fake([
         '*' => Http::response([
-            // TODO: 暫時 pass 測試，之後要重構
-            'Status' => 'SUCCESS',
-            'Period' => [
-                'Status' => 'SUCCESS',
-                'Message' => '修改成功',
-                'Result' => [
-                    'MerOrderNo' => 'Order001',
-                    'PeriodNo' => '20200101000000001',
-                    'AlterAmt' => 1000,
-                    'PeriodType' => 'D',
-                    'PeriodPoint' => '3',
-                    'NewNextAmt' => 1000,
-                    'NewNextTime' => '2020-02-04',
-                    'PeriodTimes' => 10,
-                    'Extday' => '',
-                ],
-            ],
+            'Period' => 'encrypted_period_data',
         ], 200),
     ]);
 
     $crypto = partialMock(Crypto::class);
     $crypto->allows('encryptByAES')->andReturn('encrypted_data');
+    $crypto->allows('decryptByAES')->andReturn([
+        'Status' => 'SUCCESS',
+        'Message' => '修改成功',
+        'Result' => [
+            'MerOrderNo' => 'Order001',
+            'PeriodNo' => '20200101000000001',
+            'AlterAmt' => 1000,
+            'PeriodType' => 'D',
+            'PeriodPoint' => '3',
+            'NewNextAmt' => 1000,
+            'NewNextTime' => '2020-02-04',
+            'PeriodTimes' => 10,
+            'Extday' => '',
+        ],
+    ]);
 
     $result = NewebPay::period()
         ->alter()

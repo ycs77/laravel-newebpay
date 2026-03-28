@@ -83,7 +83,8 @@ class QueryBuilder extends Builder
      */
     public function get(): QueryResult
     {
-        $result = new QueryResult($this->sendRequest());
+        $requestData = $this->toRequestData();
+        $result = new QueryResult($this->sendRequest($requestData));
 
         $this->crypto->verifyCheckCode($result);
 

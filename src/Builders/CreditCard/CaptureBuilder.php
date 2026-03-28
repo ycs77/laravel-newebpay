@@ -88,6 +88,8 @@ final class CaptureBuilder extends Builder
      */
     public function send(): CaptureResult
     {
-        return new CaptureResult($this->sendRequest());
+        $requestData = $this->toRequestData();
+
+        return new CaptureResult($this->sendRequest($requestData));
     }
 }

@@ -4,6 +4,7 @@ namespace Ycs77\NewebPay\Callback\Period;
 
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Crypto\Crypto;
+use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Results\Period\NotifyResult;
 
 class NotifyCallbackResult
@@ -26,6 +27,13 @@ class NotifyCallbackResult
         $data = $request->only('Period');
 
         $data['Period'] = $this->crypto->decryptByAES($data['Period']);
+
+        $status = $data['Period']['Status'];
+        $message = $data['Period']['Message'];
+
+        if ($status !== 'SUCCESS') {
+            throw new NewebPayException($status, $message);
+        }
 
         return new NotifyResult($data);
     }

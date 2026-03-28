@@ -6,20 +6,20 @@ use RuntimeException;
 
 class NewebPayException extends RuntimeException
 {
-    protected string $apiUrl;
-
-    protected array $formData;
-
     protected string $apiStatus;
 
     protected string $apiMessage;
 
-    public function __construct(string $apiUrl, array $formData, string $status, string $message)
+    protected ?string $apiUrl = null;
+
+    protected ?array $formData = null;
+
+    public function __construct(string $status, string $message, ?string $apiUrl = null, ?array $formData = null)
     {
-        $this->apiUrl = $apiUrl;
-        $this->formData = $formData;
         $this->apiStatus = $status;
         $this->apiMessage = $message;
+        $this->apiUrl = $apiUrl;
+        $this->formData = $formData;
 
         parent::__construct(sprintf(
             'NewebPay API 回應錯誤 (Code: %s)：「%s」', $status, $message
@@ -33,10 +33,17 @@ class NewebPayException extends RuntimeException
      */
     public function context(): array
     {
-        return [
-            'url' => $this->apiUrl,
-            'formdata' => $this->formData,
-        ];
+        $context = [];
+
+        if ($this->apiUrl) {
+            $context['url'] = $this->apiUrl;
+        }
+
+        if ($this->formData) {
+            $context['formdata'] = $this->formData;
+        }
+
+        return $context;
     }
 
     public function getApiUrl(): string

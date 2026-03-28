@@ -25,14 +25,14 @@ beforeEach(function () {
     $this->crypto->allows('setHashKey');
     $this->crypto->allows('setHashIv');
     $this->crypto->allows('encryptByAES')->andReturn('encrypted_data');
+    $this->crypto->allows('decryptByAES')->andReturn([
+        'Status' => 'SUCCESS',
+        'Message' => '修改成功',
+    ]);
 
     $this->response = mock(HttpClientResponse::class);
     $this->response->allows('json')->andReturn([
-        // TODO: 暫時 pass 測試，之後要重構
-        'Status' => 'SUCCESS',
-        'period' => [
-            'Status' => 'SUCCESS',
-        ],
+        'period' => 'encrypted_period_data',
     ]);
 
     $this->httpTransporter = mock(HttpTransporter::class);

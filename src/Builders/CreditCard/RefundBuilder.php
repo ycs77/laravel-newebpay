@@ -88,6 +88,8 @@ final class RefundBuilder extends Builder
      */
     public function send(): RefundResult
     {
-        return new RefundResult($this->sendRequest());
+        $requestData = $this->toRequestData();
+
+        return new RefundResult($this->sendRequest($requestData));
     }
 }

@@ -48,10 +48,8 @@ abstract class Builder
      *
      * @throws \Ycs77\NewebPay\Exceptions\NewebPayException
      */
-    protected function sendRequest(): array
+    protected function sendRequest(array $requestData): array
     {
-        $requestData = $this->toRequestData();
-
         $this->httpTransporter->setTimeout($this->config['timeout']);
 
         $response = $this->httpTransporter->send(
@@ -61,9 +59,9 @@ abstract class Builder
 
         $data = $response->json();
 
-        if ($data['Status'] !== 'SUCCESS') {
+        if (isset($data['Status']) && $data['Status'] !== 'SUCCESS') {
             throw new NewebPayException(
-                $requestData['url'], $requestData['formData'], $data['Status'], $data['Message']
+                $data['Status'], $data['Message'], $requestData['url'], $requestData['formData']
             );
         }
 
@@ -135,7 +133,7 @@ abstract class Builder
      */
     protected function sendFormRedirectRequest(): Response
     {
-        $requestData = $this->toRequestData();
+        $requestData = $this->toRedirectRequestData();
 
         return $this->formRedirectTransporter->send(
             $requestData['url'],

@@ -78,7 +78,8 @@ final class ReverseBuilder extends Builder
      */
     public function send(): ReverseResult
     {
-        $result = new ReverseResult($this->sendRequest());
+        $requestData = $this->toRequestData();
+        $result = new ReverseResult($this->sendRequest($requestData));
 
         $this->crypto->verifyCheckCode($result);
 
