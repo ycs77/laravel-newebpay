@@ -3,6 +3,8 @@
 namespace Ycs77\NewebPay;
 
 use Illuminate\Http\Request;
+use Ycs77\NewebPay\Callback\Period\CreateCallbackResult;
+use Ycs77\NewebPay\Callback\Period\NotifyCallbackResult;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
@@ -11,6 +13,9 @@ use Ycs77\NewebPay\Resources\Customer;
 use Ycs77\NewebPay\Resources\Payment;
 use Ycs77\NewebPay\Resources\PaymentQuery;
 use Ycs77\NewebPay\Resources\PaymentResult;
+use Ycs77\NewebPay\Resources\Period;
+use Ycs77\NewebPay\Results\Period\CreateResult;
+use Ycs77\NewebPay\Results\Period\NotifyResult;
 use Ycs77\NewebPay\Results\Trade\CustomerResult;
 use Ycs77\NewebPay\Results\Trade\PaymentResult as MPGPaymentResult;
 
@@ -88,6 +93,40 @@ class Factory
         return new CreditCard(
             $this, $this->crypto, $this->httpTransporter
         );
+    }
+
+    /**
+     * 信用卡定期定額委託相關功能
+     */
+    public function period(): Period
+    {
+        return new Period(
+            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter
+        );
+    }
+
+    /**
+     * 解析並回傳定期定額委託結果。
+     *
+     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     */
+    public function periodResult(Request $request): CreateResult
+    {
+        return (new CreateCallbackResult(
+            $this, $this->crypto
+        ))->result($request);
+    }
+
+    /**
+     * 解析並回傳每期授權通知結果。
+     *
+     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
+     */
+    public function periodNotify(Request $request): NotifyResult
+    {
+        return (new NotifyCallbackResult(
+            $this, $this->crypto
+        ))->result($request);
     }
 
     public function baseUrl(): string

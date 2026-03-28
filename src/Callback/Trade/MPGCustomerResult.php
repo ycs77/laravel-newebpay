@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\NewebPay\Callback;
+namespace Ycs77\NewebPay\Callback\Trade;
 
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Crypto\Crypto;

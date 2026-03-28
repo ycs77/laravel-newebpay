@@ -1,13 +1,13 @@
 <?php
 
-namespace Ycs77\NewebPay\Callback;
+namespace Ycs77\NewebPay\Callback\Period;
 
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Factory;
-use Ycs77\NewebPay\Results\Trade\PaymentResult;
+use Ycs77\NewebPay\Results\Period\CreateResult;
 
-class MPGCallbackResult
+class CreateCallbackResult
 {
     public function __construct(
         protected Factory $factory,
@@ -18,18 +18,16 @@ class MPGCallbackResult
     }
 
     /**
-     * 解析並回傳交易結果。
+     * 解析並回傳定期定額委託結果。
      *
      * @throws \Ycs77\NewebPay\Exceptions\DecryptException
      */
-    public function result(Request $request): PaymentResult
+    public function result(Request $request): CreateResult
     {
-        $data = $request->only(
-            'Status', 'MerchantID', 'TradeInfo', 'TradeSha', 'Version', 'EncryptType'
-        );
+        $data = $request->only('Period');
 
-        $data['TradeInfo'] = $this->crypto->decryptByAES($data['TradeInfo']);
+        $data['Period'] = $this->crypto->decryptByAES($data['Period']);
 
-        return new PaymentResult($data);
+        return new CreateResult($data);
     }
 }

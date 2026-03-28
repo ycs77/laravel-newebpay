@@ -37,13 +37,6 @@ class NewebPayServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(Factory::class, 'newebpay');
-
-        $this->app->singleton(FactoryV1::class, function ($app) {
-            return new FactoryV1(
-                $app->make('config'),
-                $app->make('session.store')
-            );
-        });
     }
 
     /**
