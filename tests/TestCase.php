@@ -7,11 +7,8 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
 use Ycs77\LaravelRecoverSession\RecoverSessionServiceProvider;
 use Ycs77\NewebPay\Enums\Bank;
 use Ycs77\NewebPay\Enums\CreditInst;
-use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LangType;
-use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\NTCBLocate;
-use Ycs77\NewebPay\Enums\PeriodStartType;
 use Ycs77\NewebPay\NewebPayServiceProvider;
 
 class TestCase extends BaseTestCase
@@ -35,18 +32,9 @@ class TestCase extends BaseTestCase
         $app['config']->set('app.key', 'base64:cVJ8Llv7iMG6ojSDQ1BLqAq+/VktufxMBQiYOerhw4I=');
 
         $app['config']->set('newebpay.env', 'test');
-        /** @deprecated */
-        $app['config']->set('newebpay.debug', true);
         $app['config']->set('newebpay.merchant_id', 'TestMerchantID1234');
         $app['config']->set('newebpay.hash_key', 'TestHashKey123456789');
         $app['config']->set('newebpay.hash_iv', '17ef14e533ed1c18'); // Generate with `bin2hex(openssl_random_pseudo_bytes(8));`
-        $app['config']->set('newebpay.version.mpg', '2.0');
-        $app['config']->set('newebpay.version.query', '1.3');
-        $app['config']->set('newebpay.version.credit_cancel', '1.0');
-        $app['config']->set('newebpay.version.credit_close', '1.1');
-        $app['config']->set('newebpay.version.period', '1.5');
-        $app['config']->set('newebpay.version.period_status', '1.0');
-        $app['config']->set('newebpay.version.period_amt', '1.1');
         $app['config']->set('newebpay.lang', LangType::ZH_TW);
         $app['config']->set('newebpay.return_url', '/pay/callback');
         $app['config']->set('newebpay.notify_url', '/pay/notify');
@@ -82,11 +70,6 @@ class TestCase extends BaseTestCase
             'CVS' => false,
             'barcode' => false,
         ]);
-        $app['config']->set('newebpay.CVSCOM', CVSCOM::NONE);
-        $app['config']->set('newebpay.lgs_type', LgsType::DEFAULT);
-        $app['config']->set('newebpay.period.start_type', PeriodStartType::AUTHORIZE_NOW);
-        $app['config']->set('newebpay.period.payment_info', false);
-        $app['config']->set('newebpay.period.order_info', false);
         $app['config']->set('newebpay.period.return_url', null);
         $app['config']->set('newebpay.period.notify_url', null);
         $app['config']->set('newebpay.period.back_url', null);
