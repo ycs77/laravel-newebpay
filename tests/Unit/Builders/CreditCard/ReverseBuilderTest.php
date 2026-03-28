@@ -2,7 +2,6 @@
 
 use Carbon\Carbon;
 use Illuminate\Http\Client\Response as HttpClientResponse;
-use InvalidArgumentException;
 use Ycs77\NewebPay\Builders\CreditCard\ReverseBuilder;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
