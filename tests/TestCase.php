@@ -36,10 +36,6 @@ class TestCase extends BaseTestCase
         $app['config']->set('newebpay.hash_key', 'TestHashKey123456789');
         $app['config']->set('newebpay.hash_iv', '17ef14e533ed1c18'); // Generate with `bin2hex(openssl_random_pseudo_bytes(8));`
         $app['config']->set('newebpay.lang', LangType::ZH_TW);
-        $app['config']->set('newebpay.return_url', '/pay/callback');
-        $app['config']->set('newebpay.notify_url', '/pay/notify');
-        $app['config']->set('newebpay.customer_url', '/pay/customer');
-        $app['config']->set('newebpay.client_back_url', null);
         $app['config']->set('newebpay.with_session_id', false);
         $app['config']->set('newebpay.payment_methods', [
             'credit' => [
@@ -70,9 +66,6 @@ class TestCase extends BaseTestCase
             'CVS' => false,
             'barcode' => false,
         ]);
-        $app['config']->set('newebpay.period.return_url', null);
-        $app['config']->set('newebpay.period.notify_url', null);
-        $app['config']->set('newebpay.period.back_url', null);
     }
 
     protected function getPackageProviders($app)

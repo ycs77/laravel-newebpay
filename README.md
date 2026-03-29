@@ -133,10 +133,12 @@ use Ycs77\NewebPay\Facades\NewebPay;
 
 Route::post('/pay', function () {
     return NewebPay::payment()
-        ->withOrder('Vanespl_ec_'.time()) // 訂單編號
-        ->withAmount(120)                 // 交易金額
-        ->withItemDescription('我的商品')  // 商品名稱
-        ->withEmail('test@example.com')   // 付款人信箱
+        ->withOrder('Vanespl_ec_'.time())                    // 訂單編號
+        ->withAmount(120)                                    // 交易金額
+        ->withItemDescription('我的商品')                     // 商品名稱
+        ->withEmail('test@example.com')                      // 付款人信箱
+        ->withReturnUrl(config('app.url').'/pay/callback')   // 前景回傳網址 (Callback)
+        ->withNotifyUrl(config('app.url').'/pay/notify')     // 背景通知網址 (Notify)
         ->submit();
 });
 ```
@@ -183,20 +185,6 @@ Route::post('/pay/notify', function (Request $request) {
 });
 ```
 
-設定好路由之後，需要在 `config/newebpay.php` 裡設定回傳網址：
-
-```php
-return [
-
-    // 付款完成後導向頁面
-    'return_url' => '/pay/callback',
-
-    // 付款完成後的通知連結
-    'notify_url' => '/pay/notify',
-
-];
-```
-
 還要把這些路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
 
 ```php
@@ -225,17 +213,17 @@ NewebPay::payment()
     ->submit();
 ```
 
-**自訂網址**
+**回傳網址**
 
-可針對個別交易覆蓋 `config/newebpay.php` 中的網址設定：
+設定付款完成後的回傳網址：
 
 ```php
 NewebPay::payment()
     ...
-    ->withReturnUrl('https://example.com/return')      // 前景回傳網址 (Callback)
-    ->withNotifyUrl('https://example.com/notify')      // 背景通知網址 (Notify)
-    ->withCustomerUrl('https://example.com/customer')  // 商店取號網址
-    ->withClientBackUrl('https://example.com/back')    // 返回按鈕網址
+    ->withReturnUrl(config('app.url').'/pay/callback')      // 前景回傳網址 (Callback)
+    ->withNotifyUrl(config('app.url').'/pay/notify')        // 背景通知網址 (Notify)
+    ->withCustomerUrl(config('app.url').'/pay/customer')    // 商店取號網址
+    ->withClientBackUrl(config('app.url').'/pay/back')      // 返回按鈕網址
     ->submit();
 ```
 
@@ -427,17 +415,6 @@ Route::post('/pay/customer', function (Request $request) {
 });
 ```
 
-在 `config/newebpay.php` 裡設定網址：
-
-```php
-return [
-
-    // 商店取號網址
-    'customer_url' => '/pay/customer',
-
-];
-```
-
 還要把路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
 
 ```php
@@ -579,12 +556,14 @@ use Ycs77\NewebPay\Facades\NewebPay;
 Route::post('/subscribe', function () {
     return NewebPay::period()
         ->create()
-        ->withOrder('Order'.time())            // 訂單編號
-        ->withAmount(120)                      // 交易金額
-        ->withItemDescription('我的訂閱制商品') // 商品名稱
-        ->withEmail('test@example.com')        // 付款人信箱
-        ->everyFewDays(2)                      // 每隔 2 天授權一次
-        ->times(3)                             // 共授權 3 次
+        ->withOrder('Order'.time())                                   // 訂單編號
+        ->withAmount(120)                                             // 交易金額
+        ->withItemDescription('我的訂閱制商品')                        // 商品名稱
+        ->withEmail('test@example.com')                               // 付款人信箱
+        ->withReturnUrl(config('app.url').'/pay/period/callback')     // 前景回傳網址 (Callback)
+        ->withNotifyUrl(config('app.url').'/pay/period/notify')       // 背景通知網址 (Notify)
+        ->everyFewDays(2)                                             // 每隔 2 天授權一次
+        ->times(3)                                                    // 共授權 3 次
         ->submit();
 });
 ```
@@ -745,22 +724,6 @@ Route::post('/pay/period/notify', function (Request $request) {
 
     // 委託授權成功，處理訂單邏輯...
 });
-```
-
-設定好路由之後，需要在 `config/newebpay.php` 裡設定回傳網址：
-
-```php
-return [
-
-    'period' => [
-        // 建立委託完成後導向頁面
-        'return_url' => '/pay/period/callback',
-
-        // 每期委託授權結果通知
-        'notify_url' => '/pay/period/notify',
-    ],
-
-];
 ```
 
 記得要把這些路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：

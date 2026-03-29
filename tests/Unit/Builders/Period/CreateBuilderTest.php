@@ -10,7 +10,7 @@ use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\PeriodStartType;
 use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Options;
-use Ycs77\NewebPay\Url\UrlFormatter;
+use Ycs77\NewebPay\Url\WithSessionIdKey;
 
 beforeEach(function () {
     $this->factory = mock(Factory::class);
@@ -21,11 +21,6 @@ beforeEach(function () {
         'hash_key' => 'TestHashKey123456789',
         'hash_iv' => '17ef14e533ed1c18',
         'lang' => LangType::ZH_TW,
-        'period' => [
-            'return_url' => null,
-            'notify_url' => null,
-            'back_url' => null,
-        ],
         'timeout' => 30,
     ];
 
@@ -39,9 +34,8 @@ beforeEach(function () {
     $this->formRedirectTransporter = mock(FormRedirectTransporter::class);
     $this->formRedirectTransporter->allows('send')->andReturn(new Response);
 
-    $this->urlFormatter = mock(UrlFormatter::class);
-    $this->urlFormatter->allows('formatCallbackUrl')->andReturnUsing(fn (string $url) => 'http://localhost'.$url);
-    $this->urlFormatter->allows('withSessionIdKey')->andReturnUsing(fn (string $url) => $url);
+    $this->withSessionIdKey = mock(WithSessionIdKey::class);
+    $this->withSessionIdKey->allows('handle')->andReturnUsing(fn (string $url) => $url);
 });
 
 test('可以成功建立信用卡定期定額委託功能', function () {
@@ -59,7 +53,7 @@ test('可以成功建立信用卡定期定額委託功能', function () {
         'PeriodStartType' => 2,
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -90,7 +84,7 @@ test('可以每隔 40 天授權一次信用卡定期定額委託', function () {
         'PeriodStartType' => 2,
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -121,7 +115,7 @@ test('可以每週日授權一次信用卡定期定額委託', function () {
         'PeriodStartType' => 2,
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -152,7 +146,7 @@ test('可以每月 20 日授權一次信用卡定期定額委託', function () {
         'PeriodStartType' => 2,
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -183,7 +177,7 @@ test('可以每年 3 月 4 日授權一次信用卡定期定額委託', function
         'PeriodStartType' => 2,
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -200,7 +194,7 @@ test('可以每年 3 月 4 日授權一次信用卡定期定額委託', function
 });
 
 test('可以每月 4 日授權信用卡定期定額委託，共授權 6 次，為期 6 個月', function () {
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -228,7 +222,7 @@ test('可以設定信用卡定期定額委託授權方式', function () {
         'PeriodStartType' => 1,
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -246,7 +240,7 @@ test('可以設定信用卡定期定額委託授權方式', function () {
 });
 
 test('可以設定立即執行十元授權', function () {
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -261,7 +255,7 @@ test('可以設定立即執行十元授權', function () {
 });
 
 test('可以設定立即執行委託金額授權', function () {
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -293,7 +287,7 @@ test('可以關閉付款人信箱修改功能', function () {
         'OrderInfo' => 'N',
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -328,7 +322,7 @@ test('可以設定語系', function () {
         'PeriodStartType' => 2,
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -361,7 +355,7 @@ test('可以啟用銀聯卡', function () {
         'UNIONPAY' => 1,
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -394,7 +388,7 @@ test('可以設定委託備註', function () {
         'PeriodMemo' => '這是委託備註',
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)
@@ -427,7 +421,7 @@ test('可以設定不檢查信用卡資訊，也不執行授權', function () {
         'PeriodFirstdate' => '2023/03/01',
     ];
 
-    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->config))
+    $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
         ->withAmount(1050)

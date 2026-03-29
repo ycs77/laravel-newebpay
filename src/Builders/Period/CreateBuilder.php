@@ -11,7 +11,7 @@ use Ycs77\NewebPay\Enums\PeriodStartType;
 use Ycs77\NewebPay\Enums\PeriodType;
 use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Period\CreateOptions;
-use Ycs77\NewebPay\Url\UrlFormatter;
+use Ycs77\NewebPay\Url\WithSessionIdKey;
 
 final class CreateBuilder extends Builder
 {
@@ -21,7 +21,7 @@ final class CreateBuilder extends Builder
         Factory $factory,
         Crypto $crypto,
         HttpTransporter $httpTransporter,
-        private readonly UrlFormatter $urlFormatter,
+        private readonly WithSessionIdKey $withSessionIdKey,
         array $config
     ) {
         parent::__construct($factory, $crypto, $httpTransporter, $config);
@@ -41,17 +41,6 @@ final class CreateBuilder extends Builder
             $this->withLang($lang);
         }
 
-        if ($returnUrl = $this->config['period']['return_url']) {
-            $this->withReturnUrl($returnUrl);
-        }
-
-        if ($notifyUrl = $this->config['period']['notify_url']) {
-            $this->withNotifyUrl($notifyUrl);
-        }
-
-        if ($backUrl = $this->config['period']['back_url']) {
-            $this->withBackUrl($backUrl);
-        }
     }
 
     public function options(): CreateOptions
@@ -212,9 +201,7 @@ final class CreateBuilder extends Builder
      */
     public function withReturnUrl(string $url): self
     {
-        $this->options->returnURL = $this->urlFormatter->withSessionIdKey(
-            $this->urlFormatter->formatCallbackUrl($url)
-        );
+        $this->options->returnURL = $this->withSessionIdKey->handle($url);
 
         return $this;
     }
@@ -224,7 +211,7 @@ final class CreateBuilder extends Builder
      */
     public function withNotifyUrl(string $url): self
     {
-        $this->options->notifyURL = $this->urlFormatter->formatCallbackUrl($url);
+        $this->options->notifyURL = $url;
 
         return $this;
     }
@@ -306,7 +293,7 @@ final class CreateBuilder extends Builder
      */
     public function withBackUrl(string $url): self
     {
-        $this->options->backURL = $this->urlFormatter->formatCallbackUrl($url);
+        $this->options->backURL = $url;
 
         return $this;
     }

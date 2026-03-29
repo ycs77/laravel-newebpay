@@ -9,7 +9,7 @@ use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Factory;
-use Ycs77\NewebPay\Url\UrlFormatter;
+use Ycs77\NewebPay\Url\WithSessionIdKey;
 
 final class Period
 {
@@ -18,7 +18,7 @@ final class Period
         private readonly Crypto $crypto,
         private readonly HttpTransporter $httpTransporter,
         private readonly FormRedirectTransporter $formRedirectTransporter,
-        private readonly UrlFormatter $urlFormatter
+        private readonly WithSessionIdKey $withSessionIdKey
     ) {
         //
     }
@@ -26,7 +26,7 @@ final class Period
     public function create(): CreateBuilder
     {
         return (new CreateBuilder(
-            $this->factory, $this->crypto, $this->httpTransporter, $this->urlFormatter, $this->factory->config()
+            $this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->factory->config()
         ))->setFormRedirectTransporter($this->formRedirectTransporter);
     }
 

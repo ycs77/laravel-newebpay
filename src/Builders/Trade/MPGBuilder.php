@@ -14,7 +14,7 @@ use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Trade\MPGOptions;
-use Ycs77\NewebPay\Url\UrlFormatter;
+use Ycs77\NewebPay\Url\WithSessionIdKey;
 
 final class MPGBuilder extends Builder
 {
@@ -24,7 +24,7 @@ final class MPGBuilder extends Builder
         Factory $factory,
         Crypto $crypto,
         HttpTransporter $httpTransporter,
-        private readonly UrlFormatter $urlFormatter,
+        private readonly WithSessionIdKey $withSessionIdKey,
         array $config
     ) {
         parent::__construct($factory, $crypto, $httpTransporter, $config);
@@ -42,22 +42,6 @@ final class MPGBuilder extends Builder
 
         if ($lang = $this->config['lang']) {
             $this->withLang($lang);
-        }
-
-        if ($returnUrl = $this->config['return_url']) {
-            $this->withReturnUrl($returnUrl);
-        }
-
-        if ($notifyUrl = $this->config['notify_url']) {
-            $this->withNotifyUrl($notifyUrl);
-        }
-
-        if ($customerUrl = $this->config['customer_url']) {
-            $this->withCustomerUrl($customerUrl);
-        }
-
-        if ($clientBackUrl = $this->config['client_back_url']) {
-            $this->withClientBackUrl($clientBackUrl);
         }
 
         if ($paymentMethods = $this->config['payment_methods']) {
@@ -157,9 +141,7 @@ final class MPGBuilder extends Builder
      */
     public function withReturnUrl(string $url): self
     {
-        $this->options->returnURL = $this->urlFormatter->withSessionIdKey(
-            $this->urlFormatter->formatCallbackUrl($url)
-        );
+        $this->options->returnURL = $this->withSessionIdKey->handle($url);
 
         return $this;
     }
@@ -173,7 +155,7 @@ final class MPGBuilder extends Builder
      */
     public function withNotifyUrl(string $url): self
     {
-        $this->options->notifyURL = $this->urlFormatter->formatCallbackUrl($url);
+        $this->options->notifyURL = $url;
 
         return $this;
     }
@@ -185,9 +167,7 @@ final class MPGBuilder extends Builder
      */
     public function withCustomerUrl(string $url): self
     {
-        $this->options->customerURL = $this->urlFormatter->withSessionIdKey(
-            $this->urlFormatter->formatCallbackUrl($url)
-        );
+        $this->options->customerURL = $this->withSessionIdKey->handle($url);
 
         return $this;
     }
@@ -199,7 +179,7 @@ final class MPGBuilder extends Builder
      */
     public function withClientBackUrl(string $url): self
     {
-        $this->options->clientBackURL = $this->urlFormatter->formatCallbackUrl($url);
+        $this->options->clientBackURL = $url;
 
         return $this;
     }
