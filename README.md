@@ -7,23 +7,47 @@
 [![GitHub Tests Action Status][ico-github-action]][link-github-action]
 [![Total Downloads][ico-downloads]][link-downloads]
 
+**Laravel NewebPay** 為針對 Laravel 所寫的藍新金流（智付通）金流串接套件。
+
 > [!IMPORTANT]
 >
-> 目前 v2.0 版本正在開發中，將會重新設計成現代化、富有表現力的 API，優化整體開發體驗。需要注意目前 v2.0 版本文件現在還沒有更新，之後開發完成後會再更新文件。
->
-> 若想要查看舊版文件可以切換回 [1.x 分支](https://github.com/ycs77/laravel-newebpay/tree/1.x)。
+> v2.0 版本為全新設計的現代化 API，優化了整體開發體驗。若想要查看舊版文件可以切換回 [1.x 分支](https://github.com/ycs77/laravel-newebpay/tree/1.x)。
 
-Laravel NewebPay 為針對 Laravel 所寫的藍新金流（智付通）金流串接套件。
-
-## 實作功能
+### 套件功能
 
 * MPG 多功能收款 API
 * 交易查詢 API
 * 信用卡取消授權 API
 * 信用卡請退款 API
 * 信用卡定期定額委託 API
-* 修改定期定額委託狀態 API
-* 修改定期定額委託內容 API
+
+## 目錄
+
+- [版本需求](#版本需求)
+- [安裝](#安裝)
+- [設定](#設定)
+- [測試信用卡號](#測試信用卡號)
+- [MPG 多功能付款](#mpg-多功能付款)
+  - [建立付款流程](#建立付款流程)
+  - [自訂付款選項](#自訂付款選項)
+  - [接收付款結果](#接收付款結果)
+  - [取得付款結果的詳細資訊](#取得付款結果的詳細資訊)
+- [ATM/超商取號](#atm超商取號)
+- [單筆交易查詢](#單筆交易查詢)
+- [信用卡取消授權](#信用卡取消授權)
+- [信用卡請款](#信用卡請款)
+- [信用卡退款](#信用卡退款)
+- [信用卡定期定額委託](#信用卡定期定額委託)
+  - [建立委託](#建立委託)
+  - [授權週期](#授權週期)
+  - [授權期數](#授權期數)
+  - [授權起始方式](#授權起始方式)
+  - [接收委託結果](#接收委託結果)
+  - [修改委託狀態](#修改委託狀態)
+  - [修改委託內容](#修改委託內容)
+- [參考](#參考)
+- [贊助](#贊助)
+- [License](#license)
 
 ## 版本需求
 
@@ -34,32 +58,34 @@ Laravel NewebPay 為針對 Laravel 所寫的藍新金流（智付通）金流串
 
 ## 安裝
 
-```
+使用 Composer 安裝套件：
+
+```bash
 composer require ycs77/laravel-newebpay
 ```
 
-### 發布設置檔案
+發布設置檔案：
 
-```
+```bash
 php artisan vendor:publish --tag=newebpay-config
 ```
 
-## 註冊藍新金流商店
+## 設定
 
-首先先到藍新金流的網站上註冊帳號 (測試時需註冊測試帳號) 和建立商店。然後在「商店資料設定」中啟用需要使用的金流功能 (測試時可以盡量全部啟用)，並複製商店串接 API 的商店代號、`HashKey` 和 `HashIV`。
+前往藍新金流的網站上註冊帳號（測試時需註冊測試帳號）和建立商店。然後在「商店資料設定」中啟用需要使用的金流功能（測試時可以盡量全部啟用），並複製商店串接 API 的商店代號、`HashKey` 和 `HashIV`。
 
-設定 `.env` 的商店代號和 HashKey 等：
+設定 `.env` 的商店代號和 HashKey 等參數：
 
-```
-NEWEBPAY_ENV=...                # 設定 API 運行環境 (production 或 staging)
+```ini
+NEWEBPAY_ENV=staging            # 設定 API 運行環境 (production 或 staging)
 NEWEBPAY_MERCHANT_ID=...        # 貼上 商店代號 (Ex: MS3311...)
 NEWEBPAY_MERCHANT_HASH_KEY=...  # 貼上 HashKey
 NEWEBPAY_MERCHANT_HASH_IV=...   # 貼上 HashIV
 ```
 
-更多設定需開啟 `config/newebpay.php` 修改。
+`NEWEBPAY_ENV` 可以設定為 `staging`（測試環境）或 `production`（正式環境）。
 
-## 測試用帳號
+## 測試信用卡號
 
 測試環境僅接受以下的測試信用卡號：
 
@@ -68,20 +94,11 @@ NEWEBPAY_MERCHANT_HASH_IV=...   # 貼上 HashIV
 
 測試卡號有效月年及卡片背面末三碼，可任意填寫。
 
-更多詳細資訊請參考[藍新金流 API 文件](https://www.newebpay.com/website/Page/content/download_api)。
-
 ## MPG 多功能付款
 
-### 發送付款請求頁面
+### 建立付款流程
 
-首先先建立一個頁面，和一個「付款」按鈕：
-
-*routes/web.php*
-```php
-Route::get('/pay', function () {
-    return view('pay');
-});
-```
+首先建立一個含有表單的頁面，讓用戶點擊「付款」按鈕後送出 POST 請求：
 
 *resources/views/pay.blade.php*
 ```html
@@ -93,15 +110,6 @@ Route::get('/pay', function () {
 
 Inertia.js 可以參考以下：
 
-*routes/web.php*
-```php
-Route::get('/pay', function () {
-    return Inertia::render('Pay', [
-        'csrfToken' => csrf_token(),
-    ]);
-});
-```
-
 *resources/js/pages/Pay.vue*
 ```vue
 <template>
@@ -111,53 +119,29 @@ Route::get('/pay', function () {
   </form>
 </template>
 
-<script setup>
-defineProps({
-  csrfToken: String,
-})
+<script setup lang="ts">
+defineProps<{
+  csrfToken: string
+}>()
 </script>
 ```
 
-然後建立送出付款的路由：
+然後設定路由來發送 MPG 多功能付款請求：
 
 ```php
 use Ycs77\NewebPay\Facades\NewebPay;
 
 Route::post('/pay', function () {
-    $no = 'Vanespl_ec_'.time();  // 訂單編號
-    $amt = 120;                  // 交易金額
-    $desc = '我的商品';           // 商品名稱
-    $email = 'test@example.com'; // 付款人信箱
-
-    return NewebPay::payment($no, $amt, $desc, $email)->submit();
+    return NewebPay::payment()
+        ->withOrder('Vanespl_ec_'.time()) // 訂單編號
+        ->withAmount(120)                 // 交易金額
+        ->withItemDescription('我的商品')  // 商品名稱
+        ->withEmail('test@example.com')   // 付款人信箱
+        ->submit();
 });
 ```
 
-基本上一般交易可直接在 `config/newebpay.php` 做設定，裡面有詳細的解說，但若遇到特殊情況，可依據個別交易設定：
-
-```php
-use Ycs77\NewebPay\Facades\NewebPay;
-
-return NewebPay::payment(...)
-    ->lang() // 語言設定
-    ->tradeLimit() // 交易秒數限制
-    ->expireDate() // 交易截止日
-    ->returnUrl() // 由藍新回傳後前景畫面要接收資料顯示的網址
-    ->notifyUrl() // 由藍新回傳後背景處理資料的接收網址
-    ->customerUrl() // 商店取號網址
-    ->clientBackUrl() // 付款時點擊「返回按鈕」的網址
-    ->emailModify() // 是否開放 email 修改
-    ->loginType() // 是否需要登入藍新金流會員
-    ->orderComment() // 商店備註
-    ->paymentMethod() // 付款方式 *依照 config 格式傳送*
-    ->CVSCOM() // 物流方式
-    ->lgsType() // 物流型態
-    ->submit();
-```
-
-### 付款請求回傳結果
-
-送出付款之後當然是要建立回傳的路由，如果是信用卡之類的付款方式，可以付款後直接跳轉回本網站的，可以只設定 callback：
+付款完成後，藍新金流會將結果回傳到指定的網址。信用卡之類可以直接跳轉回網站的付款方式，設定 callback：
 
 ```php
 use Illuminate\Http\Request;
@@ -167,16 +151,20 @@ Route::post('/pay/callback', function (Request $request) {
     $result = NewebPay::result($request);
 
     if ($result->isFail()) {
-        return redirect()->to('/pay')->with('error', $result->message());
+        return redirect()
+            ->to('/pay')
+            ->with('error', $result->message());
     }
 
-    // 訂單付款成功，處裡訂單邏輯...
+    // 訂單付款成功，處理訂單邏輯...
 
-    return redirect()->to('/pay')->with('success', '付款成功');
+    return redirect()
+        ->to('/pay')
+        ->with('success', '付款成功');
 });
 ```
 
-如果是 ATM 的付款方式，需要透過幕後回傳的，可以只設定 notify：
+如果是 ATM 的付款方式，需要透過幕後回傳的，設定 notify：
 
 ```php
 use Illuminate\Http\Request;
@@ -189,110 +177,13 @@ Route::post('/pay/notify', function (Request $request) {
         return;
     }
 
-    logger('藍新金流 交易資訊 notify', ['result' => $result->data()]);
+    logger('藍新金流 交易資訊 notify', ['result' => $result->toArray()]);
 
-    // 訂單付款成功，處裡訂單邏輯...
+    // 訂單付款成功，處理訂單邏輯...
 });
 ```
 
-回傳結果可以使用各個方法來取得需要的資料：
-
-```php
-$result = NewebPay::result($request);
-$result->data(); // 回傳完整結果
-$result->status(); // 交易狀態：若交易付款成功，則回傳 SUCCESS。若交易付款失敗，則回傳錯誤代碼。
-$result->isSuccess(); // 交易是否成功
-$result->isFail(); // 交易是否失敗
-$result->message(); // 敘述此次交易狀態
-$result->result(); // 回傳參數
-$result->merchantId(); // 藍新金流商店代號
-$result->amt(); // 交易金額
-$result->tradeNo(); // 藍新金流交易序號
-$result->merchantOrderNo(); // 商店訂單編號
-$result->respondType(); // 回傳格式
-$result->payTime(); // 支付完成時間
-$result->ip(); // 交易 IP
-$result->escrowBank(); // 款項保管銀行
-
-// 信用卡支付回傳（一次付清、Google Pay、Samaung Pay、國民旅遊卡、銀聯）
-if ($result->paymentType() === 'CREDIT') {
-    $credit = $result->credit();
-    // 參考：\Ycs77\NewebPay\Results\Trade\CreditResult
-}
-
-// WEBATM、ATM 繳費回傳
-if ($result->paymentType() === 'VACC' || $result->paymentType() === 'WEBATM') {
-    $atm = $result->atm();
-    // 參考：\Ycs77\NewebPay\Results\Trade\ATMResult
-}
-
-// 超商代碼繳費回傳
-if ($result->paymentType() === 'CVS') {
-    $storeCode = $result->storeCode();
-    // 參考：\Ycs77\NewebPay\Results\Trade\StoreCodeResult
-}
-
-// 超商條碼繳費回傳
-if ($result->paymentType() === 'BARCODE') {
-    $storeBarcode = $result->storeBarcode();
-    // 參考：\Ycs77\NewebPay\Results\Trade\StoreBarcodeResult
-}
-
-// 超商物流回傳
-if ($result->paymentType() === 'CVSCOM') {
-    $lgs = $result->lgs();
-    // 參考：\Ycs77\NewebPay\Results\Trade\LgsResult
-}
-
-// 跨境支付回傳 (包含簡單付電子錢包、簡單付微信支付、簡單付支付寶)
-$ezPay = $result->ezPay();
-if ($ezPay->isEzPay()) {
-    // 參考：\Ycs77\NewebPay\Results\Trade\EzPayResult
-}
-
-// 玉山 Wallet 回傳
-if ($result->paymentType() === 'ESUNWALLET') {
-    $esunWallet = $result->esunWallet();
-    // 參考：\Ycs77\NewebPay\Results\Trade\EsunWalletResult
-}
-
-// 台灣 Pay 回傳
-if ($result->paymentType() === 'TAIWANPAY') {
-    $taiwanPay = $result->taiwanPay();
-    // 參考：\Ycs77\NewebPay\Results\Trade\TaiwanPayResult
-}
-```
-
-但如果兩個同時設定的話，進行部分交易時兩個 API 都會發送訊息，這時就要各司其職，callback 只設定返回給用戶的訊息，而 notify 只負責處理交易的邏輯：
-
-```php
-use Illuminate\Http\Request;
-use Ycs77\NewebPay\Facades\NewebPay;
-
-Route::post('/pay/callback', function (Request $request) {
-    $result = NewebPay::result($request);
-
-    if ($result->isFail()) {
-        return redirect()->to('/pay')->with('error', $result->message());
-    }
-
-    return redirect()->to('/pay')->with('success', '付款成功');
-});
-
-Route::post('/pay/notify', function (Request $request) {
-    $result = NewebPay::result($request);
-
-    if ($result->isFail()) {
-        return;
-    }
-
-    logger('藍新金流 交易資訊 notify', ['result' => $result->data()]);
-
-    // 訂單付款成功，處裡訂單邏輯...
-});
-```
-
-設定好之後可以在 `config/newebpay.php` 裡設定網址：
+設定好路由之後，需要在 `config/newebpay.php` 裡設定回傳網址：
 
 ```php
 return [
@@ -303,12 +194,11 @@ return [
     // 付款完成後的通知連結
     'notify_url' => '/pay/notify',
 
-]
+];
 ```
 
-還要把這些路徑排除 CSRF 檢查：
+還要把這些路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
 
-*app/Http/Middleware/VerifyCsrfToken.php*
 ```php
 class VerifyCsrfToken extends Middleware
 {
@@ -319,11 +209,197 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
-## ATM/超商條碼/超商代碼取號
+### 自訂付款選項
+
+基本上一般交易可直接在 `config/newebpay.php` 做設定，但若遇到特殊情況，可依據個別交易設定更多付款選項。
+
+**交易限制**
+
+設定交易的秒數限制和截止天數：
+
+```php
+NewebPay::payment()
+    ...
+    ->withTradeLimit(900)  // 交易秒數限制 (60~900 秒)
+    ->withExpireDays(14)   // 交易截止日 (天數，最大 180 天)
+    ->submit();
+```
+
+**自訂網址**
+
+可針對個別交易覆蓋 `config/newebpay.php` 中的網址設定：
+
+```php
+NewebPay::payment()
+    ...
+    ->withReturnUrl('https://example.com/return')      // 前景回傳網址 (Callback)
+    ->withNotifyUrl('https://example.com/notify')      // 背景通知網址 (Notify)
+    ->withCustomerUrl('https://example.com/customer')  // 商店取號網址
+    ->withClientBackUrl('https://example.com/back')    // 返回按鈕網址
+    ->submit();
+```
+
+**付款方式**
+
+覆蓋 config 中的付款方式設定，格式與 config 相同：
+
+```php
+NewebPay::payment()
+    ...
+    ->withPaymentMethods([...]) // 付款方式 *依照 config 格式傳送*
+    ->submit();
+```
+
+**信用卡記憶卡號**
+
+啟用信用卡記憶卡號功能，傳入付款人名稱：
+
+```php
+NewebPay::payment()
+    ...
+    ->withCreditRemember('John Doe')
+    ->submit();
+```
+
+**其他選項**
+
+```php
+NewebPay::payment()
+    ...
+    ->disableEmailModify()           // 禁止修改 email
+    ->withOrderComment('這是訂單備註') // 商店備註 (最大 300 字)
+    ->submit();
+```
+
+**物流設定**
+
+設定超商物流相關選項：
+
+```php
+use Ycs77\NewebPay\Enums\CVSCOM;
+use Ycs77\NewebPay\Enums\LgsType;
+
+NewebPay::payment()
+    ...
+    ->withLogisticsPayment(CVSCOM::NOT_PAY_AND_PAY) // 物流方式
+    ->withLogisticsType(LgsType::C2C)               // 物流型態
+    ->submit();
+```
+
+### 接收付款結果
+
+在[建立付款流程](#建立付款流程)中已設定了基本的 callback 和 notify 路由。如果同時設定了 callback 和 notify，進行部分交易時兩個 API 都會發送訊息，這時就要各司其職，callback 只設定返回給用戶的訊息，而 notify 只負責處理交易的邏輯：
+
+```php
+use Illuminate\Http\Request;
+use Ycs77\NewebPay\Facades\NewebPay;
+
+Route::post('/pay/callback', function (Request $request) {
+    $result = NewebPay::result($request);
+
+    if ($result->isFail()) {
+        return redirect()
+            ->to('/pay')
+            ->with('error', $result->message());
+    }
+
+    return redirect()
+        ->to('/pay')
+        ->with('success', '付款成功');
+});
+
+Route::post('/pay/notify', function (Request $request) {
+    $result = NewebPay::result($request);
+
+    if ($result->isFail()) {
+        return;
+    }
+
+    logger('藍新金流 交易資訊 notify', ['result' => $result->toArray()]);
+
+    // 訂單付款成功，處理訂單邏輯...
+});
+```
+
+回傳結果可以使用各個方法來取得需要的資料：
+
+```php
+$result = NewebPay::result($request);
+$result->status()          // 交易狀態：'SUCCESS' 或錯誤代碼
+$result->isSuccess()       // 交易是否成功
+$result->isFail()          // 交易是否失敗
+$result->message()         // 交易狀態描述：'授權成功'
+$result->result()          // 回傳參數 (陣列)
+$result->merchantId()      // 藍新金流商店代號：'MS3311...'
+$result->amount()          // 交易金額：120
+$result->tradeNo()         // 藍新金流交易序號：'23061500000000000'
+$result->orderNo()         // 商店訂單編號：'1686759318'
+$result->paymentType()     // 付款方式：PaymentType::CREDIT
+$result->payTime()         // 支付完成時間：Carbon 實例
+$result->ip()              // 交易 IP：'127.0.0.1'
+$result->escrowBank()      // 款項保管銀行：'HNCB'
+```
+
+### 取得付款結果的詳細資訊
+
+根據不同的付款方式，可以取得對應的詳細資訊：
+
+```php
+use Ycs77\NewebPay\Enums\PaymentType;
+
+// 信用卡支付回傳（一次付清、Google Pay、Samaung Pay、國民旅遊卡、銀聯）
+if ($result->paymentType() === PaymentType::CREDIT) {
+    $credit = $result->credit();
+    // 參考：\Ycs77\NewebPay\Results\Trade\CreditResult
+}
+
+// WEBATM、ATM 繳費回傳
+if ($result->paymentType() === PaymentType::VACC || $result->paymentType() === PaymentType::WEBATM) {
+    $atm = $result->atm();
+    // 參考：\Ycs77\NewebPay\Results\Trade\ATMResult
+}
+
+// 超商代碼繳費回傳
+if ($result->paymentType() === PaymentType::CVS) {
+    $storeCode = $result->storeCode();
+    // 參考：\Ycs77\NewebPay\Results\Trade\StoreCodeResult
+}
+
+// 超商條碼繳費回傳
+if ($result->paymentType() === PaymentType::BARCODE) {
+    $storeBarcode = $result->storeBarcode();
+    // 參考：\Ycs77\NewebPay\Results\Trade\StoreBarcodeResult
+}
+
+// 超商物流回傳
+if ($result->paymentType() === PaymentType::CVSCOM) {
+    $lgs = $result->lgs();
+    // 參考：\Ycs77\NewebPay\Results\Trade\LgsResult
+}
+
+// 跨境支付回傳 (包含簡單付電子錢包、簡單付微信支付、簡單付支付寶)
+$ezPay = $result->ezPay();
+// 參考：\Ycs77\NewebPay\Results\Trade\EzPayResult
+
+// 玉山 Wallet 回傳
+if ($result->paymentType() === PaymentType::ESUNWALLET) {
+    $esunWallet = $result->esunWallet();
+    // 參考：\Ycs77\NewebPay\Results\Trade\EsunWalletResult
+}
+
+// 台灣 Pay 回傳
+if ($result->paymentType() === PaymentType::TAIWANPAY) {
+    $taiwanPay = $result->taiwanPay();
+    // 參考：\Ycs77\NewebPay\Results\Trade\TaiwanPayResult
+}
+```
+
+## ATM/超商取號
 
 預設會直接導向到藍新金流的取號頁面，沒有特別需求不需要自己做。但如果要自訂取號頁面的話，也是可以自己客製調整：
 
 ```php
+use Illuminate\Http\Request;
 use Ycs77\NewebPay\Facades\NewebPay;
 
 Route::post('/pay/customer', function (Request $request) {
@@ -334,7 +410,18 @@ Route::post('/pay/customer', function (Request $request) {
         return;
     }
 
-    $result = $result->result();
+    $result->merchantId()  // 藍新金流商店代號：'MS3311...'
+    $result->amount()      // 交易金額：120
+    $result->tradeNo()     // 藍新金流交易序號：'23061500000000000'
+    $result->orderNo()     // 商店訂單編號：'1686763446'
+    $result->paymentType() // 付款方式：PaymentType::BARCODE
+    $result->expireTime()  // 繳費截止日期：Carbon 實例
+
+    // 根據付款方式取得對應的取號資訊：
+    $result->atm()          // ATM 繳費資訊
+    $result->storeCode()    // 超商代碼繳費資訊
+    $result->storeBarcode() // 超商條碼繳費資訊
+    $result->lgs()          // 超商物流資訊
 
     // 自訂取號結果頁面...
 });
@@ -348,12 +435,11 @@ return [
     // 商店取號網址
     'customer_url' => '/pay/customer',
 
-]
+];
 ```
 
-然後要把路徑排除 CSRF 檢查：
+還要把路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
 
-*app/Http/Middleware/VerifyCsrfToken.php*
 ```php
 class VerifyCsrfToken extends Middleware
 {
@@ -371,166 +457,139 @@ class VerifyCsrfToken extends Middleware
 ```php
 use Ycs77\NewebPay\Facades\NewebPay;
 
-function query(Request $request)
-{
-    $no = $request->input('no'); // 該筆交易的訂單編號
-    $amt = $request->input('amt'); // 該筆交易的金額
-    $type = 'order'; // 可選擇是 'order' (訂單編號)，或是 'trade' (藍新交易編號) 來做申請
+$result = NewebPay::query()
+    ->withOrder('Order001') // 該筆交易的訂單編號
+    ->withAmount(1050)      // 該筆交易的金額
+    ->get();
 
-    $result = NewebPay::query($no, $amt, $type)->submit();
+$result->merchantId() // 藍新金流商店代號：'TestMerchantID1234'
+$result->orderNo()    // 商店訂單編號：'Order001'
+$result->tradeNo()    // 藍新金流交易序號：'23061500000000000'
+$result->amount()     // 交易金額：1050
+```
 
-    if ($result->isSuccess() && $result->verify()) {
-        // 查詢成功...
+如果是組合型商店，可以使用 `forCompositeStore()` 來查詢：
 
-        return response()->json($result->result());
-    }
-
-    return response()->json(['message' => $result->message()]);
-}
+```php
+$result = NewebPay::query()
+    ->withOrder('Order001')
+    ->withAmount(1050)
+    ->forCompositeStore()
+    ->get();
 ```
 
 ## 信用卡取消授權
 
-在尚未請款時可以發動取消信用卡交易：
+在尚未請款時可以發動取消信用卡交易。使用訂單編號取消授權：
 
 ```php
 use Ycs77\NewebPay\Facades\NewebPay;
 
-function cancel()
-{
-    $no = $request->input('no'); // 該筆交易的訂單編號
-    $amt = $request->input('amt'); // 該筆交易的金額
-    $type = 'order'; // 可選擇是 'order' (訂單編號)，或是 'trade' (藍新交易編號) 來做申請
+$result = NewebPay::creditCard()
+    ->reverse()
+    ->withOrder('Order001') // 該筆交易的訂單編號
+    ->withAmount(1050)      // 該筆交易的金額
+    ->send();
 
-    $result = NewebPay::cancel($no, $amt, $type)->submit();
-
-    if ($result->isSuccess() && $result->verify()) {
-        return response()->json(['message' => '取消授權成功']);
-    }
-
-    return response()->json(['message' => $result->message()]);
-}
+$result->merchantId() // 藍新金流商店代號：'TestMerchantID1234'
+$result->orderNo()    // 商店訂單編號：'Order001'
+$result->tradeNo()    // 藍新金流交易序號：'23061500000000000'
+$result->amount()     // 取消授權金額：1050
 ```
 
-## 信用卡請/退款
-
-設定信用卡請款、取消請款、退款、取消退款：
+或者使用藍新交易編號取消授權：
 
 ```php
-use Ycs77\NewebPay\Facades\NewebPay;
-
-/**
- * 信用卡請款
- */
-function request()
-{
-    $no = $request->input('no'); // 該筆交易的訂單編號
-    $amt = $request->input('amt'); // 該筆交易的金額
-    $type = 'order'; // 可選擇是 'order' (訂單編號)，或是 'trade' (藍新交易編號) 來做申請
-
-    $result = NewebPay::request($no, $amt, $type)->submit();
-
-    if ($result->isSuccess()) {
-        return response()->json(['message' => '信用卡請款成功']);
-    }
-
-    return response()->json(['message' => $result->message()]);
-}
-
-/**
- * 信用卡取消請款
- */
-function cancelRequest()
-{
-    $no = $request->input('no'); // 該筆交易的訂單編號
-    $amt = $request->input('amt'); // 該筆交易的金額
-    $type = 'order'; // 可選擇是 'order' (訂單編號)，或是 'trade' (藍新交易編號) 來做申請
-
-    $result = NewebPay::cancelRequest($no, $amt, $type)->submit();
-
-    if ($result->isSuccess()) {
-        return response()->json(['message' => '信用卡取消請款成功']);
-    }
-
-    return response()->json(['message' => $result->message()]);
-}
-
-/**
- * 信用卡退款
- */
-function refund()
-{
-    $no = $request->input('no'); // 該筆交易的訂單編號
-    $amt = $request->input('amt'); // 該筆交易的金額
-    $type = 'order'; // 可選擇是 'order' (訂單編號)，或是 'trade' (藍新交易編號) 來做申請
-
-    $result = NewebPay::refund($no, $amt, $type)->submit();
-
-    if ($result->isSuccess()) {
-        return response()->json(['message' => '信用卡退款成功']);
-    }
-
-    return response()->json(['message' => $result->message()]);
-}
-
-/**
- * 信用卡取消退款
- */
-function cancelRefund()
-{
-    $no = $request->input('no'); // 該筆交易的訂單編號
-    $amt = $request->input('amt'); // 該筆交易的金額
-    $type = 'order'; // 可選擇是 'order' (訂單編號)，或是 'trade' (藍新交易編號) 來做申請
-
-    $result = NewebPay::cancelRefund($no, $amt, $type)->submit();
-
-    if ($result->isSuccess()) {
-        return response()->json(['message' => '信用卡取消退款成功']);
-    }
-
-    return response()->json(['message' => $result->message()]);
-}
+$result = NewebPay::creditCard()
+    ->reverse()
+    ->withTrade('23061500000000000') // 藍新金流交易序號
+    ->withAmount(1050)
+    ->send();
 ```
 
-或是也可以使用同一個 API 端點來執行請/退款：
+## 信用卡請款
+
+信用卡請款：
 
 ```php
 use Ycs77\NewebPay\Facades\NewebPay;
 
-/**
- * 信用卡請/退款
- */
-function close()
-{
-    $no = $request->input('no'); // 該筆交易的訂單編號
-    $amt = $request->input('amt'); // 該筆交易的金額
-    $type = 'order'; // 可選擇是 'order' (訂單編號)，或是 'trade' (藍新交易編號) 來做申請
+$result = NewebPay::creditCard()
+    ->capture()
+    ->withOrder('Order001') // 該筆交易的訂單編號
+    ->withAmount(1050)      // 該筆交易的金額
+    ->send();
 
-    $result = NewebPay::close($no, $amt, $type)
-        ->closeType($request->query('type')) // 設定請款或退款
-        ->cancel($request->boolean('cancel')) // 取消請款或退款
-        ->submit();
+$result->merchantId() // 藍新金流商店代號：'TestMerchantID1234'
+$result->orderNo()    // 商店訂單編號：'Order001'
+$result->tradeNo()    // 藍新金流交易序號：'23061500000000000'
+$result->amount()     // 請款金額：1050
+```
 
-    if ($result->isSuccess()) {
-        return response()->json(['message' => '請求成功']);
-    }
+取消請款，在請款的基礎上加上 `reverse()`：
 
-    return response()->json(['message' => $result->message()]);
-}
+```php
+$result = NewebPay::creditCard()
+    ->capture()
+    ->withOrder('Order001')
+    ->withAmount(1050)
+    ->reverse() // 取消請款
+    ->send();
+```
+
+## 信用卡退款
+
+信用卡退款：
+
+```php
+use Ycs77\NewebPay\Facades\NewebPay;
+
+$result = NewebPay::creditCard()
+    ->refund()
+    ->withOrder('Order001') // 該筆交易的訂單編號
+    ->withAmount(1050)      // 該筆交易的金額
+    ->send();
+
+$result->merchantId() // 藍新金流商店代號：'TestMerchantID1234'
+$result->orderNo()    // 商店訂單編號：'Order001'
+$result->tradeNo()    // 藍新金流交易序號：'23061500000000000'
+$result->amount()     // 退款金額：1050
+```
+
+取消退款，在退款的基礎上加上 `reverse()`：
+
+```php
+$result = NewebPay::creditCard()
+    ->refund()
+    ->withOrder('Order001')
+    ->withAmount(1050)
+    ->reverse() // 取消退款
+    ->send();
 ```
 
 ## 信用卡定期定額委託
 
-### 發送建立委託請求頁面
+### 建立委託
 
-首先先建立一個頁面，和一個「訂閱」按鈕：
+建立信用卡定期定額委託的基本範例：
 
-*routes/web.php*
 ```php
-Route::get('/subscribe', function () {
-    return view('subscribe');
+use Ycs77\NewebPay\Facades\NewebPay;
+
+Route::post('/subscribe', function () {
+    return NewebPay::period()
+        ->create()
+        ->withOrder('Order'.time())            // 訂單編號
+        ->withAmount(120)                      // 交易金額
+        ->withItemDescription('我的訂閱制商品') // 商品名稱
+        ->withEmail('test@example.com')        // 付款人信箱
+        ->everyFewDays(2)                      // 每隔 2 天授權一次
+        ->times(3)                             // 共授權 3 次
+        ->submit();
 });
 ```
+
+發送建立委託前需要先建立一個含有表單的頁面：
 
 *resources/views/subscribe.blade.php*
 ```html
@@ -540,52 +599,106 @@ Route::get('/subscribe', function () {
 </form>
 ```
 
-Inertia.js 可以參考以下：
+### 授權週期
 
-*routes/web.php*
-```php
-Route::get('/subscribe', function () {
-    return Inertia::render('Subscribe', [
-        'csrfToken' => csrf_token(),
-    ]);
-});
-```
+若於週期內需授權多次，請以建立多次委託方式執行。
 
-*resources/js/pages/Subscribe.vue*
-```vue
-<template>
-  <form action="/subscribe" method="POST">
-    <input type="hidden" name="_token" :value="csrfToken">
-    <button>訂閱</button>
-  </form>
-</template>
-
-<script setup>
-defineProps({
-  csrfToken: String,
-})
-</script>
-```
-
-然後建立送出付款的路由：
+設定此委託於固定天期制授權，輸入數字為間隔天數 2~999。以授權日期隔日起算，以下為每隔 40 天授權一次：
 
 ```php
-use Ycs77\NewebPay\Facades\NewebPay;
-
-Route::post('/subscribe', function () {
-    $no = now()->timestamp;      // 訂單編號
-    $amt = 120;                  // 交易金額
-    $desc = '我的訂閱制商品';     // 商品名稱
-    $email = 'test@example.com'; // 付款人信箱
-
-    return NewebPay::period($no, $amt, $desc, $email)
-        ->everyFewDays(2)
-        ->times(3)
-        ->submit();
-});
+NewebPay::period()
+    ->create()
+    ...
+    ->everyFewDays(40)
+    ->times(1)
+    ->submit();
 ```
 
-### 建立委託請求回傳結果
+設定此委託於每週授權，輸入數字為 1~7，代表每週一至週日。以下為每週日授權一次：
+
+```php
+NewebPay::period()
+    ->create()
+    ...
+    ->weekly(7)
+    ->times(1)
+    ->submit();
+```
+
+設定此委託於每月授權，輸入數字為 1~31，每月的第幾天執行委託，若當月沒該日期則由該月的最後一天做為扣款日。以下為每月 20 日授權一次：
+
+```php
+NewebPay::period()
+    ->create()
+    ...
+    ->monthly(20)
+    ->times(1)
+    ->submit();
+```
+
+設定此委託於每年授權，輸入每年的幾月幾日執行委託。以下為每年 3 月 4 日授權一次：
+
+```php
+NewebPay::period()
+    ->create()
+    ...
+    ->yearly(3, 4)
+    ->times(1)
+    ->submit();
+```
+
+### 授權期數
+
+設定授權委託的期數。以下為每月 4 日授權，共授權 6 次，為期 6 個月：
+
+```php
+NewebPay::period()
+    ->create()
+    ...
+    ->monthly(4)
+    ->times(6)
+    ->submit();
+```
+
+### 授權起始方式
+
+設定立即執行十元授權，以驗證信用卡：
+
+```php
+'period' => [
+    'start_type' => PeriodStartType::TEN_DOLLARS_NOW,
+],
+```
+
+設定立即執行委託金額授權：
+
+```php
+'period' => [
+    'start_type' => PeriodStartType::AUTHORIZE_NOW,
+],
+```
+
+設定刷卡完之後，不檢查信用卡資訊，也不執行授權：
+
+```php
+'period' => [
+    'start_type' => PeriodStartType::NO_AUTHORIZE,
+],
+```
+
+當選擇不授權時，需要設定首期授權日：
+
+```php
+NewebPay::period()
+    ->create()
+    ...
+    ->everyFewDays(2)
+    ->times(3)
+    ->firstChargeAt(2023, 3, 1) // 首期授權日
+    ->submit();
+```
+
+### 接收委託結果
 
 設定建立委託完成後，將頁面導向回原本的網站頁面：
 
@@ -599,6 +712,11 @@ Route::post('/pay/period/callback', function (Request $request) {
     if ($result->isFail()) {
         return redirect()->to('/pay')->with('error', $result->message());
     }
+
+    $result->merchantID()   // 藍新金流商店代號：'TestMerchantID1234'
+    $result->orderNo()      // 商店訂單編號：'Order001'
+    $result->periodNo()     // 委託單號：'20200101000000001'
+    $result->periodAmount() // 委託金額：1050
 
     return redirect()->to('/pay')->with('success', '付款成功');
 });
@@ -615,16 +733,21 @@ Route::post('/pay/period/notify', function (Request $request) {
     $result = NewebPay::periodNotify($request);
 
     if ($result->isFail()) {
-        Log::error('藍新金流 定期定額 定期交易錯誤', $result->data());
+        Log::error('藍新金流 定期定額 定期交易錯誤', $result->toArray());
 
         return;
     }
 
-    // 委託授權成功，處裡訂單邏輯...
+    $result->merchantID()  // 藍新金流商店代號：'TestMerchantID1234'
+    $result->orderNo()     // 商店訂單編號：'Order001'
+    $result->authAmount()  // 本期授權金額：1050
+    $result->periodNo()    // 委託單號：'20200101000000001'
+
+    // 委託授權成功，處理訂單邏輯...
 });
 ```
 
-設定好之後可以在 `config/newebpay.php` 裡設定網址：
+設定好路由之後，需要在 `config/newebpay.php` 裡設定回傳網址：
 
 ```php
 return [
@@ -633,14 +756,14 @@ return [
         // 建立委託完成後導向頁面
         'return_url' => '/pay/period/callback',
 
-        // 每期委託授權結果通知：
+        // 每期委託授權結果通知
         'notify_url' => '/pay/period/notify',
     ],
 
-]
+];
 ```
 
-記得要把這些路徑排除 CSRF 檢查：
+記得要把這些路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
 
 *app/Http/Middleware/VerifyCsrfToken.php*
 ```php
@@ -654,138 +777,69 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
-### 授權週期
+### 修改委託狀態
 
-若於週期內需授權多次，請以建立多次委託方式執行。
+修改委託狀態需要傳入訂單編號和委託單號，並呼叫對應的狀態方法：
 
-設定此委託於固定天期制授權，輸入數字為間隔天數 2~999。以授權日期隔日起算，以下為每隔 40 天授權一次：
-
-```php
-NewebPay::period($no, $amt, $desc, $email)
-    ->everyFewDays(40)
-    ->times(1)
-    ->submit();
-```
-
-設定此委託於每週授權，輸入數字為 1~7，代表每週一至週日。以下為每週日授權一次：
+終止委託：
 
 ```php
-NewebPay::period($no, $amt, $desc, $email)
-    ->weekly(7)
-    ->times(1)
-    ->submit();
-```
-
-設定此委託於每月授權，輸入數字為 1~31，每月的第幾天執行委託，若當月沒該日期則由該月的最後一天做為扣款日。以下為每月 20 日授權一次：
-
-```php
-NewebPay::period($no, $amt, $desc, $email)
-    ->monthly(20)
-    ->times(1)
-    ->submit();
-```
-
-設定此委託於每年授權，輸入每年的幾月幾日執行委託。以下為每年 3 月 4 日授權一次：
-
-```php
-NewebPay::period($no, $amt, $desc, $email)
-    ->yearly(3, 4)
-    ->times(1)
-    ->submit();
-```
-
-### 授權期數
-
-設定授權委託的期數。以下為每月 4 日授權，共授權 6 次，為期 6 個月：
-
-```php
-NewebPay::period($no, $amt, $desc, $email)
-    ->monthly(4)
-    ->times(6)
-    ->submit();
-```
-
-### 立即執行十元授權
-
-設定立即執行十元授權，以驗證信用卡：
-
-```php
-'period' => [
-    'start_type' => PeriodStartType::TEN_DOLLARS_NOW,
-],
-```
-
-### 立即執行委託金額授權
-
-設定立即執行委託金額授權：
-
-```php
-'period' => [
-    'start_type' => PeriodStartType::AUTHORIZE_NOW,
-],
-```
-
-### 不檢查信用卡資訊，不授權
-
-設定刷卡完之後，不檢查信用卡資訊，也不執行授權：
-
-```php
-'period' => [
-    'start_type' => PeriodStartType::NO_AUTHORIZE,
-],
-```
-
-但需要設定首期授權日：
-
-```php
-NewebPay::period($no, $amt, $desc, $email)
-    ->everyFewDays(2)
-    ->times(3)
-    ->firstdate(2023, 3, 1)
-    ->submit();
-```
-
-## 修改委託狀態
-
-修改委託狀態需要傳入訂單編號、委託單號和委託狀態：
-
-```php
-use Illuminate\Http\Request;
-use Ycs77\NewebPay\Enums\PeriodStatus;
 use Ycs77\NewebPay\Facades\NewebPay;
 
-Route::post('/pay/period/status', function (Request $request) {
-    $result = NewebPay::periodStatus($request->input('no'), $request->input('periodNo'), PeriodStatus::TERMINATE)
-        ->submit();
+$result = NewebPay::period()
+    ->alterStatus()
+    ->withOrder('Order001')                // 訂單編號
+    ->withPeriod('20200101000000001')       // 委託單號
+    ->terminate();                         // 終止委託
 
-    return $result->isSuccess()
-        ? back()->with('success', '修改委託狀態成功')
-        : back()->withErrors(['no' => $result->message()]);
-});
+$result->orderNo()       // 商店訂單編號：'Order001'
+$result->periodNo()      // 委託單號：'20200101000000001'
+$result->periodStatus()  // 委託狀態：PeriodStatus::TERMINATE
 ```
 
-委託狀態可以修改成 `PeriodStatus::SUSPEND` (暫停) 和 `PeriodStatus::TERMINATE` (終止) 兩種狀態，設定成暫停之後還可以改成 `PeriodStatus::RESTART` (啟用)，但只要終止委託後就無法再次啟用了。
+暫停委託：
 
-暫停後再次啟用的委託將於最近一期開始授權。委託暫停後再啟用總期數不變，扣款時間將向後展延至期數滿期。
+```php
+$result = NewebPay::period()
+    ->alterStatus()
+    ->withOrder('Order001')
+    ->withPeriod('20200101000000001')
+    ->suspend(); // 暫停委託
+```
 
-## 修改委託內容
+暫停後重新啟用委託：
+
+```php
+$result = NewebPay::period()
+    ->alterStatus()
+    ->withOrder('Order001')
+    ->withPeriod('20200101000000001')
+    ->resume(); // 重新啟用委託
+```
+
+> [!IMPORTANT]
+>
+> 委託狀態設定成暫停之後可以改成啟用，但終止委託後就無法再次啟用了。暫停後再次啟用的委託將於最近一期開始授權，總期數不變，扣款時間將向後展延至期數滿期。
+
+### 修改委託內容
 
 修改委託內容需要傳入訂單編號、委託單號，和設定要修改成的委託觸發週期和授權次數：
 
 ```php
-use Illuminate\Http\Request;
 use Ycs77\NewebPay\Facades\NewebPay;
 
-Route::post('/pay/period/amt', function (Request $request) {
-    $result = NewebPay::periodAmt($request->input('no'), $request->input('periodNo'), $request->input('amt'))
-        ->everyFewDays(3)
-        ->times(10)
-        ->submit();
+$result = NewebPay::period()
+    ->alter()
+    ->withOrder('Order001')            // 訂單編號
+    ->withPeriod('20200101000000001')  // 委託單號
+    ->withAmount(1000)                 // 新的委託金額
+    ->everyFewDays(3)                  // 新的授權週期
+    ->times(10)                        // 新的授權次數
+    ->send();
 
-    return $result->isSuccess()
-        ? back()->with('success', '修改委託內容成功')
-        : back()->withErrors(['no' => $result->message()]);
-});
+$result->orderNo()       // 商店訂單編號：'Order001'
+$result->periodNo()      // 委託單號：'20200101000000001'
+$result->periodAmount()  // 新的委託金額：1000
 ```
 
 ## 參考
