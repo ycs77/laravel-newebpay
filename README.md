@@ -9,10 +9,6 @@
 
 **Laravel NewebPay** 為針對 Laravel 所寫的藍新金流（智付通）金流串接套件。
 
-> [!IMPORTANT]
->
-> v2.0 版本為全新設計的現代化 API，優化了整體開發體驗。若想要查看舊版文件可以切換回 [1.x 分支](https://github.com/ycs77/laravel-newebpay/tree/1.x)。
-
 ### 套件功能
 
 * MPG 多功能收款 API
