@@ -77,13 +77,13 @@ php artisan vendor:publish --tag=newebpay-config
 設定 `.env` 的商店代號和 HashKey 等參數：
 
 ```ini
-NEWEBPAY_ENV=staging            # 設定 API 運行環境 (production 或 staging)
+NEWEBPAY_ENV=test            # 設定 API 運行環境 (production 或 test)
 NEWEBPAY_MERCHANT_ID=...        # 貼上 商店代號 (Ex: MS3311...)
 NEWEBPAY_MERCHANT_HASH_KEY=...  # 貼上 HashKey
 NEWEBPAY_MERCHANT_HASH_IV=...   # 貼上 HashIV
 ```
 
-`NEWEBPAY_ENV` 可以設定為 `staging`（測試環境）或 `production`（正式環境）。
+`NEWEBPAY_ENV` 可以設定為 `test`（測試環境）或 `production`（正式環境）。
 
 ## 測試信用卡號
 

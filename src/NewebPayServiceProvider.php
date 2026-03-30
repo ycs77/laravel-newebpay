@@ -20,6 +20,10 @@ class NewebPayServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/newebpay.php', 'newebpay');
 
+        $this->app->singleton(Crypto::class, function () {
+            return new Crypto;
+        });
+
         $this->app->singleton(HttpTransporterContract::class, function ($app) {
             return new HttpTransporter($app->make(HttpClient::class));
         });
