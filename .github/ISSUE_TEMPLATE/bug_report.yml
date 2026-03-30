@@ -1,0 +1,90 @@
+name: 錯誤回報
+description: 回報 Laravel NewebPay 的問題或錯誤
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        請提供以下詳細資訊，以幫助我們解決問題。
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 發生了什麼問題
+      description: 您期望發生什麼？實際上發生了什麼？
+      placeholder: 當我跳轉到付款頁面時，出現了非此套件拋出的錯誤訊息
+    validations:
+      required: true
+  - type: textarea
+    id: how-to-reproduce
+    attributes:
+      label: 如何重現問題
+      description: 問題是如何發生的？請提供相關的設定值、出錯的程式碼和可靠的重現步驟。
+      placeholder: 安裝 Laravel 專案，加入 Laravel NewebPay 套件，執行付款功能 API
+    validations:
+      required: true
+  - type: textarea
+    id: expected-api-request
+    attributes:
+      label: 預期的 API 請求資料
+      description: 如果問題與 API 請求有關，請提供您預期的 API 請求資料 (JSON)。
+      placeholder: 請在此輸入您預期的 API 請求資料
+  - type: textarea
+    id: expected-api-response
+    attributes:
+      label: 預期的 API 回應資料
+      description: 如果問題與 API 回應有關，請提供您預期的 API 回應資料 (JSON)。
+      placeholder: 請在此輸入您預期的 API 回應資料
+  - type: textarea
+    id: actual-api-request
+    attributes:
+      label: 實際的 API 請求資料
+      description: 如果問題與 API 請求有關，請提供您實際送出的 API 請求資料 (JSON)，可以透過 `dd($options->toArray())` 來取得現在的請求 JSON 資料。參考 README > 除錯支援 的說明。
+      placeholder: 請在此輸入您實際送出的 API 請求資料
+  - type: textarea
+    id: actual-api-response
+    attributes:
+      label: 實際的 API 回應資料
+      description: 如果問題與 API 回應有關，請提供您實際收到的 API 回應資料 (JSON)，可以透過 `dd($result->toArray())` 來取得現在的回應 JSON 資料。參考 README > 除錯支援 的說明。
+      placeholder: 請在此輸入您實際收到的 API 回應資料
+  - type: input
+    id: repository-sample
+    attributes:
+      label: 範例程式倉庫
+      description: 如果可以的話，請提供能重現此問題的最小範例的程式倉庫。
+      placeholder: https://github.com/your-username/your-repository
+  - type: input
+    id: package-version
+    attributes:
+      label: Laravel NewebPay 版本
+      description: 您使用的套件版本為何？請盡可能提供具體版本。
+      placeholder: 2.0.0
+    validations:
+      required: true
+  - type: input
+    id: php-version
+    attributes:
+      label: PHP 版本
+      description: 您使用的 PHP 版本為何？請盡可能提供具體版本。
+      placeholder: 8.3.0
+    validations:
+      required: true
+  - type: dropdown
+    id: operating-systems
+    attributes:
+      label: 作業系統
+      description: 問題在哪些作業系統上發生？您可以選擇多個選項。
+      multiple: true
+      options:
+        - macOS
+        - Windows
+        - Linux
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 備註
+      description: 請使用此欄位提供您認為與此問題相關的其他資訊。
+    validations:
+      required: false
