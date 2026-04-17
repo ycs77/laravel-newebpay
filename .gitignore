@@ -4,4 +4,6 @@
 /build/coverage-report
 composer.lock
 phpunit.xml
+phpstan.neon
 *.cache
+.claude/settings.local.json
