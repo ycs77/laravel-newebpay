@@ -17,6 +17,7 @@ use Ycs77\NewebPay\Results\Result;
 
 abstract class Builder
 {
+    use Concerns\Dumpable;
     use Concerns\HasPrepareOptions;
     use Conditionable;
     use Tappable;

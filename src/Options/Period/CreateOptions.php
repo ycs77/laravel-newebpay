@@ -8,7 +8,7 @@ use Ycs77\NewebPay\Enums\PeriodStartType;
 use Ycs77\NewebPay\Enums\PeriodType;
 use Ycs77\NewebPay\Options\Options;
 
-class CreateOptions extends Options
+final class CreateOptions extends Options
 {
     public string $merchantId = '';
 

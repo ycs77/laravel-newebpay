@@ -4,7 +4,7 @@ namespace Ycs77\NewebPay\Options\Trade;
 
 use Ycs77\NewebPay\Options\Options;
 
-class QueryOptions extends Options
+final class QueryOptions extends Options
 {
     public string $merchantId = '';
 

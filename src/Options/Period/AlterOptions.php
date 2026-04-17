@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Ycs77\NewebPay\Enums\PeriodType;
 use Ycs77\NewebPay\Options\Options;
 
-class AlterOptions extends Options
+final class AlterOptions extends Options
 {
     public string $merchantId = '';
 

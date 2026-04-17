@@ -12,7 +12,7 @@ use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\NTCBLocate;
 use Ycs77\NewebPay\Options\Options;
 
-class MPGOptions extends Options
+final class MPGOptions extends Options
 {
     public string $merchantId = '';
 

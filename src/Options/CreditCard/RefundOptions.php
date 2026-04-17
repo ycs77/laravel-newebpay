@@ -5,7 +5,7 @@ namespace Ycs77\NewebPay\Options\CreditCard;
 use Carbon\Carbon;
 use Ycs77\NewebPay\Options\Options;
 
-class RefundOptions extends Options
+final class RefundOptions extends Options
 {
     public string $merchantId = '';
 

@@ -5,7 +5,7 @@ namespace Ycs77\NewebPay\Options\CreditCard;
 use Carbon\Carbon;
 use Ycs77\NewebPay\Options\Options;
 
-class CaptureOptions extends Options
+final class CaptureOptions extends Options
 {
     public string $merchantId = '';
 
