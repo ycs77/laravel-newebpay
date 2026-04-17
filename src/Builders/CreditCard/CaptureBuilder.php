@@ -3,11 +3,14 @@
 namespace Ycs77\NewebPay\Builders\CreditCard;
 
 use InvalidArgumentException;
+use Ycs77\NewebPay\Attributes\Resource;
 use Ycs77\NewebPay\Builders\Builder;
 use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Options\CreditCard\CaptureOptions;
+use Ycs77\NewebPay\Resources\CreditCard as CreditCardResource;
 use Ycs77\NewebPay\Results\CreditCard\CaptureResult;
 
+#[Resource(CreditCardResource::class, 'capture')]
 final class CaptureBuilder extends Builder
 {
     private CaptureOptions $options;
@@ -89,6 +92,10 @@ final class CaptureBuilder extends Builder
      */
     public function send(): CaptureResult
     {
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         $requestData = $this->toRequestData();
 
         return new CaptureResult($this->sendRequest($requestData));

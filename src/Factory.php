@@ -3,12 +3,16 @@
 namespace Ycs77\NewebPay;
 
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Assert as PHPUnit;
+use PHPUnit\Framework\ExpectationFailedException;
+use RuntimeException;
 use Ycs77\NewebPay\Callback\Period\CreateCallbackResult;
 use Ycs77\NewebPay\Callback\Period\NotifyCallbackResult;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Exceptions\DecryptException;
+use Ycs77\NewebPay\Options\Options;
 use Ycs77\NewebPay\Resources\CreditCard;
 use Ycs77\NewebPay\Resources\Customer;
 use Ycs77\NewebPay\Resources\Payment;
@@ -17,8 +21,10 @@ use Ycs77\NewebPay\Resources\PaymentResult;
 use Ycs77\NewebPay\Resources\Period;
 use Ycs77\NewebPay\Results\Period\CreateResult;
 use Ycs77\NewebPay\Results\Period\NotifyResult;
+use Ycs77\NewebPay\Results\Result;
 use Ycs77\NewebPay\Results\Trade\CustomerResult;
 use Ycs77\NewebPay\Results\Trade\PaymentResult as MPGPaymentResult;
+use Ycs77\NewebPay\Testing\TestRequest;
 use Ycs77\NewebPay\Url\WithSessionIdKey;
 
 class Factory
@@ -32,6 +38,25 @@ class Factory
      * NewebPay 測試環境的 baseURL。
      */
     protected string $testingBaseUrl = 'https://ccore.newebpay.com';
+
+    /**
+     * 是否開啟紀錄假資料模式
+     */
+    protected bool $recording = false;
+
+    /**
+     * 已紀錄的請求選項
+     *
+     * @var TestRequest[]
+     */
+    protected array $requests = [];
+
+    /**
+     * 已設定的假回傳資料
+     *
+     * @var Result[]
+     */
+    protected array $results = [];
 
     public function __construct(
         protected Crypto $crypto,
@@ -142,5 +167,109 @@ class Factory
     public function config(): array
     {
         return $this->config;
+    }
+
+    /**
+     * 設定假回傳資料
+     *
+     * @param  Result[]  $results
+     */
+    public function fake(array $results): void
+    {
+        $this->recording = true;
+
+        $this->results = $results;
+    }
+
+    /**
+     * 目前是否開啟紀錄假資料模式
+     */
+    public function recording(): bool
+    {
+        return $this->recording;
+    }
+
+    /**
+     * 紀錄請求選項，並回傳模擬資料
+     *
+     * @throws RuntimeException
+     */
+    public function record(string $resource, ?string $action, Options $options): ?Result
+    {
+        if (! $this->recording) {
+            return null;
+        }
+
+        $this->requests[] = new TestRequest(
+            $resource, $action, $options
+        );
+
+        /** @var Result|null $result */
+        $result = array_shift($this->results);
+
+        if (is_null($result)) {
+            throw new RuntimeException('No more fake results available.');
+        }
+
+        return $result;
+    }
+
+    /**
+     * 斷言已經送出指定的請求
+     *
+     * @throws ExpectationFailedException
+     */
+    public function assertSent(string $resource, string|callable|null $action, ?callable $callback = null): void
+    {
+        $resourceName = "[{$resource}".(is_string($action) ? "::{$action}" : '').']';
+
+        PHPUnit::assertTrue(
+            $this->sent($resource, $action, $callback) !== [],
+            "The expected {$resourceName} request was not sent."
+        );
+    }
+
+    /**
+     * 斷言沒有送出指定的請求
+     *
+     * @throws ExpectationFailedException
+     */
+    public function assertNotSent(string $resource, string|callable|null $action, ?callable $callback = null): void
+    {
+        $resourceName = "[{$resource}".(is_string($action) ? "::{$action}" : '').']';
+
+        PHPUnit::assertTrue(
+            $this->sent($resource, $action, $callback) === [],
+            "The unexpected {$resourceName} request was sent."
+        );
+    }
+
+    protected function sent(string $resource, string|callable|null $action, ?callable $callback): array
+    {
+        if (is_callable($action) && is_null($callback)) {
+            $callback = $action;
+            $action = null;
+        }
+
+        $requestOptions = $this->resourcesOf($resource, $action);
+
+        if ($requestOptions === []) {
+            return [];
+        }
+
+        $callback = $callback ?: fn (): bool => true;
+
+        return array_filter($requestOptions, fn (TestRequest $request) => $callback($request->options()));
+    }
+
+    /**
+     * @return TestRequest[]
+     */
+    protected function resourcesOf(string $resource, ?string $action): array
+    {
+        return array_filter($this->requests, function (TestRequest $request) use ($resource, $action): bool {
+            return $request->resource() === $resource
+                && (is_null($action) || $request->action() === $action);
+        });
     }
 }

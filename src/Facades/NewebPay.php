@@ -14,6 +14,11 @@ use Ycs77\NewebPay\Factory;
  * @method static \Ycs77\NewebPay\Resources\Period period()
  * @method static \Ycs77\NewebPay\Results\Period\CreateResult periodResult(\Illuminate\Http\Request $request)
  * @method static \Ycs77\NewebPay\Results\Period\NotifyResult periodNotify(\Illuminate\Http\Request $request)
+ * @method static void fake(\Ycs77\NewebPay\Results\Result[] $results)
+ * @method static bool recording()
+ * @method static \Ycs77\NewebPay\Results\Result|null record(string $resource, ?string $action, \Ycs77\NewebPay\Options\Options $options)
+ * @method static void assertSent(string $resource, string|callable|null $action, ?callable $callback = null)
+ * @method static void assertNotSent(string $resource, string|callable|null $action, ?callable $callback = null)
  *
  * @see Factory
  */

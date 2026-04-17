@@ -2,12 +2,15 @@
 
 namespace Ycs77\NewebPay\Builders\Period;
 
+use Ycs77\NewebPay\Attributes\Resource;
 use Ycs77\NewebPay\Builders\Builder;
 use Ycs77\NewebPay\Enums\PeriodStatus;
 use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Options\Period\AlterStatusOptions;
+use Ycs77\NewebPay\Resources\Period as PeriodResource;
 use Ycs77\NewebPay\Results\Period\AlterStatusResult;
 
+#[Resource(PeriodResource::class, 'alterStatus')]
 final class AlterStatusBuilder extends Builder
 {
     private AlterStatusOptions $options;
@@ -95,6 +98,10 @@ final class AlterStatusBuilder extends Builder
      */
     public function send(): AlterStatusResult
     {
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         $requestData = $this->toRequestData();
 
         $data = $this->sendRequest($requestData);

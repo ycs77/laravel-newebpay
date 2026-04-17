@@ -4,7 +4,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Facades\NewebPay;
+use Ycs77\NewebPay\Options\CreditCard\CaptureOptions;
 use Ycs77\NewebPay\Options\Options;
+use Ycs77\NewebPay\Resources\CreditCard;
 use Ycs77\NewebPay\Results\CreditCard\CaptureResult;
 
 use function Pest\Laravel\partialMock;
@@ -106,5 +108,69 @@ test('可以成功呼叫取消請款功能', function () {
         ->and($result->merchantId())->toBe('TestMerchantID1234')
         ->and($result->orderNo())->toBe('Order001')
         ->and($result->tradeNo())->toBe('23061500000000000')
+        ->and($result->amount())->toBe(1050);
+});
+
+test('信用卡請款 → 模擬請款交易', function () {
+    NewebPay::fake([
+        CaptureResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '請款成功',
+            'Result' => [
+                'MerchantID' => 'TestMerchantID1234',
+                'Amt' => 1050,
+                'TradeNo' => '23061500000000000',
+                'MerchantOrderNo' => 'Order001',
+            ],
+        ]),
+    ]);
+
+    $result = NewebPay::creditCard()
+        ->capture()
+        ->withOrder('Order001')
+        ->withAmount(1050)
+        ->send();
+
+    NewebPay::assertSent(CreditCard::class, 'capture', function (CaptureOptions $options) {
+        return $options->orderNo === 'Order001'
+            && $options->amount === 1050
+            && $options->reverse === false;
+    });
+
+    expect($result)->toBeInstanceOf(CaptureResult::class)
+        ->and($result->orderNo())->toBe('Order001')
+        ->and($result->tradeNo())->toBe('23061500000000000')
+        ->and($result->amount())->toBe(1050);
+});
+
+test('信用卡請款 → 模擬取消請款交易', function () {
+    NewebPay::fake([
+        CaptureResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '取消請款成功',
+            'Result' => [
+                'MerchantID' => 'TestMerchantID1234',
+                'Amt' => 1050,
+                'TradeNo' => '23061500000000000',
+                'MerchantOrderNo' => 'Order001',
+            ],
+        ]),
+    ]);
+
+    $result = NewebPay::creditCard()
+        ->capture()
+        ->withOrder('Order001')
+        ->withAmount(1050)
+        ->reverse()
+        ->send();
+
+    NewebPay::assertSent(CreditCard::class, 'capture', function (CaptureOptions $options) {
+        return $options->orderNo === 'Order001'
+            && $options->amount === 1050
+            && $options->reverse === true;
+    });
+
+    expect($result)->toBeInstanceOf(CaptureResult::class)
+        ->and($result->orderNo())->toBe('Order001')
         ->and($result->amount())->toBe(1050);
 });

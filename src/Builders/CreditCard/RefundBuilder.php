@@ -3,11 +3,14 @@
 namespace Ycs77\NewebPay\Builders\CreditCard;
 
 use InvalidArgumentException;
+use Ycs77\NewebPay\Attributes\Resource;
 use Ycs77\NewebPay\Builders\Builder;
 use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Options\CreditCard\RefundOptions;
+use Ycs77\NewebPay\Resources\CreditCard as CreditCardResource;
 use Ycs77\NewebPay\Results\CreditCard\RefundResult;
 
+#[Resource(CreditCardResource::class, 'refund')]
 final class RefundBuilder extends Builder
 {
     private RefundOptions $options;
@@ -89,6 +92,10 @@ final class RefundBuilder extends Builder
      */
     public function send(): RefundResult
     {
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         $requestData = $this->toRequestData();
 
         return new RefundResult($this->sendRequest($requestData));

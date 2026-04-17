@@ -2,12 +2,15 @@
 
 namespace Ycs77\NewebPay\Builders\Period;
 
+use Ycs77\NewebPay\Attributes\Resource;
 use Ycs77\NewebPay\Builders\Builder;
 use Ycs77\NewebPay\Enums\PeriodType;
 use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Options\Period\AlterOptions;
+use Ycs77\NewebPay\Resources\Period as PeriodResource;
 use Ycs77\NewebPay\Results\Period\AlterResult;
 
+#[Resource(PeriodResource::class, 'alter')]
 final class AlterBuilder extends Builder
 {
     private AlterOptions $options;
@@ -139,6 +142,10 @@ final class AlterBuilder extends Builder
      */
     public function send(): AlterResult
     {
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         $requestData = $this->toRequestData();
 
         $data = $this->sendRequest($requestData);

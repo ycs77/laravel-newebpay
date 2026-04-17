@@ -3,3 +3,6 @@ parameters:
 
     paths:
         - src
+
+    ignoreErrors:
+        - '#Method [a-zA-Z0-9\\]+::[a-zA-Z0-9]+\(\) should return [a-zA-Z0-9\\]+ but returns Ycs77\\NewebPay\\Results\\Result\.#'

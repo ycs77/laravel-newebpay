@@ -5,12 +5,15 @@ namespace Ycs77\NewebPay\Builders;
 use Illuminate\Http\Response;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
+use ReflectionClass;
+use Ycs77\NewebPay\Attributes\Resource;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Options;
+use Ycs77\NewebPay\Results\Result;
 
 abstract class Builder
 {
@@ -154,5 +157,26 @@ abstract class Builder
         $this->formRedirectTransporter = $formRedirectTransporter;
 
         return $this;
+    }
+
+    /**
+     * 紀錄請求選項，並回傳模擬資料
+     *
+     * @throws \RuntimeException
+     */
+    protected function record(): ?Result
+    {
+        $attributes = (new ReflectionClass($this))->getAttributes(Resource::class);
+
+        if (count($attributes) === 0) {
+            return null;
+        }
+
+        /** @var \Ycs77\NewebPay\Attributes\Resource $resource */
+        $resource = $attributes[0]->newInstance();
+
+        return $this->factory->record(
+            $resource->name, $resource->action, $this->getPreparedOptions()
+        );
     }
 }

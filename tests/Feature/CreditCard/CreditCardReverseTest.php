@@ -4,7 +4,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Facades\NewebPay;
+use Ycs77\NewebPay\Options\CreditCard\ReverseOptions;
 use Ycs77\NewebPay\Options\Options;
+use Ycs77\NewebPay\Resources\CreditCard;
 use Ycs77\NewebPay\Results\CreditCard\ReverseResult;
 
 use function Pest\Laravel\partialMock;
@@ -53,6 +55,38 @@ test('可以成功呼叫取消信用卡交易功能', function () {
 
     expect($result)->toBeInstanceOf(ReverseResult::class)
         ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->orderNo())->toBe('Order001')
+        ->and($result->tradeNo())->toBe('23061500000000000')
+        ->and($result->amount())->toBe(1050);
+});
+
+test('信用卡取消 → 模擬取消信用卡交易', function () {
+    NewebPay::fake([
+        ReverseResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '取消授權成功',
+            'Result' => [
+                'MerchantID' => 'TestMerchantID1234',
+                'Amt' => 1050,
+                'TradeNo' => '23061500000000000',
+                'MerchantOrderNo' => 'Order001',
+                'CheckCode' => '123456789',
+            ],
+        ]),
+    ]);
+
+    $result = NewebPay::creditCard()
+        ->reverse()
+        ->withOrder('Order001')
+        ->withAmount(1050)
+        ->send();
+
+    NewebPay::assertSent(CreditCard::class, 'reverse', function (ReverseOptions $options) {
+        return $options->orderNo === 'Order001'
+            && $options->amount === 1050;
+    });
+
+    expect($result)->toBeInstanceOf(ReverseResult::class)
         ->and($result->orderNo())->toBe('Order001')
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->amount())->toBe(1050);

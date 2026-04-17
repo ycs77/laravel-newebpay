@@ -14,6 +14,7 @@ beforeEach(function () {
 
     $this->factory = mock(Factory::class);
     $this->factory->allows('baseUrl')->andReturn('https://example.com');
+    $this->factory->allows('record')->andReturnNull();
 
     $this->config = [
         'merchant_id' => 'TestMerchantID1234',

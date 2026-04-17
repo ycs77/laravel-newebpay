@@ -3,12 +3,15 @@
 namespace Ycs77\NewebPay\Builders\Trade;
 
 use Carbon\Carbon;
+use Ycs77\NewebPay\Attributes\Resource;
 use Ycs77\NewebPay\Builders\Builder;
 use Ycs77\NewebPay\Exceptions\InvalidCheckCodeException;
 use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Options\Trade\QueryOptions;
+use Ycs77\NewebPay\Resources\PaymentQuery;
 use Ycs77\NewebPay\Results\Trade\QueryResult;
 
+#[Resource(PaymentQuery::class, 'query')]
 class QueryBuilder extends Builder
 {
     protected QueryOptions $options;
@@ -85,6 +88,10 @@ class QueryBuilder extends Builder
      */
     public function get(): QueryResult
     {
+        if ($result = $this->record()) {
+            return $result;
+        }
+
         $requestData = $this->toRequestData();
         $result = new QueryResult($this->sendRequest($requestData));
 
