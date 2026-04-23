@@ -973,7 +973,12 @@ dd($result->toArray()); // 查看回應資料
 
 ## 參考
 
-[NewebPay Payment API](https://www.newebpay.com/website/Page/content/download_api#1)
+[API文件下載 | 藍新金流服務平台](https://www.newebpay.com/website/Page/content/download_api#1)
+
+當前參考文件版本：
+
+- 線上交易─幕前支付技術串接手冊
+- 信用卡定期定額串接技術手冊
 
 ## 貢獻專案
 
