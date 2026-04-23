@@ -980,6 +980,10 @@ dd($result->toArray()); // 查看回應資料
 - 線上交易─幕前支付技術串接手冊
 - 信用卡定期定額串接技術手冊
 
+## 相關專案
+
+- [agriweather/laravel-ezpay-invoice](https://github.com/Agriweather/laravel-ezpay-invoice)：Laravel 的 ezPay 電子發票整合套件
+
 ## 貢獻專案
 
 歡迎參與貢獻專案，請參考 [貢獻指南](CONTRIBUTING.md) 文件。
