@@ -41,7 +41,9 @@
   - [接收委託結果](#接收委託結果)
   - [修改委託狀態](#修改委託狀態)
   - [修改委託內容](#修改委託內容)
+- [錯誤處理](#錯誤處理)
 - [單元測試](#單元測試)
+- [除錯支援](#除錯支援)
 - [參考](#參考)
 - [贊助](#贊助)
 - [License](#license)
@@ -802,6 +804,32 @@ $result->periodNo()      // 委託單號：'20200101000000001'
 $result->periodAmount()  // 新的委託金額：1000
 ```
 
+## 錯誤處理
+
+當藍新金流 API 回傳失敗的回應時，會拋出 `NewebPayException` 例外，可以取得藍新金流的錯誤代碼和錯誤訊息進行進一步處理：
+
+```php
+use Ycs77\NewebPay\Exceptions\NewebPayException;
+
+try {
+    $result = NewebPay::query()
+        ->withOrder('Order001')
+        ->withAmount(1050)
+        ->get();
+} catch (NewebPayException $e) {
+    $status = $e->getApiStatus(); // 'MPG01001'
+    $message = $e->getApiMessage(); // '商店代號不存在'
+
+    // 記錄錯誤日誌...
+    logger()->error($e->getMessage(), $e->context());
+
+    // 顯示錯誤訊息給使用者...
+    return response()->json([
+        'error' => $message,
+    ], 400);
+}
+```
+
 ## 單元測試
 
 在單元測試中，可以使用 `NewebPay::fake()` 模擬 API 回應，這邊要模擬交易查詢回應，因此使用 `QueryResult` 來建立模擬回應資料：
@@ -920,6 +948,28 @@ test('can capture credit card', function () {
 
 > [!WARNING]
 > 不支援模擬 MPG 多功能付款的 `submit()` 方法，因為該方法是直接產生跳轉表單資料，實際上不會發送 API 請求。
+
+## 除錯支援
+
+當發生錯誤時，請協助提供請求與回應的除錯資料，以便更快速地定位問題：
+
+```php
+use Ycs77\NewebPay\Options\Options;
+
+$result = NewebPay::query()
+    ->withOrder('Order001')
+    ->withAmount(1050)
+    ->onPreparedOptions(function (Options $options) {
+        dd($options->toArray()); // 查看請求參數資料
+    })
+    ->get();
+
+dd($result->toArray()); // 查看回應資料
+```
+
+- 使用 `$options->toArray()` 方法可檢視發送至 API 的請求資料
+- 透過 `$result->toArray()` 可檢視 API 的回應資料內容
+- 當發生錯誤時，請在提交 issue 時一併提供請求與回應的除錯資料
 
 ## 參考
 
