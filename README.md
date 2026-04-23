@@ -41,6 +41,7 @@
   - [接收委託結果](#接收委託結果)
   - [修改委託狀態](#修改委託狀態)
   - [修改委託內容](#修改委託內容)
+- [單元測試](#單元測試)
 - [參考](#參考)
 - [贊助](#贊助)
 - [License](#license)
@@ -800,6 +801,125 @@ $result->orderNo()       // 商店訂單編號：'Order001'
 $result->periodNo()      // 委託單號：'20200101000000001'
 $result->periodAmount()  // 新的委託金額：1000
 ```
+
+## 單元測試
+
+在單元測試中，可以使用 `NewebPay::fake()` 模擬 API 回應，這邊要模擬交易查詢回應，因此使用 `QueryResult` 來建立模擬回應資料：
+
+```php
+<?php
+
+use Ycs77\NewebPay\Facades\NewebPay;
+use Ycs77\NewebPay\Options\Trade\QueryOptions;
+use Ycs77\NewebPay\Resources\PaymentQuery;
+use Ycs77\NewebPay\Results\Trade\QueryResult;
+
+test('can query trade', function () {
+    // 模擬交易查詢 API 回應
+    NewebPay::fake([
+        // 模擬交易查詢回應
+        // 需要使用實際呼叫的 Result 類別來建立模擬回應
+        //
+        // 因為下面使用 NewebPay::query()->get() 來查詢交易
+        // 因此模擬的回應類別需要使用 QueryResult 類別
+        QueryResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '查詢成功',
+            'Result' => [
+                'MerchantID' => 'TestMerchantID1234',
+                'Amt' => 1050,
+                'TradeNo' => '23061500000000000',
+                'MerchantOrderNo' => 'Order001',
+                'TradeStatus' => 1,
+                'PaymentType' => 'CREDIT',
+                'CreateTime' => '2023-01-01 00:00:00',
+                'PayTime' => '2023-01-01 00:00:00',
+                'CheckCode' => '123456789',
+                'FundTime' => '2023-01-01',
+                'RespondCode' => '00',
+                'Auth' => '222111',
+                'ECI' => '',
+                'CloseAmt' => 120,
+                'CloseStatus' => 0,
+                'BackBalance' => 120,
+                'BackStatus' => 0,
+                'RespondMsg' => '授權測試',
+                'Inst' => 0,
+                'InstFirst' => 0,
+                'InstEach' => 0,
+                'PaymentMethod' => 'CREDIT',
+                'Card6No' => '400022',
+                'Card4No' => '1111',
+                'AuthBank' => 'CTBC',
+            ],
+        ]),
+    ]);
+
+    // 測試發送交易查詢請求
+    $result = NewebPay::query()
+        ->withOrder('Order001')
+        ->withAmount(1050)
+        ->get();
+
+    // 斷言發送參數
+    //
+    // 因為上面是呼叫 NewebPay::query()
+    //
+    // 因此斷言的資源類別和方法名稱分別是：
+    // - PaymentQuery::class 是 query() 方法回傳的資源類別
+    // - 'query' 是呼叫的方法名稱
+    NewebPay::assertSent(PaymentQuery::class, 'query', function (QueryOptions $options) {
+        return $options->orderNo === 'Order001'
+            && $options->amount === 1050;
+    });
+
+    expect($result->orderNo())->toBe('Order001')
+        ->and($result->tradeNo())->toBe('23061500000000000')
+        ->and($result->amount())->toBe(1050);
+});
+```
+
+信用卡請款的模擬範例，因為呼叫的是 `NewebPay::creditCard()->capture()`，因此模擬回應使用 `CaptureResult`，斷言的資源類別則是 `CreditCard`：
+
+```php
+use Ycs77\NewebPay\Facades\NewebPay;
+use Ycs77\NewebPay\Options\CreditCard\CaptureOptions;
+use Ycs77\NewebPay\Resources\CreditCard;
+use Ycs77\NewebPay\Results\CreditCard\CaptureResult;
+
+test('can capture credit card', function () {
+    NewebPay::fake([
+        CaptureResult::make([
+            'Status' => 'SUCCESS',
+            'Message' => '請款成功',
+            'Result' => [
+                'MerchantID' => 'TestMerchantID1234',
+                'Amt' => 1050,
+                'TradeNo' => '23061500000000000',
+                'MerchantOrderNo' => 'Order001',
+            ],
+        ]),
+    ]);
+
+    $result = NewebPay::creditCard()
+        ->capture()
+        ->withOrder('Order001')
+        ->withAmount(1050)
+        ->send();
+
+    NewebPay::assertSent(CreditCard::class, 'capture', function (CaptureOptions $options) {
+        return $options->orderNo === 'Order001'
+            && $options->amount === 1050
+            && $options->reverse === false;
+    });
+
+    expect($result->orderNo())->toBe('Order001')
+        ->and($result->amount())->toBe(1050);
+});
+```
+
+> [!WARNING]
+> 不支援模擬 MPG 多功能付款的 `submit()` 方法，因為該方法是直接產生跳轉表單資料，實際上不會發送 API 請求。
 
 ## 參考
 
