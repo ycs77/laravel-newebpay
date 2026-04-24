@@ -1,6 +1,7 @@
 {
     "preset": "laravel",
     "rules": {
+        "fully_qualified_strict_types": false,
         "phpdoc_align": false
     }
 }
