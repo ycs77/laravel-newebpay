@@ -4,7 +4,6 @@ namespace Ycs77\NewebPay\Callback\Period;
 
 use Illuminate\Http\Request;
 use Ycs77\NewebPay\Crypto\Crypto;
-use Ycs77\NewebPay\Exceptions\DecryptException;
 use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Results\Period\NotifyResult;
 
@@ -21,7 +20,7 @@ class NotifyCallbackResult
     /**
      * 解析並回傳每期授權通知結果。
      *
-     * @throws DecryptException
+     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
      */
     public function result(Request $request): NotifyResult
     {

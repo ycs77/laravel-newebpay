@@ -9,7 +9,6 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
-use Ycs77\NewebPay\Enums\NTCBLocate;
 use Ycs77\NewebPay\Options\Options;
 
 final class MPGOptions extends Options
@@ -117,7 +116,7 @@ final class MPGOptions extends Options
         }
         if ($this->paymentMethods['NTCB']['enabled']) {
             $tradeData['NTCB'] = 1;
-            /** @see NTCBLocate */
+            /** @see \Ycs77\NewebPay\Enums\NTCBLocate */
             $tradeData['NTCBLocate'] = $this->paymentMethods['NTCB']['locate']->value;
             $tradeData['NTCBStartDate'] = $this->paymentMethods['NTCB']['start_date'];
             $tradeData['NTCBEndDate'] = $this->paymentMethods['NTCB']['end_date'];

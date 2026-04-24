@@ -4,14 +4,12 @@ namespace Ycs77\NewebPay;
 
 use Illuminate\Http\Request;
 use PHPUnit\Framework\Assert as PHPUnit;
-use PHPUnit\Framework\ExpectationFailedException;
 use RuntimeException;
 use Ycs77\NewebPay\Callback\Period\CreateCallbackResult;
 use Ycs77\NewebPay\Callback\Period\NotifyCallbackResult;
 use Ycs77\NewebPay\Contracts\FormRedirectTransporter;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
-use Ycs77\NewebPay\Exceptions\DecryptException;
 use Ycs77\NewebPay\Options\Options;
 use Ycs77\NewebPay\Resources\CreditCard;
 use Ycs77\NewebPay\Resources\Customer;
@@ -82,7 +80,7 @@ class Factory
     /**
      * 解析並回傳交易結果。
      *
-     * @throws DecryptException
+     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
      */
     public function result(Request $request): MPGPaymentResult
     {
@@ -94,7 +92,7 @@ class Factory
     /**
      * 解析並回傳付款取號結果。
      *
-     * @throws DecryptException
+     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
      */
     public function customer(Request $request): CustomerResult
     {
@@ -136,7 +134,7 @@ class Factory
     /**
      * 解析並回傳定期定額委託結果。
      *
-     * @throws DecryptException
+     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
      */
     public function periodResult(Request $request): CreateResult
     {
@@ -148,7 +146,7 @@ class Factory
     /**
      * 解析並回傳每期授權通知結果。
      *
-     * @throws DecryptException
+     * @throws \Ycs77\NewebPay\Exceptions\DecryptException
      */
     public function periodNotify(Request $request): NotifyResult
     {
@@ -217,7 +215,7 @@ class Factory
     /**
      * 斷言已經送出指定的請求
      *
-     * @throws ExpectationFailedException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function assertSent(string $resource, string|callable|null $action, ?callable $callback = null): void
     {
@@ -232,7 +230,7 @@ class Factory
     /**
      * 斷言沒有送出指定的請求
      *
-     * @throws ExpectationFailedException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function assertNotSent(string $resource, string|callable|null $action, ?callable $callback = null): void
     {

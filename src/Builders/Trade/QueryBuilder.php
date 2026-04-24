@@ -5,8 +5,6 @@ namespace Ycs77\NewebPay\Builders\Trade;
 use Carbon\Carbon;
 use Ycs77\NewebPay\Attributes\Resource;
 use Ycs77\NewebPay\Builders\Builder;
-use Ycs77\NewebPay\Exceptions\InvalidCheckCodeException;
-use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Options\Trade\QueryOptions;
 use Ycs77\NewebPay\Resources\PaymentQuery;
 use Ycs77\NewebPay\Results\Trade\QueryResult;
@@ -83,8 +81,8 @@ class QueryBuilder extends Builder
     /**
      * 查詢交易結果
      *
-     * @throws NewebPayException
-     * @throws InvalidCheckCodeException
+     * @throws \Ycs77\NewebPay\Exceptions\NewebPayException
+     * @throws \Ycs77\NewebPay\Exceptions\InvalidCheckCodeException
      */
     public function get(): QueryResult
     {

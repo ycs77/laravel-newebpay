@@ -3,7 +3,6 @@
 namespace Ycs77\NewebPay\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Ycs77\NewebPay\Factory;
 
 /**
  * @method static \Ycs77\NewebPay\Resources\Payment payment()
@@ -20,7 +19,7 @@ use Ycs77\NewebPay\Factory;
  * @method static void assertSent(string $resource, string|callable|null $action, ?callable $callback = null)
  * @method static void assertNotSent(string $resource, string|callable|null $action, ?callable $callback = null)
  *
- * @see Factory
+ * @see \Ycs77\NewebPay\Factory
  */
 class NewebPay extends Facade
 {

@@ -8,7 +8,7 @@ use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Factory;
 
 /**
- * @mixin QueryBuilder
+ * @mixin \Ycs77\NewebPay\Builders\Trade\QueryBuilder
  */
 final class PaymentQuery
 {

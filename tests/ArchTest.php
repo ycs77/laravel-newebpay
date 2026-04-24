@@ -52,7 +52,6 @@ if (function_exists('arch')) {
         ->expect('Ycs77\NewebPay\Facades')
         ->toOnlyUse([
             'Illuminate\Support\Facades\Facade',
-            'Ycs77\NewebPay\Factory',
         ]);
 
     arch('options')

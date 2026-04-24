@@ -10,7 +10,7 @@ use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Url\WithSessionIdKey;
 
 /**
- * @mixin MPGBuilder
+ * @mixin \Ycs77\NewebPay\Builders\Trade\MPGBuilder
  */
 final class Payment
 {

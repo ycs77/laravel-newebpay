@@ -5,7 +5,6 @@ namespace Ycs77\NewebPay\Builders\CreditCard;
 use InvalidArgumentException;
 use Ycs77\NewebPay\Attributes\Resource;
 use Ycs77\NewebPay\Builders\Builder;
-use Ycs77\NewebPay\Exceptions\NewebPayException;
 use Ycs77\NewebPay\Options\CreditCard\CaptureOptions;
 use Ycs77\NewebPay\Resources\CreditCard as CreditCardResource;
 use Ycs77\NewebPay\Results\CreditCard\CaptureResult;
@@ -88,7 +87,7 @@ final class CaptureBuilder extends Builder
     /**
      * 送出信用卡請款請求
      *
-     * @throws NewebPayException
+     * @throws \Ycs77\NewebPay\Exceptions\NewebPayException
      */
     public function send(): CaptureResult
     {

@@ -3,7 +3,6 @@
 namespace Ycs77\NewebPay\Results\Trade;
 
 use Carbon\Carbon;
-use Carbon\Exceptions\InvalidFormatException;
 use Ycs77\NewebPay\Contracts\CheckCodeVerifiable;
 use Ycs77\NewebPay\Results\BaseResult;
 use Ycs77\NewebPay\Results\Concerns;
@@ -58,7 +57,7 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
     /**
      * 交易建立時間
      *
-     * @throws InvalidFormatException
+     * @throws \Carbon\Exceptions\InvalidFormatException
      */
     public function createTime(): Carbon
     {
@@ -68,7 +67,7 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
     /**
      * 支付完成時間
      *
-     * @throws InvalidFormatException
+     * @throws \Carbon\Exceptions\InvalidFormatException
      */
     public function payTime(): ?Carbon
     {
