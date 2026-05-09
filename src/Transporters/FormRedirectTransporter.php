@@ -19,15 +19,55 @@ class FormRedirectTransporter implements FormRedirectTransporterContract
 
         return response(<<<HTML
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
     <head>
         <meta charset="utf-8" />
+        <title>正在前往金流頁面</title>
+        <style>
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                margin: 0;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
+                color: #555;
+                background: #fafafa;
+            }
+            .loading {
+                text-align: center;
+            }
+            .spinner {
+                width: 40px;
+                height: 40px;
+                margin: 0 auto 16px;
+                border: 4px solid #eee;
+                border-top-color: #888;
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+            .loading p {
+                margin: 0;
+                font-size: 15px;
+                letter-spacing: 0.05em;
+            }
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
     </head>
 
     <body>
-        <form id="order-form" action="{$url}" method="post">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>正在前往金流頁面，請稍候…</p>
+        </div>
+
+        <form id="order-form" action="{$url}" method="post" hidden>
             {$inputFields}
-            <input type="submit">
+            <noscript><input type="submit" value="若未自動跳轉，請點此繼續"></noscript>
         </form>
 
         <script>document.getElementById("order-form").submit();</script>
