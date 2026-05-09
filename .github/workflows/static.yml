@@ -13,14 +13,14 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
-        php: [8.4]
-        laravel: [12.*]
+        php: [8.5]
+        laravel: [13.*]
 
     name: Static tests
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
