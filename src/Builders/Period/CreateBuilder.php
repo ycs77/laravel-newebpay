@@ -11,6 +11,7 @@ use Ycs77\NewebPay\Enums\PeriodStartType;
 use Ycs77\NewebPay\Enums\PeriodType;
 use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Period\CreateOptions;
+use Ycs77\NewebPay\Url\PrependAppUrl;
 use Ycs77\NewebPay\Url\WithSessionIdKey;
 
 final class CreateBuilder extends Builder
@@ -22,6 +23,7 @@ final class CreateBuilder extends Builder
         Crypto $crypto,
         HttpTransporter $httpTransporter,
         private readonly WithSessionIdKey $withSessionIdKey,
+        private readonly PrependAppUrl $prependAppUrl,
         array $config
     ) {
         parent::__construct($factory, $crypto, $httpTransporter, $config);
@@ -201,7 +203,9 @@ final class CreateBuilder extends Builder
      */
     public function withReturnUrl(string $url): self
     {
-        $this->options->returnURL = $this->withSessionIdKey->handle($url);
+        $this->options->returnURL = $this->withSessionIdKey->handle(
+            $this->prependAppUrl->handle($url)
+        );
 
         return $this;
     }
@@ -211,7 +215,7 @@ final class CreateBuilder extends Builder
      */
     public function withNotifyUrl(string $url): self
     {
-        $this->options->notifyURL = $url;
+        $this->options->notifyURL = $this->prependAppUrl->handle($url);
 
         return $this;
     }
@@ -293,7 +297,7 @@ final class CreateBuilder extends Builder
      */
     public function withBackUrl(string $url): self
     {
-        $this->options->backURL = $url;
+        $this->options->backURL = $this->prependAppUrl->handle($url);
 
         return $this;
     }

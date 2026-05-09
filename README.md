@@ -132,12 +132,12 @@ use Ycs77\NewebPay\Facades\NewebPay;
 
 Route::post('/pay', function () {
     return NewebPay::payment()
-        ->withOrder('Vanespl_ec_'.time())                    // 訂單編號
-        ->withAmount(120)                                    // 交易金額
-        ->withItemDescription('我的商品')                     // 商品名稱
-        ->withEmail('test@example.com')                      // 付款人信箱
-        ->withReturnUrl(config('app.url').'/pay/callback')   // 前景回傳網址 (Callback)
-        ->withNotifyUrl(config('app.url').'/pay/notify')     // 背景通知網址 (Notify)
+        ->withOrder('Vanespl_ec_'.time())  // 訂單編號
+        ->withAmount(120)                  // 交易金額
+        ->withItemDescription('我的商品')   // 商品名稱
+        ->withEmail('test@example.com')    // 付款人信箱
+        ->withReturnUrl('/pay/callback')   // 前景回傳網址 (Callback)
+        ->withNotifyUrl('/pay/notify')     // 背景通知網址 (Notify)
         ->submit();
 });
 ```
@@ -219,12 +219,14 @@ NewebPay::payment()
 ```php
 NewebPay::payment()
     ...
-    ->withReturnUrl(config('app.url').'/pay/callback')      // 前景回傳網址 (Callback)
-    ->withNotifyUrl(config('app.url').'/pay/notify')        // 背景通知網址 (Notify)
-    ->withCustomerUrl(config('app.url').'/pay/customer')    // 商店取號網址
-    ->withClientBackUrl(config('app.url').'/pay/back')      // 返回按鈕網址
+    ->withReturnUrl('/pay/callback')      // 前景回傳網址 (Callback)
+    ->withNotifyUrl('/pay/notify')        // 背景通知網址 (Notify)
+    ->withCustomerUrl('/pay/customer')    // 商店取號網址
+    ->withClientBackUrl('/pay/back')      // 返回按鈕網址
     ->submit();
 ```
+
+> **自動補全網址**：若傳入的字串不是完整 URL（例如 `/pay/callback`），套件會自動以 `config('app.url')` 作為前綴補全。若傳入完整 URL（例如 `https://example.com/callback`），則直接使用不做修改。
 
 **付款方式**
 
@@ -555,14 +557,14 @@ use Ycs77\NewebPay\Facades\NewebPay;
 Route::post('/subscribe', function () {
     return NewebPay::period()
         ->create()
-        ->withOrder('Order'.time())                                   // 訂單編號
-        ->withAmount(120)                                             // 交易金額
-        ->withItemDescription('我的訂閱制商品')                        // 商品名稱
-        ->withEmail('test@example.com')                               // 付款人信箱
-        ->withReturnUrl(config('app.url').'/pay/period/callback')     // 前景回傳網址 (Callback)
-        ->withNotifyUrl(config('app.url').'/pay/period/notify')       // 背景通知網址 (Notify)
-        ->everyFewDays(2)                                             // 每隔 2 天授權一次
-        ->times(3)                                                    // 共授權 3 次
+        ->withOrder('Order'.time())              // 訂單編號
+        ->withAmount(120)                        // 交易金額
+        ->withItemDescription('我的訂閱制商品')   // 商品名稱
+        ->withEmail('test@example.com')          // 付款人信箱
+        ->withReturnUrl('/pay/period/callback')  // 前景回傳網址 (Callback)
+        ->withNotifyUrl('/pay/period/notify')    // 背景通知網址 (Notify)
+        ->everyFewDays(2)                        // 每隔 2 天授權一次
+        ->times(3)                               // 共授權 3 次
         ->submit();
 });
 ```

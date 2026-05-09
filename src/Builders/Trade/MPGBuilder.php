@@ -14,6 +14,7 @@ use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Trade\MPGOptions;
+use Ycs77\NewebPay\Url\PrependAppUrl;
 use Ycs77\NewebPay\Url\WithSessionIdKey;
 
 final class MPGBuilder extends Builder
@@ -25,6 +26,7 @@ final class MPGBuilder extends Builder
         Crypto $crypto,
         HttpTransporter $httpTransporter,
         private readonly WithSessionIdKey $withSessionIdKey,
+        private readonly PrependAppUrl $prependAppUrl,
         array $config
     ) {
         parent::__construct($factory, $crypto, $httpTransporter, $config);
@@ -141,7 +143,9 @@ final class MPGBuilder extends Builder
      */
     public function withReturnUrl(string $url): self
     {
-        $this->options->returnURL = $this->withSessionIdKey->handle($url);
+        $this->options->returnURL = $this->withSessionIdKey->handle(
+            $this->prependAppUrl->handle($url)
+        );
 
         return $this;
     }
@@ -155,7 +159,7 @@ final class MPGBuilder extends Builder
      */
     public function withNotifyUrl(string $url): self
     {
-        $this->options->notifyURL = $url;
+        $this->options->notifyURL = $this->prependAppUrl->handle($url);
 
         return $this;
     }
@@ -167,7 +171,9 @@ final class MPGBuilder extends Builder
      */
     public function withCustomerUrl(string $url): self
     {
-        $this->options->customerURL = $this->withSessionIdKey->handle($url);
+        $this->options->customerURL = $this->withSessionIdKey->handle(
+            $this->prependAppUrl->handle($url)
+        );
 
         return $this;
     }
@@ -179,7 +185,7 @@ final class MPGBuilder extends Builder
      */
     public function withClientBackUrl(string $url): self
     {
-        $this->options->clientBackURL = $url;
+        $this->options->clientBackURL = $this->prependAppUrl->handle($url);
 
         return $this;
     }

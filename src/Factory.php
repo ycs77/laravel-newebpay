@@ -23,6 +23,7 @@ use Ycs77\NewebPay\Results\Result;
 use Ycs77\NewebPay\Results\Trade\CustomerResult;
 use Ycs77\NewebPay\Results\Trade\PaymentResult as MPGPaymentResult;
 use Ycs77\NewebPay\Testing\TestRequest;
+use Ycs77\NewebPay\Url\PrependAppUrl;
 use Ycs77\NewebPay\Url\WithSessionIdKey;
 
 class Factory
@@ -61,6 +62,7 @@ class Factory
         protected FormRedirectTransporter $formRedirectTransporter,
         protected HttpTransporter $httpTransporter,
         protected WithSessionIdKey $withSessionIdKey,
+        protected PrependAppUrl $prependAppUrl,
         protected array $config
     ) {
         //
@@ -73,7 +75,7 @@ class Factory
     public function payment(): Payment
     {
         return new Payment(
-            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter, $this->withSessionIdKey
+            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter, $this->withSessionIdKey, $this->prependAppUrl
         );
     }
 
@@ -127,7 +129,7 @@ class Factory
     public function period(): Period
     {
         return new Period(
-            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter, $this->withSessionIdKey
+            $this, $this->crypto, $this->httpTransporter, $this->formRedirectTransporter, $this->withSessionIdKey, $this->prependAppUrl
         );
     }
 

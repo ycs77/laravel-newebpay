@@ -9,6 +9,7 @@ use Ycs77\NewebPay\Contracts\HttpTransporter as HttpTransporterContract;
 use Ycs77\NewebPay\Crypto\Crypto;
 use Ycs77\NewebPay\Transporters\FormRedirectTransporter;
 use Ycs77\NewebPay\Transporters\HttpTransporter;
+use Ycs77\NewebPay\Url\PrependAppUrl;
 use Ycs77\NewebPay\Url\WithSessionIdKey;
 
 class NewebPayServiceProvider extends ServiceProvider
@@ -38,6 +39,7 @@ class NewebPayServiceProvider extends ServiceProvider
                 $app->make(FormRedirectTransporterContract::class),
                 $app->make(HttpTransporterContract::class),
                 $app->make(WithSessionIdKey::class),
+                $app->make(PrependAppUrl::class),
                 $app->make('config')->get('newebpay')
             );
         });
