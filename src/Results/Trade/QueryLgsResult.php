@@ -9,7 +9,7 @@ class QueryLgsResult extends Result
     /**
      * 超商門市編號
      */
-    public function storeCode()
+    public function storeCode(): string
     {
         return $this->data['StoreCode'];
     }
@@ -17,7 +17,7 @@ class QueryLgsResult extends Result
     /**
      * 取貨門市中文名稱
      */
-    public function storeName()
+    public function storeName(): string
     {
         return $this->data['StoreName'];
     }
@@ -30,7 +30,7 @@ class QueryLgsResult extends Result
      * * **萊爾富**
      * * **OK mart**
      */
-    public function storeType()
+    public function storeType(): string
     {
         return $this->data['StoreType'];
     }
@@ -38,7 +38,7 @@ class QueryLgsResult extends Result
     /**
      * 物流訂單編號
      */
-    public function lgsNo()
+    public function lgsNo(): string
     {
         return $this->data['LgsNo'];
     }
@@ -49,7 +49,7 @@ class QueryLgsResult extends Result
      * * **B2C**: 大宗寄倉
      * * **C2C**: 店到店
      */
-    public function lgsType()
+    public function lgsType(): string
     {
         return $this->data['LgsType'];
     }

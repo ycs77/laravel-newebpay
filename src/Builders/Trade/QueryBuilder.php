@@ -34,7 +34,7 @@ class QueryBuilder extends Builder
     /**
      * 透過訂單編號查詢 (需帶入 訂單編號 + 訂單金額 查詢)
      */
-    public function withOrder(string $orderNo)
+    public function withOrder(string $orderNo): self
     {
         $this->options->orderNo = $orderNo;
 
@@ -44,7 +44,7 @@ class QueryBuilder extends Builder
     /**
      * 透過訂單金額查詢 (需帶入 訂單編號 + 訂單金額 查詢)
      */
-    public function withAmount(int $amount)
+    public function withAmount(int $amount): self
     {
         $this->options->amount = $amount;
 
@@ -59,7 +59,7 @@ class QueryBuilder extends Builder
      * 若為複合式商店(MS5 開頭)，此欄位為必填，且要固定填入："Composite"。
      * 若沒有帶[Gateway]或是帶入其他參數值，則查詢一般商店代號。
      */
-    public function withGateway(string $gateway)
+    public function withGateway(string $gateway): self
     {
         $this->options->gateway = $gateway;
 
@@ -71,7 +71,7 @@ class QueryBuilder extends Builder
      *
      * 若為複合式商店(MS5 開頭)，此欄位為必填。
      */
-    public function forCompositeStore()
+    public function forCompositeStore(): self
     {
         $this->withGateway('Composite');
 

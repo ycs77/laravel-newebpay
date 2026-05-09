@@ -23,7 +23,7 @@ class EzPayResult extends Result
     /**
      * 確認這筆交易是來自 ezPay 的交易
      */
-    public function isEzPay()
+    public function isEzPay(): bool
     {
         return is_string($this->channelId()) && in_array($this->channelId(), array_keys($this->channels));
     }

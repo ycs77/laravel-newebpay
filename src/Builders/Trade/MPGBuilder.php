@@ -267,7 +267,7 @@ final class MPGBuilder extends Builder
      * - **CVSCOM::NOT_PAY_AND_PAY** 啟用超商取貨不付款 及 超商取貨付款
      * - **CVSCOM::NONE**            不開啟
      */
-    public function withLogisticsPayment(CVSCOM $cvscom)
+    public function withLogisticsPayment(CVSCOM $cvscom): self
     {
         $this->options->cvscom = $cvscom;
 
@@ -286,7 +286,7 @@ final class MPGBuilder extends Builder
      * 2. 若商店設定中未啟用［B2C 大宗寄倉］，則系統將會啟用［C2C 店到店］。
      * 3. 若商店設定中，［B2C 大宗寄倉］與［C2C 店到店］皆未啟用，則支付頁面中將不會出現物流選項。
      */
-    public function withLogisticsType(LgsType $lgsType)
+    public function withLogisticsType(LgsType $lgsType): self
     {
         $this->options->lgsType = $lgsType;
 

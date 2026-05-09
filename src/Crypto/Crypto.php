@@ -69,7 +69,7 @@ class Crypto
     /**
      * 使用 SHA256 加密
      */
-    public function hashBySHA(string $value)
+    public function hashBySHA(string $value): string
     {
         $value = 'HashKey='.$this->hashKey.'&'.$value.'&HashIV='.$this->hashIV;
 
