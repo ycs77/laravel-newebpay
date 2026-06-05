@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay\Crypto;
 
+use JsonException;
 use Ycs77\NewebPay\Contracts\CheckCodeVerifiable;
 use Ycs77\NewebPay\Exceptions\DecryptException;
 use Ycs77\NewebPay\Exceptions\EncryptException;
@@ -57,13 +58,13 @@ class Crypto
             throw new DecryptException('解密錯誤');
         }
 
-        $resultStr = $this->removePadding($value);
+        $jsonStr = $this->removePadding($value);
 
-        $result = [];
-
-        parse_str($resultStr, $result);
-
-        return $result;
+        try {
+            return json_decode($jsonStr, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new DecryptException('解密錯誤', previous: $e);
+        }
     }
 
     /**
