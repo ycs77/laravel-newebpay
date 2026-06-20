@@ -41,7 +41,7 @@ beforeEach(function () {
     $this->httpTransporter->allows('send')->andReturn($this->response);
 });
 
-test('可以成功修改信用卡定期定額委託狀態', function () {
+test('AlterStatusBuilder → 修改委託狀態', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.0',
@@ -63,7 +63,7 @@ test('可以成功修改信用卡定期定額委託狀態', function () {
     expect($result)->toBeInstanceOf(AlterStatusResult::class);
 });
 
-test('可以暫停信用卡定期定額委託', function () {
+test('AlterStatusBuilder → 暫停委託', function () {
     $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
@@ -76,7 +76,7 @@ test('可以暫停信用卡定期定額委託', function () {
     expect($result)->toBeInstanceOf(AlterStatusResult::class);
 });
 
-test('可以重啟信用卡定期定額委託', function () {
+test('AlterStatusBuilder → 重啟委託', function () {
     $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
@@ -89,7 +89,7 @@ test('可以重啟信用卡定期定額委託', function () {
     expect($result)->toBeInstanceOf(AlterStatusResult::class);
 });
 
-test('可以終止信用卡定期定額委託', function () {
+test('AlterStatusBuilder → 終止委託', function () {
     $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')

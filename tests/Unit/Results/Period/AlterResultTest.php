@@ -3,7 +3,7 @@
 use Ycs77\NewebPay\Enums\PeriodType;
 use Ycs77\NewebPay\Results\Period\AlterResult;
 
-test('可以解析修改委託金額結果', function () {
+test('AlterResult → 解析修改委託金額', function () {
     $data = [
         'Period' => [
             'Status' => 'SUCCESS',

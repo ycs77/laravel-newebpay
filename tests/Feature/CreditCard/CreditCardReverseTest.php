@@ -11,7 +11,7 @@ use Ycs77\NewebPay\Results\CreditCard\ReverseResult;
 
 use function Pest\Laravel\partialMock;
 
-test('可以成功呼叫取消信用卡交易功能', function () {
+test('信用卡取消交易 → 成功取消', function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
 
     $expectedOptionsData = [
@@ -60,7 +60,7 @@ test('可以成功呼叫取消信用卡交易功能', function () {
         ->and($result->amount())->toBe(1050);
 });
 
-test('信用卡取消 → 模擬取消信用卡交易', function () {
+test('信用卡取消交易 → 模擬取消交易', function () {
     NewebPay::fake([
         ReverseResult::make([
             'Status' => 'SUCCESS',

@@ -2,7 +2,7 @@
 
 use Ycs77\NewebPay\Results\Period\NotifyResult;
 
-test('可以解析定期定額每期授權通知結果', function () {
+test('NotifyResult → 解析每期授權通知', function () {
     $data = [
         'Period' => [
             'Status' => 'SUCCESS',

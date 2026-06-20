@@ -11,7 +11,7 @@ use Ycs77\NewebPay\Results\CreditCard\RefundResult;
 
 use function Pest\Laravel\partialMock;
 
-test('可以成功呼叫信用卡退款功能', function () {
+test('信用卡退款 → 成功退款', function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
 
     $expectedOptionsData = [
@@ -60,7 +60,7 @@ test('可以成功呼叫信用卡退款功能', function () {
         ->and($result->amount())->toBe(1050);
 });
 
-test('可以成功呼叫取消退款功能', function () {
+test('信用卡退款 → 成功取消退款', function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
 
     $expectedOptionsData = [

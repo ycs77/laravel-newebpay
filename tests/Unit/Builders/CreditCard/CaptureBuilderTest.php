@@ -36,7 +36,7 @@ beforeEach(function () {
     $this->httpTransporter->allows('send')->andReturn($this->response);
 });
 
-test('可以使用商店訂單編號請款', function () {
+test('CaptureBuilder → 使用商店訂單編號', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.1',
@@ -59,7 +59,7 @@ test('可以使用商店訂單編號請款', function () {
     expect($result)->toBeInstanceOf(CaptureResult::class);
 });
 
-test('可以使用藍新金流交易序號請款', function () {
+test('CaptureBuilder → 使用藍新金流交易序號', function () {
     $expectedOptionsData = [
         'MerchantID' => 'TestMerchantID1234',
         'PostData_' => [
@@ -85,7 +85,7 @@ test('可以使用藍新金流交易序號請款', function () {
     expect($result)->toBeInstanceOf(CaptureResult::class);
 });
 
-test('可以取消請款', function () {
+test('CaptureBuilder → 取消請款', function () {
     $expectedOptionsData = [
         'MerchantID' => 'TestMerchantID1234',
         'PostData_' => [
@@ -113,7 +113,7 @@ test('可以取消請款', function () {
     expect($result)->toBeInstanceOf(CaptureResult::class);
 });
 
-test('請款時商店訂單編號與藍新金流交易序號只能擇一填入', function () {
+test('CaptureBuilder → 商店訂單編號與藍新金流交易序號只能擇一', function () {
     (new CaptureBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withTrade('23061500000000000');

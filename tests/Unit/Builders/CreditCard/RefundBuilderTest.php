@@ -36,7 +36,7 @@ beforeEach(function () {
     $this->httpTransporter->allows('send')->andReturn($this->response);
 });
 
-test('可以使用商店訂單編號退款', function () {
+test('RefundBuilder → 使用商店訂單編號', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.1',
@@ -59,7 +59,7 @@ test('可以使用商店訂單編號退款', function () {
     expect($result)->toBeInstanceOf(RefundResult::class);
 });
 
-test('可以使用藍新金流交易序號退款', function () {
+test('RefundBuilder → 使用藍新金流交易序號', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.1',
@@ -82,7 +82,7 @@ test('可以使用藍新金流交易序號退款', function () {
     expect($result)->toBeInstanceOf(RefundResult::class);
 });
 
-test('可以取消退款', function () {
+test('RefundBuilder → 取消退款', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.1',
@@ -107,7 +107,7 @@ test('可以取消退款', function () {
     expect($result)->toBeInstanceOf(RefundResult::class);
 });
 
-test('退款時商店訂單編號與藍新金流交易序號只能擇一填入', function () {
+test('RefundBuilder → 商店訂單編號與藍新金流交易序號只能擇一', function () {
     (new RefundBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withTrade('23061500000000000');

@@ -13,7 +13,7 @@ use Ycs77\NewebPay\Results\Period\AlterStatusResult;
 
 use function Pest\Laravel\partialMock;
 
-test('可以成功建立信用卡定期定額委託功能', function () {
+test('定期定額委託 → 成功建立委託', function () {
     $crypto = partialMock(Crypto::class);
     $crypto->allows('encryptByAES')->andReturn('encrypted_data');
 
@@ -33,7 +33,7 @@ test('可以成功建立信用卡定期定額委託功能', function () {
         ->and($response->content())->toContain('name="PostData_" value="encrypted_data"');
 });
 
-test('可以成功修改委託狀態', function () {
+test('定期定額委託 → 成功修改委託狀態', function () {
     Http::fake([
         '*' => Http::response([
             'period' => 'encrypted_period_data',
@@ -65,7 +65,7 @@ test('可以成功修改委託狀態', function () {
         ->and($result->periodStatus())->toBe(PeriodStatus::TERMINATE);
 });
 
-test('可以成功修改委託內容', function () {
+test('定期定額委託 → 成功修改委託內容', function () {
     Http::fake([
         '*' => Http::response([
             'Period' => 'encrypted_period_data',
@@ -105,7 +105,7 @@ test('可以成功修改委託內容', function () {
         ->and($result->periodAmount())->toBe(1000);
 });
 
-test('信用卡定期定額委託 → 模擬修改委託金額', function () {
+test('定期定額委託 → 模擬修改委託金額', function () {
     NewebPay::fake([
         AlterResult::make([
             'Period' => [
@@ -146,7 +146,7 @@ test('信用卡定期定額委託 → 模擬修改委託金額', function () {
         ->and($result->periodAmount())->toBe(1000);
 });
 
-test('信用卡定期定額委託 → 模擬暫停委託', function () {
+test('定期定額委託 → 模擬暫停委託', function () {
     NewebPay::fake([
         AlterStatusResult::make([
             'period' => [
@@ -179,7 +179,7 @@ test('信用卡定期定額委託 → 模擬暫停委託', function () {
         ->and($result->periodStatus())->toBe(PeriodStatus::SUSPEND);
 });
 
-test('信用卡定期定額委託 → 模擬終止委託', function () {
+test('定期定額委託 → 模擬終止委託', function () {
     NewebPay::fake([
         AlterStatusResult::make([
             'period' => [
@@ -212,7 +212,7 @@ test('信用卡定期定額委託 → 模擬終止委託', function () {
         ->and($result->periodStatus())->toBe(PeriodStatus::TERMINATE);
 });
 
-test('信用卡定期定額委託 → 模擬恢復委託', function () {
+test('定期定額委託 → 模擬恢復委託', function () {
     NewebPay::fake([
         AlterStatusResult::make([
             'period' => [

@@ -80,7 +80,7 @@ beforeEach(function () {
     $this->prependAppUrl->allows('handle')->andReturnUsing(fn (string $url) => $url);
 });
 
-test('可以成功呼叫 MPG 金流基本功能', function () {
+test('MPGBuilder → 基本設定', function () {
     $expectedTradeInfoData = [
         'MerchantID' => 'TestMerchantID1234',
         'RespondType' => 'JSON',
@@ -114,7 +114,7 @@ test('可以成功呼叫 MPG 金流基本功能', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('MPG 信用卡 預設值', function () {
+test('MPGBuilder → 信用卡預設值', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->onPreparedOptions(function (Options $options) {
@@ -126,7 +126,7 @@ test('MPG 信用卡 預設值', function () {
         ->submit();
 });
 
-test('MPG 信用卡 啟用紅利交易', function () {
+test('MPGBuilder → 信用卡啟用紅利交易', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods([
@@ -143,7 +143,7 @@ test('MPG 信用卡 啟用紅利交易', function () {
         ->submit();
 });
 
-test('MPG 信用卡 啟用單個分期付款選項', function () {
+test('MPGBuilder → 信用卡啟用單個分期付款選項', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods([
@@ -160,7 +160,7 @@ test('MPG 信用卡 啟用單個分期付款選項', function () {
         ->submit();
 });
 
-test('MPG 信用卡 啟用多個分期付款選項', function () {
+test('MPGBuilder → 信用卡啟用多個分期付款選項', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods([
@@ -177,7 +177,7 @@ test('MPG 信用卡 啟用多個分期付款選項', function () {
         ->submit();
 });
 
-test('MPG 信用卡 記憶卡號', function () {
+test('MPGBuilder → 信用卡記憶卡號', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withCreditRemember('example_user')
@@ -189,7 +189,7 @@ test('MPG 信用卡 記憶卡號', function () {
         ->submit();
 });
 
-test('MPG 啟用 webATM', function () {
+test('MPGBuilder → 啟用 webATM', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['webATM' => true])
@@ -200,7 +200,7 @@ test('MPG 啟用 webATM', function () {
         ->submit();
 });
 
-test('MPG 啟用 ATM 轉帳 (VACC)', function () {
+test('MPGBuilder → 啟用 ATM 轉帳 (VACC)', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['VACC' => true])
@@ -211,7 +211,7 @@ test('MPG 啟用 ATM 轉帳 (VACC)', function () {
         ->submit();
 });
 
-test('MPG 啟用單個銀行選項', function () {
+test('MPGBuilder → 啟用單個銀行選項', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['bank' => Bank::BOT])
@@ -222,7 +222,7 @@ test('MPG 啟用單個銀行選項', function () {
         ->submit();
 });
 
-test('MPG 啟用多個銀行選項', function () {
+test('MPGBuilder → 啟用多個銀行選項', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['bank' => [Bank::BOT, Bank::HNCB]])
@@ -233,7 +233,7 @@ test('MPG 啟用多個銀行選項', function () {
         ->submit();
 });
 
-test('MPG 啟用 NTCB', function () {
+test('MPGBuilder → 啟用 NTCB', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods([
@@ -254,7 +254,7 @@ test('MPG 啟用 NTCB', function () {
         ->submit();
 });
 
-test('MPG 啟用 Google Pay', function () {
+test('MPGBuilder → 啟用 Google Pay', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['googlePay' => true])
@@ -265,7 +265,7 @@ test('MPG 啟用 Google Pay', function () {
         ->submit();
 });
 
-test('MPG 啟用 Samsung Pay', function () {
+test('MPGBuilder → 啟用 Samsung Pay', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['samsungPay' => true])
@@ -276,7 +276,7 @@ test('MPG 啟用 Samsung Pay', function () {
         ->submit();
 });
 
-test('MPG 啟用 LINE Pay', function () {
+test('MPGBuilder → 啟用 LINE Pay', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods([
@@ -293,7 +293,7 @@ test('MPG 啟用 LINE Pay', function () {
         ->submit();
 });
 
-test('MPG 啟用 玉山 Wallet', function () {
+test('MPGBuilder → 啟用玉山 Wallet', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['esunWallet' => true])
@@ -304,7 +304,7 @@ test('MPG 啟用 玉山 Wallet', function () {
         ->submit();
 });
 
-test('MPG 啟用台灣 Pay', function () {
+test('MPGBuilder → 啟用台灣 Pay', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['taiwanPay' => true])
@@ -315,7 +315,7 @@ test('MPG 啟用台灣 Pay', function () {
         ->submit();
 });
 
-test('MPG 啟用簡單付電子錢包', function () {
+test('MPGBuilder → 啟用簡單付電子錢包', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['ezPay' => true])
@@ -326,7 +326,7 @@ test('MPG 啟用簡單付電子錢包', function () {
         ->submit();
 });
 
-test('MPG 啟用簡單付微信支付', function () {
+test('MPGBuilder → 啟用簡單付微信支付', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['ezpWeChat' => true])
@@ -337,7 +337,7 @@ test('MPG 啟用簡單付微信支付', function () {
         ->submit();
 });
 
-test('MPG 啟用簡單付支付寶', function () {
+test('MPGBuilder → 啟用簡單付支付寶', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['ezpAlipay' => true])
@@ -348,7 +348,7 @@ test('MPG 啟用簡單付支付寶', function () {
         ->submit();
 });
 
-test('MPG 啟用超商代碼繳費支付', function () {
+test('MPGBuilder → 啟用超商代碼繳費支付', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['CVS' => true])
@@ -359,7 +359,7 @@ test('MPG 啟用超商代碼繳費支付', function () {
         ->submit();
 });
 
-test('MPG 啟用條碼繳費支付', function () {
+test('MPGBuilder → 啟用條碼繳費支付', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withPaymentMethods(['barcode' => true])
@@ -370,7 +370,7 @@ test('MPG 啟用條碼繳費支付', function () {
         ->submit();
 });
 
-test('MPG 啟用超商取貨付款', function () {
+test('MPGBuilder → 啟用超商取貨付款', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withLogisticsPayment(CVSCOM::PAY)
@@ -381,7 +381,7 @@ test('MPG 啟用超商取貨付款', function () {
         ->submit();
 });
 
-test('MPG 啟用 B2B 超商大宗寄倉', function () {
+test('MPGBuilder → 啟用 B2B 超商大宗寄倉', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withLogisticsType(LgsType::B2C)

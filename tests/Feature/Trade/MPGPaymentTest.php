@@ -12,7 +12,7 @@ use Ycs77\NewebPay\Options\Options;
 
 use function Pest\Laravel\partialMock;
 
-test('可以成功呼叫 MPG 金流基本功能', function () {
+test('MPG 金流 → 基本功能', function () {
     $crypto = partialMock(Crypto::class);
     $crypto->allows('encryptByAES')->andReturn('encrypted_trade_data');
     $crypto->allows('hashBySHA')->andReturn('encrypted_sha_data');
@@ -32,7 +32,7 @@ test('可以成功呼叫 MPG 金流基本功能', function () {
         ->and($response->content())->toContain('name="TradeSha" value="encrypted_sha_data"');
 });
 
-test('可以成功呼叫 MPG 金流的更多功能', function () {
+test('MPG 金流 → 進階功能', function () {
     $expectedTradeData = [
         'MerchantID' => 'TestMerchantID1234',
         'RespondType' => 'JSON',

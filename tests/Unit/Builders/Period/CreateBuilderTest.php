@@ -42,7 +42,7 @@ beforeEach(function () {
     $this->prependAppUrl->allows('handle')->andReturnUsing(fn (string $url) => $url);
 });
 
-test('可以成功建立信用卡定期定額委託功能', function () {
+test('CreateBuilder → 建立委託', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',
@@ -73,7 +73,7 @@ test('可以成功建立信用卡定期定額委託功能', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以每隔 40 天授權一次信用卡定期定額委託', function () {
+test('CreateBuilder → 每隔 40 天授權', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',
@@ -104,7 +104,7 @@ test('可以每隔 40 天授權一次信用卡定期定額委託', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以每週日授權一次信用卡定期定額委託', function () {
+test('CreateBuilder → 每週日授權', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',
@@ -135,7 +135,7 @@ test('可以每週日授權一次信用卡定期定額委託', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以每月 20 日授權一次信用卡定期定額委託', function () {
+test('CreateBuilder → 每月 20 日授權', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',
@@ -166,7 +166,7 @@ test('可以每月 20 日授權一次信用卡定期定額委託', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以每年 3 月 4 日授權一次信用卡定期定額委託', function () {
+test('CreateBuilder → 每年 3 月 4 日授權', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',
@@ -197,7 +197,7 @@ test('可以每年 3 月 4 日授權一次信用卡定期定額委託', function
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以每月 4 日授權信用卡定期定額委託，共授權 6 次，為期 6 個月', function () {
+test('CreateBuilder → 每月 4 日授權，共 6 次，為期 6 個月', function () {
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
@@ -211,7 +211,7 @@ test('可以每月 4 日授權信用卡定期定額委託，共授權 6 次，�
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以設定信用卡定期定額委託授權方式', function () {
+test('CreateBuilder → 設定授權方式', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',
@@ -243,7 +243,7 @@ test('可以設定信用卡定期定額委託授權方式', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以設定立即執行十元授權', function () {
+test('CreateBuilder → 立即執行十元授權', function () {
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
@@ -258,7 +258,7 @@ test('可以設定立即執行十元授權', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以設定立即執行委託金額授權', function () {
+test('CreateBuilder → 立即執行委託金額授權', function () {
     $response = (new CreateBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withOrder('Order001')
@@ -273,7 +273,7 @@ test('可以設定立即執行委託金額授權', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以關閉付款人信箱修改功能', function () {
+test('CreateBuilder → 關閉付款人信箱修改', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',
@@ -310,7 +310,7 @@ test('可以關閉付款人信箱修改功能', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以設定語系', function () {
+test('CreateBuilder → 設定語系', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',
@@ -343,7 +343,7 @@ test('可以設定語系', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以啟用銀聯卡', function () {
+test('CreateBuilder → 啟用銀聯卡', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',
@@ -376,7 +376,7 @@ test('可以啟用銀聯卡', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以設定委託備註', function () {
+test('CreateBuilder → 設定委託備註', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',
@@ -409,7 +409,7 @@ test('可以設定委託備註', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('可以設定不檢查信用卡資訊，也不執行授權', function () {
+test('CreateBuilder → 不檢查信用卡資訊也不執行授權', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.5',

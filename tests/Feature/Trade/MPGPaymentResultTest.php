@@ -8,7 +8,7 @@ use Ycs77\NewebPay\Results\Trade\PaymentResult;
 
 use function Pest\Laravel\partialMock;
 
-test('可以解析 MPG 金流回傳資料', function () {
+test('MPG 金流 → 解析金流回傳資料', function () {
     $crypto = partialMock(Crypto::class);
     $crypto->allows('decryptByAES')->andReturn([
         'Status' => 'SUCCESS',

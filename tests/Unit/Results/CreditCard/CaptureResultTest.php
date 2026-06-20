@@ -2,7 +2,7 @@
 
 use Ycs77\NewebPay\Results\CreditCard\CaptureResult;
 
-test('可以解析信用卡請款結果', function () {
+test('CaptureResult → 解析請款結果', function () {
     $data = [
         'Status' => 'SUCCESS',
         'Message' => '請款資料新增成功',

@@ -37,7 +37,7 @@ beforeEach(function () {
     $this->httpTransporter->allows('send')->andReturn($this->response);
 });
 
-test('可以使用商店訂單編號取消信用卡交易', function () {
+test('ReverseBuilder → 使用商店訂單編號', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.0',
@@ -58,7 +58,7 @@ test('可以使用商店訂單編號取消信用卡交易', function () {
     expect($result)->toBeInstanceOf(ReverseResult::class);
 });
 
-test('可以使用藍新金流交易序號取消信用卡交易', function () {
+test('ReverseBuilder → 使用藍新金流交易序號', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.0',
@@ -79,7 +79,7 @@ test('可以使用藍新金流交易序號取消信用卡交易', function () {
     expect($result)->toBeInstanceOf(ReverseResult::class);
 });
 
-test('取消信用卡交易時，商店訂單編號與藍新金流交易序號只能擇一填入', function () {
+test('ReverseBuilder → 商店訂單編號與藍新金流交易序號只能擇一', function () {
     (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withTrade('23061500000000000');

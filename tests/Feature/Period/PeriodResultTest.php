@@ -8,7 +8,7 @@ use Ycs77\NewebPay\Results\Period\NotifyResult;
 
 use function Pest\Laravel\partialMock;
 
-test('可以解析信用卡定期定額委託回傳資料', function () {
+test('定期定額委託 → 解析委託回傳資料', function () {
     $crypto = partialMock(Crypto::class);
     $crypto->allows('decryptByAES')->andReturn([
         'Status' => 'SUCCESS',
@@ -36,7 +36,7 @@ test('可以解析信用卡定期定額委託回傳資料', function () {
         ->and($result->periodAmount())->toBe(1050);
 });
 
-test('可以解析信用卡定期定額委託通知回傳資料', function () {
+test('定期定額委託 → 解析委託通知回傳資料', function () {
     $crypto = partialMock(Crypto::class);
     $crypto->allows('decryptByAES')->andReturn([
         'Status' => 'SUCCESS',

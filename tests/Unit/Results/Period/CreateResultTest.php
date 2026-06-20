@@ -3,7 +3,7 @@
 use Ycs77\NewebPay\Enums\PeriodType;
 use Ycs77\NewebPay\Results\Period\CreateResult;
 
-test('可以解析信用卡定期定額委託結果（不含授權資料）', function () {
+test('CreateResult → 解析委託結果（不含授權資料）', function () {
     $data = [
         'Period' => [
             'Status' => 'SUCCESS',
@@ -34,7 +34,7 @@ test('可以解析信用卡定期定額委託結果（不含授權資料）', fu
         ->and($result->periodNo())->toBe('20200101000000001');
 });
 
-test('可以解析信用卡定期定額委託結果（含授權資料）', function () {
+test('CreateResult → 解析委託結果（含授權資料）', function () {
     $data = [
         'Period' => [
             'Status' => 'SUCCESS',
@@ -67,7 +67,7 @@ test('可以解析信用卡定期定額委託結果（含授權資料）', funct
         ->and($result->respondCode())->toBe('00');
 });
 
-test('可以判斷委託建立失敗', function () {
+test('CreateResult → 判斷委託建立失敗', function () {
     $data = [
         'Period' => [
             'Status' => 'MPG10001',

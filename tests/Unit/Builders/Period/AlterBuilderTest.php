@@ -40,7 +40,7 @@ beforeEach(function () {
     $this->httpTransporter->allows('send')->andReturn($this->response);
 });
 
-test('可以成功修改信用卡定期定額委託金額', function () {
+test('AlterBuilder → 修改委託金額', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.1',
@@ -67,7 +67,7 @@ test('可以成功修改信用卡定期定額委託金額', function () {
     expect($result)->toBeInstanceOf(AlterResult::class);
 });
 
-test('可以修改委託為每週授權', function () {
+test('AlterBuilder → 每週授權', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.1',
@@ -94,7 +94,7 @@ test('可以修改委託為每週授權', function () {
     expect($result)->toBeInstanceOf(AlterResult::class);
 });
 
-test('可以修改委託為每月授權', function () {
+test('AlterBuilder → 每月授權', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.1',
@@ -121,7 +121,7 @@ test('可以修改委託為每月授權', function () {
     expect($result)->toBeInstanceOf(AlterResult::class);
 });
 
-test('可以修改委託為每年授權', function () {
+test('AlterBuilder → 每年授權', function () {
     $expectedPostData = [
         'RespondType' => 'JSON',
         'Version' => '1.1',

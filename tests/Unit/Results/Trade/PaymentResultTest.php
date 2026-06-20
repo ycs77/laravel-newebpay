@@ -3,7 +3,7 @@
 use Ycs77\NewebPay\Enums\PaymentType;
 use Ycs77\NewebPay\Results\Trade\PaymentResult;
 
-test('可以解析付款結果', function () {
+test('PaymentResult → 解析付款結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '授權成功',
@@ -51,7 +51,7 @@ test('可以解析付款結果', function () {
         ->and($result->escrowBank())->toBe('HNCB');
 });
 
-test('可以解析信用卡付款結果', function () {
+test('PaymentResult → 解析信用卡付款', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '授權成功',
@@ -106,7 +106,7 @@ test('可以解析信用卡付款結果', function () {
         ->and($credit->paymentMethod())->toBe('CREDIT');
 });
 
-test('可以解析 ATM 付款結果', function () {
+test('PaymentResult → 解析 ATM 付款', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '取號成功',
@@ -140,7 +140,7 @@ test('可以解析 ATM 付款結果', function () {
         ->and($atm->payerAccount5Code())->toBe('12345');
 });
 
-test('可以解析 WebATM 付款結果', function () {
+test('PaymentResult → 解析 WebATM 付款', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '付款完成',
@@ -174,7 +174,7 @@ test('可以解析 WebATM 付款結果', function () {
         ->and($atm->payerAccount5Code())->toBe('12345');
 });
 
-test('可以解析超商代碼付款結果', function () {
+test('PaymentResult → 解析超商代碼付款', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '模擬付款成功',
@@ -211,7 +211,7 @@ test('可以解析超商代碼付款結果', function () {
         ->and($storeCode->storeId())->toBe('S9999');
 });
 
-test('可以解析超商條碼付款結果', function () {
+test('PaymentResult → 解析超商條碼付款', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '模擬銷帳成功',
@@ -252,7 +252,7 @@ test('可以解析超商條碼付款結果', function () {
         ->and($storeBarcode->payStoreName())->toBe('7-11');
 });
 
-test('可以解析物流付款結果', function () {
+test('PaymentResult → 解析物流付款', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '訂單資料建立成功',
@@ -299,7 +299,7 @@ test('可以解析物流付款結果', function () {
         ->and($lgs->lgsNo())->toBe('-');
 });
 
-test('可以解析 ezPay 付款結果', function () {
+test('PaymentResult → 解析 ezPay 付款', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '訂單資料建立成功',
@@ -332,7 +332,7 @@ test('可以解析 ezPay 付款結果', function () {
         ->and($ezPay->channelNo())->toBe('NO0000000001');
 });
 
-test('可以解析玉山 Wallet 付款結果', function () {
+test('PaymentResult → 解析玉山 Wallet 付款', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '訂單資料建立成功',
@@ -365,7 +365,7 @@ test('可以解析玉山 Wallet 付款結果', function () {
         ->and($esunWallet->redDisAmt())->toBe(0);
 });
 
-test('可以解析台灣 Pay 付款結果', function () {
+test('PaymentResult → 解析台灣 Pay 付款', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '訂單資料建立成功',

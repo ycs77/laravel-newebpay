@@ -3,7 +3,7 @@
 use Ycs77\NewebPay\Enums\PaymentType;
 use Ycs77\NewebPay\Results\Trade\CustomerResult;
 
-test('可以解析取號結果', function () {
+test('CustomerResult → 解析取號結果', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '條碼取號成功',
@@ -38,7 +38,7 @@ test('可以解析取號結果', function () {
         ->and($result->expireTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 23:59:59');
 });
 
-test('可以解析 ATM 取號結果', function () {
+test('CustomerResult → 解析 ATM 取號', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '取號成功',
@@ -71,7 +71,7 @@ test('可以解析 ATM 取號結果', function () {
         ->and($storeBarcode->codeNo())->toBe('TestAccount12345');
 });
 
-test('可以解析代碼取號結果', function () {
+test('CustomerResult → 解析代碼取號', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '代碼取號成功',
@@ -102,7 +102,7 @@ test('可以解析代碼取號結果', function () {
     expect($storeCode->codeNo())->toBe('TEST1234567890');
 });
 
-test('可以解析條碼取號結果', function () {
+test('CustomerResult → 解析條碼取號', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '條碼取號成功',
@@ -137,7 +137,7 @@ test('可以解析條碼取號結果', function () {
         ->and($storeBarcode->barcode3())->toBe('TEST3');
 });
 
-test('可以解析物流取號結果', function () {
+test('CustomerResult → 解析物流取號', function () {
     $tradeData = [
         'Status' => 'SUCCESS',
         'Message' => '條碼取號成功',

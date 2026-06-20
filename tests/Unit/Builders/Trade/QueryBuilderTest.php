@@ -37,7 +37,7 @@ beforeEach(function () {
     $this->httpTransporter->allows('send')->andReturn($this->response);
 });
 
-test('可以成功查詢交易結果', function () {
+test('QueryBuilder → 查詢交易', function () {
     $expectedOptionsData = [
         'MerchantID' => 'TestMerchantID1234',
         'Version' => '1.3',

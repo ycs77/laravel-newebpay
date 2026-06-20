@@ -11,7 +11,7 @@ use Ycs77\NewebPay\Results\Trade\QueryResult;
 
 use function Pest\Laravel\partialMock;
 
-test('可以成功呼叫查詢交易功能', function () {
+test('交易查詢 → 成功查詢', function () {
     $expectedOptionsData = [
         'MerchantID' => 'TestMerchantID1234',
         'Version' => '1.3',
@@ -79,7 +79,7 @@ test('可以成功呼叫查詢交易功能', function () {
         ->and($result->amount())->toBe(1050);
 });
 
-test('可以成功呼叫查詢交易的更多功能', function () {
+test('交易查詢 → 進階查詢', function () {
     $expectedOptionsData = [
         'MerchantID' => 'TestMerchantID1234',
         'Version' => '1.3',

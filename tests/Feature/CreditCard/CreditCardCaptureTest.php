@@ -11,7 +11,7 @@ use Ycs77\NewebPay\Results\CreditCard\CaptureResult;
 
 use function Pest\Laravel\partialMock;
 
-test('可以成功呼叫信用卡請款功能', function () {
+test('信用卡請款 → 成功請款', function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
 
     $expectedOptionsData = [
@@ -60,7 +60,7 @@ test('可以成功呼叫信用卡請款功能', function () {
         ->and($result->amount())->toBe(1050);
 });
 
-test('可以成功呼叫取消請款功能', function () {
+test('信用卡請款 → 成功取消請款', function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
 
     $expectedOptionsData = [

@@ -2,7 +2,7 @@
 
 use Ycs77\NewebPay\Results\Trade\QueryResult;
 
-test('可以解析付款查詢結果', function () {
+test('QueryResult → 解析付款查詢', function () {
     $data = [
         'Status' => 'SUCCESS',
         'Message' => '查詢成功',
@@ -49,7 +49,7 @@ test('可以解析付款查詢結果', function () {
         ->and($result->payTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 00:00:00');
 });
 
-test('可以解析信用卡付款的查詢結果', function () {
+test('QueryResult → 解析信用卡付款查詢', function () {
     $data = [
         'Status' => 'SUCCESS',
         'Message' => '查詢成功',

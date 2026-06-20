@@ -2,7 +2,7 @@
 
 use Ycs77\NewebPay\Results\CreditCard\ReverseResult;
 
-test('可以解析取消信用卡交易結果', function () {
+test('ReverseResult → 解析取消交易結果', function () {
     $data = [
         'Status' => 'SUCCESS',
         'Message' => '放棄授權成功',

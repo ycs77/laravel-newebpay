@@ -2,7 +2,7 @@
 
 use Ycs77\NewebPay\Results\CreditCard\RefundResult;
 
-test('可以解析信用卡退款結果', function () {
+test('RefundResult → 解析退款結果', function () {
     $data = [
         'Status' => 'SUCCESS',
         'Message' => '請款資料新增成功',
