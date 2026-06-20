@@ -64,9 +64,9 @@ class QueryCreditResult extends Result
     /**
      * 請款金額
      */
-    public function closeAmt(): int
+    public function closeAmt(): ?int
     {
-        return $this->data['CloseAmt'];
+        return $this->data['CloseAmt'] ?? null;
     }
 
     /**
