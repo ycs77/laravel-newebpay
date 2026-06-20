@@ -83,7 +83,9 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
      */
     public function fundTime(): ?Carbon
     {
-        if ($fundTime = $this->result['FundTime']) {
+        $fundTime = $this->result['FundTime'];
+
+        if ($fundTime && $fundTime !== '0000-00-00') {
             return Carbon::createFromFormat('Y-m-d', $fundTime);
         }
 
