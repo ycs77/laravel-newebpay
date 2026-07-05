@@ -22,7 +22,7 @@ final class RefundOptions extends Options
     public function toArray()
     {
         return [
-            'MerchantID' => $this->merchantId,
+            'MerchantID_' => $this->merchantId,
             'PostData_' => array_filter([
                 'RespondType' => 'JSON',
                 'Version' => '1.1',

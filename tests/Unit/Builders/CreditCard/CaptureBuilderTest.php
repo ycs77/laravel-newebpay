@@ -37,22 +37,25 @@ beforeEach(function () {
 });
 
 test('CaptureBuilder → 使用商店訂單編號', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.1',
-        'Amt' => 1050,
-        'MerchantOrderNo' => 'Order001',
-        'TimeStamp' => Carbon::now()->timestamp,
-        'IndexType' => 1,
-        'TradeNo' => '',
-        'CloseType' => 1,
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.1',
+            'Amt' => 1050,
+            'MerchantOrderNo' => 'Order001',
+            'TimeStamp' => Carbon::now()->timestamp,
+            'IndexType' => 1,
+            'TradeNo' => '',
+            'CloseType' => 1,
+        ],
     ];
 
     $result = (new CaptureBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withAmount(1050)
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 
@@ -61,7 +64,7 @@ test('CaptureBuilder → 使用商店訂單編號', function () {
 
 test('CaptureBuilder → 使用藍新金流交易序號', function () {
     $expectedOptionsData = [
-        'MerchantID' => 'TestMerchantID1234',
+        'MerchantID_' => 'TestMerchantID1234',
         'PostData_' => [
             'RespondType' => 'JSON',
             'Version' => '1.1',
@@ -87,7 +90,7 @@ test('CaptureBuilder → 使用藍新金流交易序號', function () {
 
 test('CaptureBuilder → 取消請款', function () {
     $expectedOptionsData = [
-        'MerchantID' => 'TestMerchantID1234',
+        'MerchantID_' => 'TestMerchantID1234',
         'PostData_' => [
             'RespondType' => 'JSON',
             'Version' => '1.1',

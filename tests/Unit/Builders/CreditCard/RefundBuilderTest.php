@@ -37,22 +37,25 @@ beforeEach(function () {
 });
 
 test('RefundBuilder → 使用商店訂單編號', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.1',
-        'Amt' => 1050,
-        'MerchantOrderNo' => 'Order001',
-        'TimeStamp' => Carbon::now()->timestamp,
-        'IndexType' => 1,
-        'TradeNo' => '',
-        'CloseType' => 2,
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.1',
+            'Amt' => 1050,
+            'MerchantOrderNo' => 'Order001',
+            'TimeStamp' => Carbon::now()->timestamp,
+            'IndexType' => 1,
+            'TradeNo' => '',
+            'CloseType' => 2,
+        ],
     ];
 
     $result = (new RefundBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withAmount(1050)
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 
@@ -60,22 +63,25 @@ test('RefundBuilder → 使用商店訂單編號', function () {
 });
 
 test('RefundBuilder → 使用藍新金流交易序號', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.1',
-        'Amt' => 1050,
-        'MerchantOrderNo' => '',
-        'TimeStamp' => Carbon::now()->timestamp,
-        'IndexType' => 2,
-        'TradeNo' => '23061500000000000',
-        'CloseType' => 2,
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.1',
+            'Amt' => 1050,
+            'MerchantOrderNo' => '',
+            'TimeStamp' => Carbon::now()->timestamp,
+            'IndexType' => 2,
+            'TradeNo' => '23061500000000000',
+            'CloseType' => 2,
+        ],
     ];
 
     $result = (new RefundBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withTrade('23061500000000000')
         ->withAmount(1050)
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 
@@ -83,24 +89,27 @@ test('RefundBuilder → 使用藍新金流交易序號', function () {
 });
 
 test('RefundBuilder → 取消退款', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.1',
-        'Amt' => 1050,
-        'MerchantOrderNo' => 'Order001',
-        'TimeStamp' => Carbon::now()->timestamp,
-        'IndexType' => 1,
-        'TradeNo' => '',
-        'CloseType' => 2,
-        'Cancel' => 1,
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.1',
+            'Amt' => 1050,
+            'MerchantOrderNo' => 'Order001',
+            'TimeStamp' => Carbon::now()->timestamp,
+            'IndexType' => 1,
+            'TradeNo' => '',
+            'CloseType' => 2,
+            'Cancel' => 1,
+        ],
     ];
 
     $result = (new RefundBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withAmount(1050)
         ->reverse()
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 

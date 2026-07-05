@@ -38,20 +38,23 @@ beforeEach(function () {
 });
 
 test('ReverseBuilder → 使用商店訂單編號', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.0',
-        'Amt' => 1050,
-        'MerchantOrderNo' => 'Order001',
-        'IndexType' => 1,
-        'TimeStamp' => Carbon::now()->timestamp,
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.0',
+            'Amt' => 1050,
+            'MerchantOrderNo' => 'Order001',
+            'IndexType' => 1,
+            'TimeStamp' => Carbon::now()->timestamp,
+        ],
     ];
 
     $result = (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withAmount(1050)
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 
@@ -59,20 +62,23 @@ test('ReverseBuilder → 使用商店訂單編號', function () {
 });
 
 test('ReverseBuilder → 使用藍新金流交易序號', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.0',
-        'Amt' => 1050,
-        'TradeNo' => '23061500000000000',
-        'IndexType' => 2,
-        'TimeStamp' => Carbon::now()->timestamp,
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.0',
+            'Amt' => 1050,
+            'TradeNo' => '23061500000000000',
+            'IndexType' => 2,
+            'TimeStamp' => Carbon::now()->timestamp,
+        ],
     ];
 
     $result = (new ReverseBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withTrade('23061500000000000')
         ->withAmount(1050)
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 

@@ -15,7 +15,7 @@ test('信用卡請款 → 成功請款', function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
 
     $expectedOptionsData = [
-        'MerchantID' => 'TestMerchantID1234',
+        'MerchantID_' => 'TestMerchantID1234',
         'PostData_' => [
             'RespondType' => 'JSON',
             'Version' => '1.1',
@@ -64,7 +64,7 @@ test('信用卡請款 → 成功取消請款', function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
 
     $expectedOptionsData = [
-        'MerchantID' => 'TestMerchantID1234',
+        'MerchantID_' => 'TestMerchantID1234',
         'PostData_' => [
             'RespondType' => 'JSON',
             'Version' => '1.1',
