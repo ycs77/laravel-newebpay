@@ -41,16 +41,19 @@ beforeEach(function () {
 });
 
 test('AlterBuilder → 修改委託金額', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.1',
-        'TimeStamp' => Carbon::now()->timestamp,
-        'MerOrderNo' => 'Order001',
-        'PeriodNo' => '20200101000000001',
-        'AlterAmt' => 1000,
-        'PeriodType' => 'D',
-        'PeriodPoint' => '3',
-        'PeriodTimes' => 10,
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.1',
+            'TimeStamp' => Carbon::now()->timestamp,
+            'MerOrderNo' => 'Order001',
+            'PeriodNo' => '20200101000000001',
+            'AlterAmt' => 1000,
+            'PeriodType' => 'D',
+            'PeriodPoint' => '3',
+            'PeriodTimes' => 10,
+        ],
     ];
 
     $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
@@ -59,8 +62,8 @@ test('AlterBuilder → 修改委託金額', function () {
         ->withAmount(1000)
         ->everyFewDays(3)
         ->times(10)
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 
@@ -68,16 +71,19 @@ test('AlterBuilder → 修改委託金額', function () {
 });
 
 test('AlterBuilder → 每週授權', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.1',
-        'TimeStamp' => Carbon::now()->timestamp,
-        'MerOrderNo' => 'Order001',
-        'PeriodNo' => '20200101000000001',
-        'AlterAmt' => 1000,
-        'PeriodType' => 'W',
-        'PeriodPoint' => '5',
-        'PeriodTimes' => 5,
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.1',
+            'TimeStamp' => Carbon::now()->timestamp,
+            'MerOrderNo' => 'Order001',
+            'PeriodNo' => '20200101000000001',
+            'AlterAmt' => 1000,
+            'PeriodType' => 'W',
+            'PeriodPoint' => '5',
+            'PeriodTimes' => 5,
+        ],
     ];
 
     $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
@@ -86,8 +92,8 @@ test('AlterBuilder → 每週授權', function () {
         ->withAmount(1000)
         ->weekly(5)
         ->times(5)
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 
@@ -95,16 +101,19 @@ test('AlterBuilder → 每週授權', function () {
 });
 
 test('AlterBuilder → 每月授權', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.1',
-        'TimeStamp' => Carbon::now()->timestamp,
-        'MerOrderNo' => 'Order001',
-        'PeriodNo' => '20200101000000001',
-        'AlterAmt' => 1000,
-        'PeriodType' => 'M',
-        'PeriodPoint' => '15',
-        'PeriodTimes' => 12,
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.1',
+            'TimeStamp' => Carbon::now()->timestamp,
+            'MerOrderNo' => 'Order001',
+            'PeriodNo' => '20200101000000001',
+            'AlterAmt' => 1000,
+            'PeriodType' => 'M',
+            'PeriodPoint' => '15',
+            'PeriodTimes' => 12,
+        ],
     ];
 
     $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
@@ -113,8 +122,8 @@ test('AlterBuilder → 每月授權', function () {
         ->withAmount(1000)
         ->monthly(15)
         ->times(12)
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 
@@ -122,16 +131,19 @@ test('AlterBuilder → 每月授權', function () {
 });
 
 test('AlterBuilder → 每年授權', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.1',
-        'TimeStamp' => Carbon::now()->timestamp,
-        'MerOrderNo' => 'Order001',
-        'PeriodNo' => '20200101000000001',
-        'AlterAmt' => 1000,
-        'PeriodType' => 'Y',
-        'PeriodPoint' => '0615',
-        'PeriodTimes' => 3,
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.1',
+            'TimeStamp' => Carbon::now()->timestamp,
+            'MerOrderNo' => 'Order001',
+            'PeriodNo' => '20200101000000001',
+            'AlterAmt' => 1000,
+            'PeriodType' => 'Y',
+            'PeriodPoint' => '0615',
+            'PeriodTimes' => 3,
+        ],
     ];
 
     $result = (new AlterBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
@@ -140,8 +152,8 @@ test('AlterBuilder → 每年授權', function () {
         ->withAmount(1000)
         ->yearly(6, 15)
         ->times(3)
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 

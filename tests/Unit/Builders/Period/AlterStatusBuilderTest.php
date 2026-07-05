@@ -42,21 +42,24 @@ beforeEach(function () {
 });
 
 test('AlterStatusBuilder → 修改委託狀態', function () {
-    $expectedPostData = [
-        'RespondType' => 'JSON',
-        'Version' => '1.0',
-        'TimeStamp' => Carbon::now()->timestamp,
-        'MerOrderNo' => 'Order001',
-        'PeriodNo' => '20200101000000001',
-        'AlterType' => 'terminate',
+    $expectedOptionsData = [
+        'MerchantID_' => 'TestMerchantID1234',
+        'PostData_' => [
+            'RespondType' => 'JSON',
+            'Version' => '1.0',
+            'TimeStamp' => Carbon::now()->timestamp,
+            'MerOrderNo' => 'Order001',
+            'PeriodNo' => '20200101000000001',
+            'AlterType' => 'terminate',
+        ],
     ];
 
     $result = (new AlterStatusBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->config))
         ->withOrder('Order001')
         ->withPeriod('20200101000000001')
         ->withStatus(PeriodStatus::TERMINATE)
-        ->onPreparedOptions(function (Options $options) use ($expectedPostData) {
-            expect($options->toArray()['PostData_'])->toBe($expectedPostData);
+        ->onPreparedOptions(function (Options $options) use ($expectedOptionsData) {
+            expect($options->toArray())->toBe($expectedOptionsData);
         })
         ->send();
 
