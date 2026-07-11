@@ -50,9 +50,9 @@ class AlterStatusResult extends BaseResult
     /**
      * 委託下一次授權日期
      */
-    public function newNextTime(): string
+    public function newNextTime(): ?string
     {
-        return $this->result['NewNextTime'];
+        return $this->result['NewNextTime'] ?? null;
     }
 
     /**
