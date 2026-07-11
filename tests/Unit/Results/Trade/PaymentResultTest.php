@@ -1,5 +1,6 @@
 <?php
 
+use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\PaymentType;
 use Ycs77\NewebPay\Results\Trade\PaymentResult;
 
@@ -295,7 +296,7 @@ test('PaymentResult → 解析物流付款', function () {
         ->and($lgs->tradeType())->toBe(1)
         ->and($lgs->cvscomName())->toBe('Lucas Yang')
         ->and($lgs->cvscomPhone())->toBe('0900111222')
-        ->and($lgs->lgsType())->toBe('C2C')
+        ->and($lgs->lgsType())->toBe(LgsType::C2C)
         ->and($lgs->lgsNo())->toBe('-');
 });
 

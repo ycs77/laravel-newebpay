@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay\Results\Trade;
 
+use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Results\Result;
 
 class QueryLgsResult extends Result
@@ -49,9 +50,9 @@ class QueryLgsResult extends Result
      * * **B2C**: 大宗寄倉
      * * **C2C**: 店到店
      */
-    public function lgsType(): string
+    public function lgsType(): LgsType
     {
-        return $this->data['LgsType'];
+        return LgsType::from($this->data['LgsType']);
     }
 
     /**

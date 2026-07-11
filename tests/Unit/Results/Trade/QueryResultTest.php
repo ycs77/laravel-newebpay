@@ -1,5 +1,6 @@
 <?php
 
+use Ycs77\NewebPay\Enums\PaymentType;
 use Ycs77\NewebPay\Results\Trade\QueryResult;
 
 test('QueryResult → 解析付款查詢', function () {
@@ -44,7 +45,7 @@ test('QueryResult → 解析付款查詢', function () {
         ->and($result->amount())->toBe(120)
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->orderNo())->toBe('1686759318')
-        ->and($result->paymentType())->toBe('CREDIT')
+        ->and($result->paymentType())->toBe(PaymentType::CREDIT)
         ->and($result->createTime()->format('Y-m-d H:i:s'))->toBe('2023-01-01 00:00:00')
         ->and($result->payTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 00:00:00');
 });

@@ -4,6 +4,7 @@ namespace Ycs77\NewebPay\Results\Trade;
 
 use Carbon\Carbon;
 use Ycs77\NewebPay\Contracts\CheckCodeVerifiable;
+use Ycs77\NewebPay\Enums\PaymentType;
 use Ycs77\NewebPay\Results\BaseResult;
 use Ycs77\NewebPay\Results\Concerns;
 
@@ -49,9 +50,9 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
      * * **TAIWANPAY**: 台灣 Pay
      * * **CVSCOM**: 超商取貨付款
      */
-    public function paymentType(): string
+    public function paymentType(): PaymentType
     {
-        return $this->result['PaymentType'];
+        return PaymentType::from($this->result['PaymentType']);
     }
 
     /**
