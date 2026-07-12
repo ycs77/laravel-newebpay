@@ -8,10 +8,13 @@ use Illuminate\Http\Response;
 use Ycs77\NewebPay\Builders\Builder;
 use Ycs77\NewebPay\Contracts\HttpTransporter;
 use Ycs77\NewebPay\Crypto\Crypto;
+use Ycs77\NewebPay\Enums\Bank;
+use Ycs77\NewebPay\Enums\CreditInst;
 use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
+use Ycs77\NewebPay\Enums\NTCBLocate;
 use Ycs77\NewebPay\Factory;
 use Ycs77\NewebPay\Options\Trade\MPGOptions;
 use Ycs77\NewebPay\Url\PrependAppUrl;
@@ -44,10 +47,6 @@ final class MPGBuilder extends Builder
 
         if ($lang = $this->config['lang']) {
             $this->withLang($lang);
-        }
-
-        if ($paymentMethods = $this->config['payment_methods']) {
-            $this->withPaymentMethods($paymentMethods);
         }
     }
 
@@ -227,16 +226,25 @@ final class MPGBuilder extends Builder
     }
 
     /**
-     * 付款方式
+     * 信用卡支付
      *
-     * @param  array  $paymentMethods  支付方式設定，詳見 `config/newebpay.php`
+     * @param  bool  $enabled  是否啟用信用卡支付
+     * @param  bool  $red  是否啟用紅利
+     * @param  CreditInst|array  $inst  分期設定：
+     *                                  - **CreditInst::NONE**  不啟用 (預設值)
+     *                                  - **CreditInst::ALL**   啟用全部分期
+     *                                  - **CreditInst::P3**    分 3 期
+     *                                  - **CreditInst::P6**    分 6 期
+     *                                  - **CreditInst::P12**   分 12 期
+     *                                  - **CreditInst::P18**   分 18 期
+     *                                  - **CreditInst::P24**   分 24 期
+     *                                  使用陣列開啟多種分期，例如：`[CreditInst::P3, CreditInst::P6]`
      */
-    public function withPaymentMethods(array $paymentMethods): self
+    public function withCredit(bool $enabled = true, bool $red = false, CreditInst|array $inst = CreditInst::NONE): self
     {
-        $this->options->paymentMethods = array_merge(
-            $this->options->paymentMethods,
-            $paymentMethods
-        );
+        $this->options->credit = $enabled;
+        $this->options->creditRed = $red;
+        $this->options->creditInstallment = $inst;
 
         return $this;
     }
@@ -255,6 +263,184 @@ final class MPGBuilder extends Builder
     {
         $this->options->creditRememberIdentifier = $identifier;
         $this->options->creditRememberDemand = $demand;
+
+        return $this;
+    }
+
+    /**
+     * WebATM 支付
+     */
+    public function withWebAtm(bool $enabled = true): self
+    {
+        $this->options->webAtm = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * ATM 轉帳
+     */
+    public function withAtmTransfer(bool $enabled = true): self
+    {
+        $this->options->atmTransfer = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * 轉帳銀行
+     *
+     * WebATM 與 ATM 轉帳可供付款人選擇轉帳銀行，將顯示於 MPG 頁上。為共用此參數值，無法個別分開指定。
+     *
+     * - **Bank::BOT**        台灣銀行
+     * - **Bank::HNCB**       華南銀行
+     * - **Bank::FirstBank**  第一銀行
+     *
+     * 使用陣列指定 1 個以上的銀行，例如：`[Bank::BOT, Bank::HNCB]`。
+     *
+     * 若未設定此參數，則預設會顯示所有銀行選項。
+     *
+     * 每日的 00:00:00-01:00:00 為第一銀行例行維護時間，在此時間區間內，將不會顯示
+     * ［第一銀行］的選項，若商店在此時間區間僅指定第一銀行一家銀行，將會回應
+     * ［MPG01027］的錯誤代碼。
+     *
+     * @param  Bank|array  $bank  轉帳銀行
+     */
+    public function withBank(Bank|array $bank): self
+    {
+        $this->options->bank = $bank;
+
+        return $this;
+    }
+
+    /**
+     * 信用卡 國民旅遊卡
+     *
+     * @param  NTCBLocate  $locate  旅遊地區，可使用地區請參考 `\Ycs77\NewebPay\Enums\NTCBLocate` 類別
+     * @param  string  $startDate  國民旅遊卡起始日期
+     * @param  string  $endDate  國民旅遊卡結束日期
+     */
+    public function withNationalTravelCard(NTCBLocate $locate, string $startDate, string $endDate): self
+    {
+        $this->options->nationalTravelCard = true;
+        $this->options->nationalTravelCardLocate = $locate;
+        $this->options->nationalTravelCardStartDate = $startDate;
+        $this->options->nationalTravelCardEndDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * Google Pay
+     */
+    public function withGooglePay(bool $enabled = true): self
+    {
+        $this->options->googlePay = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Samsung Pay
+     */
+    public function withSamsungPay(bool $enabled = true): self
+    {
+        $this->options->samsungPay = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * LINE Pay
+     *
+     * @param  bool  $enabled  是否啟用 LINE Pay 支付
+     * @param  string|null  $imageUrl  產品圖檔連結網址。此連結的圖檔將顯示於 LINE Pay 付款前的產品圖片區，
+     *                                 若無產品圖檔連結網址，會使用藍新系統預設圖檔。圖片尺寸建議使用 84*84 像素。
+     */
+    public function withLinePay(bool $enabled = true, ?string $imageUrl = null): self
+    {
+        $this->options->linePay = $enabled;
+        $this->options->linePayImageUrl = $imageUrl;
+
+        return $this;
+    }
+
+    /**
+     * 銀聯卡支付
+     */
+    public function withUnionPay(bool $enabled = true): self
+    {
+        $this->options->unionPay = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * 玉山 Wallet
+     */
+    public function withEsunWallet(bool $enabled = true): self
+    {
+        $this->options->esunWallet = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * 台灣 Pay
+     */
+    public function withTaiwanPay(bool $enabled = true): self
+    {
+        $this->options->taiwanPay = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * 簡單付電子錢包
+     */
+    public function withEzPay(bool $enabled = true): self
+    {
+        $this->options->ezPay = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * 簡單付微信支付
+     */
+    public function withEzPayWeChat(bool $enabled = true): self
+    {
+        $this->options->ezPayWeChat = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * 簡單付支付寶
+     */
+    public function withEzPayAlipay(bool $enabled = true): self
+    {
+        $this->options->ezPayAlipay = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * 超商代碼繳費支付
+     */
+    public function withCvsCode(bool $enabled = true): self
+    {
+        $this->options->cvsCode = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * 條碼繳費支付
+     */
+    public function withBarcode(bool $enabled = true): self
+    {
+        $this->options->barcode = $enabled;
 
         return $this;
     }

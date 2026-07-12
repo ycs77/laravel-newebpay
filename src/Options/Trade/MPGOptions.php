@@ -9,6 +9,7 @@ use Ycs77\NewebPay\Enums\CreditRememberDemand;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
+use Ycs77\NewebPay\Enums\NTCBLocate;
 use Ycs77\NewebPay\Options\Options;
 
 final class MPGOptions extends Options
@@ -43,7 +44,49 @@ final class MPGOptions extends Options
 
     public ?string $orderComment = null;
 
-    public array $paymentMethods = [];
+    public bool $credit = false;
+
+    public bool $creditRed = false;
+
+    public CreditInst|array $creditInstallment = CreditInst::NONE;
+
+    public bool $webAtm = false;
+
+    public bool $atmTransfer = false;
+
+    public Bank|array|null $bank = null;
+
+    public bool $nationalTravelCard = false;
+
+    public ?NTCBLocate $nationalTravelCardLocate = null;
+
+    public ?string $nationalTravelCardStartDate = null;
+
+    public ?string $nationalTravelCardEndDate = null;
+
+    public bool $googlePay = false;
+
+    public bool $samsungPay = false;
+
+    public bool $linePay = false;
+
+    public ?string $linePayImageUrl = null;
+
+    public bool $unionPay = false;
+
+    public bool $esunWallet = false;
+
+    public bool $taiwanPay = false;
+
+    public bool $ezPay = false;
+
+    public bool $ezPayWeChat = false;
+
+    public bool $ezPayAlipay = false;
+
+    public bool $cvsCode = false;
+
+    public bool $barcode = false;
 
     public ?string $creditRememberIdentifier = null;
 
@@ -80,88 +123,80 @@ final class MPGOptions extends Options
         ];
 
         // 銀行相關支付方式
-        if ($this->paymentMethods['credit']['enabled']) {
+        if ($this->credit) {
             $tradeData['CREDIT'] = 1;
 
-            if ($this->paymentMethods['credit']['red']) {
+            if ($this->creditRed) {
                 $tradeData['CreditRed'] = 1;
             }
 
-            if (($this->paymentMethods['credit']['inst'] instanceof CreditInst &&
-                $this->paymentMethods['credit']['inst'] !== CreditInst::NONE) ||
-                is_array($this->paymentMethods['credit']['inst'])
+            if (($this->creditInstallment instanceof CreditInst &&
+                $this->creditInstallment !== CreditInst::NONE) ||
+                is_array($this->creditInstallment)
             ) {
-                $tradeData['InstFlag'] = collect($this->paymentMethods['credit']['inst'])
+                $tradeData['InstFlag'] = collect($this->creditInstallment)
                     ->map(fn (CreditInst $inst) => $inst->value)
                     ->join(',');
-            } elseif (is_numeric($this->paymentMethods['credit']['inst']) || is_string($this->paymentMethods['credit']['inst'])) {
-                $tradeData['InstFlag'] = $this->paymentMethods['credit']['inst'];
             }
         }
-        if ($this->paymentMethods['webATM']) {
+        if ($this->webAtm) {
             $tradeData['WEBATM'] = 1;
         }
-        if ($this->paymentMethods['VACC']) {
+        if ($this->atmTransfer) {
             $tradeData['VACC'] = 1;
         }
-        if ($this->paymentMethods['bank'] instanceof Bank &&
-            $this->paymentMethods['bank'] !== Bank::ALL ||
-            is_array($this->paymentMethods['bank'])
+        if ($this->bank instanceof Bank &&
+            $this->bank !== Bank::ALL ||
+            is_array($this->bank)
         ) {
-            $tradeData['BankType'] = collect($this->paymentMethods['bank'])
+            $tradeData['BankType'] = collect($this->bank)
                 ->map(fn (Bank $inst) => $inst->value)
                 ->join(',');
-        } elseif (is_string($this->paymentMethods['bank'])) {
-            $tradeData['BankType'] = $this->paymentMethods['bank'];
         }
-        if ($this->paymentMethods['NTCB']['enabled']) {
+        if ($this->nationalTravelCard) {
             $tradeData['NTCB'] = 1;
-            /** @see \Ycs77\NewebPay\Enums\NTCBLocate */
-            $tradeData['NTCBLocate'] = $this->paymentMethods['NTCB']['locate']->value;
-            $tradeData['NTCBStartDate'] = $this->paymentMethods['NTCB']['start_date'];
-            $tradeData['NTCBEndDate'] = $this->paymentMethods['NTCB']['end_date'];
+            $tradeData['NTCBLocate'] = $this->nationalTravelCardLocate?->value;
+            $tradeData['NTCBStartDate'] = $this->nationalTravelCardStartDate;
+            $tradeData['NTCBEndDate'] = $this->nationalTravelCardEndDate;
         }
 
         // 其他支付方式
-        if ($this->paymentMethods['googlePay']) {
+        if ($this->googlePay) {
             $tradeData['ANDROIDPAY'] = 1;
         }
-        if ($this->paymentMethods['samsungPay']) {
+        if ($this->samsungPay) {
             $tradeData['SAMSUNGPAY'] = 1;
         }
-        if ((is_array($this->paymentMethods['linePay']) &&
-            $this->paymentMethods['linePay']['enabled']) ||
-            $this->paymentMethods['linePay'] === true
-        ) {
+        if ($this->linePay) {
             $tradeData['LINEPAY'] = 1;
-            if (isset($this->paymentMethods['linePay']['image_url'])) {
-                $tradeData['ImageUrl'] = $this->paymentMethods['linePay']['image_url'];
+            if ($this->linePayImageUrl !== null) {
+                $tradeData['ImageUrl'] = $this->linePayImageUrl;
             }
         }
-        if ($this->paymentMethods['unionPay']) {
+        if ($this->unionPay) {
             $tradeData['UNIONPAY'] = 1;
         }
-        if ($this->paymentMethods['esunWallet']) {
+        if ($this->esunWallet) {
             $tradeData['ESUNWALLET'] = 1;
         }
-        if ($this->paymentMethods['taiwanPay']) {
+        if ($this->taiwanPay) {
             $tradeData['TAIWANPAY'] = 1;
         }
-        if ($this->paymentMethods['ezPay']) {
+        if ($this->ezPay) {
             $tradeData['EZPAY'] = 1;
         }
-        if ($this->paymentMethods['ezpWeChat']) {
+        if ($this->ezPayWeChat) {
             $tradeData['EZPWECHAT'] = 1;
         }
-        if ($this->paymentMethods['ezpAlipay']) {
+        if ($this->ezPayAlipay) {
             $tradeData['EZPALIPAY'] = 1;
         }
 
         // 超商代碼繳費與條碼繳費
-        if ($this->paymentMethods['CVS']) {
+        if ($this->cvsCode) {
             $tradeData['CVS'] = 1;
         }
-        if ($this->paymentMethods['barcode']) {
+        if ($this->barcode) {
             $tradeData['BARCODE'] = 1;
         }
 

@@ -3,7 +3,6 @@
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Ycs77\NewebPay\Crypto\Crypto;
-use Ycs77\NewebPay\Enums\CreditInst;
 use Ycs77\NewebPay\Enums\CVSCOM;
 use Ycs77\NewebPay\Enums\LangType;
 use Ycs77\NewebPay\Enums\LgsType;
@@ -81,17 +80,11 @@ test('MPG 金流 → 進階功能', function () {
         ->withEmail('customer@example.com')
         ->disableEmailModify()
         ->withOrderComment('這是訂單備註')
-        ->withPaymentMethods([
-            'credit' => [
-                'enabled' => true,
-                'red' => true,
-                'inst' => CreditInst::NONE,
-            ],
-            'VACC' => true,
-            'googlePay' => true,
-            'samsungPay' => true,
-            'linePay' => true,
-        ])
+        ->withCredit(red: true)
+        ->withAtmTransfer()
+        ->withGooglePay()
+        ->withSamsungPay()
+        ->withLinePay()
         ->withCreditRemember('John Doe')
         ->withLogisticsPayment(CVSCOM::NOT_PAY_AND_PAY)
         ->withLogisticsType(LgsType::C2C)

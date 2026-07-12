@@ -198,7 +198,7 @@ class VerifyCsrfToken extends Middleware
 
 ### 自訂付款選項
 
-基本上一般交易可直接在 `config/newebpay.php` 做設定，但若遇到特殊情況，可依據個別交易設定更多付款選項。
+可依據個別交易，透過方法設定更多付款選項，例如交易限制、回傳網址與付款方式。
 
 **交易限制**
 
@@ -230,14 +230,41 @@ NewebPay::payment()
 
 **付款方式**
 
-覆蓋 config 中的付款方式設定，格式與 config 相同：
+預設不啟用任何付款方式，需以下列 chain 方法顯式開啟。常見用法如下：
 
 ```php
+use Ycs77\NewebPay\Enums\CreditInst;
+
 NewebPay::payment()
-    ...
-    ->withPaymentMethods([...]) // 付款方式 *依照 config 格式傳送*
+    ->withOrder('Order001')
+    ->withAmount(1050)
+    ->withItemDescription('測試商品')
+    ->withCredit(inst: [CreditInst::P3, CreditInst::P6])  // 信用卡，開 3、6 期分期
+    ->withAtmTransfer()                                    // ATM 轉帳
+    ->withLinePay(imageUrl: 'http://example.com/logo.png') // LINE Pay
     ->submit();
 ```
+
+完整的付款方式方法清單如下（回傳皆為 `self`，可鏈式呼叫）：
+
+| 方法 | 說明 |
+|------|------|
+| `withCredit(bool $enabled = true, bool $red = false, CreditInst\|array $inst = CreditInst::NONE)` | 信用卡（可開紅利、分期，分期可傳單一 CreditInst 或陣列） |
+| `withWebAtm(bool $enabled = true)` | WebATM |
+| `withAtmTransfer(bool $enabled = true)` | ATM 轉帳 |
+| `withBank(Bank\|array $bank)` | 指定 WebATM/ATM 的轉帳銀行（可傳單一 Bank 或陣列） |
+| `withNationalTravelCard(NTCBLocate $locate, string $startDate, string $endDate)` | 國民旅遊卡 |
+| `withGooglePay(bool $enabled = true)` | Google Pay |
+| `withSamsungPay(bool $enabled = true)` | Samsung Pay |
+| `withLinePay(bool $enabled = true, ?string $imageUrl = null)` | LINE Pay（imageUrl 用具名參數：`withLinePay(imageUrl: '...')`） |
+| `withUnionPay(bool $enabled = true)` | 銀聯卡 |
+| `withEsunWallet(bool $enabled = true)` | 玉山 Wallet |
+| `withTaiwanPay(bool $enabled = true)` | 台灣 Pay |
+| `withEzPay(bool $enabled = true)` | 簡單付電子錢包 |
+| `withEzPayWeChat(bool $enabled = true)` | 簡單付微信支付 |
+| `withEzPayAlipay(bool $enabled = true)` | 簡單付支付寶 |
+| `withCvsCode(bool $enabled = true)` | 超商代碼繳費 |
+| `withBarcode(bool $enabled = true)` | 條碼繳費 |
 
 **信用卡記憶卡號**
 

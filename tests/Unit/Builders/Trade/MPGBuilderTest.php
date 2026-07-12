@@ -28,35 +28,6 @@ beforeEach(function () {
         'hash_key' => 'TestHashKey123456789',
         'hash_iv' => '17ef14e533ed1c18',
         'lang' => LangType::ZH_TW,
-        'payment_methods' => [
-            'credit' => [
-                'enabled' => true,
-                'red' => false,
-                'inst' => CreditInst::NONE,
-            ],
-            'webATM' => false,
-            'VACC' => false,
-            'bank' => Bank::ALL,
-            'NTCB' => [
-                'enabled' => false,
-                'locate' => NTCBLocate::TaipeiCity,
-                'start_date' => '2015-01-01',
-                'end_date' => '2015-01-01',
-            ],
-            'googlePay' => false,
-            'samsungPay' => false,
-            'linePay' => [
-                'enabled' => false,
-            ],
-            'unionPay' => false,
-            'esunWallet' => false,
-            'taiwanPay' => false,
-            'ezPay' => false,
-            'ezpWeChat' => false,
-            'ezpAlipay' => false,
-            'CVS' => false,
-            'barcode' => false,
-        ],
         'timeout' => 30,
     ];
 
@@ -80,7 +51,7 @@ beforeEach(function () {
     $this->prependAppUrl->allows('handle')->andReturnUsing(fn (string $url) => $url);
 });
 
-test('MPGBuilder → 基本設定', function () {
+test('MPGBuilder → 基本設定（預設不啟用任何付款方式）', function () {
     $expectedTradeInfoData = [
         'MerchantID' => 'TestMerchantID1234',
         'RespondType' => 'JSON',
@@ -94,7 +65,6 @@ test('MPGBuilder → 基本設定', function () {
         'NotifyURL' => 'http://localhost/pay/notify',
         'CustomerURL' => 'http://localhost/pay/customer',
         'Email' => 'customer@example.com',
-        'CREDIT' => 1,
     ];
 
     $response = (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
@@ -107,16 +77,22 @@ test('MPGBuilder → 基本設定', function () {
         ->withNotifyUrl('http://localhost/pay/notify')
         ->withCustomerUrl('http://localhost/pay/customer')
         ->onPreparedOptions(function (Options $options) use ($expectedTradeInfoData) {
-            expect($options->toArray()['TradeInfo'])->toBe($expectedTradeInfoData);
+            $tradeInfo = $options->toArray()['TradeInfo'];
+            // 未顯式設定任何付款方式時，不應出現任何付款方式參數
+            expect($tradeInfo)->toBe($expectedTradeInfoData);
+            expect($tradeInfo)->not->toHaveKey('CREDIT');
+            expect($tradeInfo)->not->toHaveKey('WEBATM');
+            expect($tradeInfo)->not->toHaveKey('VACC');
         })
         ->submit();
 
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-test('MPGBuilder → 信用卡預設值', function () {
+test('MPGBuilder → 啟用信用卡（withCredit）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
+        ->withCredit()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('CREDIT', 1);
@@ -126,60 +102,59 @@ test('MPGBuilder → 信用卡預設值', function () {
         ->submit();
 });
 
-test('MPGBuilder → 信用卡啟用紅利交易', function () {
+test('MPGBuilder → 信用卡啟用紅利交易（withCredit red）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods([
-            'credit' => [
-                'enabled' => true,
-                'red' => true,
-                'inst' => CreditInst::NONE,
-            ],
-        ])
+        ->withCredit(red: true)
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
+            expect($tradeInfo)->toHaveKey('CREDIT', 1);
             expect($tradeInfo)->toHaveKey('CreditRed', 1);
         })
         ->submit();
 });
 
-test('MPGBuilder → 信用卡啟用單個分期付款選項', function () {
+test('MPGBuilder → 信用卡啟用單個分期付款選項（withCredit inst）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods([
-            'credit' => [
-                'enabled' => true,
-                'red' => true,
-                'inst' => CreditInst::P3,
-            ],
-        ])
+        ->withCredit(inst: CreditInst::P3)
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
+            expect($tradeInfo)->toHaveKey('CREDIT', 1);
             expect($tradeInfo)->toHaveKey('InstFlag', '3');
         })
         ->submit();
 });
 
-test('MPGBuilder → 信用卡啟用多個分期付款選項', function () {
+test('MPGBuilder → 信用卡啟用多個分期付款選項（withCredit inst array）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods([
-            'credit' => [
-                'enabled' => true,
-                'red' => true,
-                'inst' => [CreditInst::P3, CreditInst::P6, CreditInst::P12],
-            ],
-        ])
+        ->withCredit(inst: [CreditInst::P3, CreditInst::P6, CreditInst::P12])
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
+            expect($tradeInfo)->toHaveKey('CREDIT', 1);
             expect($tradeInfo)->toHaveKey('InstFlag', '3,6,12');
         })
         ->submit();
 });
 
-test('MPGBuilder → 信用卡記憶卡號', function () {
+test('MPGBuilder → 信用卡紅利與分期同時設定（withCredit red + inst）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
+        ->withCredit(red: true, inst: [CreditInst::P3, CreditInst::P6])
+        ->onPreparedOptions(function (Options $options) {
+            $tradeInfo = $options->toArray()['TradeInfo'];
+            expect($tradeInfo)->toHaveKey('CREDIT', 1);
+            expect($tradeInfo)->toHaveKey('CreditRed', 1);
+            expect($tradeInfo)->toHaveKey('InstFlag', '3,6');
+        })
+        ->submit();
+});
+
+test('MPGBuilder → 信用卡記憶卡號（withCreditRemember）', function () {
+    (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
+        ->setFormRedirectTransporter($this->formRedirectTransporter)
+        ->withCredit()
         ->withCreditRemember('example_user')
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
@@ -189,10 +164,10 @@ test('MPGBuilder → 信用卡記憶卡號', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用 webATM', function () {
+test('MPGBuilder → 啟用 WebATM（withWebAtm）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['webATM' => true])
+        ->withWebAtm()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('WEBATM', 1);
@@ -200,10 +175,10 @@ test('MPGBuilder → 啟用 webATM', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用 ATM 轉帳 (VACC)', function () {
+test('MPGBuilder → 啟用 ATM 轉帳（withAtmTransfer）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['VACC' => true])
+        ->withAtmTransfer()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('VACC', 1);
@@ -211,10 +186,11 @@ test('MPGBuilder → 啟用 ATM 轉帳 (VACC)', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用單個銀行選項', function () {
+test('MPGBuilder → 指定單個轉帳銀行（withBank）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['bank' => Bank::BOT])
+        ->withAtmTransfer()
+        ->withBank(Bank::BOT)
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('BankType', 'BOT');
@@ -222,10 +198,11 @@ test('MPGBuilder → 啟用單個銀行選項', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用多個銀行選項', function () {
+test('MPGBuilder → 指定多個轉帳銀行（withBank array）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['bank' => [Bank::BOT, Bank::HNCB]])
+        ->withAtmTransfer()
+        ->withBank([Bank::BOT, Bank::HNCB])
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('BankType', 'BOT,HNCB');
@@ -233,17 +210,10 @@ test('MPGBuilder → 啟用多個銀行選項', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用 NTCB', function () {
+test('MPGBuilder → 啟用國民旅遊卡（withNationalTravelCard）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods([
-            'NTCB' => [
-                'enabled' => true,
-                'locate' => NTCBLocate::HsinchuCity,
-                'start_date' => '2020-01-01',
-                'end_date' => '2020-01-01',
-            ],
-        ])
+        ->withNationalTravelCard(NTCBLocate::HsinchuCity, '2020-01-01', '2020-01-01')
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('NTCB', 1);
@@ -254,10 +224,10 @@ test('MPGBuilder → 啟用 NTCB', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用 Google Pay', function () {
+test('MPGBuilder → 啟用 Google Pay（withGooglePay）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['googlePay' => true])
+        ->withGooglePay()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('ANDROIDPAY', 1);
@@ -265,10 +235,10 @@ test('MPGBuilder → 啟用 Google Pay', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用 Samsung Pay', function () {
+test('MPGBuilder → 啟用 Samsung Pay（withSamsungPay）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['samsungPay' => true])
+        ->withSamsungPay()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('SAMSUNGPAY', 1);
@@ -276,15 +246,10 @@ test('MPGBuilder → 啟用 Samsung Pay', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用 LINE Pay', function () {
+test('MPGBuilder → 啟用 LINE Pay（withLinePay）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods([
-            'linePay' => [
-                'enabled' => true,
-                'image_url' => 'http://example.com/your-image-url',
-            ],
-        ])
+        ->withLinePay(imageUrl: 'http://example.com/your-image-url')
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('LINEPAY', 1);
@@ -293,10 +258,33 @@ test('MPGBuilder → 啟用 LINE Pay', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用玉山 Wallet', function () {
+test('MPGBuilder → 啟用 LINE Pay 不帶產品圖檔（withLinePay）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['esunWallet' => true])
+        ->withLinePay()
+        ->onPreparedOptions(function (Options $options) {
+            $tradeInfo = $options->toArray()['TradeInfo'];
+            expect($tradeInfo)->toHaveKey('LINEPAY', 1);
+            expect($tradeInfo)->not->toHaveKey('ImageUrl');
+        })
+        ->submit();
+});
+
+test('MPGBuilder → 啟用銀聯卡（withUnionPay）', function () {
+    (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
+        ->setFormRedirectTransporter($this->formRedirectTransporter)
+        ->withUnionPay()
+        ->onPreparedOptions(function (Options $options) {
+            $tradeInfo = $options->toArray()['TradeInfo'];
+            expect($tradeInfo)->toHaveKey('UNIONPAY', 1);
+        })
+        ->submit();
+});
+
+test('MPGBuilder → 啟用玉山 Wallet（withEsunWallet）', function () {
+    (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
+        ->setFormRedirectTransporter($this->formRedirectTransporter)
+        ->withEsunWallet()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('ESUNWALLET', 1);
@@ -304,10 +292,10 @@ test('MPGBuilder → 啟用玉山 Wallet', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用台灣 Pay', function () {
+test('MPGBuilder → 啟用台灣 Pay（withTaiwanPay）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['taiwanPay' => true])
+        ->withTaiwanPay()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('TAIWANPAY', 1);
@@ -315,10 +303,10 @@ test('MPGBuilder → 啟用台灣 Pay', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用簡單付電子錢包', function () {
+test('MPGBuilder → 啟用簡單付電子錢包（withEzPay）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['ezPay' => true])
+        ->withEzPay()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('EZPAY', 1);
@@ -326,10 +314,10 @@ test('MPGBuilder → 啟用簡單付電子錢包', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用簡單付微信支付', function () {
+test('MPGBuilder → 啟用簡單付微信支付（withEzPayWeChat）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['ezpWeChat' => true])
+        ->withEzPayWeChat()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('EZPWECHAT', 1);
@@ -337,10 +325,10 @@ test('MPGBuilder → 啟用簡單付微信支付', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用簡單付支付寶', function () {
+test('MPGBuilder → 啟用簡單付支付寶（withEzPayAlipay）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['ezpAlipay' => true])
+        ->withEzPayAlipay()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('EZPALIPAY', 1);
@@ -348,10 +336,10 @@ test('MPGBuilder → 啟用簡單付支付寶', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用超商代碼繳費支付', function () {
+test('MPGBuilder → 啟用超商代碼繳費（withCvsCode）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['CVS' => true])
+        ->withCvsCode()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('CVS', 1);
@@ -359,10 +347,10 @@ test('MPGBuilder → 啟用超商代碼繳費支付', function () {
         ->submit();
 });
 
-test('MPGBuilder → 啟用條碼繳費支付', function () {
+test('MPGBuilder → 啟用條碼繳費（withBarcode）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
-        ->withPaymentMethods(['barcode' => true])
+        ->withBarcode()
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
             expect($tradeInfo)->toHaveKey('BARCODE', 1);
