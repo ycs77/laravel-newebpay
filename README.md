@@ -24,15 +24,16 @@
 - [設定](#設定)
 - [測試信用卡號](#測試信用卡號)
 - [MPG 多功能付款](#mpg-多功能付款)
-  - [建立付款流程](#建立付款流程)
-  - [自訂付款選項](#自訂付款選項)
+  - [快速開始](#快速開始)
+  - [付款方式](#付款方式)
   - [接收付款結果](#接收付款結果)
   - [取得付款結果的詳細資訊](#取得付款結果的詳細資訊)
-- [ATM/超商取號](#atm超商取號)
-- [單筆交易查詢](#單筆交易查詢)
+  - [ATM/超商取號](#atm超商取號)
+- [查詢交易詳情](#查詢交易詳情)
 - [信用卡取消授權](#信用卡取消授權)
-- [信用卡請款](#信用卡請款)
-- [信用卡退款](#信用卡退款)
+- [信用卡請退款](#信用卡請退款)
+  - [信用卡請款](#信用卡請款)
+  - [信用卡退款](#信用卡退款)
 - [信用卡定期定額委託](#信用卡定期定額委託)
   - [建立委託](#建立委託)
   - [授權週期](#授權週期)
@@ -95,7 +96,7 @@ NEWEBPAY_MERCHANT_HASH_IV=...   # 貼上 HashIV
 
 ## MPG 多功能付款
 
-### 建立付款流程
+### 快速開始
 
 首先建立一個含有表單的頁面，讓用戶點擊「付款」按鈕後送出 POST 請求：
 
@@ -125,7 +126,7 @@ defineProps<{
 </script>
 ```
 
-然後設定路由來發送 MPG 多功能付款請求：
+然後設定路由來發送 MPG 多功能付款請求。付款方式預設全部關閉，這裡以最常見的信用卡付款為例，用 `withCredit()` 顯式啟用：
 
 ```php
 use Ycs77\NewebPay\Facades\NewebPay;
@@ -136,6 +137,7 @@ Route::post('/pay', function () {
         ->withAmount(120)                  // 交易金額
         ->withItemDescription('我的商品')   // 商品名稱
         ->withEmail('test@example.com')    // 付款人信箱
+        ->withCredit()                     // 啟用信用卡付款
         ->withReturnUrl('/pay/callback')   // 前景回傳網址 (Callback)
         ->withNotifyUrl('/pay/notify')     // 背景通知網址 (Notify)
         ->submit();
@@ -165,26 +167,7 @@ Route::post('/pay/callback', function (Request $request) {
 });
 ```
 
-如果是 ATM 的付款方式，需要透過幕後回傳的，設定 notify：
-
-```php
-use Illuminate\Http\Request;
-use Ycs77\NewebPay\Facades\NewebPay;
-
-Route::post('/pay/notify', function (Request $request) {
-    $result = NewebPay::result($request);
-
-    if ($result->isFail()) {
-        return;
-    }
-
-    logger('藍新金流 交易資訊 notify', ['result' => $result->toArray()]);
-
-    // 訂單付款成功，處理訂單邏輯...
-});
-```
-
-還要把這些路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
+還要把這個路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
 
 ```php
 class VerifyCsrfToken extends Middleware
@@ -196,77 +179,40 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
-### 自訂付款選項
+這樣就完成一個最基本的信用卡付款流程了。想開啟更多付款方式，請參考[付款方式](#付款方式)；callback 與 notify 的完整設定，請參考[接收付款結果](#接收付款結果)。
 
-可依據個別交易，透過方法設定更多付款選項，例如交易限制、回傳網址與付款方式。
+### 付款方式
 
-**交易限制**
+可依需要啟用信用卡、WebATM／ATM、國民旅遊卡、行動支付、簡單付、超商代碼／條碼等多種付款方式，以下分別說明各自的設定方式。
 
-設定交易的秒數限制和截止天數：
+#### 信用卡
 
-```php
-NewebPay::payment()
-    ...
-    ->withTradeLimit(900)  // 交易秒數限制 (60~900 秒)
-    ->withExpireDays(14)   // 交易截止日 (天數，最大 180 天)
-    ->submit();
-```
-
-**回傳網址**
-
-設定付款完成後的回傳網址：
-
-```php
-NewebPay::payment()
-    ...
-    ->withReturnUrl('/pay/callback')      // 前景回傳網址 (Callback)
-    ->withNotifyUrl('/pay/notify')        // 背景通知網址 (Notify)
-    ->withCustomerUrl('/pay/customer')    // 商店取號網址
-    ->withClientBackUrl('/pay/back')      // 返回按鈕網址
-    ->submit();
-```
-
-> **自動補全網址**：若傳入的字串不是完整 URL（例如 `/pay/callback`），套件會自動以 `config('app.url')` 作為前綴補全。若傳入完整 URL（例如 `https://example.com/callback`），則直接使用不做修改。
-
-**付款方式**
-
-預設不啟用任何付款方式，需以下列 chain 方法顯式開啟。常見用法如下：
+信用卡可搭配紅利折抵與分期付款：
 
 ```php
 use Ycs77\NewebPay\Enums\CreditInst;
 
 NewebPay::payment()
-    ->withOrder('Order001')
-    ->withAmount(1050)
-    ->withItemDescription('測試商品')
-    ->withCredit(inst: [CreditInst::P3, CreditInst::P6])  // 信用卡，開 3、6 期分期
-    ->withAtmTransfer()                                    // ATM 轉帳
-    ->withLinePay(imageUrl: 'http://example.com/logo.png') // LINE Pay
+    ...
+    ->withCredit()                                       // 一次付清
+    ->withCredit(red: true)                              // 啟用紅利折抵
+    ->withCredit(inst: [CreditInst::P3, CreditInst::P6]) // 分期付款：3、6 期
     ->submit();
 ```
 
-完整的付款方式方法清單如下（回傳皆為 `self`，可鏈式呼叫）：
+分期參數 `inst` 可傳單一 `CreditInst` 或陣列，選項如下：
 
-| 方法 | 說明 |
+| 選項 | 說明 |
 |------|------|
-| `withCredit(bool $enabled = true, bool $red = false, CreditInst\|array $inst = CreditInst::NONE)` | 信用卡（可開紅利、分期，分期可傳單一 CreditInst 或陣列） |
-| `withWebAtm(bool $enabled = true)` | WebATM |
-| `withAtmTransfer(bool $enabled = true)` | ATM 轉帳 |
-| `withBank(Bank\|array $bank)` | 指定 WebATM/ATM 的轉帳銀行（可傳單一 Bank 或陣列） |
-| `withNationalTravelCard(NTCBLocate $locate, string $startDate, string $endDate)` | 國民旅遊卡 |
-| `withGooglePay(bool $enabled = true)` | Google Pay |
-| `withSamsungPay(bool $enabled = true)` | Samsung Pay |
-| `withLinePay(bool $enabled = true, ?string $imageUrl = null)` | LINE Pay（imageUrl 用具名參數：`withLinePay(imageUrl: '...')`） |
-| `withUnionPay(bool $enabled = true)` | 銀聯卡 |
-| `withEsunWallet(bool $enabled = true)` | 玉山 Wallet |
-| `withTaiwanPay(bool $enabled = true)` | 台灣 Pay |
-| `withEzPay(bool $enabled = true)` | 簡單付電子錢包 |
-| `withEzPayWeChat(bool $enabled = true)` | 簡單付微信支付 |
-| `withEzPayAlipay(bool $enabled = true)` | 簡單付支付寶 |
-| `withCvsCode(bool $enabled = true)` | 超商代碼繳費 |
-| `withBarcode(bool $enabled = true)` | 條碼繳費 |
+| `CreditInst::NONE` | 不啟用分期（預設） |
+| `CreditInst::ALL` | 啟用全部分期 |
+| `CreditInst::P3` | 分 3 期 |
+| `CreditInst::P6` | 分 6 期 |
+| `CreditInst::P12` | 分 12 期 |
+| `CreditInst::P18` | 分 18 期 |
+| `CreditInst::P24` | 分 24 期 |
 
-**信用卡記憶卡號**
+#### 信用卡記憶卡號
 
 啟用信用卡記憶卡號功能，傳入付款人名稱：
 
@@ -277,17 +223,97 @@ NewebPay::payment()
     ->submit();
 ```
 
-**其他選項**
+#### WebATM／ATM 轉帳
 
 ```php
 NewebPay::payment()
     ...
-    ->disableEmailModify()           // 禁止修改 email
-    ->withOrderComment('這是訂單備註') // 商店備註 (最大 300 字)
+    ->withWebAtm()      // WebATM
+    ->withAtmTransfer() // ATM 轉帳
     ->submit();
 ```
 
-**物流設定**
+WebATM 與 ATM 轉帳可用 `withBank()` 指定顯示於付款頁上的轉帳銀行（此參數為兩者共用，無法個別分開指定），可傳單一 `Bank` 或陣列：
+
+```php
+use Ycs77\NewebPay\Enums\Bank;
+
+NewebPay::payment()
+    ...
+    ->withAtmTransfer()
+    ->withBank([Bank::BOT, Bank::HNCB]) // 台灣銀行、華南銀行
+    ->submit();
+```
+
+可用的銀行有 `Bank::BOT`（台灣銀行）、`Bank::HNCB`（華南銀行）、`Bank::FirstBank`（第一銀行）。若未設定，預設會顯示所有銀行選項。
+
+> [!NOTE]
+> 每日 00:00~01:00 為第一銀行例行維護時間，此區間內不會顯示第一銀行選項；若此時僅指定第一銀行一家，將回應 `MPG01027` 錯誤代碼。
+
+#### 國民旅遊卡
+
+傳入旅遊地區與起訖日期：
+
+```php
+use Ycs77\NewebPay\Enums\NTCBLocate;
+
+NewebPay::payment()
+    ...
+    ->withNationalTravelCard(NTCBLocate::HsinchuCity, '2020-01-01', '2020-12-31')
+    ->submit();
+```
+
+旅遊地區可使用的選項請參考 `\Ycs77\NewebPay\Enums\NTCBLocate` 類別。
+
+#### 行動支付
+
+Google Pay、Samsung Pay、LINE Pay、銀聯卡、玉山 Wallet、台灣 Pay：
+
+```php
+NewebPay::payment()
+    ...
+    ->withGooglePay()  // Google Pay
+    ->withSamsungPay() // Samsung Pay
+    ->withLinePay()    // LINE Pay
+    ->withUnionPay()   // 銀聯卡
+    ->withEsunWallet() // 玉山 Wallet
+    ->withTaiwanPay()  // 台灣 Pay
+    ->submit();
+```
+
+LINE Pay 可傳入產品圖檔連結，顯示於 LINE Pay 付款前的產品圖片區（建議尺寸 84*84 像素，未提供時使用藍新系統預設圖檔）：
+
+```php
+NewebPay::payment()
+    ...
+    ->withLinePay(imageUrl: 'http://example.com/logo.png')
+    ->submit();
+```
+
+#### 簡單付
+
+簡單付電子錢包、微信支付、支付寶：
+
+```php
+NewebPay::payment()
+    ...
+    ->withEzPay()       // 簡單付電子錢包
+    ->withEzPayWeChat() // 簡單付微信支付
+    ->withEzPayAlipay() // 簡單付支付寶
+    ->submit();
+```
+
+#### 超商代碼／條碼繳費
+
+```php
+NewebPay::payment()
+    ...
+    ->withCvsCode() // 超商代碼繳費
+    ->withBarcode() // 條碼繳費
+    ->submit();
+```
+
+#### 物流設定
 
 設定超商物流相關選項：
 
@@ -302,9 +328,93 @@ NewebPay::payment()
     ->submit();
 ```
 
+#### 交易限制
+
+設定交易的秒數限制和截止天數：
+
+```php
+NewebPay::payment()
+    ...
+    ->withTradeLimit(900)  // 交易秒數限制 (60~900 秒)
+    ->withExpireDays(14)   // 交易截止日 (天數，最大 180 天)
+    ->submit();
+```
+
+#### 其他付款選項
+
+```php
+NewebPay::payment()
+    ...
+    ->disableEmailModify()           // 禁止修改 email
+    ->withOrderComment('這是訂單備註') // 商店備註 (最大 300 字)
+    ->submit();
+```
+
+#### 完整方法對照表
+
+付款相關方法一覽：
+
+```php
+use Ycs77\NewebPay\Enums\Bank;
+use Ycs77\NewebPay\Enums\CreditInst;
+use Ycs77\NewebPay\Enums\CVSCOM;
+use Ycs77\NewebPay\Enums\LgsType;
+use Ycs77\NewebPay\Enums\NTCBLocate;
+
+NewebPay::payment()
+    ...
+    ->withCredit(red: true, inst: [CreditInst::P3, CreditInst::P6]) // 信用卡（可開紅利、分期）
+    ->withCreditRemember('John Doe')     // 信用卡記憶卡號
+    ->withWebAtm()                       // WebATM
+    ->withAtmTransfer()                  // ATM 轉帳
+    ->withBank([Bank::BOT, Bank::HNCB])  // 指定 WebATM/ATM 轉帳銀行
+    ->withNationalTravelCard(NTCBLocate::HsinchuCity, '2020-01-01', '2020-12-31') // 國民旅遊卡
+    ->withGooglePay()                    // Google Pay
+    ->withSamsungPay()                   // Samsung Pay
+    ->withLinePay(imageUrl: 'http://example.com/logo.png') // LINE Pay
+    ->withUnionPay()                     // 銀聯卡
+    ->withEsunWallet()                   // 玉山 Wallet
+    ->withTaiwanPay()                    // 台灣 Pay
+    ->withEzPay()                        // 簡單付電子錢包
+    ->withEzPayWeChat()                  // 簡單付微信支付
+    ->withEzPayAlipay()                  // 簡單付支付寶
+    ->withCvsCode()                      // 超商代碼繳費
+    ->withBarcode()                      // 條碼繳費
+    ->withLogisticsPayment(CVSCOM::NOT_PAY_AND_PAY) // 物流方式
+    ->withLogisticsType(LgsType::C2C)    // 物流型態
+    ->withTradeLimit(900)                // 交易秒數限制
+    ->withExpireDays(14)                 // 交易截止日
+    ->disableEmailModify()               // 禁止修改 email
+    ->withOrderComment('這是訂單備註')   // 商店備註
+    ->submit();
+```
+
 ### 接收付款結果
 
-在[建立付款流程](#建立付款流程)中已設定了基本的 callback 和 notify 路由。如果同時設定了 callback 和 notify，進行部分交易時兩個 API 都會發送訊息，這時就要各司其職，callback 只設定返回給用戶的訊息，而 notify 只負責處理交易的邏輯：
+依付款方式不同，藍新金流會用兩種方式回傳交易結果：
+
+- **即時付款**（可直接跳轉回網站）：信用卡、Google Pay、Samsung Pay、LINE Pay、銀聯卡、玉山 Wallet、台灣 Pay、國民旅遊卡等，透過 `withReturnUrl()` 設定的 **callback**（前景回傳）接收。
+- **取號付款**（需先取號、稍後才付款）：WebATM、ATM 轉帳、超商代碼、條碼、簡單付系列等，透過 `withNotifyUrl()` 設定的 **notify**（背景通知）接收。
+
+如果同時設定了 callback 和 notify，進行部分交易時兩個 API 都會發送訊息，這時就要各司其職：callback 只設定返回給用戶的訊息，而 notify 只負責處理交易的邏輯。
+
+**設定回傳網址**
+
+```php
+NewebPay::payment()
+    ...
+    ->withReturnUrl('/pay/callback')      // 前景回傳網址 (Callback)
+    ->withNotifyUrl('/pay/notify')        // 背景通知網址 (Notify)
+    ->withCustomerUrl('/pay/customer')    // 商店取號網址
+    ->withClientBackUrl('/pay/back')      // 返回按鈕網址
+    ->submit();
+```
+
+> **自動補全網址**：若傳入的字串不是完整 URL（例如 `/pay/callback`），套件會自動以 `config('app.url')` 作為前綴補全。若傳入完整 URL（例如 `https://example.com/callback`），則直接使用不做修改。
+
+**Callback（前景回傳）**
+
+信用卡等即時付款方式，付款完成後會直接跳轉回網站，用 callback 回覆給用戶的訊息：
 
 ```php
 use Illuminate\Http\Request;
@@ -323,6 +433,15 @@ Route::post('/pay/callback', function (Request $request) {
         ->to('/pay')
         ->with('success', '付款成功');
 });
+```
+
+**Notify（背景通知）**
+
+ATM、超商等取號付款方式，付款完成是透過幕後通知的，用 notify 處理交易邏輯：
+
+```php
+use Illuminate\Http\Request;
+use Ycs77\NewebPay\Facades\NewebPay;
 
 Route::post('/pay/notify', function (Request $request) {
     $result = NewebPay::result($request);
@@ -336,6 +455,20 @@ Route::post('/pay/notify', function (Request $request) {
     // 訂單付款成功，處理訂單邏輯...
 });
 ```
+
+記得把這些路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
+
+```php
+class VerifyCsrfToken extends Middleware
+{
+    protected $except = [
+        '/pay/callback',
+        '/pay/notify',
+    ];
+}
+```
+
+**取得回傳結果**
 
 回傳結果可以使用各個方法來取得需要的資料：
 
@@ -410,7 +543,7 @@ if ($result->paymentType() === PaymentType::TAIWANPAY) {
 }
 ```
 
-## ATM/超商取號
+### ATM/超商取號
 
 預設會直接導向到藍新金流的取號頁面，沒有特別需求不需要自己做。但如果要自訂取號頁面的話，也是可以自己客製調整：
 
@@ -455,7 +588,7 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
-## 單筆交易查詢
+## 查詢交易詳情
 
 從訂單編號和該筆交易的金額來查詢交易詳情：
 
@@ -512,7 +645,9 @@ $result = NewebPay::creditCard()
     ->send();
 ```
 
-## 信用卡請款
+## 信用卡請退款
+
+### 信用卡請款
 
 信用卡請款：
 
@@ -542,7 +677,7 @@ $result = NewebPay::creditCard()
     ->send();
 ```
 
-## 信用卡退款
+### 信用卡退款
 
 信用卡退款：
 
