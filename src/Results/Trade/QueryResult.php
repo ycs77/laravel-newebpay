@@ -13,6 +13,7 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
     use Concerns\HasCheckCode;
     use Concerns\HasMerchantID;
     use Concerns\HasOrderNo;
+    use Concerns\HasPaymentType;
     use Concerns\HasTradeNo;
 
     /**
@@ -53,6 +54,51 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
     public function paymentType(): PaymentType
     {
         return PaymentType::from($this->result['PaymentType']);
+    }
+
+    /**
+     * 是否為信用卡交易
+     */
+    public function hasCredit(): bool
+    {
+        return $this->hasPaymentType(PaymentType::CREDIT);
+    }
+
+    /**
+     * 是否包含付款狀態資訊
+     *
+     * 超商代碼、超商條碼、超商取貨付款、LINE Pay、ATM、WebATM
+     */
+    public function hasPaymentStatus(): bool
+    {
+        return $this->hasPaymentType(
+            PaymentType::VACC,
+            PaymentType::WEBATM,
+            PaymentType::BARCODE,
+            PaymentType::CVS,
+            PaymentType::LINEPAY,
+            PaymentType::CVSCOM,
+        );
+    }
+
+    /**
+     * 是否為超商物流付款
+     */
+    public function hasLgs(): bool
+    {
+        return $this->hasPaymentType(PaymentType::CVSCOM);
+    }
+
+    /**
+     * 是否為電子錢包付款
+     */
+    public function hasDigitalWallet(): bool
+    {
+        return $this->hasPaymentType(
+            PaymentType::LINEPAY,
+            PaymentType::ESUNWALLET,
+            PaymentType::TAIWANPAY,
+        );
     }
 
     /**

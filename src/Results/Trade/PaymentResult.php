@@ -11,6 +11,7 @@ class PaymentResult extends BaseResult
 {
     use Concerns\HasMerchantID;
     use Concerns\HasOrderNo;
+    use Concerns\HasPaymentType;
     use Concerns\HasTradeNo;
 
     /**
@@ -45,6 +46,73 @@ class PaymentResult extends BaseResult
     public function paymentType(): PaymentType
     {
         return PaymentType::from($this->result['PaymentType']);
+    }
+
+    /**
+     * 是否為信用卡付款
+     */
+    public function hasCredit(): bool
+    {
+        return $this->hasPaymentType(PaymentType::CREDIT);
+    }
+
+    /**
+     * 是否為 ATM 或 WebATM 付款
+     */
+    public function hasAtm(): bool
+    {
+        return $this->hasPaymentType(
+            PaymentType::VACC,
+            PaymentType::WEBATM,
+        );
+    }
+
+    /**
+     * 是否為超商代碼繳費
+     */
+    public function hasStoreCode(): bool
+    {
+        return $this->hasPaymentType(PaymentType::CVS);
+    }
+
+    /**
+     * 是否為超商條碼繳費
+     */
+    public function hasStoreBarcode(): bool
+    {
+        return $this->hasPaymentType(PaymentType::BARCODE);
+    }
+
+    /**
+     * 是否為超商物流付款
+     */
+    public function hasLgs(): bool
+    {
+        return $this->hasPaymentType(PaymentType::CVSCOM);
+    }
+
+    /**
+     * 是否為跨境支付
+     */
+    public function hasEzPay(): bool
+    {
+        return $this->ezPay()->isEzPay();
+    }
+
+    /**
+     * 是否為玉山 Wallet 付款
+     */
+    public function hasEsunWallet(): bool
+    {
+        return $this->hasPaymentType(PaymentType::ESUNWALLET);
+    }
+
+    /**
+     * 是否為台灣 Pay 付款
+     */
+    public function hasTaiwanPay(): bool
+    {
+        return $this->hasPaymentType(PaymentType::TAIWANPAY);
     }
 
     /**

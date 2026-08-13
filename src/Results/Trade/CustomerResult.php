@@ -11,6 +11,7 @@ class CustomerResult extends BaseResult
 {
     use Concerns\HasMerchantID;
     use Concerns\HasOrderNo;
+    use Concerns\HasPaymentType;
     use Concerns\HasTradeNo;
 
     /**
@@ -40,6 +41,38 @@ class CustomerResult extends BaseResult
     public function paymentType(): PaymentType
     {
         return PaymentType::from($this->result['PaymentType']);
+    }
+
+    /**
+     * 是否為 ATM 轉帳付款
+     */
+    public function hasAtm(): bool
+    {
+        return $this->hasPaymentType(PaymentType::VACC);
+    }
+
+    /**
+     * 是否為超商代碼繳費
+     */
+    public function hasStoreCode(): bool
+    {
+        return $this->hasPaymentType(PaymentType::CVS);
+    }
+
+    /**
+     * 是否為超商條碼繳費
+     */
+    public function hasStoreBarcode(): bool
+    {
+        return $this->hasPaymentType(PaymentType::BARCODE);
+    }
+
+    /**
+     * 是否為超商物流付款
+     */
+    public function hasLgs(): bool
+    {
+        return $this->hasPaymentType(PaymentType::CVSCOM);
     }
 
     /**

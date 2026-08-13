@@ -47,6 +47,7 @@ test('PaymentResult → 解析付款結果', function () {
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->orderNo())->toBe('1686759318')
         ->and($result->paymentType())->toBe(PaymentType::CREDIT)
+        ->and($result->hasCredit())->toBeTrue()
         ->and($result->payTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 00:00:00')
         ->and($result->ip())->toBe('127.0.0.1')
         ->and($result->escrowBank())->toBe('HNCB');
@@ -93,6 +94,14 @@ test('PaymentResult → 解析信用卡付款', function () {
     $credit = $result->credit();
 
     expect($result->paymentType())->toBe(PaymentType::CREDIT);
+    expect($result->hasCredit())->toBeTrue()
+        ->and($result->hasAtm())->toBeFalse()
+        ->and($result->hasStoreCode())->toBeFalse()
+        ->and($result->hasStoreBarcode())->toBeFalse()
+        ->and($result->hasLgs())->toBeFalse()
+        ->and($result->hasEzPay())->toBeFalse()
+        ->and($result->hasEsunWallet())->toBeFalse()
+        ->and($result->hasTaiwanPay())->toBeFalse();
     expect($credit->authBank())->toBe('CTBC')
         ->and($credit->authBankName())->toBe('中國信託銀行')
         ->and($credit->respondCode())->toBe('00')
@@ -137,6 +146,7 @@ test('PaymentResult → 解析 ATM 付款', function () {
     $atm = $result->atm();
 
     expect($result->paymentType())->toBe(PaymentType::VACC);
+    expect($result->hasAtm())->toBeTrue();
     expect($atm->payBankCode())->toBe(null)
         ->and($atm->payerAccount5Code())->toBe('12345');
 });
@@ -171,6 +181,7 @@ test('PaymentResult → 解析 WebATM 付款', function () {
     $atm = $result->atm();
 
     expect($result->paymentType())->toBe(PaymentType::WEBATM);
+    expect($result->hasAtm())->toBeTrue();
     expect($atm->payBankCode())->toBe('809')
         ->and($atm->payerAccount5Code())->toBe('12345');
 });
@@ -206,6 +217,7 @@ test('PaymentResult → 解析超商代碼付款', function () {
     $storeCode = $result->storeCode();
 
     expect($result->paymentType())->toBe(PaymentType::CVS);
+    expect($result->hasStoreCode())->toBeTrue();
     expect($storeCode->codeNo())->toBe('TEST1234567890')
         ->and($storeCode->storeType())->toBe(4)
         ->and($storeCode->storeTypeName())->toBe('萊爾富')
@@ -245,6 +257,7 @@ test('PaymentResult → 解析超商條碼付款', function () {
     $storeBarcode = $result->storeBarcode();
 
     expect($result->paymentType())->toBe(PaymentType::BARCODE);
+    expect($result->hasStoreBarcode())->toBeTrue();
     expect($storeBarcode->barcode1())->toBe('TEST1')
         ->and($storeBarcode->barcode2())->toBe('TEST2')
         ->and($storeBarcode->barcode3())->toBe('TEST3')
@@ -289,6 +302,7 @@ test('PaymentResult → 解析物流付款', function () {
     $lgs = $result->lgs();
 
     expect($result->paymentType())->toBe(PaymentType::CVSCOM);
+    expect($result->hasLgs())->toBeTrue();
     expect($lgs->storeCode())->toBe('019666')
         ->and($lgs->storeType())->toBe('全家')
         ->and($lgs->storeName())->toBe('全家台灣大道店')
@@ -321,13 +335,14 @@ test('PaymentResult → 解析 ezPay 付款', function () {
         'Status' => 'SUCCESS',
         'MerchantID' => 'TestMerchantID1234',
         'TradeInfo' => $tradeData,
-        'TradeSha' => 'TradeSha',
         'Version' => '2.0',
     ]);
 
     $ezPay = $result->ezPay();
 
     expect($ezPay->isEzPay())->toBeTrue();
+    expect($result->hasEzPay())->toBeTrue();
+    expect($result->hasCredit())->toBeFalse();
     expect($ezPay->channelId())->toBe('ALIPAY')
         ->and($ezPay->channelName())->toBe('支付寶')
         ->and($ezPay->channelNo())->toBe('NO0000000001');
@@ -362,6 +377,7 @@ test('PaymentResult → 解析玉山 Wallet 付款', function () {
     $esunWallet = $result->esunWallet();
 
     expect($result->paymentType())->toBe(PaymentType::ESUNWALLET);
+    expect($result->hasEsunWallet())->toBeTrue();
     expect($esunWallet->payAmt())->toBe(120)
         ->and($esunWallet->redDisAmt())->toBe(0);
 });
@@ -394,5 +410,6 @@ test('PaymentResult → 解析台灣 Pay 付款', function () {
     $taiwanPay = $result->taiwanPay();
 
     expect($result->paymentType())->toBe(PaymentType::TAIWANPAY);
+    expect($result->hasTaiwanPay())->toBeTrue();
     expect($taiwanPay->payAmt())->toBe(120);
 });

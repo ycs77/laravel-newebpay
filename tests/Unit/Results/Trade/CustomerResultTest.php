@@ -36,6 +36,10 @@ test('CustomerResult → 解析取號結果', function () {
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->orderNo())->toBe('1686763446')
         ->and($result->paymentType())->toBe(PaymentType::BARCODE)
+        ->and($result->hasStoreBarcode())->toBeTrue()
+        ->and($result->hasAtm())->toBeFalse()
+        ->and($result->hasStoreCode())->toBeFalse()
+        ->and($result->hasLgs())->toBeFalse()
         ->and($result->expireTime()?->format('Y-m-d H:i:s'))->toBe('2023-01-01 23:59:59');
 });
 
@@ -68,6 +72,7 @@ test('CustomerResult → 解析 ATM 取號', function () {
     $storeBarcode = $result->atm();
 
     expect($result->paymentType())->toBe(PaymentType::VACC);
+    expect($result->hasAtm())->toBeTrue();
     expect($storeBarcode->bankCode())->toBe('007')
         ->and($storeBarcode->codeNo())->toBe('TestAccount12345');
 });
@@ -100,6 +105,7 @@ test('CustomerResult → 解析代碼取號', function () {
     $storeCode = $result->storeCode();
 
     expect($result->paymentType())->toBe(PaymentType::CVS);
+    expect($result->hasStoreCode())->toBeTrue();
     expect($storeCode->codeNo())->toBe('TEST1234567890');
 });
 
@@ -133,6 +139,7 @@ test('CustomerResult → 解析條碼取號', function () {
     $storeBarcode = $result->storeBarcode();
 
     expect($result->paymentType())->toBe(PaymentType::BARCODE);
+    expect($result->hasStoreBarcode())->toBeTrue();
     expect($storeBarcode->barcode1())->toBe('TEST1')
         ->and($storeBarcode->barcode2())->toBe('TEST2')
         ->and($storeBarcode->barcode3())->toBe('TEST3');
@@ -172,6 +179,7 @@ test('CustomerResult → 解析物流取號', function () {
     $lgs = $result->lgs();
 
     expect($result->paymentType())->toBe(PaymentType::CVSCOM);
+    expect($result->hasLgs())->toBeTrue();
     expect($lgs->storeCode())->toBe('019666')
         ->and($lgs->storeName())->toBe('全家台灣大道店')
         ->and($lgs->storeType())->toBe('全家')

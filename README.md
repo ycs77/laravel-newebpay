@@ -491,53 +491,53 @@ $result->escrowBank()      // 款項保管銀行：'HNCB'
 
 ### 取得付款結果的詳細資訊
 
-根據不同的付款方式，可以取得對應的詳細資訊：
+付款完成後，藍新會依付款方式回傳不同的資料：
 
 ```php
-use Ycs77\NewebPay\Enums\PaymentType;
-
-// 信用卡支付回傳（一次付清、Google Pay、Samaung Pay、國民旅遊卡、銀聯）
-if ($result->paymentType() === PaymentType::CREDIT) {
+// 信用卡支付回傳（一次付清、Google Pay、Samsung Pay、國民旅遊卡、銀聯）
+if ($result->hasCredit()) {
     $credit = $result->credit();
     // 參考：\Ycs77\NewebPay\Results\Trade\CreditResult
 }
 
 // WEBATM、ATM 繳費回傳
-if ($result->paymentType() === PaymentType::VACC || $result->paymentType() === PaymentType::WEBATM) {
+if ($result->hasAtm()) {
     $atm = $result->atm();
     // 參考：\Ycs77\NewebPay\Results\Trade\ATMResult
 }
 
 // 超商代碼繳費回傳
-if ($result->paymentType() === PaymentType::CVS) {
+if ($result->hasStoreCode()) {
     $storeCode = $result->storeCode();
     // 參考：\Ycs77\NewebPay\Results\Trade\StoreCodeResult
 }
 
 // 超商條碼繳費回傳
-if ($result->paymentType() === PaymentType::BARCODE) {
+if ($result->hasStoreBarcode()) {
     $storeBarcode = $result->storeBarcode();
     // 參考：\Ycs77\NewebPay\Results\Trade\StoreBarcodeResult
 }
 
 // 超商物流回傳
-if ($result->paymentType() === PaymentType::CVSCOM) {
+if ($result->hasLgs()) {
     $lgs = $result->lgs();
     // 參考：\Ycs77\NewebPay\Results\Trade\LgsResult
 }
 
-// 跨境支付回傳 (包含簡單付電子錢包、簡單付微信支付、簡單付支付寶)
-$ezPay = $result->ezPay();
-// 參考：\Ycs77\NewebPay\Results\Trade\EzPayResult
+// 跨境支付回傳（包含簡單付電子錢包、簡單付微信支付、簡單付支付寶）
+if ($result->hasEzPay()) {
+    $ezPay = $result->ezPay();
+    // 參考：\Ycs77\NewebPay\Results\Trade\EzPayResult
+}
 
 // 玉山 Wallet 回傳
-if ($result->paymentType() === PaymentType::ESUNWALLET) {
+if ($result->hasEsunWallet()) {
     $esunWallet = $result->esunWallet();
     // 參考：\Ycs77\NewebPay\Results\Trade\EsunWalletResult
 }
 
 // 台灣 Pay 回傳
-if ($result->paymentType() === PaymentType::TAIWANPAY) {
+if ($result->hasTaiwanPay()) {
     $taiwanPay = $result->taiwanPay();
     // 參考：\Ycs77\NewebPay\Results\Trade\TaiwanPayResult
 }
@@ -567,10 +567,25 @@ Route::post('/pay/customer', function (Request $request) {
     $result->expireTime()  // 繳費截止日期：Carbon 實例
 
     // 根據付款方式取得對應的取號資訊：
-    $result->atm()          // ATM 繳費資訊
-    $result->storeCode()    // 超商代碼繳費資訊
-    $result->storeBarcode() // 超商條碼繳費資訊
-    $result->lgs()          // 超商物流資訊
+    if ($result->hasAtm()) {
+        $atm = $result->atm();
+        // 參考：\Ycs77\NewebPay\Results\Trade\CustomerATMResult
+    }
+
+    if ($result->hasStoreCode()) {
+        $storeCode = $result->storeCode();
+        // 參考：\Ycs77\NewebPay\Results\Trade\CustomerStoreCodeResult
+    }
+
+    if ($result->hasStoreBarcode()) {
+        $storeBarcode = $result->storeBarcode();
+        // 參考：\Ycs77\NewebPay\Results\Trade\CustomerStoreBarcodeResult
+    }
+
+    if ($result->hasLgs()) {
+        $lgs = $result->lgs();
+        // 參考：\Ycs77\NewebPay\Results\Trade\CustomerLgsResult
+    }
 
     // 自訂取號結果頁面...
 });
@@ -604,7 +619,36 @@ $result->merchantId() // 藍新金流商店代號：'TestMerchantID1234'
 $result->orderNo()    // 商店訂單編號：'Order001'
 $result->tradeNo()    // 藍新金流交易序號：'23061500000000000'
 $result->amount()     // 交易金額：1050
+$result->paymentType() // 付款方式：PaymentType::CREDIT
 ```
+
+### 取得查詢結果的詳細資訊
+
+根據不同的付款方式，可以確認對應的查詢資訊：
+
+```php
+if ($result->hasCredit()) {
+    $credit = $result->credit();
+    // 參考：\Ycs77\NewebPay\Results\Trade\QueryCreditResult
+}
+
+if ($result->hasPaymentStatus()) {
+    $paymentStatus = $result->paymentStatus();
+    // 參考：\Ycs77\NewebPay\Results\Trade\QueryPaymentStatusResult
+}
+
+if ($result->hasLgs()) {
+    $lgs = $result->lgs();
+    // 參考：\Ycs77\NewebPay\Results\Trade\QueryLgsResult
+}
+
+if ($result->hasDigitalWallet()) {
+    $digitalWallet = $result->digitalWallet();
+    // 參考：\Ycs77\NewebPay\Results\Trade\QueryDigitalWalletResult
+}
+```
+
+`hasPaymentStatus()` 與 `hasLgs()`、`hasDigitalWallet()` 不一定互斥；例如 `CVSCOM` 同時有付款狀態與物流資訊，`LINEPAY` 同時有付款狀態與電子錢包資訊。
 
 如果是組合型商店，可以使用 `forCompositeStore()` 來查詢：
 
