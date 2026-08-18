@@ -124,7 +124,9 @@ class PaymentResult extends BaseResult
      */
     public function payTime(): ?Carbon
     {
-        if ($payTime = $this->result['PayTime']) {
+        $payTime = $this->result['PayTime'] ?? null;
+
+        if ($payTime) {
             return Carbon::createFromFormat('Y-m-d H:i:s', $payTime);
         }
 

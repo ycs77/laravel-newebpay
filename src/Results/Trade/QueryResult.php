@@ -119,7 +119,9 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
      */
     public function payTime(): ?Carbon
     {
-        if ($payTime = $this->result['PayTime']) {
+        $payTime = $this->result['PayTime'] ?? null;
+
+        if ($payTime) {
             return Carbon::createFromFormat('Y-m-d H:i:s', $payTime);
         }
 
@@ -131,7 +133,7 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
      */
     public function fundTime(): ?Carbon
     {
-        $fundTime = $this->result['FundTime'];
+        $fundTime = $this->result['FundTime'] ?? null;
 
         if ($fundTime && $fundTime !== '0000-00-00') {
             return Carbon::createFromFormat('Y-m-d', $fundTime);
