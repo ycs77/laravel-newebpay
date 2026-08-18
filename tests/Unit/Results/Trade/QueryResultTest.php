@@ -2,6 +2,7 @@
 
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\PaymentType;
+use Ycs77\NewebPay\Enums\TradeStatus;
 use Ycs77\NewebPay\Results\Trade\QueryResult;
 
 test('QueryResult → 解析付款查詢', function () {
@@ -13,7 +14,7 @@ test('QueryResult → 解析付款查詢', function () {
             'Amt' => 120,
             'TradeNo' => '23061500000000000',
             'MerchantOrderNo' => '1686759318',
-            'TradeStatus' => 1,
+            'TradeStatus' => '1',
             'PaymentType' => 'CREDIT',
             'CreateTime' => '2023-01-01 00:00:00',
             'PayTime' => '2023-01-01 00:00:00',
@@ -46,6 +47,7 @@ test('QueryResult → 解析付款查詢', function () {
         ->and($result->amount())->toBe(120)
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->orderNo())->toBe('1686759318')
+        ->and($result->tradeStatus())->toBe(TradeStatus::PAID)
         ->and($result->paymentType())->toBe(PaymentType::CREDIT)
         ->and($result->hasCredit())->toBeTrue()
         ->and($result->createTime()->format('Y-m-d H:i:s'))->toBe('2023-01-01 00:00:00')
@@ -61,7 +63,7 @@ test('QueryResult → 解析信用卡付款查詢', function () {
             'Amt' => 120,
             'TradeNo' => '23061500000000000',
             'MerchantOrderNo' => '1686759318',
-            'TradeStatus' => 1,
+            'TradeStatus' => '1',
             'PaymentType' => 'CREDIT',
             'CreateTime' => '2023-01-01 00:00:00',
             'PayTime' => '2023-01-01 00:00:00',

@@ -1066,7 +1066,7 @@ test('can query trade', function () {
                 'Amt' => 1050,
                 'TradeNo' => '23061500000000000',
                 'MerchantOrderNo' => 'Order001',
-                'TradeStatus' => 1,
+                'TradeStatus' => '1',
                 'PaymentType' => 'CREDIT',
                 'CreateTime' => '2023-01-01 00:00:00',
                 'PayTime' => '2023-01-01 00:00:00',

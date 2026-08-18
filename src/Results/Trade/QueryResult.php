@@ -5,6 +5,7 @@ namespace Ycs77\NewebPay\Results\Trade;
 use Carbon\Carbon;
 use Ycs77\NewebPay\Contracts\CheckCodeVerifiable;
 use Ycs77\NewebPay\Enums\PaymentType;
+use Ycs77\NewebPay\Enums\TradeStatus;
 use Ycs77\NewebPay\Results\BaseResult;
 use Ycs77\NewebPay\Results\Concerns;
 
@@ -33,9 +34,9 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
      * * **3**: 取消付款
      * * **6**: 退款
      */
-    public function tradeStatus(): string
+    public function tradeStatus(): TradeStatus
     {
-        return $this->result['TradeStatus'];
+        return TradeStatus::from((int) $this->result['TradeStatus']);
     }
 
     /**
