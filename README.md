@@ -1,3 +1,5 @@
+
+
 # Laravel NewebPay - 藍新金流
 
 > Fork from [treerful/laravel-newebpay](https://bitbucket.org/pickone/laravel-newebpay)
@@ -81,6 +83,7 @@ NEWEBPAY_ENV=test            # 設定 API 運行環境 (production 或 test)
 NEWEBPAY_MERCHANT_ID=...        # 貼上 商店代號 (Ex: MS3311...)
 NEWEBPAY_MERCHANT_HASH_KEY=...  # 貼上 HashKey
 NEWEBPAY_MERCHANT_HASH_IV=...   # 貼上 HashIV
+NEWEBPAY_TIMEOUT=30             # 可選：API 連線逾時秒數 (預設 30)
 ```
 
 `NEWEBPAY_ENV` 可以設定為 `test`（測試環境）或 `production`（正式環境）。
