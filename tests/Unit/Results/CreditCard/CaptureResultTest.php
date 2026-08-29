@@ -20,7 +20,7 @@ test('CaptureResult → 解析請款結果', function () {
         ->and($result->isSuccess())->toBeTrue()
         ->and($result->isFail())->toBeFalse()
         ->and($result->message())->toBe('請款資料新增成功')
-        ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->merchantID())->toBe('TestMerchantID1234')
         ->and($result->orderNo())->toBe('Order001')
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->amount())->toBe(1050);

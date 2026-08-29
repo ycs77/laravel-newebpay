@@ -155,10 +155,10 @@ test('MPGBuilder → 信用卡記憶卡號（withCreditRemember）', function ()
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)
         ->withCredit()
-        ->withCreditRemember('example_user')
+        ->withCreditRemember('john@example.com')
         ->onPreparedOptions(function (Options $options) {
             $tradeInfo = $options->toArray()['TradeInfo'];
-            expect($tradeInfo)->toHaveKey('TokenTerm', 'example_user');
+            expect($tradeInfo)->toHaveKey('TokenTerm', 'john@example.com');
             expect($tradeInfo)->toHaveKey('TokenTermDemand', 1);
         })
         ->submit();

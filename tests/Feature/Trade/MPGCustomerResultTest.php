@@ -42,7 +42,7 @@ test('MPG 金流 → 解析 ATM/超商條碼/超商代碼 取號資料', functio
         ->and($result->isSuccess())->toBeTrue()
         ->and($result->isFail())->toBeFalse()
         ->and($result->message())->toBe('條碼取號成功')
-        ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->merchantID())->toBe('TestMerchantID1234')
         ->and($result->amount())->toBe(120)
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->orderNo())->toBe('1686763446')

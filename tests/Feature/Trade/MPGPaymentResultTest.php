@@ -53,7 +53,7 @@ test('MPG 金流 → 解析金流回傳資料', function () {
         ->and($result->isSuccess())->toBeTrue()
         ->and($result->isFail())->toBeFalse()
         ->and($result->message())->toBe('授權成功')
-        ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->merchantID())->toBe('TestMerchantID1234')
         ->and($result->amount())->toBe(120)
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->orderNo())->toBe('1686759318')

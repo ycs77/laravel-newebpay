@@ -215,12 +215,24 @@ NewebPay::payment()
 
 #### 信用卡記憶卡號
 
-啟用信用卡記憶卡號功能，傳入付款人名稱：
+啟用信用卡記憶卡號功能，傳入付款人綁定資料（例如：會員編號、Email），用於綁定付款人與信用卡卡號時使用，格式限英、數字、「.」、「_」、「@」、「-」：
 
 ```php
 NewebPay::payment()
     ...
-    ->withCreditRemember('John Doe')
+    ->withCreditRemember('john@example.com')
+    ->submit();
+```
+
+信用卡記憶卡號的快速結帳必填欄位預設值為，必填信用卡到期日與背面末三碼，可以修改為只需填寫其中一個欄位：
+
+```php
+NewebPay::payment()
+    ...
+    // 必填信用卡到期日
+    ->withCreditRemember('john@example.com', CreditRememberDemand::EXPIRATION_DATE)
+    // 必填背面末三碼
+    ->withCreditRemember('john@example.com', CreditRememberDemand::CVC)
     ->submit();
 ```
 
@@ -458,7 +470,7 @@ $result->isSuccess()    // 交易是否成功
 $result->isFail()       // 交易是否失敗
 $result->message()      // 交易狀態描述：'授權成功'
 $result->result()       // 回傳參數 (陣列)
-$result->merchantId()   // 藍新金流商店代號：'MS3311...'
+$result->merchantID()   // 藍新金流商店代號：'MS3311...'
 $result->amount()       // 交易金額：120
 $result->tradeNo()      // 藍新金流交易序號：'23061500000000000'
 $result->orderNo()      // 商店訂單編號：'1686759318'
@@ -617,7 +629,7 @@ class VerifyCsrfToken extends Middleware
 
 ```php
 $result = NewebPay::customer($request);
-$result->merchantId()   // 藍新金流商店代號：'MS3311...'
+$result->merchantID()   // 藍新金流商店代號：'MS3311...'
 $result->amount()       // 交易金額：120
 $result->tradeNo()      // 藍新金流交易序號：'23061500000000000'
 $result->orderNo()      // 商店訂單編號：'1686763446'
@@ -684,7 +696,7 @@ $result = NewebPay::query()
     ->withAmount(1050)      // 該筆交易的金額
     ->get();
 
-$result->merchantId()   // 藍新金流商店代號：'TestMerchantID1234'
+$result->merchantID()   // 藍新金流商店代號：'TestMerchantID1234'
 $result->orderNo()      // 商店訂單編號：'Order001'
 $result->tradeNo()      // 藍新金流交易序號：'23061500000000000'
 $result->amount()       // 交易金額：1050
@@ -783,7 +795,7 @@ $result = NewebPay::creditCard()
     ->withAmount(1050)      // 該筆交易的金額
     ->send();
 
-$result->merchantId()  // 藍新金流商店代號：'TestMerchantID1234'
+$result->merchantID()  // 藍新金流商店代號：'TestMerchantID1234'
 $result->orderNo()     // 商店訂單編號：'Order001'
 $result->tradeNo()     // 藍新金流交易序號：'23061500000000000'
 $result->amount()      // 取消授權金額：1050
@@ -814,7 +826,7 @@ $result = NewebPay::creditCard()
     ->withAmount(1050)      // 該筆交易的金額
     ->send();
 
-$result->merchantId()  // 藍新金流商店代號：'TestMerchantID1234'
+$result->merchantID()  // 藍新金流商店代號：'TestMerchantID1234'
 $result->orderNo()     // 商店訂單編號：'Order001'
 $result->tradeNo()     // 藍新金流交易序號：'23061500000000000'
 $result->amount()      // 請款金額：1050
@@ -844,7 +856,7 @@ $result = NewebPay::creditCard()
     ->withAmount(1050)      // 該筆交易的金額
     ->send();
 
-$result->merchantId()  // 藍新金流商店代號：'TestMerchantID1234'
+$result->merchantID()  // 藍新金流商店代號：'TestMerchantID1234'
 $result->orderNo()     // 商店訂單編號：'Order001'
 $result->tradeNo()     // 藍新金流交易序號：'23061500000000000'
 $result->amount()      // 退款金額：1050

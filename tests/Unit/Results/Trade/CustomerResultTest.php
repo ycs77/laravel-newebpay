@@ -31,7 +31,7 @@ test('CustomerResult → 解析取號結果', function () {
         'Version' => '2.0',
     ]);
 
-    expect($result->merchantId())->toBe('TestMerchantID1234')
+    expect($result->merchantID())->toBe('TestMerchantID1234')
         ->and($result->amount())->toBe(120)
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->orderNo())->toBe('1686763446')

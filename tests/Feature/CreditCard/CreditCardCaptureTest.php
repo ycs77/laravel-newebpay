@@ -54,7 +54,7 @@ test('信用卡請款 → 成功請款', function () {
         ->send();
 
     expect($result)->toBeInstanceOf(CaptureResult::class)
-        ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->merchantID())->toBe('TestMerchantID1234')
         ->and($result->orderNo())->toBe('Order001')
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->amount())->toBe(1050);
@@ -105,7 +105,7 @@ test('信用卡請款 → 成功取消請款', function () {
         ->send();
 
     expect($result)->toBeInstanceOf(CaptureResult::class)
-        ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->merchantID())->toBe('TestMerchantID1234')
         ->and($result->orderNo())->toBe('Order001')
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->amount())->toBe(1050);

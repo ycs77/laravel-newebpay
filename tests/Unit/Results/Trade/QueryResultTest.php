@@ -43,7 +43,7 @@ test('QueryResult → 解析付款查詢', function () {
     expect($result->status())->toBe('SUCCESS')
         ->and($result->isSuccess())->toBeTrue()
         ->and($result->isFail())->toBeFalse()
-        ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->merchantID())->toBe('TestMerchantID1234')
         ->and($result->amount())->toBe(120)
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->orderNo())->toBe('1686759318')

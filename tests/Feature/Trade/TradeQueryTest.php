@@ -73,7 +73,7 @@ test('交易查詢 → 成功查詢', function () {
         ->get();
 
     expect($result)->toBeInstanceOf(QueryResult::class)
-        ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->merchantID())->toBe('TestMerchantID1234')
         ->and($result->orderNo())->toBe('Order001')
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->amount())->toBe(1050);

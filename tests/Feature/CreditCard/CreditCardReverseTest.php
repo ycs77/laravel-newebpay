@@ -54,7 +54,7 @@ test('信用卡取消交易 → 成功取消', function () {
         ->send();
 
     expect($result)->toBeInstanceOf(ReverseResult::class)
-        ->and($result->merchantId())->toBe('TestMerchantID1234')
+        ->and($result->merchantID())->toBe('TestMerchantID1234')
         ->and($result->orderNo())->toBe('Order001')
         ->and($result->tradeNo())->toBe('23061500000000000')
         ->and($result->amount())->toBe(1050);

@@ -50,7 +50,7 @@ test('MPG 金流 → 進階功能', function () {
         'Email' => 'customer@example.com',
         'EmailModify' => 0,
         'OrderComment' => '這是訂單備註',
-        'TokenTerm' => 'John Doe',
+        'TokenTerm' => 'john@example.com',
         'TokenTermDemand' => 1,
         'CVSCOM' => 3,
         'LgsType' => 'C2C',
@@ -85,7 +85,7 @@ test('MPG 金流 → 進階功能', function () {
         ->withGooglePay()
         ->withSamsungPay()
         ->withLinePay()
-        ->withCreditRemember('John Doe')
+        ->withCreditRemember('john@example.com')
         ->withLogisticsPayment(CVSCOM::NOT_PAY_AND_PAY)
         ->withLogisticsType(LgsType::C2C)
         ->onPreparedOptions(function (Options $options) use ($expectedTradeData) {

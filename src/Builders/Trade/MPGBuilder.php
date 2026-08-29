@@ -256,7 +256,7 @@ final class MPGBuilder extends Builder
      * - **CreditRememberDemand::EXPIRATION_DATE**         必填信用卡到期日
      * - **CreditRememberDemand::CVC**                     必填背面末三碼
      *
-     * @param  string  $identifier  付款人綁定資料，用於綁定付款人與信用卡卡號時使用。例：會員編號、Email。格式限英、數字，「.」、「_」、「@」、「-」。
+     * @param  string  $identifier  付款人綁定資料，用於綁定付款人與信用卡卡號時使用。例：會員編號、Email。格式限英、數字、「.」、「_」、「@」、「-」。
      * @param  CreditRememberDemand  $demand  指定付款人信用卡快速結帳必填欄位設定
      */
     public function withCreditRemember(string $identifier, ?CreditRememberDemand $demand = CreditRememberDemand::EXPIRATION_DATE_AND_CVC): self
