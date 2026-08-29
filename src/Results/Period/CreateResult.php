@@ -56,7 +56,7 @@ class CreateResult extends BaseResult
     }
 
     /**
-     * 此委託總授權期數
+     * 委託總授權期數
      */
     public function authTimes(): int
     {

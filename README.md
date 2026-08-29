@@ -9,7 +9,7 @@
 
 **Laravel NewebPay** 為針對 Laravel 所寫的藍新金流（智付通）金流串接套件。
 
-### 套件功能
+## 套件功能
 
 * 💳 MPG 多功能收款 API
 * 🔍 交易查詢 API
@@ -77,7 +77,7 @@ php artisan vendor:publish --tag=newebpay-config
 設定 `.env` 的商店代號和 HashKey 等參數：
 
 ```ini
-NEWEBPAY_ENV=test            # 設定 API 運行環境 (production 或 test)
+NEWEBPAY_ENV=test               # 設定 API 運行環境 (production 或 test)
 NEWEBPAY_MERCHANT_ID=...        # 貼上 商店代號 (Ex: MS3311...)
 NEWEBPAY_MERCHANT_HASH_KEY=...  # 貼上 HashKey
 NEWEBPAY_MERCHANT_HASH_IV=...   # 貼上 HashIV
@@ -133,13 +133,12 @@ use Ycs77\NewebPay\Facades\NewebPay;
 
 Route::post('/pay', function () {
     return NewebPay::payment()
-        ->withOrder('Vanespl_ec_'.time())  // 訂單編號
-        ->withAmount(120)                  // 交易金額
-        ->withItemDescription('我的商品')   // 商品名稱
-        ->withEmail('test@example.com')    // 付款人信箱
-        ->withCredit()                     // 啟用信用卡付款
-        ->withReturnUrl('/pay/callback')   // 前景回傳網址 (Callback)
-        ->withNotifyUrl('/pay/notify')     // 背景通知網址 (Notify)
+        ->withOrder('Order'.time())       // 訂單編號
+        ->withAmount(120)                 // 交易金額
+        ->withItemDescription('我的商品')  // 商品名稱
+        ->withEmail('test@example.com')   // 付款人信箱
+        ->withCredit()                    // 啟用信用卡付款
+        ->withReturnUrl('/pay/callback')  // 支付完成返回網址 (Callback)
         ->submit();
 });
 ```
@@ -167,14 +166,13 @@ Route::post('/pay/callback', function (Request $request) {
 });
 ```
 
-還要把這個路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
+然後把這個路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
 
 ```php
 class VerifyCsrfToken extends Middleware
 {
     protected $except = [
         '/pay/callback',
-        '/pay/notify',
     ];
 }
 ```
@@ -183,20 +181,23 @@ class VerifyCsrfToken extends Middleware
 
 ### 付款方式
 
-可依需要啟用信用卡、WebATM／ATM、國民旅遊卡、行動支付、簡單付、超商代碼／條碼等多種付款方式，以下分別說明各自的設定方式。
+可依需要啟用信用卡、WebATM／ATM、國民旅遊卡、行動支付、ezPay、超商代碼／條碼等多種付款方式，以下分別說明各自的設定方式。
 
 #### 信用卡
 
-信用卡可搭配紅利折抵與分期付款：
+啟用信用卡功能，信用卡可搭配紅利折抵與分期付款：
 
 ```php
 use Ycs77\NewebPay\Enums\CreditInst;
 
 NewebPay::payment()
     ...
-    ->withCredit()                                       // 一次付清
-    ->withCredit(red: true)                              // 啟用紅利折抵
-    ->withCredit(inst: [CreditInst::P3, CreditInst::P6]) // 分期付款：3、6 期
+    // 啟用信用卡，預設為一次付清
+    ->withCredit()
+    // 啟用紅利折抵
+    ->withCredit(red: true)
+    // 分期付款：3、6 期
+    ->withCredit(inst: [CreditInst::P3, CreditInst::P6])
     ->submit();
 ```
 
@@ -228,8 +229,10 @@ NewebPay::payment()
 ```php
 NewebPay::payment()
     ...
-    ->withWebAtm()      // WebATM
-    ->withAtmTransfer() // ATM 轉帳
+    // 啟用 WebATM
+    ->withWebAtm()
+    // 啟用 ATM 轉帳
+    ->withAtmTransfer()
     ->submit();
 ```
 
@@ -252,7 +255,7 @@ NewebPay::payment()
 
 #### 國民旅遊卡
 
-傳入旅遊地區與起訖日期：
+可傳入旅遊地區與起訖日期：
 
 ```php
 use Ycs77\NewebPay\Enums\NTCBLocate;
@@ -267,7 +270,7 @@ NewebPay::payment()
 
 #### 行動支付
 
-Google Pay、Samsung Pay、LINE Pay、銀聯卡、玉山 Wallet、台灣 Pay：
+啟用行動支付功能，支援 Google Pay、Samsung Pay、LINE Pay、銀聯卡、玉山 Wallet、台灣 Pay，可依需要啟用其中一種或多種：
 
 ```php
 NewebPay::payment()
@@ -281,7 +284,7 @@ NewebPay::payment()
     ->submit();
 ```
 
-LINE Pay 可傳入產品圖檔連結，顯示於 LINE Pay 付款前的產品圖片區（建議尺寸 84*84 像素，未提供時使用藍新系統預設圖檔）：
+LINE Pay 可傳入產品圖檔連結，將會顯示於 LINE Pay 付款前的產品圖片區（建議尺寸 84*84 像素，未提供時使用藍新系統預設圖檔）：
 
 ```php
 NewebPay::payment()
@@ -290,20 +293,22 @@ NewebPay::payment()
     ->submit();
 ```
 
-#### 簡單付
+#### ezPay
 
-簡單付電子錢包、微信支付、支付寶：
+啟用 ezPay 功能，支援 ezPay 電子錢包、微信支付、支付寶：
 
 ```php
 NewebPay::payment()
     ...
-    ->withEzPay()       // 簡單付電子錢包
-    ->withEzPayWeChat() // 簡單付微信支付
-    ->withEzPayAlipay() // 簡單付支付寶
+    ->withEzPay()       // ezPay 電子錢包
+    ->withEzPayWeChat() // ezPay 微信支付
+    ->withEzPayAlipay() // ezPay 支付寶
     ->submit();
 ```
 
 #### 超商代碼／條碼繳費
+
+啟用超商代碼或條碼繳費功能：
 
 ```php
 NewebPay::payment()
@@ -323,8 +328,10 @@ use Ycs77\NewebPay\Enums\LgsType;
 
 NewebPay::payment()
     ...
-    ->withLogisticsPayment(CVSCOM::NOT_PAY_AND_PAY) // 物流方式
-    ->withLogisticsType(LgsType::C2C)               // 物流型態
+    // 物流方式
+    ->withLogisticsPayment(CVSCOM::NOT_PAY_AND_PAY)
+    // 物流型態
+    ->withLogisticsType(LgsType::C2C)
     ->submit();
 ```
 
@@ -336,56 +343,27 @@ NewebPay::payment()
 NewebPay::payment()
     ...
     ->withTradeLimit(900)  // 交易秒數限制 (60~900 秒)
-    ->withExpireDays(14)   // 交易截止日 (天數，最大 180 天)
+    ->withExpireDays(14)   // 交易截止日 (天數，最多 180 天)
     ->submit();
 ```
 
 #### 其他付款選項
 
+禁止修改 Email：
+
 ```php
 NewebPay::payment()
     ...
-    ->disableEmailModify()           // 禁止修改 email
-    ->withOrderComment('這是訂單備註') // 商店備註 (最大 300 字)
+    ->disableEmailModify()
     ->submit();
 ```
 
-#### 完整方法對照表
-
-付款相關方法一覽：
+商店備註，最多 300 字：
 
 ```php
-use Ycs77\NewebPay\Enums\Bank;
-use Ycs77\NewebPay\Enums\CreditInst;
-use Ycs77\NewebPay\Enums\CVSCOM;
-use Ycs77\NewebPay\Enums\LgsType;
-use Ycs77\NewebPay\Enums\NTCBLocate;
-
 NewebPay::payment()
     ...
-    ->withCredit(red: true, inst: [CreditInst::P3, CreditInst::P6]) // 信用卡（可開紅利、分期）
-    ->withCreditRemember('John Doe')     // 信用卡記憶卡號
-    ->withWebAtm()                       // WebATM
-    ->withAtmTransfer()                  // ATM 轉帳
-    ->withBank([Bank::BOT, Bank::HNCB])  // 指定 WebATM/ATM 轉帳銀行
-    ->withNationalTravelCard(NTCBLocate::HsinchuCity, '2020-01-01', '2020-12-31') // 國民旅遊卡
-    ->withGooglePay()                    // Google Pay
-    ->withSamsungPay()                   // Samsung Pay
-    ->withLinePay(imageUrl: 'http://example.com/logo.png') // LINE Pay
-    ->withUnionPay()                     // 銀聯卡
-    ->withEsunWallet()                   // 玉山 Wallet
-    ->withTaiwanPay()                    // 台灣 Pay
-    ->withEzPay()                        // 簡單付電子錢包
-    ->withEzPayWeChat()                  // 簡單付微信支付
-    ->withEzPayAlipay()                  // 簡單付支付寶
-    ->withCvsCode()                      // 超商代碼繳費
-    ->withBarcode()                      // 條碼繳費
-    ->withLogisticsPayment(CVSCOM::NOT_PAY_AND_PAY) // 物流方式
-    ->withLogisticsType(LgsType::C2C)    // 物流型態
-    ->withTradeLimit(900)                // 交易秒數限制
-    ->withExpireDays(14)                 // 交易截止日
-    ->disableEmailModify()               // 禁止修改 email
-    ->withOrderComment('這是訂單備註')   // 商店備註
+    ->withOrderComment('這是訂單備註')
     ->submit();
 ```
 
@@ -393,26 +371,26 @@ NewebPay::payment()
 
 依付款方式不同，藍新金流會用兩種方式回傳交易結果：
 
-- **即時付款**（可直接跳轉回網站）：信用卡、Google Pay、Samsung Pay、LINE Pay、銀聯卡、玉山 Wallet、台灣 Pay、國民旅遊卡等，透過 `withReturnUrl()` 設定的 **callback**（前景回傳）接收。
-- **取號付款**（需先取號、稍後才付款）：WebATM、ATM 轉帳、超商代碼、條碼、簡單付系列等，透過 `withNotifyUrl()` 設定的 **notify**（背景通知）接收。
+- **即時支付**（可直接在 MPG 頁面完成支付）：信用卡、Google Pay、Samsung Pay、LINE Pay、銀聯卡、玉山 Wallet、台灣 Pay、國民旅遊卡等。
+- **非即時支付**（需至超商或實體 ATM 完成支付）：WebATM、ATM 轉帳、超商代碼、超商條碼、超商取貨付款、ezPay 等。
+
+如果只啟用了即時支付的付款方式，則只需要設定 callback；如果只啟用了非即時支付的付款方式，則只需要設定 notify。
 
 如果同時設定了 callback 和 notify，進行部分交易時兩個 API 都會發送訊息，這時就要各司其職：callback 只設定返回給用戶的訊息，而 notify 只負責處理交易的邏輯。
-
-**設定回傳網址**
 
 ```php
 NewebPay::payment()
     ...
-    ->withReturnUrl('/pay/callback')      // 前景回傳網址 (Callback)
-    ->withNotifyUrl('/pay/notify')        // 背景通知網址 (Notify)
-    ->withCustomerUrl('/pay/customer')    // 商店取號網址
-    ->withClientBackUrl('/pay/back')      // 返回按鈕網址
+    ->withReturnUrl('/pay/callback')    // 支付完成返回網址 (Callback)
+    ->withNotifyUrl('/pay/notify')      // 支付通知網址 (Notify)
+    ->withCustomerUrl('/pay/customer')  // 商店取號網址
+    ->withClientBackUrl('/pay/back')    // 返回按鈕網址
     ->submit();
 ```
 
-> **自動補全網址**：若傳入的字串不是完整 URL（例如 `/pay/callback`），套件會自動以 `config('app.url')` 作為前綴補全。若傳入完整 URL（例如 `https://example.com/callback`），則直接使用不做修改。
+> 若傳入的字串不是完整 URL（例如 `/pay/callback`），套件會自動以 `config('app.url')` 作為前綴補全。若傳入完整 URL（例如 `https://example.com/callback`），則直接使用不做修改。
 
-**Callback（前景回傳）**
+#### 支付完成返回
 
 信用卡等即時付款方式，付款完成後會直接跳轉回網站，用 callback 回覆給用戶的訊息：
 
@@ -435,9 +413,9 @@ Route::post('/pay/callback', function (Request $request) {
 });
 ```
 
-**Notify（背景通知）**
+#### 背景支付通知
 
-ATM、超商等取號付款方式，付款完成是透過幕後通知的，用 notify 處理交易邏輯：
+ATM、超商等取號付款方式，付款完成是只會透過幕後通知的，用 notify 處理交易邏輯：
 
 ```php
 use Illuminate\Http\Request;
@@ -447,6 +425,7 @@ Route::post('/pay/notify', function (Request $request) {
     $result = NewebPay::result($request);
 
     if ($result->isFail()) {
+        // 交易失敗，紀錄錯誤訊息...
         return;
     }
 
@@ -456,7 +435,7 @@ Route::post('/pay/notify', function (Request $request) {
 });
 ```
 
-記得把這些路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
+然後把這個路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
 
 ```php
 class VerifyCsrfToken extends Middleware
@@ -468,78 +447,135 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
-**取得回傳結果**
+#### 取得回傳結果
 
 回傳結果可以使用各個方法來取得需要的資料：
 
 ```php
 $result = NewebPay::result($request);
-$result->status()          // 交易狀態：'SUCCESS' 或錯誤代碼
-$result->isSuccess()       // 交易是否成功
-$result->isFail()          // 交易是否失敗
-$result->message()         // 交易狀態描述：'授權成功'
-$result->result()          // 回傳參數 (陣列)
-$result->merchantId()      // 藍新金流商店代號：'MS3311...'
-$result->amount()          // 交易金額：120
-$result->tradeNo()         // 藍新金流交易序號：'23061500000000000'
-$result->orderNo()         // 商店訂單編號：'1686759318'
-$result->paymentType()     // 付款方式：PaymentType::CREDIT
-$result->payTime()         // 支付完成時間：Carbon 實例
-$result->ip()              // 交易 IP：'127.0.0.1'
-$result->escrowBank()      // 款項保管銀行：'HNCB'
+$result->status()       // 交易狀態：'SUCCESS' 或錯誤代碼
+$result->isSuccess()    // 交易是否成功
+$result->isFail()       // 交易是否失敗
+$result->message()      // 交易狀態描述：'授權成功'
+$result->result()       // 回傳參數 (陣列)
+$result->merchantId()   // 藍新金流商店代號：'MS3311...'
+$result->amount()       // 交易金額：120
+$result->tradeNo()      // 藍新金流交易序號：'23061500000000000'
+$result->orderNo()      // 商店訂單編號：'1686759318'
+$result->paymentType()  // 付款方式：PaymentType::CREDIT
+$result->payTime()      // 支付完成時間：Carbon 實例
+$result->ip()           // 交易 IP：'127.0.0.1'
+$result->escrowBank()   // 款項保管銀行：'HNCB'
 ```
 
-### 取得付款結果的詳細資訊
-
-付款完成後，藍新會依付款方式回傳不同的資料：
+取得信用卡支付回傳的詳細資訊：
 
 ```php
-// 信用卡支付回傳（一次付清、Google Pay、Samsung Pay、國民旅遊卡、銀聯）
 if ($result->hasCredit()) {
     $credit = $result->credit();
-    // 參考：\Ycs77\NewebPay\Results\Trade\CreditResult
+    $credit->authBank()           // 收單金融機構：'CTBC'
+    $credit->authBankName()       // 收單金融機構中文名稱：'中國信託銀行'
+    $credit->respondCode()        // 金融機構回應碼：'00'
+    $credit->auth()               // 授權碼：'115468'
+    $credit->card6No()            // 卡號前六碼：'400000'
+    $credit->card4No()            // 卡號末四碼：'1111'
+    $credit->inst()               // 分期-期別：12
+    $credit->instFirst()          // 分期-首期金額：300
+    $credit->instEach()           // 分期-每期金額：300
+    $credit->ECI()                // ECI 值：'1'
+    $credit->tokenUseStatus()     // 信用卡快速結帳使用狀態：0
+    $credit->redAmt()             // 紅利折抵後實際金額：null
+    $credit->paymentMethod()      // 交易類別：'CREDIT'
+    $credit->paymentMethodName()  // 交易類別中文名稱：'台灣發卡機構核發之信用卡'
+    $credit->dccAmt()             // 外幣金額：null
+    $credit->dccRate()            // 匯率：null
+    $credit->dccMarkup()          // 風險匯率：null
+    $credit->dccCurrency()        // 幣別：null
+    $credit->dccCurrencyCode()    // 幣別代碼：null
 }
+```
 
-// WEBATM、ATM 繳費回傳
+取得 WEBATM、ATM 的詳細資訊：
+
+```php
 if ($result->hasAtm()) {
     $atm = $result->atm();
-    // 參考：\Ycs77\NewebPay\Results\Trade\ATMResult
+    $atm->payBankCode()        // 付款人金融機構代碼：'809'
+    $atm->payerAccount5Code()  // 付款人金融機構帳號末五碼：'12345'
 }
+```
 
-// 超商代碼繳費回傳
+取得超商代碼繳費回傳的詳細資訊：
+
+```php
 if ($result->hasStoreCode()) {
     $storeCode = $result->storeCode();
-    // 參考：\Ycs77\NewebPay\Results\Trade\StoreCodeResult
+    $storeCode->codeNo()         // 繳費代碼：'TEST1234567890'
+    $storeCode->storeType()      // 繳費門市類別：4
+    $storeCode->storeTypeName()  // 繳費超商中文名稱：'萊爾富'
+    $storeCode->storeId()        // 繳費門市代號：'S9999'
 }
+```
 
-// 超商條碼繳費回傳
+取得超商條碼繳費回傳的詳細資訊：
+
+```php
 if ($result->hasStoreBarcode()) {
     $storeBarcode = $result->storeBarcode();
-    // 參考：\Ycs77\NewebPay\Results\Trade\StoreBarcodeResult
+    $storeBarcode->barcode1()      // 繳費條碼第一段條碼：'TEST1'
+    $storeBarcode->barcode2()      // 繳費條碼第二段條碼：'TEST2'
+    $storeBarcode->barcode3()      // 繳費條碼第三段條碼：'TEST3'
+    $storeBarcode->repayTimes()    // 付款次數：0
+    $storeBarcode->payStore()      // 繳費超商：'SEVEN'
+    $storeBarcode->payStoreName()  // 繳費超商中文名稱：'7-11'
 }
+```
 
-// 超商物流回傳
+取得超商物流回傳的詳細資訊：
+
+```php
 if ($result->hasLgs()) {
     $lgs = $result->lgs();
-    // 參考：\Ycs77\NewebPay\Results\Trade\LgsResult
+    $lgs->storeCode()    // 超商門市編號：'019666'
+    $lgs->storeName()    // 取貨門市中文名稱：'全家台灣大道店'
+    $lgs->storeType()    // 超商類別名稱：'全家'
+    $lgs->storeAddr()    // 超商門市地址：'台中市中區台灣大道一段531號'
+    $lgs->tradeType()    // 取件交易方式：1（取貨付款）
+    $lgs->cvscomName()   // 取貨人姓名：'王小明'
+    $lgs->cvscomPhone()  // 取貨人手機號碼：'0900111222'
+    $lgs->lgsNo()        // 物流寄件單號：'-'
+    $lgs->lgsType()      // 物流型態：LgsType::C2C
 }
+```
 
-// 跨境支付回傳（包含簡單付電子錢包、簡單付微信支付、簡單付支付寶）
+取得跨境支付回傳（包含 ezPay 電子錢包、ezPay 微信支付、ezPay 支付寶）的詳細資訊：
+
+```php
 if ($result->hasEzPay()) {
     $ezPay = $result->ezPay();
-    // 參考：\Ycs77\NewebPay\Results\Trade\EzPayResult
+    $ezPay->isEzPay()      // 是否為 ezPay 交易：true
+    $ezPay->channelId()    // 跨境通路類型：'ALIPAY'
+    $ezPay->channelName()  // 跨境通路中文名稱：'支付寶'
+    $ezPay->channelNo()    // 跨境通路交易序號：'NO0000000001'
 }
+```
 
-// 玉山 Wallet 回傳
+取得玉山 Wallet 回傳的詳細資訊：
+
+```php
 if ($result->hasEsunWallet()) {
     $esunWallet = $result->esunWallet();
-    // 參考：\Ycs77\NewebPay\Results\Trade\EsunWalletResult
+    $esunWallet->payAmt()     // 實際付款金額：120
+    $esunWallet->redDisAmt()  // 紅利折抵金額：0
 }
+```
 
-// 台灣 Pay 回傳
+取得台灣 Pay 回傳的詳細資訊：
+
+```php
 if ($result->hasTaiwanPay()) {
     $taiwanPay = $result->taiwanPay();
-    // 參考：\Ycs77\NewebPay\Results\Trade\TaiwanPayResult
+    $taiwanPay->payAmt()  // 實際付款金額：120
 }
 ```
 
@@ -559,39 +595,11 @@ Route::post('/pay/customer', function (Request $request) {
         return;
     }
 
-    $result->merchantId()  // 藍新金流商店代號：'MS3311...'
-    $result->amount()      // 交易金額：120
-    $result->tradeNo()     // 藍新金流交易序號：'23061500000000000'
-    $result->orderNo()     // 商店訂單編號：'1686763446'
-    $result->paymentType() // 付款方式：PaymentType::BARCODE
-    $result->expireTime()  // 繳費截止日期：Carbon 實例
-
-    // 根據付款方式取得對應的取號資訊：
-    if ($result->hasAtm()) {
-        $atm = $result->atm();
-        // 參考：\Ycs77\NewebPay\Results\Trade\CustomerATMResult
-    }
-
-    if ($result->hasStoreCode()) {
-        $storeCode = $result->storeCode();
-        // 參考：\Ycs77\NewebPay\Results\Trade\CustomerStoreCodeResult
-    }
-
-    if ($result->hasStoreBarcode()) {
-        $storeBarcode = $result->storeBarcode();
-        // 參考：\Ycs77\NewebPay\Results\Trade\CustomerStoreBarcodeResult
-    }
-
-    if ($result->hasLgs()) {
-        $lgs = $result->lgs();
-        // 參考：\Ycs77\NewebPay\Results\Trade\CustomerLgsResult
-    }
-
     // 自訂取號結果頁面...
 });
 ```
 
-還要把路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
+然後把這個路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
 
 ```php
 class VerifyCsrfToken extends Middleware
@@ -600,6 +608,67 @@ class VerifyCsrfToken extends Middleware
         ...
         '/pay/customer',
     ];
+}
+```
+
+#### 取得取號回傳結果
+
+回傳結果可以使用各個方法來取得需要的資料：
+
+```php
+$result = NewebPay::customer($request);
+$result->merchantId()   // 藍新金流商店代號：'MS3311...'
+$result->amount()       // 交易金額：120
+$result->tradeNo()      // 藍新金流交易序號：'23061500000000000'
+$result->orderNo()      // 商店訂單編號：'1686763446'
+$result->paymentType()  // 付款方式：PaymentType::BARCODE
+$result->expireTime()   // 繳費截止日期：Carbon 實例
+```
+
+取得 WEBATM、ATM 的詳細資訊：
+
+```php
+if ($result->hasAtm()) {
+    $atm = $result->atm();
+    $atm->bankCode()  // 金融機構代碼：'007'
+    $atm->codeNo()    // 繳費代碼：'TestAccount12345'
+}
+```
+
+取得超商代碼繳費回傳的詳細資訊：
+
+```php
+if ($result->hasStoreCode()) {
+    $storeCode = $result->storeCode();
+    $storeCode->codeNo()  // 繳費代碼：'TEST1234567890'
+}
+```
+
+取得超商條碼繳費回傳的詳細資訊：
+
+```php
+if ($result->hasStoreBarcode()) {
+    $storeBarcode = $result->storeBarcode();
+    $storeBarcode->barcode1()  // 繳費條碼第一段條碼：'TEST1'
+    $storeBarcode->barcode2()  // 繳費條碼第二段條碼：'TEST2'
+    $storeBarcode->barcode3()  // 繳費條碼第三段條碼：'TEST3'
+}
+```
+
+取得超商物流回傳的詳細資訊：
+
+```php
+if ($result->hasLgs()) {
+    $lgs = $result->lgs();
+    $lgs->storeCode()    // 超商門市編號：'019666'
+    $lgs->storeName()    // 取貨門市中文名稱：'全家台灣大道店'
+    $lgs->storeType()    // 超商類別名稱：'全家'
+    $lgs->storeAddr()    // 超商門市地址：'台中市中區台灣大道一段531號'
+    $lgs->tradeType()    // 取件交易方式：1（取貨付款）
+    $lgs->cvscomName()   // 取貨人姓名：'王小明'
+    $lgs->cvscomPhone()  // 取貨人手機號碼：'0900111222'
+    $lgs->lgsNo()        // 物流寄件單號：'-'
+    $lgs->lgsType()      // 物流型態：LgsType::C2C
 }
 ```
 
@@ -615,42 +684,14 @@ $result = NewebPay::query()
     ->withAmount(1050)      // 該筆交易的金額
     ->get();
 
-$result->merchantId() // 藍新金流商店代號：'TestMerchantID1234'
-$result->orderNo()    // 商店訂單編號：'Order001'
-$result->tradeNo()    // 藍新金流交易序號：'23061500000000000'
-$result->amount()     // 交易金額：1050
-$result->paymentType() // 付款方式：PaymentType::CREDIT
+$result->merchantId()   // 藍新金流商店代號：'TestMerchantID1234'
+$result->orderNo()      // 商店訂單編號：'Order001'
+$result->tradeNo()      // 藍新金流交易序號：'23061500000000000'
+$result->amount()       // 交易金額：1050
+$result->paymentType()  // 付款方式：PaymentType::CREDIT
 ```
 
-### 取得查詢結果的詳細資訊
-
-根據不同的付款方式，可以確認對應的查詢資訊：
-
-```php
-if ($result->hasCredit()) {
-    $credit = $result->credit();
-    // 參考：\Ycs77\NewebPay\Results\Trade\QueryCreditResult
-}
-
-if ($result->hasPaymentStatus()) {
-    $paymentStatus = $result->paymentStatus();
-    // 參考：\Ycs77\NewebPay\Results\Trade\QueryPaymentStatusResult
-}
-
-if ($result->hasLgs()) {
-    $lgs = $result->lgs();
-    // 參考：\Ycs77\NewebPay\Results\Trade\QueryLgsResult
-}
-
-if ($result->hasDigitalWallet()) {
-    $digitalWallet = $result->digitalWallet();
-    // 參考：\Ycs77\NewebPay\Results\Trade\QueryDigitalWalletResult
-}
-```
-
-`hasPaymentStatus()` 與 `hasLgs()`、`hasDigitalWallet()` 不一定互斥；例如 `CVSCOM` 同時有付款狀態與物流資訊，`LINEPAY` 同時有付款狀態與電子錢包資訊。
-
-如果是組合型商店，可以使用 `forCompositeStore()` 來查詢：
+查詢組合型商店：
 
 ```php
 $result = NewebPay::query()
@@ -658,6 +699,75 @@ $result = NewebPay::query()
     ->withAmount(1050)
     ->forCompositeStore()
     ->get();
+```
+
+### 取得查詢結果的詳細資訊
+
+取得信用卡支付的詳細資訊：
+
+```php
+if ($result->hasCredit()) {
+    $credit = $result->credit();
+    $credit->respondCode()        // 金融機構回應碼：'00'
+    $credit->auth()               // 授權碼：'222111'
+    $credit->ECI()                // ECI 值：''
+    $credit->closeAmt()           // 請款金額：120
+    $credit->closeStatus()        // 請款狀態：0（未請款）
+    $credit->backBalance()        // 可退款餘額：120
+    $credit->backStatus()         // 退款狀態：0（未退款）
+    $credit->respondMsg()         // 授權結果訊息：'授權測試'
+    $credit->inst()               // 分期-期別：0
+    $credit->instFirst()          // 分期-首期金額：0
+    $credit->instEach()           // 分期-每期金額：0
+    $credit->paymentMethod()      // 交易類別：'CREDIT'
+    $credit->paymentMethodName()  // 交易類別中文名稱：'台灣發卡機構核發之信用卡'
+    $credit->card6No()            // 卡號前六碼：'400022'
+    $credit->card4No()            // 卡號末四碼：'1111'
+    $credit->authBank()           // 收單金融機構：'CTBC'
+    $credit->authBankName()       // 收單金融機構中文名稱：'中國信託銀行'
+}
+```
+
+取得 WEBATM、ATM 的詳細資訊：
+
+```php
+if ($result->hasPaymentStatus()) {
+    $paymentStatus = $result->paymentStatus();
+    $paymentStatus->payInfo()      // 付款資訊：'(822)12345678901234'
+    $paymentStatus->expireDate()   // 繳費有效期限：'2023-01-02 23:59:59'
+    $paymentStatus->orderStatus()  // 交易狀態：0（未付款）
+}
+```
+
+取得超商物流的詳細資訊：
+
+```php
+if ($result->hasLgs()) {
+    $lgs = $result->lgs();
+    $lgs->storeCode()  // 超商門市編號：'019666'
+    $lgs->storeName()  // 取貨門市中文名稱：'全家台灣大道店'
+    $lgs->storeType()  // 超商類別名稱：'全家'
+    $lgs->lgsNo()      // 物流訂單編號：'LGS23061500000001'
+    $lgs->lgsType()    // 物流型態：LgsType::C2C
+}
+```
+
+取得數位 Wallet 的詳細資訊：
+
+```php
+if ($result->hasDigitalWallet()) {
+    $digitalWallet = $result->digitalWallet();
+    $digitalWallet->respondCode()        // 金融機構回應碼：'00'
+    $digitalWallet->closeAmt()           // 請款金額：120
+    $digitalWallet->closeStatus()        // 請款狀態：'0'（未請款）
+    $digitalWallet->backBalance()        // 可退款餘額：120（LINE Pay 不支援）
+    $digitalWallet->backStatus()         // 退款狀態：'0'（未退款）
+    $digitalWallet->respondMsg()         // 授權結果訊息：'交易成功'
+    $digitalWallet->paymentMethod()      // 交易類別：'LINEPAY'
+    $digitalWallet->paymentMethodName()  // 交易類別中文名稱：'LINE Pay 付款'
+    $digitalWallet->authBank()           // 收單金融機構：'Linepay'
+    $digitalWallet->authBankName()       // 收單金融機構中文名稱：'LINE Pay'
+}
 ```
 
 ## 信用卡取消授權
@@ -673,10 +783,10 @@ $result = NewebPay::creditCard()
     ->withAmount(1050)      // 該筆交易的金額
     ->send();
 
-$result->merchantId() // 藍新金流商店代號：'TestMerchantID1234'
-$result->orderNo()    // 商店訂單編號：'Order001'
-$result->tradeNo()    // 藍新金流交易序號：'23061500000000000'
-$result->amount()     // 取消授權金額：1050
+$result->merchantId()  // 藍新金流商店代號：'TestMerchantID1234'
+$result->orderNo()     // 商店訂單編號：'Order001'
+$result->tradeNo()     // 藍新金流交易序號：'23061500000000000'
+$result->amount()      // 取消授權金額：1050
 ```
 
 或者使用藍新交易編號取消授權：
@@ -704,13 +814,13 @@ $result = NewebPay::creditCard()
     ->withAmount(1050)      // 該筆交易的金額
     ->send();
 
-$result->merchantId() // 藍新金流商店代號：'TestMerchantID1234'
-$result->orderNo()    // 商店訂單編號：'Order001'
-$result->tradeNo()    // 藍新金流交易序號：'23061500000000000'
-$result->amount()     // 請款金額：1050
+$result->merchantId()  // 藍新金流商店代號：'TestMerchantID1234'
+$result->orderNo()     // 商店訂單編號：'Order001'
+$result->tradeNo()     // 藍新金流交易序號：'23061500000000000'
+$result->amount()      // 請款金額：1050
 ```
 
-取消請款，在請款的基礎上加上 `reverse()`：
+取消請款需要加上 `reverse()`：
 
 ```php
 $result = NewebPay::creditCard()
@@ -734,13 +844,13 @@ $result = NewebPay::creditCard()
     ->withAmount(1050)      // 該筆交易的金額
     ->send();
 
-$result->merchantId() // 藍新金流商店代號：'TestMerchantID1234'
-$result->orderNo()    // 商店訂單編號：'Order001'
-$result->tradeNo()    // 藍新金流交易序號：'23061500000000000'
-$result->amount()     // 退款金額：1050
+$result->merchantId()  // 藍新金流商店代號：'TestMerchantID1234'
+$result->orderNo()     // 商店訂單編號：'Order001'
+$result->tradeNo()     // 藍新金流交易序號：'23061500000000000'
+$result->amount()      // 退款金額：1050
 ```
 
-取消退款，在退款的基礎上加上 `reverse()`：
+取消退款需要加上 `reverse()`：
 
 ```php
 $result = NewebPay::creditCard()
@@ -851,25 +961,31 @@ NewebPay::period()
 設定立即執行十元授權，以驗證信用卡：
 
 ```php
-'period' => [
-    'start_type' => PeriodStartType::TEN_DOLLARS_NOW,
-],
+NewebPay::period()
+    ->create()
+    ...
+    ->startWithTenDollarAuth()
+    ->submit();
 ```
 
 設定立即執行委託金額授權：
 
 ```php
-'period' => [
-    'start_type' => PeriodStartType::AUTHORIZE_NOW,
-],
+NewebPay::period()
+    ->create()
+    ...
+    ->startWithImmediateAuth()
+    ->submit();
 ```
 
 設定刷卡完之後，不檢查信用卡資訊，也不執行授權：
 
 ```php
-'period' => [
-    'start_type' => PeriodStartType::NO_AUTHORIZE,
-],
+NewebPay::period()
+    ->create()
+    ...
+    ->startWithoutAuth()
+    ->submit();
 ```
 
 當選擇不授權時，需要設定首期授權日：
@@ -878,9 +994,7 @@ NewebPay::period()
 NewebPay::period()
     ->create()
     ...
-    ->everyFewDays(2)
-    ->times(3)
-    ->firstChargeAt(2023, 3, 1) // 首期授權日
+    ->firstChargeAt(2023, 3, 1)
     ->submit();
 ```
 
@@ -899,10 +1013,23 @@ Route::post('/pay/period/callback', function (Request $request) {
         return redirect()->to('/pay')->with('error', $result->message());
     }
 
-    $result->merchantID()   // 藍新金流商店代號：'TestMerchantID1234'
-    $result->orderNo()      // 商店訂單編號：'Order001'
-    $result->periodNo()     // 委託單號：'20200101000000001'
-    $result->periodAmount() // 委託金額：1050
+    $result->merchantID()         // 藍新金流商店代號：'TestMerchantID1234'
+    $result->orderNo()            // 商店訂單編號：'Order001'
+    $result->tradeNo()            // 藍新金流交易序號：'23061500000000000'
+    $result->periodNo()           // 委託單號：'20200101000000001'
+    $result->periodAmount()       // 委託金額：1050
+    $result->periodType()         // 委託週期：PeriodType::EVERY_FEW_DAYS（固定天期制）
+    $result->authTimes()          // 委託總授權期數：3
+    $result->authTime()           // 每期授權時間：10
+    $result->dateArray()          // 委託所有授權日期排程：['2020-01-01', '2020-01-11', '2020-01-21']
+    $result->cardNo()             // 卡號前六與後四碼：'400000******1111'
+    $result->authCode()           // 授權碼：'123456'
+    $result->respondCode()        // 銀行回應碼：'00'
+    $result->escrowBank()         // 款項保管銀行：'HNCB'
+    $result->authBank()           // 收單金融機構：'CTBC'
+    $result->authBankName()       // 收單金融機構中文名稱：'中國信託銀行'
+    $result->paymentMethod()      // 交易類別：'CREDIT'
+    $result->paymentMethodName()  // 交易類別中文名稱：'台灣發卡機構核發之信用卡'
 
     return redirect()->to('/pay')->with('success', '付款成功');
 });
@@ -924,16 +1051,25 @@ Route::post('/pay/period/notify', function (Request $request) {
         return;
     }
 
-    $result->merchantID()  // 藍新金流商店代號：'TestMerchantID1234'
-    $result->orderNo()     // 商店訂單編號：'Order001'
-    $result->authAmount()  // 本期授權金額：1050
-    $result->periodNo()    // 委託單號：'20200101000000001'
+    $result->merchantID()         // 藍新金流商店代號：'TestMerchantID1234'
+    $result->orderNo()            // 商店訂單編號：'Order001'
+    $result->tradeNo()            // 藍新金流交易序號：'23061500000000000'
+    $result->periodNo()           // 委託單號：'20200101000000001'
+    $result->authAmount()       // 委託單本期授權金額：300
+    $result->authDate()          // 委託之本期授權時間：'2020-01-01'
+    $result->totalTimes()          // 委託之總授權期數：3
+    $result->alreadyTimes()          // 委託之已授權期數，包含授權失敗期數：1
+    $result->authCode()           // 授權碼：'123456'
+    $result->escrowBank()         // 款項保管銀行：'HNCB'
+    $result->authBank()           // 收單金融機構：'CTBC'
+    $result->authBankName()       // 收單金融機構中文名稱：'中國信託銀行'
+    $result->nextAuthDate()                 // 下期委託授權日期：'2020-01-11'
 
     // 委託授權成功，處理訂單邏輯...
 });
 ```
 
-記得要把這些路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
+然後把這個路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
 
 *app/Http/Middleware/VerifyCsrfToken.php*
 ```php
@@ -1025,8 +1161,8 @@ try {
         ->withAmount(1050)
         ->get();
 } catch (NewebPayException $e) {
-    $status = $e->getApiStatus(); // 'MPG01001'
-    $message = $e->getApiMessage(); // '商店代號不存在'
+    $status = $e->getApiStatus();    // 'MPG01001'
+    $message = $e->getApiMessage();  // '商店代號不存在'
 
     // 記錄錯誤日誌...
     logger()->error($e->getMessage(), $e->context());
