@@ -2,6 +2,8 @@
 
 namespace Ycs77\NewebPay\Results\Trade;
 
+use Ycs77\NewebPay\Enums\CaptureStatus;
+use Ycs77\NewebPay\Enums\RefundStatus;
 use Ycs77\NewebPay\Results\Result;
 
 class QueryCreditResult extends Result
@@ -77,9 +79,9 @@ class QueryCreditResult extends Result
      * * **2**: 請款處理中
      * * **3**: 請款完成
      */
-    public function closeStatus(): int
+    public function closeStatus(): CaptureStatus
     {
-        return $this->data['CloseStatus'];
+        return CaptureStatus::from((int) $this->data['CloseStatus']);
     }
 
     /**
@@ -101,9 +103,9 @@ class QueryCreditResult extends Result
      * * **2**: 退款處理中
      * * **3**: 退款完成
      */
-    public function backStatus(): int
+    public function backStatus(): RefundStatus
     {
-        return $this->data['BackStatus'];
+        return RefundStatus::from((int) $this->data['BackStatus']);
     }
 
     /**

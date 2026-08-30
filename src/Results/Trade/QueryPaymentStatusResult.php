@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay\Results\Trade;
 
+use Ycs77\NewebPay\Enums\OrderStatus;
 use Ycs77\NewebPay\Results\Result;
 
 class QueryPaymentStatusResult extends Result
@@ -36,9 +37,9 @@ class QueryPaymentStatusResult extends Result
      * * **6**: 已退款
      * * **9**: 付款中，待銀行確認
      */
-    public function orderStatus(): int
+    public function orderStatus(): OrderStatus
     {
-        return $this->data['OrderStatus'];
+        return OrderStatus::from((int) $this->data['OrderStatus']);
     }
 
     /**

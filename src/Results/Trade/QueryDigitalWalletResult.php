@@ -2,6 +2,9 @@
 
 namespace Ycs77\NewebPay\Results\Trade;
 
+use Ycs77\NewebPay\Enums\CaptureStatus;
+use Ycs77\NewebPay\Enums\PaymentType;
+use Ycs77\NewebPay\Enums\RefundStatus;
 use Ycs77\NewebPay\Results\Result;
 
 class QueryDigitalWalletResult extends Result
@@ -48,9 +51,9 @@ class QueryDigitalWalletResult extends Result
      * * **3**: 請款完成
      * * **4**: 請款失敗
      */
-    public function closeStatus(): string
+    public function closeStatus(): CaptureStatus
     {
-        return $this->data['CloseStatus'];
+        return CaptureStatus::from((int) $this->data['CloseStatus']);
     }
 
     /**
@@ -74,9 +77,9 @@ class QueryDigitalWalletResult extends Result
      * * **3**: 退款完成
      * * **4**: 退款失敗
      */
-    public function backStatus(): string
+    public function backStatus(): RefundStatus
     {
-        return $this->data['BackStatus'];
+        return RefundStatus::from((int) $this->data['BackStatus']);
     }
 
     /**
@@ -96,9 +99,9 @@ class QueryDigitalWalletResult extends Result
      * * **ESUNWALLET**: 玉山 Wallet
      * * **TAIWANPAY**: 台灣 Pay
      */
-    public function paymentMethod(): string
+    public function paymentMethod(): PaymentType
     {
-        return $this->data['PaymentMethod'];
+        return PaymentType::from($this->data['PaymentMethod']);
     }
 
     /**

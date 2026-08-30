@@ -1,7 +1,11 @@
 <?php
 
+use Ycs77\NewebPay\Enums\EzPayChannel;
+use Ycs77\NewebPay\Enums\LgsTradeType;
 use Ycs77\NewebPay\Enums\LgsType;
+use Ycs77\NewebPay\Enums\PaymentStoreType;
 use Ycs77\NewebPay\Enums\PaymentType;
+use Ycs77\NewebPay\Enums\TokenUseStatus;
 use Ycs77\NewebPay\Results\Trade\PaymentResult;
 
 test('PaymentResult → 解析付款結果', function () {
@@ -112,7 +116,7 @@ test('PaymentResult → 解析信用卡付款', function () {
         ->and($credit->instFirst())->toBe(0)
         ->and($credit->instEach())->toBe(0)
         ->and($credit->ECI())->toBe('')
-        ->and($credit->tokenUseStatus())->toBe(0)
+        ->and($credit->tokenUseStatus())->toBe(TokenUseStatus::NOT_USED)
         ->and($credit->paymentMethod())->toBe('CREDIT');
 });
 
@@ -219,7 +223,7 @@ test('PaymentResult → 解析超商代碼付款', function () {
     expect($result->paymentType())->toBe(PaymentType::CVS);
     expect($result->hasStoreCode())->toBeTrue();
     expect($storeCode->codeNo())->toBe('TEST1234567890')
-        ->and($storeCode->storeType())->toBe(4)
+        ->and($storeCode->storeType())->toBe(PaymentStoreType::HI_LIFE)
         ->and($storeCode->storeTypeName())->toBe('萊爾富')
         ->and($storeCode->storeId())->toBe('S9999');
 });
@@ -307,7 +311,7 @@ test('PaymentResult → 解析物流付款', function () {
         ->and($lgs->storeType())->toBe('全家')
         ->and($lgs->storeName())->toBe('全家台灣大道店')
         ->and($lgs->storeAddr())->toBe('台中市中區台灣大道一段531號')
-        ->and($lgs->tradeType())->toBe(1)
+        ->and($lgs->tradeType())->toBe(LgsTradeType::PAY_ON_PICKUP)
         ->and($lgs->cvscomName())->toBe('Lucas Yang')
         ->and($lgs->cvscomPhone())->toBe('0900111222')
         ->and($lgs->lgsType())->toBe(LgsType::C2C)
@@ -343,7 +347,7 @@ test('PaymentResult → 解析 ezPay 付款', function () {
     expect($ezPay->isEzPay())->toBeTrue();
     expect($result->hasEzPay())->toBeTrue();
     expect($result->hasCredit())->toBeFalse();
-    expect($ezPay->channelId())->toBe('ALIPAY')
+    expect($ezPay->channelId())->toBe(EzPayChannel::ALIPAY)
         ->and($ezPay->channelName())->toBe('支付寶')
         ->and($ezPay->channelNo())->toBe('NO0000000001');
 });

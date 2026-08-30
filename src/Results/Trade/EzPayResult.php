@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay\Results\Trade;
 
+use Ycs77\NewebPay\Enums\EzPayChannel;
 use Ycs77\NewebPay\Results\Result;
 
 class EzPayResult extends Result
@@ -25,7 +26,7 @@ class EzPayResult extends Result
      */
     public function isEzPay(): bool
     {
-        return is_string($this->channelId()) && in_array($this->channelId(), array_keys($this->channels));
+        return $this->channelId() !== null;
     }
 
     /**
@@ -42,9 +43,9 @@ class EzPayResult extends Result
      * * **VACC**: ATM 轉帳
      * * **WEBATM**: WebATM 轉帳
      */
-    public function channelId(): ?string
+    public function channelId(): ?EzPayChannel
     {
-        return $this->data['ChannelID'] ?? null;
+        return EzPayChannel::tryFrom($this->data['ChannelID'] ?? '');
     }
 
     /**
@@ -52,7 +53,9 @@ class EzPayResult extends Result
      */
     public function channelName(): ?string
     {
-        return $this->channels[$this->data['ChannelID']] ?? $this->data['ChannelID'];
+        $channel = $this->channelId();
+
+        return $channel ? $this->channels[$channel->value] : ($this->data['ChannelID'] ?? null);
     }
 
     /**

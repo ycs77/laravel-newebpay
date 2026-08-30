@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay\Results\Trade;
 
+use Ycs77\NewebPay\Enums\LgsTradeType;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Results\Result;
 
@@ -47,9 +48,9 @@ class LgsResult extends Result
      * * **1**: 取貨付款
      * * **3**: 取貨不付款
      */
-    public function tradeType(): int
+    public function tradeType(): LgsTradeType
     {
-        return $this->data['TradeType'];
+        return LgsTradeType::from((int) $this->data['TradeType']);
     }
 
     /**

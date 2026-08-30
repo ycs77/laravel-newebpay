@@ -1,5 +1,6 @@
 <?php
 
+use Ycs77\NewebPay\Enums\LgsTradeType;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\PaymentType;
 use Ycs77\NewebPay\Results\Trade\CustomerResult;
@@ -184,7 +185,7 @@ test('CustomerResult → 解析物流取號', function () {
         ->and($lgs->storeName())->toBe('全家台灣大道店')
         ->and($lgs->storeType())->toBe('全家')
         ->and($lgs->storeAddr())->toBe('台中市中區台灣大道一段531號')
-        ->and($lgs->tradeType())->toBe(1)
+        ->and($lgs->tradeType())->toBe(LgsTradeType::PAY_ON_PICKUP)
         ->and($lgs->cvscomName())->toBe('Lucas Yang')
         ->and($lgs->cvscomPhone())->toBe('0900111222')
         ->and($lgs->lgsNo())->toBe('-')

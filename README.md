@@ -495,7 +495,7 @@ if ($result->hasCredit()) {
     $credit->instFirst()          // 分期-首期金額：300
     $credit->instEach()           // 分期-每期金額：300
     $credit->ECI()                // ECI 值：'1'
-    $credit->tokenUseStatus()     // 信用卡快速結帳使用狀態：0
+    $credit->tokenUseStatus()     // 信用卡快速結帳使用狀態：TokenUseStatus::NOT_USED
     $credit->redAmt()             // 紅利折抵後實際金額：null
     $credit->paymentMethod()      // 交易類別：'CREDIT'
     $credit->paymentMethodName()  // 交易類別中文名稱：'台灣發卡機構核發之信用卡'
@@ -523,7 +523,7 @@ if ($result->hasAtm()) {
 if ($result->hasStoreCode()) {
     $storeCode = $result->storeCode();
     $storeCode->codeNo()         // 繳費代碼：'TEST1234567890'
-    $storeCode->storeType()      // 繳費門市類別：4
+    $storeCode->storeType()      // 繳費門市類別：PaymentStoreType::HI_LIFE
     $storeCode->storeTypeName()  // 繳費超商中文名稱：'萊爾富'
     $storeCode->storeId()        // 繳費門市代號：'S9999'
 }
@@ -552,7 +552,7 @@ if ($result->hasLgs()) {
     $lgs->storeName()    // 取貨門市中文名稱：'全家台灣大道店'
     $lgs->storeType()    // 超商類別名稱：'全家'
     $lgs->storeAddr()    // 超商門市地址：'台中市中區台灣大道一段531號'
-    $lgs->tradeType()    // 取件交易方式：1（取貨付款）
+    $lgs->tradeType()    // 取件交易方式：LgsTradeType::PAY_ON_PICKUP
     $lgs->cvscomName()   // 取貨人姓名：'王小明'
     $lgs->cvscomPhone()  // 取貨人手機號碼：'0900111222'
     $lgs->lgsNo()        // 物流寄件單號：'-'
@@ -566,7 +566,7 @@ if ($result->hasLgs()) {
 if ($result->hasEzPay()) {
     $ezPay = $result->ezPay();
     $ezPay->isEzPay()      // 是否為 ezPay 交易：true
-    $ezPay->channelId()    // 跨境通路類型：'ALIPAY'
+    $ezPay->channelId()    // 跨境通路類型：EzPayChannel::ALIPAY
     $ezPay->channelName()  // 跨境通路中文名稱：'支付寶'
     $ezPay->channelNo()    // 跨境通路交易序號：'NO0000000001'
 }
@@ -724,9 +724,9 @@ if ($result->hasCredit()) {
     $credit->auth()               // 授權碼：'222111'
     $credit->ECI()                // ECI 值：''
     $credit->closeAmt()           // 請款金額：120
-    $credit->closeStatus()        // 請款狀態：0（未請款）
+    $credit->closeStatus()        // 請款狀態：CaptureStatus::NOT_CAPTURED
     $credit->backBalance()        // 可退款餘額：120
-    $credit->backStatus()         // 退款狀態：0（未退款）
+    $credit->backStatus()         // 退款狀態：RefundStatus::NOT_REFUNDED
     $credit->respondMsg()         // 授權結果訊息：'授權測試'
     $credit->inst()               // 分期-期別：0
     $credit->instFirst()          // 分期-首期金額：0
@@ -747,7 +747,7 @@ if ($result->hasPaymentStatus()) {
     $paymentStatus = $result->paymentStatus();
     $paymentStatus->payInfo()      // 付款資訊：'(822)12345678901234'
     $paymentStatus->expireDate()   // 繳費有效期限：'2023-01-02 23:59:59'
-    $paymentStatus->orderStatus()  // 交易狀態：0（未付款）
+    $paymentStatus->orderStatus()  // 交易狀態：OrderStatus::UNPAID
 }
 ```
 
@@ -771,11 +771,11 @@ if ($result->hasDigitalWallet()) {
     $digitalWallet = $result->digitalWallet();
     $digitalWallet->respondCode()        // 金融機構回應碼：'00'
     $digitalWallet->closeAmt()           // 請款金額：120
-    $digitalWallet->closeStatus()        // 請款狀態：'0'（未請款）
+    $digitalWallet->closeStatus()        // 請款狀態：CaptureStatus::NOT_CAPTURED
     $digitalWallet->backBalance()        // 可退款餘額：120（LINE Pay 不支援）
-    $digitalWallet->backStatus()         // 退款狀態：'0'（未退款）
+    $digitalWallet->backStatus()         // 退款狀態：RefundStatus::NOT_REFUNDED
     $digitalWallet->respondMsg()         // 授權結果訊息：'交易成功'
-    $digitalWallet->paymentMethod()      // 交易類別：'LINEPAY'
+    $digitalWallet->paymentMethod()      // 交易類別：PaymentType::LINEPAY
     $digitalWallet->paymentMethodName()  // 交易類別中文名稱：'LINE Pay 付款'
     $digitalWallet->authBank()           // 收單金融機構：'Linepay'
     $digitalWallet->authBankName()       // 收單金融機構中文名稱：'LINE Pay'

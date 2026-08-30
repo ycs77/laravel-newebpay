@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay\Results\Trade;
 
+use Ycs77\NewebPay\Enums\PaymentStoreType;
 use Ycs77\NewebPay\Results\Result;
 
 class StoreCodeResult extends Result
@@ -32,9 +33,9 @@ class StoreCodeResult extends Result
      * * **3**: OK
      * * **4**: 萊爾富
      */
-    public function storeType(): int
+    public function storeType(): PaymentStoreType
     {
-        return $this->data['StoreType'];
+        return PaymentStoreType::from((int) $this->data['StoreType']);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Ycs77\NewebPay\Results\Trade;
 
+use Ycs77\NewebPay\Enums\TokenUseStatus;
 use Ycs77\NewebPay\Results\Result;
 
 class CreditResult extends Result
@@ -135,9 +136,9 @@ class CreditResult extends Result
      * * **2**: 該筆交易為使用信用卡快速結帳功能。
      * * **9**: 該筆交易為取消信用卡快速結帳功能功能。
      */
-    public function tokenUseStatus(): int
+    public function tokenUseStatus(): TokenUseStatus
     {
-        return $this->data['TokenUseStatus'];
+        return TokenUseStatus::from((int) $this->data['TokenUseStatus']);
     }
 
     /**

@@ -1,7 +1,10 @@
 <?php
 
+use Ycs77\NewebPay\Enums\CaptureStatus;
 use Ycs77\NewebPay\Enums\LgsType;
+use Ycs77\NewebPay\Enums\OrderStatus;
 use Ycs77\NewebPay\Enums\PaymentType;
+use Ycs77\NewebPay\Enums\RefundStatus;
 use Ycs77\NewebPay\Enums\TradeStatus;
 use Ycs77\NewebPay\Results\Trade\QueryResult;
 
@@ -96,9 +99,9 @@ test('QueryResult → 解析信用卡付款查詢', function () {
         ->and($credit->auth())->toBe('222111')
         ->and($credit->ECI())->toBe('')
         ->and($credit->closeAmt())->toBe(120)
-        ->and($credit->closeStatus())->toBe(0)
+        ->and($credit->closeStatus())->toBe(CaptureStatus::NOT_CAPTURED)
         ->and($credit->backBalance())->toBe(120)
-        ->and($credit->backStatus())->toBe(0)
+        ->and($credit->backStatus())->toBe(RefundStatus::NOT_REFUNDED)
         ->and($credit->respondMsg())->toBe('授權測試')
         ->and($credit->inst())->toBe(0)
         ->and($credit->instFirst())->toBe(0)
@@ -128,7 +131,7 @@ test('QueryResult → 解析 ATM 付款狀態查詢', function () {
     expect($result->hasPaymentStatus())->toBeTrue();
     expect($paymentStatus->payInfo())->toBe('(822)12345678901234')
         ->and($paymentStatus->expireDate())->toBe('2023-01-02 23:59:59')
-        ->and($paymentStatus->orderStatus())->toBe(0);
+        ->and($paymentStatus->orderStatus())->toBe(OrderStatus::UNPAID);
 });
 
 test('QueryResult → 解析超商物流查詢', function () {
@@ -178,10 +181,10 @@ test('QueryResult → 解析 LINE Pay 電子錢包查詢', function () {
     expect($result->hasDigitalWallet())->toBeTrue();
     expect($digitalWallet->respondCode())->toBe('00')
         ->and($digitalWallet->closeAmt())->toBe(120)
-        ->and($digitalWallet->closeStatus())->toBe('0')
-        ->and($digitalWallet->backStatus())->toBe('0')
+        ->and($digitalWallet->closeStatus())->toBe(CaptureStatus::NOT_CAPTURED)
+        ->and($digitalWallet->backStatus())->toBe(RefundStatus::NOT_REFUNDED)
         ->and($digitalWallet->respondMsg())->toBe('交易成功')
-        ->and($digitalWallet->paymentMethod())->toBe(PaymentType::LINEPAY->value)
+        ->and($digitalWallet->paymentMethod())->toBe(PaymentType::LINEPAY)
         ->and($digitalWallet->paymentMethodName())->toBe('LINE Pay 付款')
         ->and($digitalWallet->authBank())->toBe('Linepay')
         ->and($digitalWallet->authBankName())->toBe('LINE Pay');
@@ -210,11 +213,11 @@ test('QueryResult → 解析玉山 Wallet 電子錢包查詢', function () {
     expect($result->hasDigitalWallet())->toBeTrue();
     expect($digitalWallet->respondCode())->toBe('00')
         ->and($digitalWallet->closeAmt())->toBe(120)
-        ->and($digitalWallet->closeStatus())->toBe('0')
+        ->and($digitalWallet->closeStatus())->toBe(CaptureStatus::NOT_CAPTURED)
         ->and($digitalWallet->backBalance())->toBe(120)
-        ->and($digitalWallet->backStatus())->toBe('0')
+        ->and($digitalWallet->backStatus())->toBe(RefundStatus::NOT_REFUNDED)
         ->and($digitalWallet->respondMsg())->toBe('交易成功')
-        ->and($digitalWallet->paymentMethod())->toBe(PaymentType::ESUNWALLET->value)
+        ->and($digitalWallet->paymentMethod())->toBe(PaymentType::ESUNWALLET)
         ->and($digitalWallet->paymentMethodName())->toBe('玉山 Wallet')
         ->and($digitalWallet->authBank())->toBe('Esun')
         ->and($digitalWallet->authBankName())->toBe('玉山銀行');
@@ -243,11 +246,11 @@ test('QueryResult → 解析台灣 Pay 電子錢包查詢', function () {
     expect($result->hasDigitalWallet())->toBeTrue();
     expect($digitalWallet->respondCode())->toBe('00')
         ->and($digitalWallet->closeAmt())->toBe(120)
-        ->and($digitalWallet->closeStatus())->toBe('0')
+        ->and($digitalWallet->closeStatus())->toBe(CaptureStatus::NOT_CAPTURED)
         ->and($digitalWallet->backBalance())->toBe(120)
-        ->and($digitalWallet->backStatus())->toBe('0')
+        ->and($digitalWallet->backStatus())->toBe(RefundStatus::NOT_REFUNDED)
         ->and($digitalWallet->respondMsg())->toBe('交易成功')
-        ->and($digitalWallet->paymentMethod())->toBe(PaymentType::TAIWANPAY->value)
+        ->and($digitalWallet->paymentMethod())->toBe(PaymentType::TAIWANPAY)
         ->and($digitalWallet->paymentMethodName())->toBe('台灣 Pay')
         ->and($digitalWallet->authBank())->toBe('Esun')
         ->and($digitalWallet->authBankName())->toBe('玉山銀行');
