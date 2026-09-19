@@ -166,15 +166,14 @@ Route::post('/pay/callback', function (Request $request) {
 });
 ```
 
-然後把這個路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
+然後把這個路徑在 `bootstrap/app.php` 中排除 CSRF 檢查：
 
 ```php
-class VerifyCsrfToken extends Middleware
-{
-    protected $except = [
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->preventRequestForgery(except: [
         '/pay/callback',
-    ];
-}
+    ]);
+})
 ```
 
 這樣就完成一個最基本的信用卡付款流程了。想開啟更多付款方式，請參考[付款方式](#付款方式)；callback 與 notify 的完整設定，請參考[接收付款結果](#接收付款結果)。
@@ -447,16 +446,15 @@ Route::post('/pay/notify', function (Request $request) {
 });
 ```
 
-然後把這個路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
+然後把這個路徑在 `bootstrap/app.php` 中排除 CSRF 檢查：
 
 ```php
-class VerifyCsrfToken extends Middleware
-{
-    protected $except = [
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->preventRequestForgery(except: [
         '/pay/callback',
         '/pay/notify',
-    ];
-}
+    ]);
+})
 ```
 
 #### 取得回傳結果
@@ -611,16 +609,15 @@ Route::post('/pay/customer', function (Request $request) {
 });
 ```
 
-然後把這個路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
+然後把這個路徑在 `bootstrap/app.php` 中排除 CSRF 檢查：
 
 ```php
-class VerifyCsrfToken extends Middleware
-{
-    protected $except = [
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->preventRequestForgery(except: [
         ...
         '/pay/customer',
-    ];
-}
+    ]);
+})
 ```
 
 #### 取得取號回傳結果
@@ -1081,18 +1078,16 @@ Route::post('/pay/period/notify', function (Request $request) {
 });
 ```
 
-然後把這個路徑在 `app/Http/Middleware/VerifyCsrfToken.php` 中排除 CSRF 檢查：
+然後把這個路徑在 `bootstrap/app.php` 中排除 CSRF 檢查：
 
-*app/Http/Middleware/VerifyCsrfToken.php*
 ```php
-class VerifyCsrfToken extends Middleware
-{
-    protected $except = [
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->preventRequestForgery(except: [
         ...
         '/pay/period/callback',
         '/pay/period/notify',
-    ];
-}
+    ]);
+})
 ```
 
 ### 修改委託狀態
