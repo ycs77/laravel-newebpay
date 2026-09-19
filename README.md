@@ -1,11 +1,11 @@
 # Laravel NewebPay - 藍新金流
 
-> Fork from [treerful/laravel-newebpay](https://bitbucket.org/pickone/laravel-newebpay)
-
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE)
 [![GitHub Tests Action Status][ico-github-action]][link-github-action]
 [![Total Downloads][ico-downloads]][link-downloads]
+
+> Fork from [treerful/laravel-newebpay](https://bitbucket.org/pickone/laravel-newebpay)
 
 **Laravel NewebPay** 為針對 Laravel 所寫的藍新金流（智付通）金流串接套件。
 
