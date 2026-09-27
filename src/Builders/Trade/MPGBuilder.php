@@ -294,7 +294,6 @@ final class MPGBuilder extends Builder
      *
      * - **Bank::BOT**        台灣銀行
      * - **Bank::HNCB**       華南銀行
-     * - **Bank::FirstBank**  第一銀行
      *
      * 使用陣列指定 1 個以上的銀行，例如：`[Bank::BOT, Bank::HNCB]`。
      *

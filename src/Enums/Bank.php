@@ -12,7 +12,4 @@ enum Bank: string
 
     /** 華南銀行 */
     case HNCB = 'HNCB';
-
-    /** 第一銀行 */
-    case FirstBank = 'FirstBank';
 }
