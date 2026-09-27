@@ -63,6 +63,14 @@ class CreditResult extends Result
     }
 
     /**
+     * 發卡金融機構
+     */
+    public function cardBank(): ?string
+    {
+        return $this->data['CardBank'] ?? null;
+    }
+
+    /**
      * 金融機構回應碼
      */
     public function respondCode(): ?string

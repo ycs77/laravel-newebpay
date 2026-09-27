@@ -134,7 +134,7 @@ class PaymentResult extends BaseResult
     }
 
     /**
-     * 交易 IP
+     * 付款人取號或交易時的 IP
      */
     public function ip(): string
     {

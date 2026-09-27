@@ -487,6 +487,7 @@ if ($result->hasCredit()) {
     $credit = $result->credit();
     $credit->authBank()           // 收單金融機構：'CTBC'
     $credit->authBankName()       // 收單金融機構中文名稱：'中國信託銀行'
+    $credit->cardBank()           // 發卡金融機構
     $credit->respondCode()        // 金融機構回應碼：'00'
     $credit->auth()               // 授權碼：'115468'
     $credit->card6No()            // 卡號前六碼：'400000'
