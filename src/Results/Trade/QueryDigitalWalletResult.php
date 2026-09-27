@@ -44,12 +44,6 @@ class QueryDigitalWalletResult extends Result
 
     /**
      * 請款狀態
-     *
-     * * **0**: 未請款
-     * * **1**: 請款申請中 (等待提送請款檔至收單機構)
-     * * **2**: 請款處理中
-     * * **3**: 請款完成
-     * * **4**: 請款失敗
      */
     public function closeStatus(): CaptureStatus
     {
@@ -70,12 +64,6 @@ class QueryDigitalWalletResult extends Result
 
     /**
      * 退款狀態
-     *
-     * * **0**: 未退款
-     * * **1**: 退款申請中 (等待提送退款至收單機構)
-     * * **2**: 退款處理中
-     * * **3**: 退款完成
-     * * **4**: 退款失敗
      */
     public function backStatus(): RefundStatus
     {

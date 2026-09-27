@@ -1,5 +1,7 @@
 <?php
 
+use Ycs77\NewebPay\Enums\BNPLCaptureStatus;
+use Ycs77\NewebPay\Enums\BNPLRefundStatus;
 use Ycs77\NewebPay\Enums\CaptureStatus;
 use Ycs77\NewebPay\Enums\LgsType;
 use Ycs77\NewebPay\Enums\OrderStatus;
@@ -254,6 +256,69 @@ test('QueryResult → 解析台灣 Pay 電子錢包查詢', function () {
         ->and($digitalWallet->paymentMethodName())->toBe('台灣 Pay')
         ->and($digitalWallet->authBank())->toBe('Esun')
         ->and($digitalWallet->authBankName())->toBe('玉山銀行');
+});
+
+test('QueryResult → 解析 AFTEE 先買後付查詢', function () {
+    $result = new QueryResult([
+        'Status' => 'SUCCESS',
+        'Message' => '查詢成功',
+        'Result' => [
+            'PaymentType' => PaymentType::AFTEE->value,
+            'RespondCode' => '00',
+            'RespondMsg' => '交易成功',
+            'CloseAmt' => 120,
+            'CloseStatus' => '0',
+            'BackBalance' => 120,
+            'BackStatus' => '0',
+            'Inst' => 0,
+            'PaymentMethod' => PaymentType::AFTEE->value,
+        ],
+    ]);
+
+    $bnpl = $result->BNPL();
+
+    expect($result->paymentType())->toBe(PaymentType::AFTEE);
+    expect($result->hasBNPL())->toBeTrue();
+    expect($bnpl->respondCode())->toBe('00')
+        ->and($bnpl->respondMsg())->toBe('交易成功')
+        ->and($bnpl->closeAmt())->toBe(120)
+        ->and($bnpl->closeStatus())->toBe(BNPLCaptureStatus::NOT_CAPTURED)
+        ->and($bnpl->backBalance())->toBe(120)
+        ->and($bnpl->backStatus())->toBe(BNPLRefundStatus::NOT_REFUNDED)
+        ->and($bnpl->inst())->toBe(0)
+        ->and($bnpl->paymentMethod())->toBe(PaymentType::AFTEE)
+        ->and($bnpl->paymentMethodName())->toBe('AFTEE 先享後付');
+});
+
+test('QueryResult → 解析大哥付你分期查詢', function () {
+    $result = new QueryResult([
+        'Status' => 'SUCCESS',
+        'Message' => '查詢成功',
+        'Result' => [
+            'PaymentType' => PaymentType::OPPAY->value,
+            'RespondCode' => null,
+            'RespondMsg' => '交易成功',
+            'CloseAmt' => null,
+            'CloseStatus' => '2',
+            'BackBalance' => 80,
+            'BackStatus' => '3',
+            'Inst' => 3,
+            'PaymentMethod' => PaymentType::OPPAY->value,
+        ],
+    ]);
+
+    $bnpl = $result->BNPL();
+
+    expect($result->paymentType())->toBe(PaymentType::OPPAY);
+    expect($result->hasBNPL())->toBeTrue();
+    expect($bnpl->respondCode())->toBeNull()
+        ->and($bnpl->closeAmt())->toBeNull()
+        ->and($bnpl->closeStatus())->toBe(BNPLCaptureStatus::COMPLETED)
+        ->and($bnpl->backBalance())->toBe(80)
+        ->and($bnpl->backStatus())->toBe(BNPLRefundStatus::COMPLETED)
+        ->and($bnpl->inst())->toBe(3)
+        ->and($bnpl->paymentMethod())->toBe(PaymentType::OPPAY)
+        ->and($bnpl->paymentMethodName())->toBe('大哥付你分期');
 });
 
 test('QueryResult → 判斷信用卡付款詳細資訊', function () {

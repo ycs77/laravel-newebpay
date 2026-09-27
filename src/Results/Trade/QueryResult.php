@@ -27,12 +27,6 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
 
     /**
      * 支付狀態
-     *
-     * * **0**: 未付款
-     * * **1**: 付款成功
-     * * **2**: 付款失敗
-     * * **3**: 取消付款
-     * * **6**: 退款
      */
     public function tradeStatus(): TradeStatus
     {
@@ -41,16 +35,6 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
 
     /**
      * 支付方式
-     *
-     * * **CREDIT**: 信用卡付款
-     * * **VACC**: 銀行 ATM 轉帳付款
-     * * **WEBATM**: 網路銀行轉帳付款
-     * * **BARCODE**: 超商條碼繳費
-     * * **CVS**: 超商代碼繳費
-     * * **LINEPAY**: LINE Pay 付款
-     * * **ESUNWALLET**: 玉山 Wallet
-     * * **TAIWANPAY**: 台灣 Pay
-     * * **CVSCOM**: 超商取貨付款
      */
     public function paymentType(): PaymentType
     {
@@ -99,6 +83,17 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
             PaymentType::LINEPAY,
             PaymentType::ESUNWALLET,
             PaymentType::TAIWANPAY,
+        );
+    }
+
+    /**
+     * 是否為 BNPL 先買後付
+     */
+    public function hasBNPL(): bool
+    {
+        return $this->hasPaymentType(
+            PaymentType::AFTEE,
+            PaymentType::OPPAY,
         );
     }
 
@@ -180,5 +175,13 @@ class QueryResult extends BaseResult implements CheckCodeVerifiable
     public function digitalWallet(): QueryDigitalWalletResult
     {
         return new QueryDigitalWalletResult($this->result);
+    }
+
+    /**
+     * BNPL 先買後付
+     */
+    public function BNPL(): QueryBNPLResult
+    {
+        return new QueryBNPLResult($this->result);
     }
 }

@@ -30,4 +30,10 @@ enum PaymentType: string
 
     /** 超商取貨付款 */
     case CVSCOM = 'CVSCOM';
+
+    /** AFTEE 先享後付 */
+    case AFTEE = 'AFTEE';
+
+    /** 大哥付你分期 */
+    case OPPAY = 'OPPAY';
 }

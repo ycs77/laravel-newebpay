@@ -42,6 +42,8 @@ class PaymentResult extends BaseResult
      * * **ESUNWALLET**: 玉山 Wallet
      * * **TAIWANPAY**: 台灣 Pay
      * * **CVSCOM**: 超商取貨付款
+     * * **AFTEE**: AFTEE 先享後付
+     * * **OPPAY**: 大哥付你分期
      */
     public function paymentType(): PaymentType
     {

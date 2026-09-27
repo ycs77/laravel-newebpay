@@ -29,13 +29,6 @@ class QueryPaymentStatusResult extends Result
 
     /**
      * 交易狀態
-     *
-     * * **0**: 未付款
-     * * **1**: 已付款
-     * * **2**: 訂單失敗
-     * * **3**: 訂單取消
-     * * **6**: 已退款
-     * * **9**: 付款中，待銀行確認
      */
     public function orderStatus(): OrderStatus
     {

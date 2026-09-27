@@ -75,11 +75,6 @@ class QueryCreditResult extends Result
 
     /**
      * 請款狀態
-     *
-     * * **0**: 未請款
-     * * **1**: 等待提送請款至收單機構
-     * * **2**: 請款處理中
-     * * **3**: 請款完成
      */
     public function closeStatus(): CaptureStatus
     {

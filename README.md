@@ -782,6 +782,23 @@ if ($result->hasDigitalWallet()) {
 }
 ```
 
+取得 BNPL 先買後付的詳細資訊：
+
+```php
+if ($result->hasBNPL()) {
+    $bnpl = $result->BNPL();
+    $bnpl->respondCode()        // 金融機構回應碼：'00'
+    $bnpl->respondMsg()         // 授權結果訊息：'交易成功'
+    $bnpl->closeAmt()           // 請款金額：120
+    $bnpl->closeStatus()        // 請款狀態：BNPLCaptureStatus::NOT_CAPTURED
+    $bnpl->backBalance()        // 可退款餘額：120
+    $bnpl->backStatus()         // 退款狀態：BNPLRefundStatus::NOT_REFUNDED
+    $bnpl->inst()               // 分期期別：0（一次付清）
+    $bnpl->paymentMethod()      // 交易類別：PaymentType::AFTEE
+    $bnpl->paymentMethodName()  // 交易類別中文名稱：'AFTEE 先享後付'
+}
+```
+
 ## 信用卡取消授權
 
 在尚未請款時可以發動取消信用卡交易。使用訂單編號取消授權：
