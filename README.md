@@ -91,8 +91,9 @@ NEWEBPAY_MERCHANT_HASH_IV=...   # 貼上 HashIV
 
 * 4000-2211-1111-1111 (一次付清+分期付款)
 * 4003-5511-1111-1111 (紅利折抵)
+* 3760-000000-00006 (美國運通卡)
 
-測試卡號有效月年及卡片背面末三碼，可任意填寫。
+測試卡號有效月年及卡片背面末三碼，可任意填寫。銀聯卡交易不開放測試。
 
 ## MPG 多功能付款
 
@@ -286,12 +287,13 @@ NewebPay::payment()
 ```php
 NewebPay::payment()
     ...
-    ->withGooglePay()  // Google Pay
-    ->withSamsungPay() // Samsung Pay
-    ->withLinePay()    // LINE Pay
-    ->withUnionPay()   // 銀聯卡
-    ->withEsunWallet() // 玉山 Wallet
-    ->withTaiwanPay()  // 台灣 Pay
+    ->withGooglePay()       // Google Pay
+    ->withSamsungPay()      // Samsung Pay
+    ->withLinePay()         // LINE Pay
+    ->withUnionPay()        // 銀聯卡
+    ->withAmericanExpress() // 美國運通卡
+    ->withEsunWallet()      // 玉山 Wallet
+    ->withTaiwanPay()       // 台灣 Pay
     ->submit();
 ```
 

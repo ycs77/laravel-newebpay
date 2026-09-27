@@ -74,6 +74,8 @@ final class MPGOptions extends Options
 
     public bool $unionPay = false;
 
+    public bool $americanExpress = false;
+
     public bool $esunWallet = false;
 
     public bool $taiwanPay = false;
@@ -175,6 +177,9 @@ final class MPGOptions extends Options
         }
         if ($this->unionPay) {
             $tradeData['UNIONPAY'] = 1;
+        }
+        if ($this->americanExpress) {
+            $tradeData['CREDITAE'] = 1;
         }
         if ($this->esunWallet) {
             $tradeData['ESUNWALLET'] = 1;

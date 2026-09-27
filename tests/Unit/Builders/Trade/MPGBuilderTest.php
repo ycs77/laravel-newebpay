@@ -281,6 +281,17 @@ test('MPGBuilder → 啟用銀聯卡（withUnionPay）', function () {
         ->submit();
 });
 
+test('MPGBuilder → 啟用美國運通卡（withAmericanExpress）', function () {
+    (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
+        ->setFormRedirectTransporter($this->formRedirectTransporter)
+        ->withAmericanExpress()
+        ->onPreparedOptions(function (Options $options) {
+            $tradeInfo = $options->toArray()['TradeInfo'];
+            expect($tradeInfo)->toHaveKey('CREDITAE', 1);
+        })
+        ->submit();
+});
+
 test('MPGBuilder → 啟用玉山 Wallet（withEsunWallet）', function () {
     (new MPGBuilder($this->factory, $this->crypto, $this->httpTransporter, $this->withSessionIdKey, $this->prependAppUrl, $this->config))
         ->setFormRedirectTransporter($this->formRedirectTransporter)

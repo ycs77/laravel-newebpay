@@ -375,6 +375,16 @@ final class MPGBuilder extends Builder
     }
 
     /**
+     * 美國運通卡
+     */
+    public function withAmericanExpress(bool $enabled = true): self
+    {
+        $this->options->americanExpress = $enabled;
+
+        return $this;
+    }
+
+    /**
      * 玉山 Wallet
      */
     public function withEsunWallet(bool $enabled = true): self
