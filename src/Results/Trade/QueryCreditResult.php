@@ -35,6 +35,8 @@ class QueryCreditResult extends Result
         'SKBank' => '新光銀行',
         'Fubon' => '富邦銀行',
         'FirstBank' => '第一銀行',
+        'LINEBank' => '連線商業銀行',
+        'SinoPac' => '永豐銀行',
     ];
 
     /**
@@ -195,6 +197,8 @@ class QueryCreditResult extends Result
      * * **SKBank**: 新光銀行
      * * **Fubon**: 富邦銀行
      * * **FirstBank**: 第一銀行
+     * * **LINEBank**: 連線商業銀行
+     * * **SinoPac**: 永豐銀行
      */
     public function authBank(): string
     {
